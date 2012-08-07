@@ -1,0 +1,48 @@
+<!-- Conductor base configuration file -->
+<!-- The development config file -->
+<config>
+	<instance>inventory</instance>
+
+	<!-- setup the different types of logging -->
+	<log debug="true">
+		<console>true</console>
+		<file>false</file>
+		<database datasource="inventory">false</database>
+	</log>
+	
+	<!-- set the data and files directory manually -->
+	<directory files="files" data="data" />
+	
+	<!-- a listing of all the 'trains' the conductor must keep track of -->
+	<trains>
+		<train name="Update Info" schedule="*/5 * * * *">
+			<options>
+				<option name="network">10.10.10.x</option>
+				<option name="settings_db">inventory</option>
+			</options>
+			<car name="Update PC Info" class="com.ecec.rweber.inventory.GatherPCInfo">
+				<options>
+					<option name="request_add">true</option>
+				</options>
+			</car>
+			<!-- 
+			<car name="Find Programs" class="com.ecec.rweber.inventory.FindPrograms" />
+			<car name="Move Shortcuts" class="com.ecec.rweber.inventory.MoveShortcuts">
+				<options>
+					<option name="remote_path">smb://10.10.10.15/backups/Shortcuts/</option>
+				</options>
+			</car>
+			-->
+		</train>
+	</trains>
+	
+	<!-- a list of different data sources and their information -->
+	<datasources>
+		<inventory name="Computer Inventory DB" type="mysql">
+			<option name="database">10.10.10.6</option>
+			<option name="username">inventory</option>
+			<option name="password">pass</option>
+			<option name="schema_name">computer_inventory</option>
+		</inventory>
+	</datasources>
+</config>
