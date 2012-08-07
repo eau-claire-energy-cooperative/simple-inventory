@@ -1,6 +1,6 @@
 #Simple Computer Inventory
 
-* **Author**: afaber and robweber
+* **Authors**: afaber and robweber
 
 ##What is it? 
 
