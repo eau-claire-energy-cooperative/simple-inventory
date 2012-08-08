@@ -1,0 +1,22 @@
+INDEX VERSION 1.126+Z:\ComputerInventory\project\.metadata\.plugins\org.eclipse.jdt.core
+1962638457.index
+2731687618.index
+3318047761.index
+2375370348.index
+2479909925.index
+617032855.index
+3291799386.index
+848959954.index
+864646936.index
+2152569611.index
+4284093014.index
+2022523719.index
+3847904249.index
+529437705.index
+3082991455.index
+4050959524.index
+2900339390.index
+1518161806.index
+989118166.index
+3954531377.index
+3140045379.index

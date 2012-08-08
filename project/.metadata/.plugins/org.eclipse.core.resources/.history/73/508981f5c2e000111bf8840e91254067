@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Create Jar Filie" default="makejar" basedir=".">
+  <property name="jar.class.path" value="jars/conductor_framework.jar jars/cron4j-2.2.3.jar jars/jdom.jar jars/mysqlconnect.jar jars/utils.jar jars/xml-apis.jar jars/jcifs-1.3.17.jar jars/log4j-1.2.16.jar jars/mail.jar sigar-bin/lib/sigar.jar"/>
+  <property name="install.dir" value="\\10.10.10.35\inventory\updater" />
+  
+  <target name="makejar" description="Build Inventory Jar File">
+    <jar jarfile="inventory.jar" basedir="bin">
+    <manifest>
+    		<attribute name="Main-Class" value="com.ecec.rweber.inventory.Main" />
+    		<attribute name="Class-Path" value="${jar.class.path}" />
+    	</manifest>
+    </jar>
+	
+	<antcall target="create_build" />
+  </target>
+  
+  <target name="create_build" description="Move File Needed For Build">
+  	<!-- copy the resource files -->
+	<copy todir="${install.dir}/jars">
+		<fileset dir="jars" />
+	</copy>
+	
+	<copy todir="${install.dir}/sigar-bin">
+		<fileset dir="sigar-bin" />
+	</copy>
+	
+	<copy todir="${install.dir}/" flatten="true">
+		<resources>
+			<file file="inventory.jar" />
+			<file file="scripts/run.bat" />
+		</resources>
+	</copy>
+	
+	<copy todir="${install.dir}/config" flatten="true">
+		<resources>
+			<file file="config/config.xml" />
+		</resources>
+	</copy>
+	
+  </target>
+</project>
