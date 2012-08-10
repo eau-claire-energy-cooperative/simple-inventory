@@ -32,9 +32,9 @@
 	<!-- a list of different data sources and their information -->
 	<datasources>
 		<inventory name="Computer Inventory DB" type="mysql">
-			<option name="database">10.10.10.6</option>
-			<option name="username">inventory</option>
-			<option name="password">pass</option>
+			<option name="database">10.10.10.35</option>
+			<option name="username">root</option>
+			<option name="password">password</option>
 			<option name="schema_name">computer_inventory</option>
 		</inventory>
 	</datasources>

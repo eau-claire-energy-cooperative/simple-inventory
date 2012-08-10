@@ -18,7 +18,7 @@ public class ProcessorCommand implements SigarCommand{
 			currentInfo.addField("CPU_Vendor", processor.getVendor());
 			currentInfo.addField("CPU", processor.getModel());
 			currentInfo.addField("CPU_Cores", processor.getTotalCores() + "");
-			
+
 		} catch (SigarException e) {
 			//do nothing
 		}
