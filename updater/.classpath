@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="jars/conductor_framework.jar"/>
+	<classpathentry kind="lib" path="jars/cron4j-2.2.3.jar"/>
+	<classpathentry kind="lib" path="jars/jcifs-1.3.17.jar"/>
+	<classpathentry kind="lib" path="jars/jdom.jar"/>
+	<classpathentry kind="lib" path="jars/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="jars/mail.jar"/>
+	<classpathentry kind="lib" path="jars/mysqlconnect.jar"/>
+	<classpathentry kind="lib" path="jars/utils.jar"/>
+	<classpathentry kind="lib" path="jars/xml-apis.jar"/>
+	<classpathentry kind="lib" path="sigar-bin/lib/sigar.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
