@@ -1,20 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Simple Inventory Builder" default="makejar" basedir="../../../">
-  <property name="jar.class.path" value="jars/conductor_framework.jar jars/cron4j-2.2.3.jar jars/jdom.jar jars/mysqlconnect.jar jars/utils.jar jars/xml-apis.jar jars/jcifs-1.3.17.jar jars/log4j-1.2.16.jar jars/mail.jar sigar-bin/lib/sigar.jar"/>
+<project name="Simple Inventory Builder" default="makejar" basedir=".">
+  <property name="jar.manifest" value="jars/conductor_framework.jar jars/cron4j-2.2.3.jar jars/jdom.jar jars/mysqlconnect.jar jars/utils.jar jars/xml-apis.jar jars/jcifs-1.3.17.jar jars/log4j-1.2.16.jar jars/mail.jar sigar-bin/lib/sigar.jar"/>
   <property name="dir.updater" value="updater" />
   <property name="dir.www" value="www" />
+  <property name="dir.build" value="../build" />
+  
+  <path id="jar.classpath">
+    <fileset dir="${dir.updater}/jars">
+      <include name="*.jar" />
+    </fileset>
+
+    <fileset dir="${dir.updater}/sigar-bin/lib">
+      <include name="sigar.jar" />
+    </fileset>
+  </path>
 
   <target name="makejar" description="Build Inventory Jar File">
     
-    <mkdir dir="build" />
-    <mkdir dir="build/bin" />
-    <javac verbose="true" srcdir="${dir.updater}/src" destdir="build/bin" fork="yes" includeantruntime="false" classpath="${dir.updater}/jars" />
-    <jar jarfile="build/inventory.jar" basedir="build/bin" >
+    <mkdir dir="${dir.build}" />
+    <mkdir dir="${dir.build}/bin" />
+    <javac verbose="false" srcdir="${dir.updater}/src" destdir="${dir.build}/bin" fork="yes" includeantruntime="false">
+        <classpath refid="jar.classpath" />
+    </javac>
+    <jar jarfile="${dir.build}/inventory.jar" basedir="${dir.build}/bin" >
     <manifest>
     		<attribute name="Main-Class" value="com.ecec.rweber.inventory.Main" />
-    		<attribute name="Class-Path" value="${jar.class.path}" />
+    		<attribute name="Class-Path" value="${jar.manifest}" />
     	</manifest>
     </jar>
+  </target>
+
+  <target name="clean" description="Clean Build Directory">
+    <delete dir="${dir.build}" />
   </target>
   
 </project>
