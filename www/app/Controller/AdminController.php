@@ -3,6 +3,8 @@
 class AdminController extends AppController {
 	var $uses = array('Logs','Location');
 	var $helpers = array('Html','Session','Time');
+	var $paginate = array('limit'=>100, order=>array('Logs.id'=>'desc'));
+	
 	
 	function index(){
 		
@@ -11,7 +13,8 @@ class AdminController extends AppController {
 	public function logs()
 	{
 	 	$this->set('title_for_layout','Logs');
-	 	$this->set('logs', $this->Logs->find('all', array('order'=> array('id DESC'))));// gets all data
+	 	$this->set('logs',$this->paginate('Logs'));
+	 	//$this->set('logs', $this->Logs->find('all', array('order'=> array('id DESC'))));// gets all data
 	}
 	
 	public function location() {

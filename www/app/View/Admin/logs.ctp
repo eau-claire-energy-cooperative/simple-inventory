@@ -1,6 +1,13 @@
 
 <?php echo $this->Html->link('Home', '/'); ?>
-	 
+
+<table>
+	<tr>
+		<th width="33%"><?echo $this->Paginator->prev("<< Newer "); ?></th>
+		<th width="33%"><p align="center"><?echo $this->Paginator->counter('Displaying page {:page} of {:pages}') ?></p></th>
+		<th align="right"><p align="right"><?php echo $this->Paginator->next("Older >> ") ?></p></th>
+	</tr>
+</table>
 <div id="logDiv">
    <table>
     <?php foreach ($logs as $post): ?>
