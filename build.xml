@@ -55,6 +55,25 @@
         
   </target>
 
+  <target name="update_program" description="Update Inventory program">
+    <!-- create the jar file -->
+    <antcall target="makejar" />
+
+    <!-- get the location of the updater folder -->
+    <input message="Enter the updater destination directory" addproperty="dest_dir" defaultvalue="" />
+
+    <if>
+       <available file="${dest_dir}" type="dir" />
+       <then>
+	 <!-- copy the inventory.jar file -->
+	 <copy file="${dir.build}/inventory.jar" tofile="${dest_dir}/inventory.jar" overwrite="true" failonerror="true" />
+       </then>
+       <else>
+          <echo message="Destination does not exist or is not a directory" />
+       </else>
+    </if>
+  </target>
+
   <target name="makejar" description="Build Inventory Jar File" depends="build_temp">
     
     <javac verbose="false" srcdir="${dir.updater}/src" destdir="${dir.build}/bin" fork="yes" includeantruntime="false">
