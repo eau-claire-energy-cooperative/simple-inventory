@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Simple Inventory Builder" default="makejar" basedir=".">
+<project name="Simple Inventory Builder" default="how_to" basedir=".">
   <property name="jar.manifest" value="jars/conductor_framework.jar jars/cron4j-2.2.3.jar jars/jdom.jar jars/mysqlconnect.jar jars/utils.jar jars/xml-apis.jar jars/jcifs-1.3.17.jar jars/log4j-1.2.16.jar jars/mail.jar sigar-bin/lib/sigar.jar"/>
   <property name="dir.updater" value="updater" />
   <property name="dir.www" value="www" />
@@ -15,10 +15,48 @@
     </fileset>
   </path>
 
-  <target name="makejar" description="Build Inventory Jar File">
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+    <classpath>
+      <pathelement location="/usr/share/java/ant-contrib.jar" />
+    </classpath>
+  </taskdef>
+
+  <target name="how_to" description="Echo Usage Instructions">
+	<echo message="Run with target update_site, or update_program" />
+  </target>
+
+  <target name="update_site" description="Updates Website Data" depends="build_temp">
+    <input message="Enter the website destination directory" addproperty="dest_dir" defaultvalue="" />
+    <echo message="Updating site in directory ${dest_dir}" />
+
+    <if>
+      <available file="${dest_dir}" type="dir" />
+      <then>
+        <!-- copy any existing config files -->
+	<copy file="${dest_dir}/app/Config/database.php" tofile="${dir.build}/www_config/database.php" failonerror="false" overwrite="true"/>
+
+	<!-- delete all files in the original directory -->
+	<delete includeemptydirs="true">
+	  <fileset dir="${dest_dir}" includes="**/*" />
+	</delete>
+	<!-- copy the www source tree to this location -->
+	<copy todir="${dest_dir}">
+	  <fileset dir="${dir.www}" />
+	</copy>
+
+	<!-- copy the config file back -->
+	<copy file="${dir.build}/www_config/database.php" tofile="${dest_dir}/app/Config/database.php" failonerror="false" overwrite="true" />
+	
+      </then>
+      <else>
+        <echo message="Destination does not exist or is not a directory" />
+      </else>
+    </if>
+        
+  </target>
+
+  <target name="makejar" description="Build Inventory Jar File" depends="build_temp">
     
-    <mkdir dir="${dir.build}" />
-    <mkdir dir="${dir.build}/bin" />
     <javac verbose="false" srcdir="${dir.updater}/src" destdir="${dir.build}/bin" fork="yes" includeantruntime="false">
         <classpath refid="jar.classpath" />
     </javac>
@@ -28,6 +66,12 @@
     		<attribute name="Class-Path" value="${jar.manifest}" />
     	</manifest>
     </jar>
+  </target>
+
+  <target name="build_temp" description="Build temp structure">
+    <mkdir dir="${dir.build}" />
+    <mkdir dir="${dir.build}/bin" />
+    <mkdir dir="${dir.build}/www_config" />
   </target>
 
   <target name="clean" description="Clean Build Directory">
