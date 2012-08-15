@@ -117,13 +117,42 @@ public class GatherPCInfo extends Car{
 			logError(info.get("ComputerName") + " is not in the Inventory System");
 			
 			//check if we are allowed to add this computer
-			if(this.parameters.get("request_add") != null && Boolean.parseBoolean(this.parameters.get("request_add")))
+			if(this.shouldAddComputer(info))
 			{
 				//add this computer to the inventory
 				this.addComputer(info);
 			}
 		}
 		
+	}
+	
+	private boolean shouldAddComputer(PCInfo info){
+		boolean result = false;
+		
+		//check if adding computers to the system is even allowed
+		if(this.parameters.get("request_add") != null)
+		{
+			result = Boolean.parseBoolean(this.parameters.get("request_add"));
+			
+			//check if this computer specifically is on an ignore list
+			if(result)
+			{
+				if(this.db_settings.containsKey("computer_ignore_list"))
+				{
+					String ignoreList = this.db_settings.get("computer_ignore_list").toLowerCase();
+					String compName = info.get("ComputerName").toLowerCase();
+					
+					//set back to false if on ignore list, else do nothing
+					if(ignoreList.contains(compName))
+					{
+						logError(compName + " is on ignore list, not sending add request");
+						result = false;
+					}
+				}
+			}
+		}
+		
+		return result;
 	}
 	
 	private void addComputer(PCInfo info){
