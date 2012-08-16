@@ -39,10 +39,13 @@
 	<delete includeemptydirs="true">
 	  <fileset dir="${dest_dir}" includes="**/*" />
 	</delete>
-	<!-- copy the www source tree to this location -->
+
+	<!-- copy the www source tree to this location and set file permissions -->
 	<copy todir="${dest_dir}">
 	  <fileset dir="${dir.www}" />
 	</copy>
+
+	<chmod dir="${dest_dir}/" perm="777" includes="*" type="both" />
 
 	<!-- copy the config file back -->
 	<copy file="${dir.build}/www_config/database.php" tofile="${dest_dir}/app/Config/database.php" failonerror="false" overwrite="true" />
@@ -67,10 +70,50 @@
        <then>
 	 <!-- copy the inventory.jar file -->
 	 <copy file="${dir.build}/inventory.jar" tofile="${dest_dir}/inventory.jar" overwrite="true" failonerror="true" />
+
+         <!-- delete the jar files and copy the ones from the source dir -->
+	 <delete>
+	   <fileset dir="${dest_dir}/jars/" includes="**/*" />
+	 </delete>
+
+	 <copy todir="${dest_dir}/jars/">
+	   <fileset dir="${dir.updater}/jars/" />
+  	 </copy>
        </then>
        <else>
           <echo message="Destination does not exist or is not a directory" />
        </else>
+    </if>
+  </target>
+
+  <target name="create_batch_file" description="Creates the batch file for the login script">
+    <!-- get the location of the updater directory -->
+    <input message="Enter the updater destination directory" addproperty="dest_dir" defaultvalue="" />
+
+    <if>
+      <available file="${dest_dir}" type="dir" />
+      <then>
+        <!-- check if a run.bat file already exists -->
+	<if>
+	  <available file="${dest_dir}/run2.bat" type="file"/>
+	  <then>
+	    <echo message="run.bat file already exists, please delete before running this" />
+	  </then>
+	  <else>
+	    <!-- create the file and write the contents to it -->
+	    <hostinfo />
+	    <touch file="${dest_dir}/run.bat" />
+	    <echo file="${dest_dir}/run.bat" message="@echo off ${line.separator}" append="true" />
+	    <echo file="${dest_dir}/run.bat" message="set INVENTORY_PATH=\\${ADDR4}\inventory\updater ${line.separator}" append="true" />
+	    <concat destfile="${dest_dir}/run.bat" append="true" binary="yes">
+	      <filelist dir="${dir.updater}/scripts/" files="run.bat" />
+	    </concat>
+	  </else>
+	</if>
+      </then>
+      <else>
+        <echo message="Destination does not exist or is not a directory" />
+      </else> 
     </if>
   </target>
 
