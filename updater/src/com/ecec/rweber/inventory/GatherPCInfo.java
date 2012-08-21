@@ -107,8 +107,8 @@ public class GatherPCInfo extends Car{
 			compId = new Integer(queryResults.get(0).get("ID"));
 			
 			//update the computer info in the database
-			String updateString = "update " + Database.COMPUTER + " set SerialNumber = ?, CurrentUser = ?, Model = ?, OS = ?, Memory = ?, CPU = ?, IPaddress = ?, MACaddress = ?, DiskSpace = ?, DiskSpaceFree = ?, NumberOfMonitors = ?, LastUpdated = ?, LastBooted = ?  where ID = ?";
-			db.executeUpdate(updateString, info.get("SerialNumber"),info.get("CurrentUser"),info.get("Model"),info.get("OS") + " " + info.get("OS_Arch"),info.get("Memory"),info.get("CPU"),info.get("IPaddress"),info.get("MACaddress"),info.get("DiskSpace"),info.get("DiskSpaceFree"),info.get("NumberOfMonitors"),new Date(),info.get("LastBootTime"),compId);
+			String updateString = "update " + Database.COMPUTER + " set SerialNumber = ?, CurrentUser = ?, Model = ?, OS = ?, Memory = ?, MemoryFree = ?, CPU = ?, IPaddress = ?, MACaddress = ?, DiskSpace = ?, DiskSpaceFree = ?, NumberOfMonitors = ?, LastUpdated = ?, LastBooted = ?  where ID = ?";
+			db.executeUpdate(updateString, info.get("SerialNumber"),info.get("CurrentUser"),info.get("Model"),info.get("OS") + " " + info.get("OS_Arch"),info.get("Memory"),info.get("MemoryFree"),info.get("CPU"),info.get("IPaddress"),info.get("MACaddress"),info.get("DiskSpace"),info.get("DiskSpaceFree"),info.get("NumberOfMonitors"),new Date(),info.get("LastBootTime"),compId);
 			
 			logInfo("Updating computer " + info.get("ComputerName"));
 		}
