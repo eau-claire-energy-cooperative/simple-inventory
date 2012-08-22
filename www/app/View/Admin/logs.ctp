@@ -1,5 +1,5 @@
 
-<?php echo $this->Html->link('Home', '/'); ?>
+<?php echo $this->Html->link('Admin', array('action'=>"index")); ?>
 
 <table>
 	<tr>

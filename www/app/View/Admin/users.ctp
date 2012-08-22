@@ -1,4 +1,4 @@
-<p><?php echo $this->Html->link('Home', '/'); ?> | <?php echo $this->Html->link('Add User', '/admin/editUser'); ?></p>
+<p><?php echo $this->Html->link('Admin', array('action'=>"index")); ?> | <?php echo $this->Html->link('Add User', '/admin/editUser'); ?></p>
 
 <table>
   <?php foreach ($users as $aUser): ?>

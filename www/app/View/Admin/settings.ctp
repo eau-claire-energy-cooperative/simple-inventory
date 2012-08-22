@@ -1,4 +1,4 @@
-<p><?php echo $this->Html->link('Home', '/'); ?> | 
+<p><?php echo $this->Html->link('Admin', array('action'=>"index")); ?> | 
 <?php echo $this->Html->link('Add Setting','/admin/edit_setting') ?></p>
 <p>Please note, you should not add or remove settings from this page unless you know what you are doing. They will affect, and possibly break, how the website and inventory update functions run. </p>
 <table>

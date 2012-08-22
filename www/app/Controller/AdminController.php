@@ -51,13 +51,14 @@ class AdminController extends AppController {
 	}
 	
 	public function edit_setting($id = null){
-		$this->set('title_for_layout','Edit Setting');
+		$this->set('title_for_layout','Add Setting');
 		
 		if($this->request->is('get'))
 		{
 			if(isset($id))
 			{
 				//get the information about this id
+				$this->set('title_for_layout','Edit Setting');
 				$this->set('setting',$this->Setting->find('first',array('conditions'=>array('Setting.id'=>$id))));
 			}
 		}

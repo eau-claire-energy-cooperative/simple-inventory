@@ -1,4 +1,4 @@
-<?php echo $this->Html->link('Home', '/'); ?> 
+<?php echo $this->Html->link('Admin', array('action'=>"index")); ?> 
 
 <?php echo $this->Form->create('Setting');?>
 <table>
