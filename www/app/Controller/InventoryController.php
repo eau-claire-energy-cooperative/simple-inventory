@@ -5,13 +5,73 @@ class InventoryController extends AppController {
     var $components = array('Session');
 
 
-	public $uses = array('Computer','Location', 'Programs', 'Logs','Decommissioned');
+	public $uses = array('Computer','Location', 'Programs', 'Logs','Decommissioned','Setting','User');
 
+	public function beforeFilter(){
+		//check if we are using a login method
+		if(!$this->Session->check('authenticated')){
+			//check if we are using a login method
+			$loginMethod = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'auth_type')));
+			
+			if(isset($loginMethod) && trim($loginMethod['Setting']['value']) == 'none')
+			{
+				//we aren't authenticating, just keep moving
+				$this->Session->write('authenticated','true');
+			}
+			//check, we may already be trying to go to the login page
+			else if($this->action != 'login')
+			{
+				//we need to forward to the login page
+				$this->redirect(array('action'=>'login'));
+			}
+		}
+	}
 
 	public function index(){
 		$this->redirect(array("action"=>"computerInventory"));
 	}
 
+	public function login(){
+		$this->set('title_for_layout','Login');
+		
+		if ($this->request->is('post')) 
+		{
+			//check the type of login method
+			$loginMethod = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'auth_type')));
+
+			if($loginMethod['Setting']['value'] == 'local')
+			{
+				//attempt to get a username that matches this password locally
+				$aUser = $this->User->find('first',array('conditions'=>array('User.username'=>$this->data['User']['username'])));
+				
+				if($aUser)
+				{
+					//check the passwords
+					if(md5($this->data['User']['password']) == $aUser['User']['password'])
+					{
+						//success!
+						$this->Session->write('authenticated','true');
+						$this->redirect('/');
+					}
+					else
+					{
+						$this->Session->setFlash('Incorrect Password');
+					}
+				}
+				else
+				{
+					$this->Session->setFlash('Incorrect Username');
+				}
+			}
+		}
+	}
+	
+	public function logout(){
+		//just destroy the session
+		$this->Session->destroy();
+		$this->redirect('/');
+	}
+	
 	public function home()
 	{
 		$this->redirect(array('action' => 'computerInventory'));

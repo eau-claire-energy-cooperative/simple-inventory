@@ -1,13 +1,31 @@
 <?php
 	
 class AdminController extends AppController {
-	var $uses = array('Logs','Location','Setting');
-	var $helpers = array('Html','Session','Time');
+	var $uses = array('Logs','Location','Setting','User');
+	var $helpers = array('Html','Session','Time','Form');
 	var $paginate = array('limit'=>100, order=>array('Logs.id'=>'desc'));
 	
-	
+	public function beforeFilter(){
+		//check if we are using a login method
+		if(!$this->Session->check('authenticated')){
+			//check if we are using a login method
+			$loginMethod = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'auth_type')));
+				
+			if(isset($loginMethod) && trim($loginMethod['Setting']['value']) == 'none')
+			{
+				//we aren't authenticating, just keep moving
+				$this->Session->write('authenticated','true');
+			}
+			//check, we may already be trying to go to the login page
+			else if($this->action != 'login')
+			{
+				//we need to forward to the login page
+				$this->redirect(array('controller'=>'inventory','action'=>'login'));
+			}
+		}
+	}
 	function index(){
-		
+		$this->set('title_for_layout','Admin');
 	}
 	
 	public function logs()
@@ -101,6 +119,45 @@ class AdminController extends AppController {
 	        $this->Session->setFlash('The entry with id: ' . $id . ' has been deleted.');
 	        $this->redirect(array('action' => 'location'));
 	    }
+	}
+	
+	public function users(){
+		$this->set('title_for_layout','Users');
+		
+		$users = $this->User->find('all',array('order'=>array('User.name')));
+		$this->set('users',$users);
+	}
+	
+	public function editUser($id= null) {
+		$this->set('title_for_layout','Edit User');
+    	$this->User->id = $id;
+    	
+    	if ($this->request->is('get')) {
+    			
+    		if(isset($this->params['url']['action']) && $this->params['url']['action'] == 'delete'){
+    			$this->User->delete($id);
+    			$this->Session->setFlash("Your entry has been deleted");
+    			$this->redirect(array('action'=>'users'));
+    		}
+			else
+			{
+        		$this->request->data = $this->User->read();
+			}
+   		} 
+   		else 
+   		{
+   			//hash the password
+   			$this->request->data['User']['password'] = md5($this->request->data['User']['password']);
+   			
+        	if ($this->User->save($this->request->data)) {
+            	$this->Session->setFlash('Your entry has been updated.');
+            	$this->redirect(array('action' => 'users'));
+        	} 
+        	else 
+        	{
+            	$this->Session->setFlash('Unable to update your entry.');
+        	}
+   		}
 	}
 }
 

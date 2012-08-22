@@ -51,9 +51,8 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 		</div>
 		<div id="footer">
 			<?php // echo $this->Html->link($this->Html->image('cog.png',array('alt'=>'Admin')),'',array('escape'=>false,'title'=>'Admin')) ?>
-			<?php echo $this->Html->link('Settings',array('controller'=>'admin','action'=>'settings')) ?> | 
-			<?php echo $this->Html->link('Edit Locations', array('controller'=>'admin','action' => 'location')); ?> | 
-			<?php echo $this->Html->link('Logs', array('controller'=>'admin','action' => 'logs')); ?>
+			<?php echo $this->Html->link('Logout', array('controller'=>'inventory','action' => 'logout')); ?> | 
+			<?php echo $this->Html->link('Admin', array('controller'=>'admin','action' => 'index')); ?>
 		</div>
 	</div>
 	<?php echo $this->element('sql_dump'); ?>
