@@ -24,6 +24,7 @@ class AdminController extends AppController {
 			}
 		}
 	}
+	
 	function index(){
 		$this->set('title_for_layout','Admin');
 	}
@@ -146,8 +147,12 @@ class AdminController extends AppController {
    		} 
    		else 
    		{
-   			//hash the password
-   			$this->request->data['User']['password'] = md5($this->request->data['User']['password']);
+   			//hash the password - if needed
+   			if(!isset($this->request->data['User']['password_original']) || 
+   			(isset($this->request->data['User']['password_original']) && $this->request->data['User']['password_original'] != $this->request->data['User']['password']))
+   			{
+   				$this->request->data['User']['password'] = md5($this->request->data['User']['password']);
+			}
    			
         	if ($this->User->save($this->request->data)) {
             	$this->Session->setFlash('Your entry has been updated.');
@@ -159,6 +164,7 @@ class AdminController extends AppController {
         	}
    		}
 	}
+	
 }
 
 ?>
