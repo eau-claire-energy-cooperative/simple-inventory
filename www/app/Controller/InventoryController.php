@@ -2,8 +2,7 @@
 	
 class InventoryController extends AppController {
     var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace');
-    var $components = array('Session');
-
+    var $components = array('Session','Ldap');
 
 	public $uses = array('Computer','Location', 'Programs', 'Logs','Decommissioned','Setting','User');
 
@@ -37,9 +36,9 @@ class InventoryController extends AppController {
 		if ($this->request->is('post')) 
 		{
 			//check the type of login method
-			$loginMethod = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'auth_type')));
+			$settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
 
-			if($loginMethod['Setting']['value'] == 'local')
+			if($settings['auth_type'] == 'local')
 			{
 				//attempt to get a username that matches this password locally
 				$aUser = $this->User->find('first',array('conditions'=>array('User.username'=>$this->data['User']['username'])));
@@ -61,6 +60,33 @@ class InventoryController extends AppController {
 				else
 				{
 					$this->Session->setFlash('Incorrect Username');
+				}
+			}
+			else if($settings['auth_type'] == 'ldap')
+			{
+				
+				//check if this user is allowed into the system (local user)
+				$aUser = $this->User->find('first',array('conditions'=>array('User.username'=>$this->data['User']['username'])));
+				
+				if($aUser)
+				{
+					//use the ldap component to authorize the user, first set it up
+					$this->Ldap->setup(array('host'=>$settings['ldap_host'],'port'=>$settings['ldap_port'],'baseDN'=>$settings['ldap_basedn'],'user'=>$settings['ldap_user'],'password'=>$settings['ldap_password']));
+					
+					if($this->Ldap->auth($this->data['User']['username'],$this->data['User']['password']))
+					{
+						//success!
+						$this->Session->write('authenticated','true');
+						$this->redirect('/');
+					}
+					else
+					{
+						$this->Session->setFlash('Incorrect Username/Password');
+					}
+				}
+				else
+				{
+					$this->Session->setFlash('Incorrect Username/Password');
 				}
 			}
 		}
