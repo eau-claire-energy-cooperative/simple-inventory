@@ -2,12 +2,13 @@
 
 class SearchController extends AppController {
 	var $uses = array("Programs","Computer","Location");
-	
+	var $helpers = array('Html','Csv','DiskSpace','Time');
 	var $search_types = array(array("name"=>"Location","field"=>"Computer.ComputerLocation"),
 						array('name'=>'Model','field'=>'Computer.Model'),
 						array('name'=>'OS','field'=>'Computer.OS'),
 						array('name'=>'Memory','field'=>'Computer.Memory'),
 						array('name'=>'Monitors','field'=>'Computer.NumberOfMonitors'));
+	var $components = array('RequestHandler','Session');
 	
 	public function beforeFilter(){
 		//check if we are using a login method

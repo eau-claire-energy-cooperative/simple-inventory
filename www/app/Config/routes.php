@@ -31,6 +31,7 @@
  */
 	Router::connect('/inventory/:action/*', array('controller' => 'inventory'));
 
+	Router::parseExtensions('csv');
 /**
  * Load all plugin routes.  See the CakePlugin documentation on 
  * how to customize the loading of plugin routes.
