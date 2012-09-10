@@ -6,3 +6,9 @@
 	</tr>
 </table>
 <?php echo $this->Form->end('Login') ?>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#UserUsername').focus();
+});
+</script>
