@@ -38,7 +38,8 @@
       
           <td><?php echo $computer['Computer']['CPU']?></td>
     
-           <td> <?php echo $this->Html->link($computer['Computer']['Memory'] . " GB", array('controller'=>'search','action' => 'search', 3, $computer['Computer']['Memory'])); ?></td>
+           <td> <?php echo $this->Html->link($computer['Computer']['Memory'] . " GB", array('controller'=>'search','action' => 'search', 3, $computer['Computer']['Memory'])); ?> 
+           	    (<?php echo $this->DiskSpace->compare($computer['Computer']['Memory'],$computer['Computer']['MemoryFree']) ?>% free)</td>
         
 
              <td> <?php echo $this->Html->link( $computer['Computer']['NumberOfMonitors'], array('controller'=>'search','action' => 'search', 4, $computer['Computer']['NumberOfMonitors'])); ?></td>
@@ -60,7 +61,7 @@
     <tr>
 		<td><?php echo $computer['Computer']['IPaddress']?></td>
 		<td><?php echo $computer['Computer']['MACaddress']?></td>
-		<td><?php echo $this->DiskSpace->toString($computer['Computer']['DiskSpace']) ?></td>
+		<td><?php echo $this->DiskSpace->toString($computer['Computer']['DiskSpace']) ?> (<?php echo $this->DiskSpace->compare($computer['Computer']['DiskSpace'],$computer['Computer']['DiskSpaceFree']) ?>% free)</td>
 		<td><?php echo $this->Time->niceShort($computer['Computer']['LastUpdated']);?></td>
 		<td></td> 
      </tr>
@@ -82,19 +83,13 @@
 <table>
     <tr>
         <th><h1>Programs</h1></th>
-       
-     
     </tr>
 
     <!-- Here is where we loop through our $posts array, printing out post info -->
 	
     <?php foreach ($programs as $post): ?>
     <tr>
-    	
-   
-			
-        <td> <?php echo $this->Html->link( $post['Programs']['program'] , '/search/searchProgram/' . $post['Programs']['program']); ?></td>
- 
+    	<td> <?php echo $this->Html->link( $post['Programs']['program'] , '/search/searchProgram/' . $post['Programs']['program']); ?></td>
     </tr>
     
     <?php endforeach; ?>

@@ -28,6 +28,17 @@ class DiskSpaceHelper extends AppHelper {
 		
 		return $result;
 	}
+	
+	function compare($total,$used){
+		if($total != 0)
+		{
+			return number_format(($used/$total) * 100,0);
+		}
+		else
+		{
+			return 0;
+		}
+	}
 }
 
 ?>
