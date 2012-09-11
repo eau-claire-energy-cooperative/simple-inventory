@@ -1,7 +1,7 @@
 <?php 
 
 class SearchController extends AppController {
-	var $uses = array("Programs","Computer","Location");
+	var $uses = array("Programs","Computer","Location","Service");
 	var $helpers = array('Html','Csv','DiskSpace','Time');
 	var $search_types = array(array("name"=>"Location","field"=>"Computer.ComputerLocation"),
 						array('name'=>'Model','field'=>'Computer.Model'),
@@ -52,6 +52,14 @@ class SearchController extends AppController {
 		$this->set('results', $this->Programs->find('all',array('conditions' => array('Programs.program LIKE "' . $program . '%"') )));
 		
 		$this->render('search');
+	}
+	
+	function searchService($service){
+		$this->set("title_for_layout","Search Results");
+		
+		//get all computers that match the program name
+		$this->set("q","For Service '" . $service . "'");
+		$this->set('results', $this->Service->find('all',array('conditions' => array('Service.name LIKE "' . $service . '%"') )));
 	}
 }
 ?>

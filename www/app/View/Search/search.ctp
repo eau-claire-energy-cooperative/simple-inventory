@@ -2,7 +2,7 @@
 <p></p>
 
 <h3><?php echo $q ?></h3>
-<p align="right"><?php echo $this->Html->link('Download CSV',$this->here . ".csv") ?></p>
+<p align="right"><a href="<?php echo $this->here . ".csv" ?>">Download CSV</a></p>
 <table>
     
    <?php foreach ($results as $post): ?>

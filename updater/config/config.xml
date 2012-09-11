@@ -26,6 +26,7 @@
 				</options>
 			</car>
 			<car name="Find Programs" class="com.ecec.rweber.inventory.FindPrograms" />
+			<car name="Find Services" class="com.ecec.rweber.inventory.WindowsServices" />
 		</train>
 	</trains>
 	

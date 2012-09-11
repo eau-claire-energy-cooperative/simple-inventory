@@ -20,24 +20,22 @@
 				<option name="network">10.10.10.x</option>
 				<option name="settings_db">inventory</option>
 			</options>
-			<!-- 
+			
 			<car name="Update PC Info" class="com.ecec.rweber.inventory.GatherPCInfo">
 				<options>
 					<option name="request_add">true</option>
 				</options>
 			</car>
-			
+			 
 			<car name="Find Programs" class="com.ecec.rweber.inventory.FindPrograms" />
+			<!--
 			<car name="Move Shortcuts" class="com.ecec.rweber.inventory.MoveShortcuts">
 				<options>
 					<option name="remote_path">smb://10.10.10.15/backups/Shortcuts/</option>
 				</options>
 			</car>
 			-->
-			<car name="PC Benchmark" class="com.ecec.rweber.inventory.Benchmark">
-				<options>
-					<option name="settings_db">inventory</option>
-				</options>
+			<car name="Get Services" class="com.ecec.rweber.inventory.WindowsServices">
 			</car>
 			
 		</train>

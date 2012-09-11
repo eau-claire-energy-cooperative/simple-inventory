@@ -1,3 +1,17 @@
+<script type="text/javascript">
+	function expandTable(id){
+		
+		$('#' + id + ' tr').each(function(index){
+			if(index != 0)
+			{
+				$(this).toggle();
+			}
+		});
+		
+		return false;
+	}
+</script>
+
 <?php echo $this->Html->link('Home', array('action' => 'home')); ?> |
 <?php echo $this->Html->link('Edit', array('action' => 'edit', $computer['Computer']['id'])); ?>
 <table>
@@ -79,19 +93,31 @@
 </table> 
  <?php endif; ?>
  
-<div id="programDiv">
-<table>
+<table id="programs">
     <tr>
-        <th><h1>Programs</h1></th>
+        <th><h1><a href="#" onClick="expandTable('programs')">Programs</a></h1></th>
     </tr>
-
-    <!-- Here is where we loop through our $posts array, printing out post info -->
-	
+    
     <?php foreach ($programs as $post): ?>
-    <tr>
+    <tr style="display:none">
     	<td> <?php echo $this->Html->link( $post['Programs']['program'] , '/search/searchProgram/' . $post['Programs']['program']); ?></td>
     </tr>
     
     <?php endforeach; ?>
-   </table>
-</div>	
+ </table>
+ 
+ <table id="services">
+    <tr>
+        <th colspan="3"><h1><a href="#" onClick="expandTable('services')">Services</a></h1></th>
+    </tr>
+    
+    <?php foreach ($services as $post): ?>
+    <tr style="display:none">
+    	<td width="33%"> <?php echo $this->Html->link( $post['Service']['name'] , '/search/searchService/' . $post['Service']['name']); ?></td>
+    	<td width="33%"><?php echo $post['Service']['startmode'] ?></td>
+    	<td><?php echo $post['Service']['status'] ?></td>
+    </tr>
+    
+    <?php endforeach; ?>
+ </table>
+ 
