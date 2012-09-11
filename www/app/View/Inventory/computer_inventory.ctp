@@ -16,7 +16,7 @@
         <th>Operating System	&uArr;&dArr;</th>	
         <th>Memory	&uArr;&dArr;</th>
         <th>Location	&uArr;&dArr;</th>
-     
+        <th>Last Update	&uArr;&dArr;</th>
     </tr>
 	</thead>
 	<tbody>
@@ -27,10 +27,9 @@
         <td> <?php echo $this->Html->link( $post['Computer']['ComputerName'] , array('action' => 'moreInfo', $post['Computer']['id'])); ?></td>
          <td><?php echo $post['Computer']['CurrentUser']; ?></td>
          <td><?php echo $post['Computer']['OS']; ?></td>
-          <td><?php echo $post['Computer']['Memory']  ?> GB</td>
-          
-            <td><?php echo $this->Html->link( $post['Location']['location'], array('controller'=>'search','action' => 'search', 0,$post['Computer']['ComputerLocation'])); ?></td>
-            
+         <td><?php echo $post['Computer']['Memory']  ?> GB</td>
+         <td><?php echo $this->Html->link( $post['Location']['location'], array('controller'=>'search','action' => 'search', 0,$post['Computer']['ComputerLocation'])); ?></td>
+         <td><?php echo $this->Time->format('m/d/Y',$post['Computer']['LastUpdated']) ?></td>   
          <td>
          <?php echo $this->Html->link('Decommission', array('action' => 'confirmDecommission', $post['Computer']['id'])); ?>
         </td>
