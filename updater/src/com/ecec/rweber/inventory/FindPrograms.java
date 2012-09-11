@@ -13,6 +13,7 @@ import com.ecec.rweber.conductor.framework.datasources.sql.SQLDatasource;
 import com.ecec.rweber.inventory.utils.Database;
 import com.ecec.rweber.inventory.utils.NetworkDetector;
 import com.ecec.rweber.inventory.utils.PCInfo;
+import com.ecec.rweber.utils.SettingsReader;
 
 public class FindPrograms extends Car{
 	private Integer computerId = null;
@@ -62,15 +63,13 @@ public class FindPrograms extends Car{
 		{
 			try{
 				
-				String fullString = jWMI.getWMIValue("select * from Win32_Product", "Name");
-				String[] splitString = fullString.split("\\n");
+				List<Element> wmi = jWMI.getWMIValues("select * from Win32_Product", "Name");
 				
-				String aLine = null;
-				for(int i = 0; i < splitString.length; i ++)
+				Element temp = null;
+				for(int i = 0; i < wmi.size(); i ++)
 				{
-					aLine = splitString[i];
-					
-					allPrograms.add(new PCProgram(aLine,aLine));
+					temp = wmi.get(i);
+					allPrograms.add(new PCProgram(temp.getChildText("Name"),temp.getChildText("Name")));
 						
 				}
 			}

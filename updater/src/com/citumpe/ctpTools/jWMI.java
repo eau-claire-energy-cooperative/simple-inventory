@@ -6,6 +6,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.util.List;
+
+import org.jdom.Element;
+
+import com.ecec.rweber.utils.SettingsReader;
 
 /**
  * File: jWMI.java
@@ -56,9 +62,29 @@ public class jWMI
 		String[] wmiFieldNameArray = wmiCommaSeparatedFieldName.split(",");
 		for(int i = 0; i < wmiFieldNameArray.length; i++)
 		{
-			vbs += "  strData = strData & obj."+wmiFieldNameArray[i]+" & VBCrLf"+CRLF;
+			vbs += "  strData = strData & obj."+wmiFieldNameArray[i].trim() +"& VBCrLf"+CRLF;
 		}
 		vbs += "Next"+CRLF;
+		vbs += "wscript.echo strData"+CRLF;
+		return vbs;
+	}
+	
+	private static String getVBScriptXml(String wmiQueryStr, String wmiCommaSeparatedFieldName)
+	{
+		String vbs = "Dim oWMI : Set oWMI = GetObject(\"winmgmts:\")"+CRLF;
+		vbs += "Dim classComponent : Set classComponent = oWMI.ExecQuery(\""+wmiQueryStr+"\")"+CRLF;
+		vbs += "Dim obj, strData"+CRLF;
+		vbs += "strData = \"<results>\"" + CRLF;
+		vbs += "For Each obj in classComponent"+CRLF;
+		vbs += "  strData = strData & \"<entry>\"" + CRLF;
+		String[] wmiFieldNameArray = wmiCommaSeparatedFieldName.split(",");
+		for(int i = 0; i < wmiFieldNameArray.length; i++)
+		{
+			vbs += "  strData = strData & \"<" + wmiFieldNameArray[i].trim() + "><![CDATA[\" & obj."+wmiFieldNameArray[i].trim() +" & \"]]></" + wmiFieldNameArray[i].trim() + ">\" & VBCrLf"+CRLF;
+		}
+		vbs += "  strData = strData & \"</entry>\"" + CRLF;
+		vbs += "Next"+CRLF;
+		vbs += "strData = strData & \"</results>\"" + CRLF;
 		vbs += "wscript.echo strData"+CRLF;
 		return vbs;
 	}
@@ -110,8 +136,22 @@ public class jWMI
 		writeStrToFile(tmpFileName, vbScript);
 		String output = execute(new String[] {"cmd.exe", "/C", "cscript.exe", tmpFileName});
 		new File(tmpFileName).delete();
-				
+		
 		return output.trim();
+	}
+	
+	public static List<Element> getWMIValues(String wmiQueryStr, String wmiCommaSeparatedFieldName) throws Exception
+	{
+		String vbScript = getVBScriptXml(wmiQueryStr, wmiCommaSeparatedFieldName);
+		String tmpDirName = getEnvVar("TEMP").trim();
+		String tmpFileName = tmpDirName + File.separator + "jwmi.vbs";
+		writeStrToFile(tmpFileName, vbScript);
+		String output = execute(new String[] {"cmd.exe", "/C", "cscript.exe", tmpFileName});
+		new File(tmpFileName).delete();
+		
+		SettingsReader result = new SettingsReader(new StringReader(output.trim()));
+		
+		return result.getElements("entry");
 	}
 	
 	/**
@@ -129,7 +169,7 @@ public class jWMI
 		while((line = input.readLine()) != null)
 		{
 			//need to filter out lines that don't contain our desired output
-			if(!line.contains("Microsoft") && !line.equals(""))
+			if(!line.startsWith("Microsoft (R)") && !line.startsWith("Copyright (C)") && !line.equals(""))
 			{
 				output += line +CRLF;
 			}

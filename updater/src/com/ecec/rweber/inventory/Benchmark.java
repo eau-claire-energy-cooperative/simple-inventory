@@ -15,6 +15,7 @@ import com.ecec.rweber.conductor.framework.datasources.sql.SQLDatasource;
 import com.ecec.rweber.inventory.FindPrograms.PCProgram;
 import com.ecec.rweber.inventory.utils.Database;
 import com.ecec.rweber.inventory.utils.PCInfo;
+import com.ecec.rweber.utils.SettingsReader;
 
 public class Benchmark extends Car{
 	private Integer computerId = null;
@@ -69,10 +70,10 @@ public class Benchmark extends Car{
 		
 		try{
 			
-			String fullString = jWMI.getWMIValue("select * From Win32_WinSAT", "CPUScore, MemoryScore");
+			SettingsReader wmi = jWMI.getWMIValue("select * From Win32_WinSAT", "CPUScore, MemoryScore");
 			
 			//make sure this is not empty (may happen on XP machines)
-			if(!fullString.trim().equals(""))
+			if(!wmi.getSetting("entry.).trim().equals(""))
 			{
 				String[] splitString = fullString.split("\\n");
 				
