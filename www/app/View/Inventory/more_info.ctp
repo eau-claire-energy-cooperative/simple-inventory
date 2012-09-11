@@ -13,7 +13,12 @@
 </script>
 
 <?php echo $this->Html->link('Home', array('action' => 'home')); ?> |
-<?php echo $this->Html->link('Edit', array('action' => 'edit', $computer['Computer']['id'])); ?>
+<?php echo $this->Html->link('Edit', array('action' => 'edit', $computer['Computer']['id'])); ?> | 
+<?php echo $this->Form->postLink(
+                'Delete',
+                array('action' => 'delete', $post['Computer']['id']),
+                array('confirm' => 'Are you sure?'));
+            ?>
 <table>
     <tr>
         <th style="width: 200px;">Computer Name</th>

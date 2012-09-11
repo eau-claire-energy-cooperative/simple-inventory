@@ -32,14 +32,7 @@
             <td><?php echo $this->Html->link( $post['Location']['location'], array('controller'=>'search','action' => 'search', 0,$post['Computer']['ComputerLocation'])); ?></td>
             
          <td>
-         <?php echo $this->Html->link('Edit', array('action' => 'edit', $post['Computer']['id'])); ?> |
-          <?php echo $this->Form->postLink(
-                'Delete',
-                array('action' => 'delete', $post['Computer']['id']),
-                array('confirm' => 'Are you sure?'));
-            ?> |
-            
-             <?php echo $this->Html->link('Decommission', array('action' => 'confirmDecommission', $post['Computer']['id'])); ?>
+         <?php echo $this->Html->link('Decommission', array('action' => 'confirmDecommission', $post['Computer']['id'])); ?>
         </td>
  
     </tr>
