@@ -47,12 +47,8 @@ public class GatherPCInfo extends Car{
 	@Override
 	protected void runImp(Helper arg0) {
 		
-		//if we're on the right network
-		if(NetworkDetector.networkRunning(this.parameters.get("network")))
-		{
-			PCInfo results = runCommands();
-			sendResults(results);
-		}
+		PCInfo results = runCommands();
+		sendResults(results);
 	}
 
 	private PCInfo runCommands(){

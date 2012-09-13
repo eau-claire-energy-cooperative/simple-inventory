@@ -58,46 +58,43 @@ public class FindPrograms extends Car{
 	protected void runImp(Helper arg0) {
 		List<PCProgram> allPrograms = new ArrayList<PCProgram>();
 		
-		//if we're on the right network
-		if(NetworkDetector.networkRunning(this.parameters.get("network")))
-		{
-			try{
-				
-				List<Element> wmi = jWMI.getWMIValues("select * from Win32_Product", "Name");
-				
-				Element temp = null;
-				for(int i = 0; i < wmi.size(); i ++)
-				{
-					temp = wmi.get(i);
-					allPrograms.add(new PCProgram(temp.getChildText("Name"),temp.getChildText("Name")));
-						
-				}
-			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-			}
+		try{
 			
-			if(computerId != null)
+			List<Element> wmi = jWMI.getWMIValues("select * from Win32_Product", "Name");
+			
+			Element temp = null;
+			for(int i = 0; i < wmi.size(); i ++)
 			{
-				logInfo("Found " + allPrograms.size() + " programs for computer " + PCInfo.getComputerName());
-				//clear out the current programs list
-				db.executeUpdate("delete from programs where comp_id = ?", computerId);
-				
-				String updateString = "insert into programs (comp_id,program) values (?,?)";
-				PCProgram p = null;
-				for(int i = 0; i < allPrograms.size(); i ++)
-				{
-					//insert the program for this computer
-					p = allPrograms.get(i);
-					db.executeUpdate(updateString, computerId,p.name);
-				}
-			}
-			else
-			{
-				logError("No Computer ID found for " + PCInfo.getComputerName() + ", can't update programs");
+				temp = wmi.get(i);
+				allPrograms.add(new PCProgram(temp.getChildText("Name"),temp.getChildText("Name")));
+					
 			}
 		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		if(computerId != null)
+		{
+			logInfo("Found " + allPrograms.size() + " programs for computer " + PCInfo.getComputerName());
+			//clear out the current programs list
+			db.executeUpdate("delete from programs where comp_id = ?", computerId);
+			
+			String updateString = "insert into programs (comp_id,program) values (?,?)";
+			PCProgram p = null;
+			for(int i = 0; i < allPrograms.size(); i ++)
+			{
+				//insert the program for this computer
+				p = allPrograms.get(i);
+				db.executeUpdate(updateString, computerId,p.name);
+			}
+		}
+		else
+		{
+			logError("No Computer ID found for " + PCInfo.getComputerName() + ", can't update programs");
+		}
+	
 	}
 
 	public class PCProgram {
