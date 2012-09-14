@@ -26,7 +26,7 @@
   </target>
 
   <target name="update_site" description="Updates Website Data" depends="build_temp">
-    <input message="Enter the website destination directory" addproperty="dest_dir" defaultvalue="" />
+    <property name="dest_dir" value="/home/inventory/www" />
     <echo message="Updating site in directory ${dest_dir}" />
 
     <if>
@@ -63,8 +63,7 @@
     <antcall target="makejar" />
 
     <!-- get the location of the updater folder -->
-    <input message="Enter the updater destination directory" addproperty="dest_dir" defaultvalue="" />
-
+    <property name="dest_dir" value="/home/inventory/updater" />
     <if>
        <available file="${dest_dir}" type="dir" />
        <then>
