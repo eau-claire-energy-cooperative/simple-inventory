@@ -25,6 +25,11 @@ class InventoryController extends AppController {
 			}
 		}
 	}
+	
+	function beforeRender(){
+		$settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
+		$this->set('settings',$settings);
+	}
 
 	public function index(){
 		$this->redirect(array("action"=>"computerInventory"));
