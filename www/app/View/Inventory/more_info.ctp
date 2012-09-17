@@ -1,4 +1,14 @@
 <script type="text/javascript">
+    $(document).ready(function(){
+		$.getJSON('<?php echo $this->webroot ?>ajax/checkRunning/<?php echo $computer['Computer']['ComputerName'] ?>',function(data){
+			if(data.received == data.transmitted)
+			{
+				$('#is_running').html('Running');
+				$('#is_running').removeClass('red');
+			}
+		});
+	});
+
 	function expandTable(id){
 		
 		$('#' + id + ' tr').each(function(index){
@@ -82,7 +92,7 @@
 		<td><?php echo $computer['Computer']['MACaddress']?></td>
 		<td><?php echo $this->DiskSpace->toString($computer['Computer']['DiskSpace']) ?> (<?php echo $this->DiskSpace->compare($computer['Computer']['DiskSpace'],$computer['Computer']['DiskSpaceFree']) ?>% free)</td>
 		<td><?php echo $this->Time->niceShort($computer['Computer']['LastUpdated']);?></td>
-		<td></td> 
+		<td><p id="is_running" class="red">Not Running</p></td> 
      </tr>
        
 </table> 
