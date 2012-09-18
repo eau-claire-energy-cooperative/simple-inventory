@@ -143,6 +143,20 @@ CREATE TABLE IF NOT EXISTS `programs` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `services`
+--
+
+DROP TABLE IF EXISTS `services`;
+CREATE TABLE IF NOT EXISTS `services` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `comp_id` int(11) NOT NULL,
+  `name` varchar(75) NOT NULL,
+  `startmode` varchar(20) NOT NULL,
+  `status` varchar(15) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25758 ;
+
+--
 -- Table structure for table `settings`
 --
 
