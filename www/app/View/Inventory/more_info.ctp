@@ -1,5 +1,10 @@
 <script type="text/javascript">
     $(document).ready(function(){
+    	checkRunning();
+		setInterval(checkRunning,40 * 1000);
+	});
+
+	function checkRunning(){
 		$.getJSON('<?php echo $this->webroot ?>ajax/checkRunning/<?php echo $computer['Computer']['ComputerName'] ?>',function(data){
 			if(data.received == data.transmitted)
 			{
@@ -13,8 +18,21 @@
 				}
 				$('#is_running').removeClass('red');
 			}
+			else
+			{
+				if(<?php echo $settings['show_computer_commands']?>)
+				{
+					$('#is_running').html('<a href="#" onClick="wol(\'<?php echo $computer['Computer']['MACaddress'] ?>\')">Turn On</a>');
+					$('#is_running').removeClass('red');
+				}
+				else
+				{
+					$('#is_running').html('Not Running');
+					$('#is_running').addClass('red');
+				}
+			}
 		});
-	});
+	}
 
 	function expandTable(id){
 		
@@ -36,13 +54,17 @@
 		}
 		return false;
 	}
+	
+	function wol(mac){
+		$.ajax('<?php echo $this->webroot ?>ajax/wol?mac=' + mac);
+	}
 </script>
 
 <?php echo $this->Html->link('Home', array('action' => 'home')); ?> |
 <?php echo $this->Html->link('Edit', array('action' => 'edit', $computer['Computer']['id'])); ?> | 
 <?php echo $this->Form->postLink(
                 'Delete',
-                array('action' => 'delete', $post['Computer']['id']),
+                array('action' => 'delete', $computer['Computer']['id']),
                 array('confirm' => 'Are you sure?'));
             ?>
 <table>
