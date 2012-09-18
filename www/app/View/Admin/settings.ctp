@@ -1,12 +1,82 @@
-<p><?php echo $this->Html->link('Admin', array('action'=>"index")); ?> | 
-<?php echo $this->Html->link('Add Setting','/admin/edit_setting') ?></p>
-<p>Please note, you should not add or remove settings from this page unless you know what you are doing. They will affect, and possibly break, how the website and inventory update functions run. </p>
+<p><?php echo $this->Html->link('Admin', array('action'=>"index")); ?> </p>
+
+<?php echo $this->Form->create('Setting',array('url'=>'/admin/settings')) ?>
+<h2>General</h2>
 <table>
-	<?php foreach($settings as $aSetting): ?>
 	<tr>
-		<td><?php echo $aSetting['Setting']['key'] ?></td>
-		<td><?php echo $aSetting['Setting']['value'] ?></td>
-		<td><?php echo $this->Html->link("Edit","/admin/edit_setting/". $aSetting['Setting']['id']) ?>  <?php echo $this->Html->link("Delete","/admin/settings/delete?id=". $aSetting['Setting']['id']) ?></td>
+		<td width="50%">Show Computer Commands</td>
+		<td><?php echo $this->Form->select('show_computer_commands',array('true'=>'Yes','false'=>'No'),array('value'=>$settings['show_computer_commands'],'empty'=>false)) ?></td>
 	</tr>
-	<?php endforeach; ?>
+	<tr>
+		<td>Shutdown Computer Message</td>
+		<td><?php echo $this->Form->input('shutdown_message',array('label'=>false,'value'=>$settings['shutdown_message'])) ?></td>
+	</tr>
+	<tr>
+		<td>Computer Ignore List (comma separated)</td>
+		<td><?php echo $this->Form->input('computer_ignore_list',array('label'=>false,'value'=>$settings['computer_ignore_list'])) ?></td>
+	</tr>
+	<tr>
+		<td>Active Directory Admin Account</td>
+		<td><?php echo $this->Form->input('domain_username',array('label'=>false,'value'=>$settings['domain_username'])) ?></td>
+	</tr>
+	<tr>
+		<td>Active Directory Admin Password</td>
+		<td><?php echo $this->Form->input('domain_password',array('label'=>false,'value'=>$settings['domain_password'])) ?></td>
+	</tr>
 </table>
+
+<h2>Authentication Settings</h2>
+<table>
+	<tr>
+		<td width="50%">Authentication Method</td>
+		<td><?php echo $this->Form->select('auth_type',array('local'=>'Local Users','ldap'=>'LDAP Connection'),array('value'=>$settings['auth_type'],'empty'=>false)) ?></td>
+	</tr>
+	<tr>
+		<td>LDAP Host</td>
+		<td><?php echo $this->Form->input('ldap_host',array('label'=>false,'value'=>$settings['ldap_host'])) ?></td>
+	</tr>
+	<tr>
+		<td>LDAP Port</td>
+		<td><?php echo $this->Form->input('ldap_port',array('label'=>false,'value'=>$settings['ldap_port'])) ?></td>
+	</tr>
+	<tr>
+		<td>LDAP Search Base</td>
+		<td><?php echo $this->Form->input('ldap_basedn',array('label'=>false,'value'=>$settings['ldap_basedn'])) ?></td>
+	</tr>
+	<tr>
+		<td>LDAP Username</td>
+		<td><?php echo $this->Form->input('ldap_user',array('label'=>false,'value'=>$settings['ldap_user'])) ?></td>
+	</tr>
+	<tr>
+		<td>LDAP Password</td>
+		<td><?php echo $this->Form->input('ldap_password',array('label'=>false,'value'=>$settings['ldap_password'])) ?></td>
+	</tr>
+</table>
+
+<h2>Mail Settings</h2>
+<table>
+	<tr>
+		<td width="50%">Send Mail As</td>
+		<td><?php echo $this->Form->input('outgoing_email',array('label'=>false,'value'=>$settings['outgoing_email'])) ?></td>
+	</tr>
+	<tr>
+		<td>SMTP Host</td>
+		<td><?php echo $this->Form->input('smtp_server',array('label'=>false,'value'=>$settings['smtp_server'])) ?></td>
+	</tr>
+	<tr>
+		<td>SMTP Authentication</td>
+		<td><?php echo $this->Form->select('smtp_auth',array('true'=>'Yes','false'=>'No'),array('value'=>$settings['smtp_auth'],'empty'=>false)) ?></td>
+	</tr>
+	<tr>
+		<td>SMTP Username</td>
+		<td><?php echo $this->Form->input('smtp_user',array('label'=>false,'value'=>$settings['smtp_user'])) ?></td>
+	</tr>
+	<tr>
+		<td>SMTP Password</td>
+		<td><?php echo $this->Form->input('smtp_pass',array('label'=>false,'value'=>$settings['smtp_pass'])) ?></td>
+	</tr>
+</table>
+
+<div align="right">
+	<?php echo $this->Form->Submit('Update') ?>
+</div>

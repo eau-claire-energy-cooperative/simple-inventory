@@ -35,7 +35,20 @@ class AdminController extends AppController {
 	 	$this->set('logs',$this->paginate('Logs'));
 	}
 	
-	public function settings($delete = null){
+	public function settings(){
+		if($this->request->is('post'))
+		{
+			foreach(array_keys($this->data['Setting']) as $key)
+			{
+				$this->Setting->query(sprintf('update settings set settings.value = "%s" where settings.key = "%s"',$this->data['Setting'][$key],$key));
+			}
+		}
+		
+		$this->set('title_for_layout','Settings');
+		$this->set('settings',$this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value'))));
+	}
+	
+	public function settings2($delete = null){
 		
 		if(isset($delete))
 		{
@@ -49,6 +62,7 @@ class AdminController extends AppController {
 		$this->set('title_for_layout','Settings');
 		$this->set('settings',$this->Setting->find('all',array('order'=>array('Setting.key'))));
 	}
+	
 	
 	public function edit_setting($id = null){
 		$this->set('title_for_layout','Add Setting');
