@@ -164,7 +164,6 @@ INSERT INTO `settings` (`id`, `key`, `value`) VALUES
 (3, 'smtp_pass', 'Disp@tch'),
 (4, 'smtp_auth', 'true'),
 (5, 'outgoing_email', 'administrator@ecec.com'),
-(6, 'admin_email', 'rweber@ecec.com,afaber@ecec.com'),
 (10, 'computer_ignore_list', 'thor'),
 (11, 'auth_type', 'local'),
 (13, 'ldap_host', '10.10.10.3'),
@@ -190,6 +189,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `username` varchar(50) NOT NULL,
   `password` text NOT NULL,
   `email` varchar(100) NOT NULL,
+  `send_email` varchar(10) NOT NULL DEFAULT 'false',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
