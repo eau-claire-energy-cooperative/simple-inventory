@@ -15,8 +15,12 @@ class PingComponent extends Component {
 		return $result;
 	}
 	
-	function wol($broadcast, $mac)
+	function wol($host, $mac)
 	{
+		//get the broadcast addr
+		$range = $this->iprange($host,24);
+		$broadcast = $range['last_ip'];
+		
 		$mac_array = explode(':', $mac);
 	
 		$hwaddr = '';
@@ -50,6 +54,26 @@ class PingComponent extends Component {
 				socket_close($sock);
 			}
 		}
+	}
+	
+	function iprange($ip,$mask=24,$return_array=FALSE) {
+		$corr=(pow(2,32)-1)-(pow(2,32-$mask)-1);
+		$first=ip2long($ip) & ($corr);
+		$length=pow(2,32-$mask)-1;
+		if (!$return_array) {
+			return array(
+					'first'=>$first,
+					'size'=>$length+1,
+					'last'=>$first+$length,
+					'first_ip'=>long2ip($first),
+					'last_ip'=>long2ip($first+$length)
+			);
+		}
+		$ips=array();
+		for ($i=0;$i<=$length;$i++) {
+			$ips[]=long2ip($first+$i);
+		}
+		return $ips;
 	}
 	
 }

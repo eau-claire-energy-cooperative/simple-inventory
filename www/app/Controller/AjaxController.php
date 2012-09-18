@@ -27,10 +27,9 @@ class AjaxController extends AppController {
 	}
 	
 	function wol(){
-		//pull in the system settings
-		$settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
-		
-		$this->Ping->wol($settings['network_broadcast'],$this->params['url']['mac']);
+	
+		$this->Ping->wol($_SERVER['SERVER_ADDR'],$this->params['url']['mac']);
 	}
+	
 }
 ?>

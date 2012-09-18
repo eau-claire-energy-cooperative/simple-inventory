@@ -175,8 +175,7 @@ INSERT INTO `settings` (`id`, `key`, `value`) VALUES
 (18, 'show_computer_commands', 'true'),
 (19, 'domain_username', 'administrator'),
 (20, 'domain_password', 'password'),
-(21, 'shutdown_message', 'The Administrator has initiated a shutdown of your PC'),
-(22, 'network_broadcast', '10.10.10.255');
+(21, 'shutdown_message', 'The Administrator has initiated a shutdown of your PC');
 
 -- --------------------------------------------------------
 
