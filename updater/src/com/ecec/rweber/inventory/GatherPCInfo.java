@@ -1,6 +1,8 @@
 package com.ecec.rweber.inventory;
 
 import java.util.Date;
+
+
 import java.util.HashMap;
 import java.util.List;
 import org.hyperic.sigar.Sigar;
@@ -16,7 +18,6 @@ import com.ecec.rweber.conductor.framework.mail.EmailMessage;
 import com.ecec.rweber.conductor.framework.mail.EmailSender;
 import com.ecec.rweber.inventory.commands.*;
 import com.ecec.rweber.inventory.utils.Database;
-import com.ecec.rweber.inventory.utils.NetworkDetector;
 import com.ecec.rweber.inventory.utils.PCInfo;
 
 public class GatherPCInfo extends Car{

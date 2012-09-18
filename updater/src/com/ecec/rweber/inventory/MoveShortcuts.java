@@ -1,6 +1,7 @@
 package com.ecec.rweber.inventory;
 
 import java.util.HashMap;
+
 import java.util.List;
 
 import org.jdom.Element;
@@ -11,7 +12,6 @@ import com.ecec.rweber.conductor.framework.datasources.file.FileDatasource;
 import com.ecec.rweber.conductor.framework.datasources.file.FileRepository;
 import com.ecec.rweber.conductor.framework.datasources.file.RepositoryFile;
 import com.ecec.rweber.conductor.framework.datasources.file.SMBRepository;
-import com.ecec.rweber.inventory.utils.NetworkDetector;
 
 public class MoveShortcuts extends Car{
 	private FileDatasource localDir = null;
@@ -45,12 +45,9 @@ public class MoveShortcuts extends Car{
 	@Override
 	protected void runImp(Helper arg0) {
 		
-		if(NetworkDetector.networkRunning("10.10.10.x"))
-		{
-			//delete files on the share and send new ones
-			this.deleteRemote();
-			this.sendCurrent();
-		}
+		//delete files on the share and send new ones
+		this.deleteRemote();
+		this.sendCurrent();
 	}
 
 	private void deleteRemote(){

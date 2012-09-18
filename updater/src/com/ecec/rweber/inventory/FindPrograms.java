@@ -1,6 +1,7 @@
 package com.ecec.rweber.inventory;
 
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import org.jdom.Element;
@@ -11,7 +12,6 @@ import com.ecec.rweber.conductor.framework.Helper;
 import com.ecec.rweber.conductor.framework.datasources.exception.InvalidDatasourceException;
 import com.ecec.rweber.conductor.framework.datasources.sql.SQLDatasource;
 import com.ecec.rweber.inventory.utils.Database;
-import com.ecec.rweber.inventory.utils.NetworkDetector;
 import com.ecec.rweber.inventory.utils.PCInfo;
 import com.ecec.rweber.utils.SettingsReader;
 
