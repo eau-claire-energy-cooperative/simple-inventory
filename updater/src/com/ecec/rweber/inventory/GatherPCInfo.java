@@ -160,9 +160,26 @@ public class GatherPCInfo extends Car{
 			"Serial Number: " + info.get("SerialNumber") + "<br>" + 
 			"Current User: " + info.get("CurrentUser");
 		
-		EmailMessage emailM = new EmailMessage(db_settings.get("outgoing_email"), "Computer Add Request", db_settings.get("admin_email"), message);
+		EmailMessage emailM = new EmailMessage(db_settings.get("outgoing_email"), "Computer Add Request", this.getAdminEmail(), message);
 		
 		EmailSender sender = new EmailSender(db_settings.get("smtp_server"),db_settings.get("smtp_user"),db_settings.get("smtp_pass"),db_settings.get("smtp_auth"));
 		sender.sendTo(emailM);
+	}
+	
+	private String getAdminEmail(){
+		String result = "";
+		
+		//get the admin email addresses
+		List<HashMap<String,String>> adminEmails = db.executeQuery("select email from " + Database.USERS + " where send_email = ?", "true");
+		
+		HashMap<String,String> temp = null;
+		for(int count = 0; count < adminEmails.size(); count ++)
+		{
+			temp = adminEmails.get(count);
+			
+			result = result + temp.get("email") + ",";
+		}
+		
+		return result;
 	}
 }

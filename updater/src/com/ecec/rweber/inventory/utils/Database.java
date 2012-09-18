@@ -6,4 +6,5 @@ public class Database {
 	public static final String PROGRAMS = "programs";
 	public static final String SERVICES = "services";
 	public static final String LOGS = "logs";
+	public static final String USERS = "users";
 }
