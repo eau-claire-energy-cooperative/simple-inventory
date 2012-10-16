@@ -44,6 +44,14 @@ class SearchController extends AppController {
 		$this->set("results", $this->Computer->find('all',array('conditions' => array($type['field'] => $q),'order'=>'Computer.ComputerName')));
 	}
 	
+	function listAll(){
+		$this->set('title_for_layout',"List All");
+		$this->set('q',"All");
+		$this->set("results",$this->Computer->find('all',array('order'=>array('Computer.ComputerName'))));
+		
+		$this->render('search');
+	}
+	
 	function searchProgram($program){
 		$this->set("title_for_layout","Search Results");
 		
