@@ -91,7 +91,7 @@ class AdminController extends AppController {
 	
 	public function location() {
 	 	$this->set('title_for_layout','Locations');
-        $this->set('location', $this->Location->find('all', array('order'=> array('location ASC'))));// gets all data
+        $this->set('location', $this->Location->find('all', array('order'=> array('is_default desc, location ASC'))));// gets all data
     }
 	
 	public function editLocation($id= null) {
@@ -112,6 +112,18 @@ class AdminController extends AppController {
             	$this->Session->setFlash('Unable to update your entry.');
         	}
    		}
+	}
+	
+	public function setDefaultLocation($id){
+		//reset all locations to false
+		$this->Location->query("update location set is_default='false'");	
+		
+		$this->Location->create();
+		$this->Location->set('id',$id);
+		$this->Location->set('is_default','true');
+		$this->Location->save();
+		
+		$this->redirect(array('action'=>'location'));
 	}
 	
 	public function addLocation() {

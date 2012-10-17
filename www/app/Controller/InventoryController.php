@@ -135,7 +135,7 @@ class InventoryController extends AppController {
 	public function add() {
 		$this->set('title_for_layout','Add a New Computer');
 		
-		$this->set('location', $this->Location->find('list', array('fields' => array("Location.Location"))));
+		$this->set('location', $this->Location->find('list', array('fields' => array("Location.Location"), 'order'=>array('is_default desc, location asc'))));
         if ($this->request->is('post')) {
             if ($this->Computer->save($this->request->data)) {
             	//create log entry
@@ -152,7 +152,7 @@ class InventoryController extends AppController {
 	
 	public function edit($id= null) {
 		$this->set('title_for_layout','Edit Computer Data');
-		$this->set('location', $this->Location->find('list', array('fields' => array("Location.Location"),'order'=>'Location.Location')));
+		$this->set('location', $this->Location->find('list', array('fields' => array("Location.Location"),'order'=>'Location.is_default desc, Location.Location asc')));
 	    $this->Computer->id = $id;
 	    
 	    if ($this->request->is('get')) {
