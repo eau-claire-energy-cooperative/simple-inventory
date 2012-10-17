@@ -117,7 +117,11 @@ public class GatherPCInfo extends Car{
 			if(this.shouldAddComputer(info))
 			{
 				//add this computer to the inventory
-				this.addComputer(info);
+				if(this.addComputer(info))
+				{
+					//we actually performed the add operation, try and do this again
+					this.sendResults(info);
+				}
 			}
 		}
 		
@@ -152,18 +156,50 @@ public class GatherPCInfo extends Car{
 		return result;
 	}
 	
-	private void addComputer(PCInfo info){
-		logInfo("Sending add request for computer " + info.get("ComputerName"));
+	private boolean addComputer(PCInfo info){
+		boolean result = false;	//by default assume we did not add the computer
+		EmailMessage emailM = null;
 
-		//create the body of the message
-		String message = "Computer <b>" + info.get("ComputerName") + "</b> is requesting to be added to the inventory. Details are below: <br><br>" + 
-			"Serial Number: " + info.get("SerialNumber") + "<br>" + 
-			"Current User: " + info.get("CurrentUser");
+		if(this.db_settings.get("computer_auto_add").equals("true"))
+		{
+			//get the default location id
+			List<HashMap<String,String>> locationId = db.executeQuery("select id,location from " + Database.LOCATION + " where is_default = 'true'");
+			
+			//automatically add the computer
+			String add_computer = "insert into " + Database.COMPUTER + " (ComputerName,AssetId,ComputerLocation) values (?,1,?)";
+			db.executeUpdate(add_computer, info.get("ComputerName"),locationId.get(0).get("id"));
+			
+			//notify the admins
+			String message = "Computer <b>" + info.get("ComputerName") + "</b> has been automatically added to the inventory system. Details are below: <br><br>" + 
+				"Model: " + info.get("Model") + "<br>" + 
+				"Serial Number: " + info.get("SerialNumber") + "<br>" + 
+				"Current User: " + info.get("CurrentUser") + "<br>" + 
+				"Computer Location: " + locationId.get(0).get("location");
+			emailM = new EmailMessage(db_settings.get("outgoing_email"), "Computer Added", this.getAdminEmail(), message);
+
+			
+			logInfo("Computer " + info.get("ComputerName") + " added to database");
+			result = true;
+		}
+		else
+		{
+			logInfo("Sending add request for computer " + info.get("ComputerName"));
+	
+			//create the body of the message
+			String message = "Computer <b>" + info.get("ComputerName") + "</b> is requesting to be added to the inventory. Details are below: <br><br>" +
+			    "Model: " + info.get("Model") + "<br>" + 
+				"Serial Number: " + info.get("SerialNumber") + "<br>" + 
+				"Current User: " + info.get("CurrentUser");
+			
+			emailM = new EmailMessage(db_settings.get("outgoing_email"), "Computer Add Request", this.getAdminEmail(), message);
+			
+		}
 		
-		EmailMessage emailM = new EmailMessage(db_settings.get("outgoing_email"), "Computer Add Request", this.getAdminEmail(), message);
-		
+
 		EmailSender sender = new EmailSender(db_settings.get("smtp_server"),db_settings.get("smtp_user"),db_settings.get("smtp_pass"),db_settings.get("smtp_auth"));
 		sender.sendTo(emailM);
+		
+		return result;
 	}
 	
 	private String getAdminEmail(){

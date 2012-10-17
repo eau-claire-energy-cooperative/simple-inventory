@@ -4,16 +4,24 @@
 <h2>General</h2>
 <table>
 	<tr>
+		<td width="50%">Computer Ignore List (comma separated)</td>
+		<td><?php echo $this->Form->input('computer_ignore_list',array('label'=>false,'value'=>$settings['computer_ignore_list'])) ?></td>
+	</tr>
+	<tr>
+		<td>Enable Computer Auto Add</td>
+		<td><?php echo $this->Form->select('computer_auto_add',array('true'=>'Yes','false'=>'No'),array('value'=>$settings['computer_auto_add'],'empty'=>false)) ?></td>
+	</tr>
+</table>
+
+<h2>Computer Commands</h2>
+<table>
+	<tr>
 		<td width="50%">Show Computer Commands</td>
 		<td><?php echo $this->Form->select('show_computer_commands',array('true'=>'Yes','false'=>'No'),array('value'=>$settings['show_computer_commands'],'empty'=>false)) ?></td>
 	</tr>
 	<tr>
 		<td>Shutdown Computer Message</td>
 		<td><?php echo $this->Form->input('shutdown_message',array('label'=>false,'value'=>$settings['shutdown_message'])) ?></td>
-	</tr>
-	<tr>
-		<td>Computer Ignore List (comma separated)</td>
-		<td><?php echo $this->Form->input('computer_ignore_list',array('label'=>false,'value'=>$settings['computer_ignore_list'])) ?></td>
 	</tr>
 	<tr>
 		<td>Active Directory Admin Account</td>
