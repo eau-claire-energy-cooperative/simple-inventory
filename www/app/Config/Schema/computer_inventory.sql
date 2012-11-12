@@ -93,6 +93,7 @@ DROP TABLE IF EXISTS `location`;
 CREATE TABLE IF NOT EXISTS `location` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `location` varchar(255) NOT NULL,
+  `is_default` varchar(6) NOT NULL DEFAULT 'false',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
 
@@ -100,14 +101,14 @@ CREATE TABLE IF NOT EXISTS `location` (
 -- Dumping data for table `location`
 --
 
-INSERT INTO `location` (`id`, `location`) VALUES
-(1, 'IT'),
-(2, 'Human Resources'),
-(3, 'Office'),
-(4, 'Truck'),
-(8, 'Administration'),
-(13, 'Operations'),
-(15, 'Board Room');
+INSERT INTO `location` (`id`, `location`, `is_default`) VALUES
+(1, 'IT', 'false'),
+(2, 'Human Resources', 'false'),
+(3, 'Office', 'true'),
+(4, 'Truck', 'false'),
+(8, 'Administration', 'false'),
+(13, 'Operations', 'false'),
+(15, 'Board Room', 'false');
 
 -- --------------------------------------------------------
 
@@ -188,7 +189,8 @@ INSERT INTO `settings` (`id`, `key`, `value`) VALUES
 (18, 'show_computer_commands', 'true'),
 (19, 'domain_username', 'administrator'),
 (20, 'domain_password', 'password'),
-(21, 'shutdown_message', 'The Administrator has initiated a shutdown of your PC');
+(21, 'shutdown_message', 'The Administrator has initiated a shutdown of your PC'),
+(23, 'computer_auto_add', 'false');
 
 -- --------------------------------------------------------
 
