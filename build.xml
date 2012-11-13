@@ -22,7 +22,7 @@
   </taskdef>
 
   <target name="how_to" description="Echo Usage Instructions">
-	<echo message="Run with target update_site, or update_program" />
+	<echo message="Run with target create_batch_file, update_site, or update_program" />
   </target>
 
   <target name="update_site" description="Updates Website Data" depends="build_temp">
@@ -87,14 +87,14 @@
 
   <target name="create_batch_file" description="Creates the batch file for the login script">
     <!-- get the location of the updater directory -->
-    <input message="Enter the updater destination directory" addproperty="dest_dir" defaultvalue="" />
+    <property name="dest_dir" value="/home/inventory/updater" />
 
     <if>
       <available file="${dest_dir}" type="dir" />
       <then>
         <!-- check if a run.bat file already exists -->
 	<if>
-	  <available file="${dest_dir}/run2.bat" type="file"/>
+	  <available file="${dest_dir}/run.bat" type="file"/>
 	  <then>
 	    <echo message="run.bat file already exists, please delete before running this" />
 	  </then>
