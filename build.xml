@@ -103,7 +103,7 @@
 	    <hostinfo />
 	    <touch file="${dest_dir}/run.bat" />
 	    <echo file="${dest_dir}/run.bat" message="@echo off ${line.separator}" append="true" />
-	    <echo file="${dest_dir}/run.bat" message="set INVENTORY_PATH=\\${ADDR4}\inventory\updater ${line.separator}" append="true" />
+	    <echo file="${dest_dir}/run.bat" message="set INVENTORY_PATH=\\${ADDR4}\inventory\updater${line.separator}" append="true" />
 	    <concat destfile="${dest_dir}/run.bat" append="true" binary="yes">
 	      <filelist dir="${dir.updater}/scripts/" files="run.bat" />
 	    </concat>
