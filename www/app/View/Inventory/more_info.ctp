@@ -120,7 +120,7 @@
     <tr>
         <th style="width: 200px;">IP Address</th>
         <th style="width: 250px;">MAC Address</th>
- 		<th style="width: 250px;">Disk Space</th>
+ 		<th style="width: 250px;">C: Drive Space</th>
  		<th style="width: 250px;">Last Updated</th>
  		<th style="width: 250px;"></th>
      

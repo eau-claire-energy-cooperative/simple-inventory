@@ -3,7 +3,7 @@
 Configure::write('debug',0 );
 
 //header values
-$headers = array('Computer Name','Current User','Location','Start Mode','Status','Serial Number','Asset ID','Model','Operating System','CPU','Memory','Number of Monitors','IP Address','MAC Address','Disk Space','Last Updated');
+$headers = array('Computer Name','Current User','Location','Start Mode','Status','Serial Number','Asset ID','Model','Operating System','CPU','Memory','Number of Monitors','IP Address','MAC Address','C: Drive Space','Last Updated');
 $this->Csv->addRow($headers);
 
 foreach ($results as $post){
