@@ -4,7 +4,7 @@ class InventoryController extends AppController {
     var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace');
     var $components = array('Session','Ldap');
 
-	public $uses = array('Computer','Location', 'Programs', 'Logs','Service','Decommissioned','Setting','User');
+	public $uses = array('Computer','Location', 'Programs', 'Logs','Service','Decommissioned','Setting','User','RestrictedProgram');
 
 	public function beforeFilter(){
 		//check if we are using a login method
@@ -122,6 +122,8 @@ class InventoryController extends AppController {
         $this->set('computer', $this->Computer->read());
 		$this->set('programs', $this->Programs->find('all',array('conditions' => array('comp_id' => $id), 'order' => array('program ASC'))));
 		$this->set('services', $this->Service->find('all',array('conditions' => array('comp_id' => $id), 'order' => array('name ASC'))));
+		$this->set('restricted_programs',$this->RestrictedProgram->find('list',array('fields'=>array('RestrictedProgram.name','RestrictedProgram.id'))));
+		
     }
     
 	 public function moreInfoDecommissioned( $id) {

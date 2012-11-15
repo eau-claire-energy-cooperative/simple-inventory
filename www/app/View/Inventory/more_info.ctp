@@ -145,7 +145,6 @@
 	</tr>
 </table> 
  <?php endif; ?>
- 
 <table id="programs">
     <tr>
         <th><h1><a href="#" onClick="expandTable('programs')">Programs</a></h1></th>
@@ -153,7 +152,16 @@
     
     <?php foreach ($programs as $post): ?>
     <tr style="display:none">
-    	<td> <?php echo $this->Html->link( $post['Programs']['program'] , '/search/searchProgram/' . $post['Programs']['program']); ?></td>
+    	<td width="75%"> <?php echo $this->Html->link( $post['Programs']['program'] , '/search/searchProgram/' . $post['Programs']['program']); ?></td>
+    	<td><p><b>
+    		<?php 
+    			if(key_exists($post['Programs']['program'],$restricted_programs))
+				{
+					echo '<span class="red">Restricted</span>';
+				}
+    		?>
+    	</b></p>
+    	</td>
     </tr>
     
     <?php endforeach; ?>
