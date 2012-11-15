@@ -1,7 +1,7 @@
 <?php
 	
 class AdminController extends AppController {
-	var $uses = array('Logs','Location','Setting','User','Command','Schedule');
+	var $uses = array('Logs','Location','Setting','User','Command','Schedule','Programs','RestrictedProgram');
 	var $helpers = array('Html','Session','Time','Form');
 	var $paginate = array('limit'=>100, order=>array('Logs.id'=>'desc'));
 	
@@ -190,6 +190,35 @@ class AdminController extends AppController {
             	$this->Session->setFlash('Unable to update your entry.');
         	}
    		}
+	}
+	
+	function restricted_programs(){
+		$this->set('title_for_layout','Restricted Programs');
+		
+		//get a list of all programs on the system
+		$all_programs = $this->Programs->find('all',array('fields'=>array('DISTINCT Programs.program'),'order'=>array('Programs.program')));
+		$this->set('all_programs',$all_programs);
+		
+		//get a list of currently restricted programs
+		$this->set('restricted_programs',$this->RestrictedProgram->find('list',array('fields'=>array('RestrictedProgram.name','RestrictedProgram.id'))));
+	}
+	
+	function toggle_restricted($delete,$program)
+	{
+		if($delete == 'true')
+		{
+			$this->RestrictedProgram->delete($program);
+			$this->Session->setFlash('Unmarked Program');
+		}
+		else 
+		{
+			$this->RestrictedProgram->create();
+			$this->RestrictedProgram->set('name',$program);
+			$this->RestrictedProgram->save();
+			$this->Session->setFlash('Marked Program');
+		}
+		
+		$this->redirect(array('action'=>'restricted_programs'));
 	}
 	
 	function commands(){
