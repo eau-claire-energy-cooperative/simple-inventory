@@ -215,3 +215,36 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`id`, `name`, `username`, `password`, `email`) VALUES
 (2, 'Temp', 'test', '1a1dc91c907325c69271ddf0c944bc72', 'test@ecec.com');
+
+
+--
+-- Table structure for table `commands`
+--
+
+CREATE TABLE IF NOT EXISTS `commands` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL,
+  `parameters` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `commands`
+--
+
+INSERT INTO `commands` (`id`, `name`, `parameters`) VALUES
+(1, 'Restricted Programs', ''),
+(2, 'Wake Computer', 'Computer Name');
+
+--
+-- Table structure for table `schedules`
+--
+
+CREATE TABLE IF NOT EXISTS `schedules` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `schedule` varchar(15) NOT NULL,
+  `command_id` int(11) NOT NULL,
+  `parameters` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
