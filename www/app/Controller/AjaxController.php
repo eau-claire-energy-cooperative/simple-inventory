@@ -4,7 +4,7 @@ class AjaxController extends AppController {
     var $components = array('Session','Ping');
     var $helpers = array('Js');
 	var $layout = '';
-	var $uses = array('Computer','Setting');
+	var $uses = array('Computer','Setting','Command');
 
 	function checkRunning($name){
 		$isRunning = $this->Ping->ping($name);
@@ -31,5 +31,11 @@ class AjaxController extends AppController {
 		$this->Ping->wol($_SERVER['SERVER_ADDR'],$this->params['url']['mac']);
 	}
 	
+	function setup_command($id){
+
+		//get the command that goes with this id
+		$command = $this->Command->find('first',array('conditions'=>array('Command.id'=>$id)));
+		$this->set('command',$command);
+	}
 }
 ?>

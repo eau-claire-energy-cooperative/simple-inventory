@@ -1,7 +1,7 @@
 <?php
 	
 class AdminController extends AppController {
-	var $uses = array('Logs','Location','Setting','User');
+	var $uses = array('Logs','Location','Setting','User','Command','Schedule');
 	var $helpers = array('Html','Session','Time','Form');
 	var $paginate = array('limit'=>100, order=>array('Logs.id'=>'desc'));
 	
@@ -190,6 +190,59 @@ class AdminController extends AppController {
             	$this->Session->setFlash('Unable to update your entry.');
         	}
    		}
+	}
+	
+	function commands(){
+		$this->set('title_for_layout','Scheduled Commands');
+	
+		//get all of the commands that can be scheduled
+		$all_commands = $this->Command->find('all',array('order'=>array('Command.name')));
+		$this->set('all_commands',$all_commands);
+		
+		//get all of the current schedules
+		$all_schedules = $this->Schedule->find('all',array('order'=>array('Command.name')));
+		$this->set('all_schedules',$all_schedules);
+	}
+	
+	function schedule($id = NULL){
+		
+		if($this->request->is('post'))
+		{
+			#setup the schedule model
+			$this->Schedule->create();
+			$this->Schedule->set('schedule',$this->data['Schedule']['schedule']);
+			$this->Schedule->set('command_id',$this->data['Schedule']['command_id']);
+			
+			//get all of the parameters
+			$schedule_params = 'array(';
+			if($this->data['Schedule']['parameter_list'] != '')
+			{
+				$parameters = explode(',',$this->data['Schedule']['parameter_list']);
+				
+				foreach($parameters as $param){
+					$schedule_params = $schedule_params . "'" . $param . "'=>'" . $this->data['Schedule']['param_' . $param] . "',";
+				}
+				
+				$schedule_params = substr($schedule_params,0,-1);
+			}
+			
+			$schedule_params = $schedule_params . ')';
+			$this->Schedule->set('parameters',$schedule_params);
+			$this->Schedule->save();
+			
+			$this->Session->setFlash('Schedule Created');
+		}
+		else
+		{
+			if($id != NULL)
+			{
+				$this->Schedule->delete($id);
+				
+				$this->Session->setFlash('Schedule Removed');
+			}
+		}
+		
+		$this->redirect(array('action'=>'commands'));
 	}
 	
 }

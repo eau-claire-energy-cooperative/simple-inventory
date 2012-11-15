@@ -220,7 +220,7 @@ input[type=submit] {
 	font-size: 110%;
 	width: auto;
 }
-form .submit input[type=submit] {
+form .submit input[type=submit], button[type=submit] {
 	background:#62af56;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#76BF6B), to(#3B8230));
 	background-image: -webkit-linear-gradient(top, #76BF6B, #3B8230);
@@ -230,7 +230,7 @@ form .submit input[type=submit] {
 	padding: 8px 10px;
 	cursor:pointer;
 }
-form .submit input[type=submit]:hover {
+form .submit input[type=submit]:hover, button[type=submit]:hover {
 	background: #5BA150;
 }
 /* Form errors */
