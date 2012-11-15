@@ -122,7 +122,6 @@ class InventoryController extends AppController {
         $this->set('computer', $this->Computer->read());
 		$this->set('programs', $this->Programs->find('all',array('conditions' => array('comp_id' => $id), 'order' => array('program ASC'))));
 		$this->set('services', $this->Service->find('all',array('conditions' => array('comp_id' => $id), 'order' => array('name ASC'))));
-		$this->set('logs', $this->Logs->find('all', array('order'=> array('id ASC'))));// gets all data
     }
     
 	 public function moreInfoDecommissioned( $id) {
