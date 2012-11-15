@@ -138,7 +138,18 @@ CREATE TABLE IF NOT EXISTS `programs` (
   `version` text NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `comp_id` (`comp_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=80034 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+--
+-- Table structure for table `restricted_programs`
+--
+
+CREATE TABLE IF NOT EXISTS `restricted_programs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 
 -- --------------------------------------------------------
