@@ -222,7 +222,7 @@ class AdminController extends AppController {
 	}
 	
 	function commands(){
-		$this->set('title_for_layout','Scheduled Commands');
+		$this->set('title_for_layout','Scheduled Tasks');
 	
 		//get all of the commands that can be scheduled
 		$all_commands = $this->Command->find('all',array('order'=>array('Command.name')));

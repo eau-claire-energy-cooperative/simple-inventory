@@ -3,10 +3,10 @@
 		echo $this->Html->script("fancybox/jquery.fancybox.js",false);
 		echo $this->Html->css('jquery.fancybox.css');
 ?>
-<?php echo $this->Html->link('Admin', array('action'=>"index")); ?>
+
 <table width="100%">
 	<tr>
-		<td width="60%"><h2>Currently Scheduled Commands</h2></td>
+		<td width="60%"><h2>Currently Scheduled Tasks</h2></td>
 		<td><h2>Available Commands</h2></td>
 	</tr>
 	<tr>

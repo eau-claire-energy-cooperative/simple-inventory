@@ -1,4 +1,3 @@
-<?php echo $this->Html->link('Admin', array('action'=>"index")); ?>
 
 <table id="programs">
     <?php foreach ($all_programs as $post): ?>

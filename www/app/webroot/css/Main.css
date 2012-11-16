@@ -78,6 +78,27 @@ p {
 }
 
 
+#header ul {
+	list-style:none;
+}
+
+#header ul li {
+	float:right;
+	margin-bottom:8px;
+	font-size:1.2em;
+	
+}
+
+#header ul li a {
+	color: #fff;
+	font-weight:normal;
+	text-decoration:none;
+}
+
+#header ul li a:hover {
+	text-decoration:underline;	
+}
+
 #content{
 	background: #fff;
 	clear: both;

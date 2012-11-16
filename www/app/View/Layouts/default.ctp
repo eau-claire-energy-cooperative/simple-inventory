@@ -41,7 +41,12 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 <body>
 	<div id="container">
 		<div id="header">
-			<h1></h1>
+			<ul>
+				<li><?php echo $this->Html->link('Scheduled Tasks','/admin/commands') ?></li>
+				<li><?php echo $this->Html->link('Programs','/admin/restricted_programs') ?></li>
+				<li><?php echo $this->Html->link('Decomissioned','/inventory/decommission') ?></li>
+				<li><?php echo $this->Html->link('Inventory','/inventory/') ?></li>
+			</ul>
 		</div>
 		<div id="content">
 

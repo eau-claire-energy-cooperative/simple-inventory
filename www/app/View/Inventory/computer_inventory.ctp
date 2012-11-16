@@ -4,8 +4,6 @@
 ?>
 
 <?php echo $this->Html->link('Add Computer', array('controller' => 'Inventory', 'action' => 'add')); ?> | 
-
-<?php echo $this->Html->link('Decommissioned Machines', array('action' => 'decommission')); ?> 
 <p></p>
 
 <table id="tableSort" class="tablesorter">
