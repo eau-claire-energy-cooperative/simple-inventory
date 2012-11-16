@@ -3,7 +3,7 @@
 		echo $this->Html->script("table_utils.js",false);
 ?>
 
-<?php echo $this->Html->link('Add Computer', array('controller' => 'Inventory', 'action' => 'add')); ?> | 
+<?php echo $this->Html->link('Add Computer', array('controller' => 'Inventory', 'action' => 'add')); ?>
 <p></p>
 
 <table id="tableSort" class="tablesorter">

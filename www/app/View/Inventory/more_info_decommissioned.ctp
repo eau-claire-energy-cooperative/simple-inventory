@@ -1,7 +1,4 @@
 
-<?php echo $this->Html->link('Home', array('action' => 'home')); ?> |
-<?php echo $this->Html->link('Back', array('action' => 'decommission')); ?> 
-	 	
 <table>
     <tr>
         <th style="width: 200px;">Computer Name</th>

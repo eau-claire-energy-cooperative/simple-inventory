@@ -60,7 +60,6 @@
 	}
 </script>
 
-<?php echo $this->Html->link('Home', array('action' => 'home')); ?> |
 <?php echo $this->Html->link('Edit', array('action' => 'edit', $computer['Computer']['id'])); ?> | 
 <?php echo $this->Form->postLink(
                 'Delete',

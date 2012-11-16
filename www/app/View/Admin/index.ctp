@@ -1,4 +1,3 @@
-<p><?php echo $this->Html->link('Home', '/'); ?></p>
 <ul>
 	<li><?php echo $this->Html->link('Users',array('action'=>'users')) ?></li>
 	<li><?php echo $this->Html->link('Edit Locations', array('action' => 'location')); ?></li>
