@@ -180,6 +180,10 @@ class InventoryController extends AppController {
 	    $computer = $this->Computer->read();
 	    
 	    if ($this->Computer->delete($id)) {
+	    	//also delete programs and services
+	    	$this->Programs->query('delete from programs where com_id = ' . $id);
+	    	$this->Service->query('delete from services where comp_id = ' . $id);
+	    	
 	    	$message = 'Computer ' . $computer['Computer']['ComputerName'] . ' has been deleted';
 	    	
 	    	$this->_saveLog($message);
@@ -253,7 +257,9 @@ class InventoryController extends AppController {
 			
 			$this->Computer->delete($id);
 		
-
+			//also delete programs and services 
+			$this->Programs->query('delete from programs where com_id = ' . $id);
+			$this->Service->query('delete from services where comp_id = ' . $id);
 			
 		
 			if( $this->Decommissioned->save())
