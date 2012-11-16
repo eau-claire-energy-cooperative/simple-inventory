@@ -152,16 +152,15 @@
     
     <?php foreach ($programs as $post): ?>
     <tr style="display:none">
-    	<td width="75%"> <?php echo $this->Html->link( $post['Programs']['program'] , '/search/searchProgram/' . $post['Programs']['program']); ?></td>
-    	<td><p><b>
-    		<?php 
-    			if(key_exists($post['Programs']['program'],$restricted_programs))
-				{
-					echo '<span class="red">Restricted</span>';
-				}
-    		?>
-    	</b></p>
-    	</td>
+<?php 
+	$row_class = '';
+	
+	if(key_exists($post['Programs']['program'],$restricted_programs))
+	{
+		$row_class = 'restricted';
+	}
+?>
+    	<td class="<?php echo $row_class ?>"> <?php echo $this->Html->link( $post['Programs']['program'] , '/search/searchProgram/' . $post['Programs']['program']); ?></td>
     </tr>
     
     <?php endforeach; ?>
