@@ -27,5 +27,38 @@ App::uses('Shell', 'Console');
  * @package       app.Console.Command
  */
 class AppShell extends Shell {
-
+	var $uses = array('User','Setting');
+	
+	
+	public function sendMail($subject,$message){
+		App::import("Vendor",'PHPMailer',array('file'=>'PhpMailer/class.phpmailer.php'));
+		 
+		//get the settings
+		$settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
+		
+		//setup the mailer
+		$email = new PHPMailer();
+		$email->IsSMTP();
+		$email->IsHTML(true);
+		$email->Host = $settings['smtp_server'];
+		$email->Port = 25;
+		$email->Username = $settings['smtp_user'];
+		$email->Password = $settings['smtp_pass'];
+		$email->SetFrom($settings['outgoing_email']);
+		
+		//setup the subject/message
+		$email->Subject = $subject;
+		$email->Body = $message;
+		
+		//get the addresses to send to
+		$users = $this->User->find('all',array('conditions'=>array('User.send_email'=>'true')));
+		
+		foreach($users as $aUser){
+			$email->AddAddress($aUser['User']['email']);
+		}
+		 
+		//send the message
+		$email->Send();
+		 
+	}
 }
