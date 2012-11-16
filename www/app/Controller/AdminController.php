@@ -203,24 +203,6 @@ class AdminController extends AppController {
 		$this->set('restricted_programs',$this->RestrictedProgram->find('list',array('fields'=>array('RestrictedProgram.name','RestrictedProgram.id'))));
 	}
 	
-	function toggle_restricted($delete,$program)
-	{
-		if($delete == 'true')
-		{
-			$this->RestrictedProgram->delete($program);
-			$this->Session->setFlash('Unmarked Program');
-		}
-		else 
-		{
-			$this->RestrictedProgram->create();
-			$this->RestrictedProgram->set('name',$program);
-			$this->RestrictedProgram->save();
-			$this->Session->setFlash('Marked Program');
-		}
-		
-		$this->redirect(array('action'=>'restricted_programs'));
-	}
-	
 	function commands(){
 		$this->set('title_for_layout','Scheduled Tasks');
 	

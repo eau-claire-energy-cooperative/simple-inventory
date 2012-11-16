@@ -4,7 +4,7 @@ class AjaxController extends AppController {
     var $components = array('Session','Ping');
     var $helpers = array('Js');
 	var $layout = '';
-	var $uses = array('Computer','Setting','Command');
+	var $uses = array('Computer','Setting','Command','RestrictedProgram');
 
 	function checkRunning($name){
 		$isRunning = $this->Ping->ping($name);
@@ -36,6 +36,20 @@ class AjaxController extends AppController {
 		//get the command that goes with this id
 		$command = $this->Command->find('first',array('conditions'=>array('Command.id'=>$id)));
 		$this->set('command',$command);
+	}
+	
+	function toggle_restricted($delete,$program)
+	{
+		if($delete == 'true')
+		{
+			$this->RestrictedProgram->query(sprintf('delete from restricted_programs where name ="%s"',$program));
+		}
+		else
+		{
+			$this->RestrictedProgram->create();
+			$this->RestrictedProgram->set('name',$program);
+			$this->RestrictedProgram->save();
+		}
 	}
 }
 ?>
