@@ -27,8 +27,17 @@ App::uses('Shell', 'Console');
  * @package       app.Console.Command
  */
 class AppShell extends Shell {
-	var $uses = array('User','Setting');
+	var $uses = array('User','Setting','Logs');
 	
+	
+	public function log($message){
+		$this->Logs->create();
+		$this->Logs->set('LOGGER','Scheduler');
+		$this->Logs->set('LEVEL','INFO');
+		$this->Logs->set('MESSAGE',$message);
+		$this->Logs->set("DATED",date("Y-m-d H:i:s",time()));
+		$this->Logs->save();
+	}
 	
 	public function sendMail($subject,$message){
 		App::import("Vendor",'PHPMailer',array('file'=>'PhpMailer/class.phpmailer.php'));
@@ -54,6 +63,9 @@ class AppShell extends Shell {
 		$users = $this->User->find('all',array('conditions'=>array('User.send_email'=>'true')));
 		
 		foreach($users as $aUser){
+			//log email
+			$this->log("Sending email to " . $aUser['User']['email']);
+			
 			$email->AddAddress($aUser['User']['email']);
 		}
 		 

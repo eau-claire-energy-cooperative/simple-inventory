@@ -29,6 +29,8 @@ class RestrictedProgramsTask extends AppShell {
     	
     	if(count($found_computers) > 0)
     	{
+    		$this->log("Restricted Programs Task found programs, compiling email");
+    		
     		$message = "<p>Below is a list restricted programs and the computers they were found on:</p><br><br>";
     		
     		//prepare a message to email the administrator
