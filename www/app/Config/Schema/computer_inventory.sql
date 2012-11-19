@@ -185,18 +185,18 @@ CREATE TABLE IF NOT EXISTS `settings` (
 --
 
 INSERT INTO `settings` (`id`, `key`, `value`) VALUES
-(1, 'smtp_server', '10.10.10.3'),
-(2, 'smtp_user', 'dispatch'),
-(3, 'smtp_pass', 'Disp@tch'),
+(1, 'smtp_server', ''),
+(2, 'smtp_user', ''),
+(3, 'smtp_pass', ''),
 (4, 'smtp_auth', 'true'),
-(5, 'outgoing_email', 'administrator@ecec.com'),
+(5, 'outgoing_email', 'administrator@domain.com'),
 (10, 'computer_ignore_list', 'thor'),
 (11, 'auth_type', 'local'),
-(13, 'ldap_host', '10.10.10.3'),
+(13, 'ldap_host', ''),
 (14, 'ldap_port', '389'),
-(15, 'ldap_basedn', 'ou=ECEC users,dc=ECEC,dc=local'),
-(16, 'ldap_user', 'dispatch@ecec.local'),
-(17, 'ldap_password', 'Disp@tch'),
+(15, 'ldap_basedn', ''),
+(16, 'ldap_user', ''),
+(17, 'ldap_password', ''),
 (18, 'show_computer_commands', 'true'),
 (19, 'domain_username', 'administrator'),
 (20, 'domain_password', 'password'),
@@ -225,7 +225,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `username`, `password`, `email`) VALUES
-(2, 'Temp', 'test', '1a1dc91c907325c69271ddf0c944bc72', 'test@ecec.com');
+(2, 'Temp', 'test', '1a1dc91c907325c69271ddf0c944bc72', 'test@domain.com');
 
 
 --
