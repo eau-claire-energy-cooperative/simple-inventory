@@ -2,7 +2,7 @@
 
 class SchedulerShell extends AppShell {
 	var $uses = array('Schedule');
-	var $tasks = array('RestrictedPrograms');
+	var $tasks = array('RestrictedPrograms','WakeComputer');
 	
 	public function main(){
 		App::import('Vendor','Cron/CronExpression');
@@ -28,6 +28,10 @@ class SchedulerShell extends AppShell {
 				if($schedule['Schedule']['command_id'] == 1)
 				{
 					$this->RestrictedPrograms->execute($schedule_params);					
+				}
+				else if($schedule['Schedule']['command_id'] == 2)
+				{
+					$this->WakeComputer->execute($schedule_params);
 				}
 			}
 			else
