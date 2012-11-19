@@ -25,14 +25,15 @@ class SchedulerShell extends AppShell {
 				//create the parameter array for this task
 				eval("\$schedule_params = " . $schedule['Schedule']['parameters'] . ";");
 
-				if($schedule['Schedule']['command_id'] == 1)
-				{
-					$this->RestrictedPrograms->execute($schedule_params);					
+				switch($aSchedule['Schedule']['command_id']){
+					case 1:
+						$this->RestrictedPrograms->execute($schedule_params);
+						break;
+					case 2:
+						$this->WakeComputer->execute($schedule_params);
+						break;
 				}
-				else if($schedule['Schedule']['command_id'] == 2)
-				{
-					$this->WakeComputer->execute($schedule_params);
-				}
+
 			}
 			else
 			{
