@@ -56,6 +56,19 @@ class PingComponent extends Component {
 		}
 	}
 	
+	function shutdown_computer($computer,$restart,$settings){
+		
+		$exec_string = 'net rpc shutdown -I ' . $computer . ' -U ' . $settings['domain_username'] . '%' . $settings['domain_password'] . ' ';
+		
+		if($restart == 'true'){
+			$exec_string = $exec_string . '-r ';
+		}
+		
+		$exec_string = $exec_string . '-C "' . $settings['shutdown_message'] . '"';
+		
+		exec($exec_string);
+	}
+	
 	function iprange($ip,$mask=24,$return_array=FALSE) {
 		$corr=(pow(2,32)-1)-(pow(2,32-$mask)-1);
 		$first=ip2long($ip) & ($corr);
