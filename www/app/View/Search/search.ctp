@@ -6,7 +6,7 @@
 <table>
     
    <?php foreach ($results as $post): ?>
-    
+   	<?php if(isset($post['Computer']['ComputerName'])): ?>
     <tr>
     		
     	 <td width="20%"> <?php echo $this->Html->link( $post['Computer']['ComputerName'] , array('controller'=>'inventory','action' => 'moreInfo', $post['Computer']['id'])); ?></td>
@@ -15,7 +15,7 @@
        	 <td width="20%"> <?php echo $post['Computer']['Model']; ?></td>
        	 <td> <?php echo $post['Computer']['OS']; ?></td>
     </tr>
-  
+     <?php endif ?>
     <?php endforeach; ?>
 	
 </table>
