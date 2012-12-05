@@ -144,6 +144,8 @@
 	</tr>
 </table> 
  <?php endif; ?>
+ 
+<?php if(count($programs) > 0): ?>
 <table id="programs">
     <tr>
         <th><h1><a href="#" onClick="expandTable('programs')">Programs</a></h1></th>
@@ -164,7 +166,9 @@
     
     <?php endforeach; ?>
  </table>
+ <?php endif; ?>
  
+ <?php if(count($services) > 0): ?>
  <table id="services">
     <tr>
         <th colspan="3"><h1><a href="#" onClick="expandTable('services')">Services</a></h1></th>
@@ -179,4 +183,5 @@
     
     <?php endforeach; ?>
  </table>
+ <?php endif ?>
  
