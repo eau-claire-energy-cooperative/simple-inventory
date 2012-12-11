@@ -28,10 +28,6 @@
          <td><?php echo $post['Computer']['Memory']  ?> GB</td>
          <td><?php echo $this->Html->link( $post['Location']['location'], array('controller'=>'search','action' => 'search', 0,$post['Computer']['ComputerLocation'])); ?></td>
          <td><?php echo $this->Time->format('m/d/Y',$post['Computer']['LastUpdated']) ?></td>   
-         <td>
-         <?php echo $this->Html->link('Decommission', array('action' => 'confirmDecommission', $post['Computer']['id'])); ?>
-        </td>
- 
     </tr>
     
     <?php endforeach; ?>

@@ -66,6 +66,7 @@
                 array('action' => 'delete', $computer['Computer']['id']),
                 array('confirm' => 'Are you sure?'));
             ?>
+<span style="float:right"><?php echo $this->Html->link('Decommission', array('action' => 'confirmDecommission', $computer['Computer']['id'])); ?></span>
 <table>
     <tr>
         <th style="width: 200px;">Computer Name</th>
