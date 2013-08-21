@@ -4,6 +4,10 @@
 <h2>General</h2>
 <table>
 	<tr>
+		<td width="50%">Authentication Method</td>
+		<td><?php echo $this->Form->select('auth_type',array('local'=>'Local Users','ldap'=>'LDAP Connection'),array('value'=>$settings['auth_type'],'empty'=>false)) ?></td>
+	</tr>
+	<tr>
 		<td width="50%">Computer Ignore List (comma separated)</td>
 		<td><?php echo $this->Form->input('computer_ignore_list',array('label'=>false,'value'=>$settings['computer_ignore_list'])) ?></td>
 	</tr>
@@ -24,21 +28,17 @@
 		<td><?php echo $this->Form->input('shutdown_message',array('label'=>false,'value'=>$settings['shutdown_message'])) ?></td>
 	</tr>
 	<tr>
-		<td>Active Directory Admin Account</td>
+		<td>Admin Account (Domain account works best)</td>
 		<td><?php echo $this->Form->input('domain_username',array('label'=>false,'value'=>$settings['domain_username'])) ?></td>
 	</tr>
 	<tr>
-		<td>Active Directory Admin Password</td>
+		<td>Admin Password</td>
 		<td><?php echo $this->Form->input('domain_password',array('label'=>false,'value'=>$settings['domain_password'])) ?></td>
 	</tr>
 </table>
 
-<h2>Authentication Settings</h2>
+<h2>LDAP Settings</h2>
 <table>
-	<tr>
-		<td width="50%">Authentication Method</td>
-		<td><?php echo $this->Form->select('auth_type',array('local'=>'Local Users','ldap'=>'LDAP Connection'),array('value'=>$settings['auth_type'],'empty'=>false)) ?></td>
-	</tr>
 	<tr>
 		<td>LDAP Host</td>
 		<td><?php echo $this->Form->input('ldap_host',array('label'=>false,'value'=>$settings['ldap_host'])) ?></td>
@@ -48,8 +48,12 @@
 		<td><?php echo $this->Form->input('ldap_port',array('label'=>false,'value'=>$settings['ldap_port'])) ?></td>
 	</tr>
 	<tr>
-		<td>LDAP Search Base</td>
+		<td>LDAP Authentication Search Base</td>
 		<td><?php echo $this->Form->input('ldap_basedn',array('label'=>false,'value'=>$settings['ldap_basedn'])) ?></td>
+	</tr>
+	<tr>
+		<td>LDAP Computers Search Base</td>
+		<td><?php echo $this->Form->input('ldap_computers_basedn',array('label'=>false,'value'=>$settings['ldap_computers_basedn'])) ?></td>
 	</tr>
 	<tr>
 		<td>LDAP Username</td>

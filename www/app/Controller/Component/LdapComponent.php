@@ -39,6 +39,27 @@ class LdapComponent extends Component {
     	return $result;
     }
     
+	public function getComputers(){
+		$result = null;
+		
+		$this->connect();
+		
+		if(isset($this->dsPointer))
+		{
+			$query = ldap_search($this->dsPointer,$this->baseDN,"(objectClass=Computer)");
+	
+			if($query){
+				ldap_sort($this->dsPointer,$query,'cn');
+				
+				$result = ldap_get_entries($this->dsPointer,$query);
+			}
+		}
+		
+		$this->disconnect();
+		
+		return $result;
+	}
+	
     private function getUser($user){
     	
     	if(isset($this->dsPointer))

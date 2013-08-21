@@ -255,7 +255,6 @@ class AdminController extends AppController {
 		
 		$this->redirect(array('action'=>'commands'));
 	}
-	
 }
 
 ?>

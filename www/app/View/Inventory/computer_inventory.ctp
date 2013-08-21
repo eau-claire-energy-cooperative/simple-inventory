@@ -3,7 +3,10 @@
 		echo $this->Html->script("table_utils.js",false);
 ?>
 
-<?php echo $this->Html->link('Add Computer', array('controller' => 'Inventory', 'action' => 'add')); ?>
+<?php echo $this->Html->link('Add Computer', array('controller' => 'Inventory', 'action' => 'add')); ?> 
+<?php if($settings['ldap_computers_basedn'] != ''): ?> | 
+<?php echo $this->Html->link('Active Directory Sync', array('controller' => 'Inventory', 'action' => 'active_directory_sync')); ?>
+<?php endif; ?>
 <p></p>
 
 <table id="tableSort" class="tablesorter">

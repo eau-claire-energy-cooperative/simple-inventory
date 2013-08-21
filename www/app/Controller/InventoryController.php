@@ -315,6 +315,83 @@ class InventoryController extends AppController {
 		}
 	}
 	
+	function active_directory_sync($action = null){
+		$this->set('title_for_layout','Active Directory Sync');
+		
+		if($action != null)
+		{
+			$settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
+		
+			//get the ldap computer listing
+			$this->Ldap->setup(array('host'=>$settings['ldap_host'],'port'=>$settings['ldap_port'],'baseDN'=>$settings['ldap_computers_basedn'],'user'=>$settings['ldap_user'],'password'=>$settings['ldap_password']));
+			$ad_computers = array();
+			$ldap_response = $this->Ldap->getComputers();
+			
+			
+			$result = array();
+			
+			if($action == 'compare')
+			{
+				foreach($ldap_response as $lr)
+				{
+					if(isset($lr['cn']))
+					{
+						$ad_computers[] = trim(strtoupper($lr['cn'][0]));
+					}
+				}
+			
+				//get the computer inventory 
+				$inventory_computers = $this->Computer->find('list', array('fields'=>array('ComputerName'),'order'=> array('ComputerName ASC')));
+			
+				//transform the names to uppercase
+				for($i = 0; $i < count($inventory_computers); $i ++)
+				{
+					$inventory_computers[$i] = trim(strtoupper($inventory_computers[$i]));
+				}
+			
+				//find the differences between the two lists
+				$ad_diff = array_diff($ad_computers,$inventory_computers);
+				$inventory_diff = array_diff($inventory_computers,$ad_computers);
+				
+				//merge the lists
+				foreach($ad_diff as $diff){
+					$result[$diff] = array('value'=>'Not in Inventory','class'=>'not_inventory');
+				}
+
+				foreach($inventory_diff as $diff){
+					if($diff != '')
+					{
+						$result[$diff] = array('value'=>'Not in Active Directory','class'=>'not_ad');
+					}
+				}
+				
+				//sort the final array
+				ksort($result);
+				
+			}
+			else if ($action == 'find_old')
+			{
+				foreach($ldap_response as $lr)
+				{
+					if(isset($lr['cn']))
+					{
+						//convert the last login to unix time
+						$lastLogon = (($lr['lastlogontimestamp'][0]/10000000)-11644473600);
+						
+						//if user hasn't logged on in more than 60 days
+						if($lastLogon < time() - (86400 * 60))
+						{
+							$result[trim(strtoupper($lr['cn'][0]))] = array('value'=>'Last Active Directory Logon: ' . date('F d, Y',$lastLogon));
+						}
+					}
+				}
+			}
+		
+			$this->set('computers',$result);
+		}
+		
+	}
+	
 	function _saveLog($message){
 		$this->Logs->create();
 		$this->Logs->set('LOGGER','Website');
