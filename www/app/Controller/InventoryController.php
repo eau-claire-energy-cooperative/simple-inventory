@@ -376,7 +376,7 @@ class InventoryController extends AppController {
 					if(isset($lr['cn']))
 					{
 						//convert the last login to unix time
-						$lastLogon = (($lr['lastlogontimestamp'][0]/10000000)-11644473600);
+						$lastLogon = (($lr['lastlogon'][0]/10000000)-11644473600);
 						
 						//if user hasn't logged on in more than 60 days
 						if($lastLogon < time() - (86400 * 60))
