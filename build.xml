@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Simple Inventory Builder" default="how_to" basedir=".">
-  <property name="jar.manifest" value="jars/conductor_framework.jar jars/cron4j-2.2.3.jar jars/jdom.jar jars/mysqlconnect.jar jars/utils.jar jars/xml-apis.jar jars/jcifs-1.3.17.jar jars/log4j-1.2.16.jar jars/mail.jar sigar-bin/lib/sigar.jar"/>
+  <property name="jar.manifest" value="jars/conductor_framework.jar jars/cron4j-2.2.3.jar jars/jdom.jar jars/mysqlconnect.jar jars/utils.jar jars/xml-apis.jar jars/jcifs-1.3.17.jar jars/log4j-1.2.16.jar jars/mail.jar jars/json-simple-1.1.1.jar sigar-bin/lib/sigar.jar"/>
   <property name="dir.updater" value="updater" />
   <property name="dir.www" value="www" />
   <property name="dir.build" value="../build" />
