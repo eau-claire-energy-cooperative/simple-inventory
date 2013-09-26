@@ -7,7 +7,7 @@
 	<log debug="false">
 		<console>false</console>
 		<file>false</file>
-		<database datasource="inventory">true</database>
+		<custom class="com.ecec.rweber.inventory.utils.WebsiteLogger" url="http://inventory.ecec.com/inventory/">true</custom>
 	</log>
 	
 	<!-- set the data and files directory manually -->
@@ -18,13 +18,9 @@
 		<train name="Update Info" schedule="*/5 * * * *">
 			<options>
 				<option name="network">10.10.10.x</option>
-				<option name="settings_db">inventory</option>
+				<option name="inventory_url">http://inventory.ecec.com/inventory/</option>
 			</options>
-			<car name="Update PC Info" class="com.ecec.rweber.inventory.GatherPCInfo">
-				<options>
-					<option name="request_add">true</option>
-				</options>
-			</car>
+			<car name="Update PC Info" class="com.ecec.rweber.inventory.GatherPCInfo" />
 			<car name="Find Programs" class="com.ecec.rweber.inventory.FindPrograms" />
 			<car name="Find Services" class="com.ecec.rweber.inventory.WindowsServices" />
 		</train>

@@ -12,6 +12,7 @@ import com.ecec.rweber.conductor.framework.datasources.file.FileDatasource;
 import com.ecec.rweber.conductor.framework.datasources.file.FileRepository;
 import com.ecec.rweber.conductor.framework.datasources.file.RepositoryFile;
 import com.ecec.rweber.conductor.framework.datasources.file.SMBRepository;
+import com.ecec.rweber.inventory.utils.GetDBSettings;
 
 public class MoveShortcuts extends Car{
 	private FileDatasource localDir = null;
@@ -19,6 +20,7 @@ public class MoveShortcuts extends Car{
 	
 	public MoveShortcuts(Element c, Helper h, HashMap<String, String> tParams) {
 		super(c, h, tParams);
+		this.settingsGrabber = new GetDBSettings();
 		
 		String username = System.getProperty("user.name");
 		

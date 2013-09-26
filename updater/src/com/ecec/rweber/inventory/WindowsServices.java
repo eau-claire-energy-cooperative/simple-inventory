@@ -2,8 +2,10 @@ package com.ecec.rweber.inventory;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jdom.Element;
+import org.json.simple.JSONObject;
 
 import com.citumpe.ctpTools.jWMI;
 import com.ecec.rweber.conductor.framework.Car;
@@ -11,27 +13,23 @@ import com.ecec.rweber.conductor.framework.Helper;
 import com.ecec.rweber.conductor.framework.datasources.exception.InvalidDatasourceException;
 import com.ecec.rweber.conductor.framework.datasources.sql.SQLDatasource;
 import com.ecec.rweber.inventory.FindPrograms.PCProgram;
+import com.ecec.rweber.inventory.api.ApiManager;
 import com.ecec.rweber.inventory.utils.Database;
+import com.ecec.rweber.inventory.utils.GetDBSettings;
 import com.ecec.rweber.inventory.utils.PCInfo;
 import com.ecec.rweber.utils.SettingsReader;
 
 
 public class WindowsServices extends Car{
 	private Integer computerId = null;
-	private SQLDatasource db = null;
+	private ApiManager api = null;
 	
 	public WindowsServices(Element c, Helper h, HashMap<String, String> tParams) {
 		super(c, h, tParams);
+		this.settingsGrabber = new GetDBSettings();
 		
-		//create db connection
-		try {
-			db = h.getSQLDatasource("inventory");
-			
-		} catch (InvalidDatasourceException e) {
-			logError("Can't connect to Inventory DB");
-			e.printStackTrace();
-		}
-		
+		//create the api manager
+		api = ApiManager.getInstance(parameters.get("inventory_url"));
 		
 		//find the computer ID in the database
 		String computerName = PCInfo.getComputerName();
@@ -39,11 +37,12 @@ public class WindowsServices extends Car{
 		if(computerName != null)
 		{
 			//get this computer's ID based on the name
-			List<HashMap<String,String>> queryResults = db.executeQuery("select ID from " + Database.COMPUTER + " where ComputerName = ?", computerName);
+			JSONObject queryResults = api.computer_exists(computerName);
 			
-			if(!queryResults.isEmpty())
+			if(queryResults != null && !queryResults.get("type").equals(ApiManager.RESPONSE_ERROR))
 			{
-				computerId= new Integer(queryResults.get(0).get("ID"));
+				JSONObject computerO = (JSONObject)queryResults.get("result");
+				computerId = new Integer(computerO.get("id").toString());
 			}
 			
 		}
@@ -51,12 +50,11 @@ public class WindowsServices extends Car{
 
 	@Override
 	protected void cleanup() {
-		db.disconnect();
+		
 	}
 
 	@Override
 	protected void runImp(Helper arg0) {
-		String updateStatement = "insert into " + Database.SERVICES +  " (comp_id,name,startmode,status) values (?,?,?,?)";
 		List<Element> wmi = null;
 		
 		try {
@@ -69,17 +67,25 @@ public class WindowsServices extends Car{
 		
 		if(computerId != null)
 		{
+			//reuse these parameters, just reset the args
+			Map<String,String> params = new HashMap<String,String>();
+			params.put("id",computerId.toString());
+			
 			logInfo("Found " + wmi.size() + " services for computer " + PCInfo.getComputerName());
+			
 			//clear out the services list
-			db.executeUpdate("delete from " + Database.SERVICES + " where comp_id = ?", computerId);
+			api.services(ApiManager.SERVICE_CLEAR, params);
 			
 			//insert each service into the database
 			Element temp = null;
 			for(int count = 0; count < wmi.size(); count ++)
 			{
 				temp = wmi.get(count);
+				params.put("name",temp.getChildText("DisplayName"));
+				params.put("mode",temp.getChildText("StartMode"));
+				params.put("status",temp.getChildText("State"));
 				
-				db.executeUpdate(updateStatement, computerId,temp.getChildText("DisplayName"),temp.getChildText("StartMode"),temp.getChildText("State"));
+				api.services(ApiManager.SERVICE_ADD, params);
 			}
 		}
 		else

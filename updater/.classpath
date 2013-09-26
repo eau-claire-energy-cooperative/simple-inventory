@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="jars/xml-apis.jar"/>
 	<classpathentry kind="lib" path="sigar-bin/lib/sigar.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="jars/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

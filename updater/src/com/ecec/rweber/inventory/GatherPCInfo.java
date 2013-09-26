@@ -1,48 +1,40 @@
 package com.ecec.rweber.inventory;
 
-import java.util.Date;
-
-
+import java.sql.Timestamp;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.cmd.Shell;
 import org.jdom.Element;
-
-import com.citumpe.ctpTools.jWMI;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import com.ecec.rweber.conductor.framework.Car;
 import com.ecec.rweber.conductor.framework.Helper;
-import com.ecec.rweber.conductor.framework.datasources.exception.InvalidDatasourceException;
-import com.ecec.rweber.conductor.framework.datasources.sql.SQLDatasource;
 import com.ecec.rweber.conductor.framework.mail.EmailMessage;
 import com.ecec.rweber.conductor.framework.mail.EmailSender;
+import com.ecec.rweber.inventory.api.ApiManager;
 import com.ecec.rweber.inventory.commands.*;
-import com.ecec.rweber.inventory.utils.Database;
+import com.ecec.rweber.inventory.utils.GetDBSettings;
 import com.ecec.rweber.inventory.utils.PCInfo;
 
 public class GatherPCInfo extends Car{
 	private Sigar sigar;
-	private SQLDatasource db = null;
+	private ApiManager api = null;
 	
 	public GatherPCInfo(Element c, Helper h, HashMap<String, String> tParams) {
 		super(c, h, tParams);
-	
+		this.settingsGrabber = new GetDBSettings();
+		
 		//create Sigar for PC info
 		sigar = new Shell().getSigar();
 		
-		//create db connection
-		try {
-			db = h.getSQLDatasource("inventory");
-			
-		} catch (InvalidDatasourceException e) {
-			logError("Can't connect to Inventory DB");
-			e.printStackTrace();
-		}
+		//create api
+		api = ApiManager.getInstance(parameters.get("inventory_url"));
 	}
 
 	@Override
 	protected void cleanup() {
-		db.disconnect();
+		
 	}
 
 	@Override
@@ -96,20 +88,25 @@ public class GatherPCInfo extends Car{
 	
 	private void sendResults(PCInfo info){
 		//get this computer's ID based on the name
-		List<HashMap<String,String>> queryResults = db.executeQuery("select ID from " + Database.COMPUTER + " where ComputerName = ?", info.get("ComputerName"));
+		JSONObject queryResults = api.computer_exists(info.get("ComputerName"));
+				
 		Integer compId = null;
 		
-		if(!queryResults.isEmpty())
+		if(queryResults != null && !queryResults.get("type").equals(ApiManager.RESPONSE_ERROR))
 		{
-			compId = new Integer(queryResults.get(0).get("ID"));
+			JSONObject computerO = (JSONObject)queryResults.get("result");
+			compId = new Integer(computerO.get("id").toString());
+			
+			//add some fields for the database
+			info.addField("id", compId.toString());
+			info.addField("LastUpdated",new Timestamp(System.currentTimeMillis()).toString());
 			
 			//update the computer info in the database
-			String updateString = "update " + Database.COMPUTER + " set SerialNumber = ?, CurrentUser = ?, Model = ?, OS = ?, Memory = ?, MemoryFree = ?, CPU = ?, IPaddress = ?, MACaddress = ?, DiskSpace = ?, DiskSpaceFree = ?, NumberOfMonitors = ?, LastUpdated = ?, LastBooted = ?  where ID = ?";
-			db.executeUpdate(updateString, info.get("SerialNumber"),info.get("CurrentUser"),info.get("Model"),info.get("OS") + " " + info.get("OS_Arch"),info.get("Memory"),info.get("MemoryFree"),info.get("CPU"),info.get("IPaddress"),info.get("MACaddress"),info.get("DiskSpace"),info.get("DiskSpaceFree"),info.get("NumberOfMonitors"),new Date(),info.get("LastBootTime"),compId);
+			api.inventory(ApiManager.INVENTORY_UPDATE, info);
 			
 			logInfo("Updating computer " + info.get("ComputerName"));
 		}
-		else
+		else if(queryResults != null)
 		{
 			logError(info.get("ComputerName") + " is not in the Inventory System");
 			
@@ -128,28 +125,19 @@ public class GatherPCInfo extends Car{
 	}
 	
 	private boolean shouldAddComputer(PCInfo info){
-		boolean result = false;
+		boolean result = true;
 		
-		//check if adding computers to the system is even allowed
-		if(this.parameters.get("request_add") != null)
+		
+		if(this.db_settings.containsKey("computer_ignore_list"))
 		{
-			result = Boolean.parseBoolean(this.parameters.get("request_add"));
+			String ignoreList = this.db_settings.get("computer_ignore_list").toLowerCase();
+			String compName = info.get("ComputerName").toLowerCase();
 			
-			//check if this computer specifically is on an ignore list
-			if(result)
+			//set back to false if on ignore list, else do nothing
+			if(ignoreList.contains(compName))
 			{
-				if(this.db_settings.containsKey("computer_ignore_list"))
-				{
-					String ignoreList = this.db_settings.get("computer_ignore_list").toLowerCase();
-					String compName = info.get("ComputerName").toLowerCase();
-					
-					//set back to false if on ignore list, else do nothing
-					if(ignoreList.contains(compName))
-					{
-						logError(compName + " is on ignore list, not sending add request");
-						result = false;
-					}
-				}
+				logError(compName + " is on ignore list, not sending add request");
+				result = false;
 			}
 		}
 		
@@ -162,24 +150,28 @@ public class GatherPCInfo extends Car{
 
 		if(this.db_settings.get("computer_auto_add").equals("true"))
 		{
-			//get the default location id
-			List<HashMap<String,String>> locationId = db.executeQuery("select id,location from " + Database.LOCATION + " where is_default = 'true'");
+			//get the default location
+			JSONObject defaultLocation = api.location(ApiManager.LOCATION_DEFAULT);
 			
-			//automatically add the computer
-			String add_computer = "insert into " + Database.COMPUTER + " (ComputerName,AssetId,ComputerLocation) values (?,1,?)";
-			db.executeUpdate(add_computer, info.get("ComputerName"),locationId.get(0).get("id"));
-			
-			//notify the admins
-			String message = "Computer <b>" + info.get("ComputerName") + "</b> has been automatically added to the inventory system. Details are below: <br><br>" + 
-				"Model: " + info.get("Model") + "<br>" + 
-				"Serial Number: " + info.get("SerialNumber") + "<br>" + 
-				"Current User: " + info.get("CurrentUser") + "<br>" + 
-				"Computer Location: " + locationId.get(0).get("location");
-			emailM = new EmailMessage(db_settings.get("outgoing_email"), "Computer Added", this.getAdminEmail(), message);
-
-			
-			logInfo("Computer " + info.get("ComputerName") + " added to database");
-			result = true;
+			if(defaultLocation != null && defaultLocation.get("type").equals(ApiManager.RESPONSE_SUCCESS))
+			{
+				//automatically add the computer
+				Map<String,String> params = new HashMap<String,String>();
+				params.put("ComputerName",info.get("ComputerName"));
+				api.inventory(ApiManager.INVENTORY_ADD, params);
+				
+				//notify the admins
+				String message = "Computer <b>" + info.get("ComputerName") + "</b> has been automatically added to the inventory system. Details are below: <br><br>" + 
+					"Model: " + info.get("Model") + "<br>" + 
+					"Serial Number: " + info.get("SerialNumber") + "<br>" + 
+					"Current User: " + info.get("CurrentUser") + "<br>" + 
+					"Computer Location: " + ((JSONObject)defaultLocation.get("result")).get("location");
+				emailM = new EmailMessage(db_settings.get("outgoing_email"), "Computer Added", this.getAdminEmail(), message);
+	
+				
+				logInfo("Computer " + info.get("ComputerName") + " added to database");
+				result = true;
+			}
 		}
 		else
 		{
@@ -206,14 +198,20 @@ public class GatherPCInfo extends Car{
 		String result = "";
 		
 		//get the admin email addresses
-		List<HashMap<String,String>> adminEmails = db.executeQuery("select email from " + Database.USERS + " where send_email = ?", "true");
-		
-		HashMap<String,String> temp = null;
-		for(int count = 0; count < adminEmails.size(); count ++)
+		JSONObject webResponse = api.users(ApiManager.USERS_EMAIL);
+		System.out.println(webResponse.toJSONString());
+		if(webResponse != null && webResponse.get("type").equals(ApiManager.RESPONSE_SUCCESS))
 		{
-			temp = adminEmails.get(count);
+			JSONArray userList = (JSONArray)webResponse.get("result");
+			JSONObject temp = null;
 			
-			result = result + temp.get("email") + ",";
+			for(int count = 0; count < userList.size(); count ++)
+			{
+				temp = (JSONObject)userList.get(count);
+				
+				result = result + ((JSONObject)temp.get("User")).get("email") + ",";
+			}
+			
 		}
 		
 		return result;
