@@ -163,7 +163,7 @@ class InventoryController extends AppController {
 	    {
 	        if ($this->Computer->save($this->request->data)) {
 	            $this->Session->setFlash('Your entry has been updated.');
-	            $this->redirect(array('action' => 'computerInventory'));
+	            $this->redirect("/inventory/moreInfo/" . $this->data['Computer']['id']);
 	        } else {
 	            $this->Session->setFlash('Unable to update your entry.');
 	        	}
