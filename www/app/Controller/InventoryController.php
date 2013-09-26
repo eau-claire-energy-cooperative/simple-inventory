@@ -181,7 +181,7 @@ class InventoryController extends AppController {
 	    
 	    if ($this->Computer->delete($id)) {
 	    	//also delete programs and services
-	    	$this->Programs->query('delete from programs where com_id = ' . $id);
+	    	$this->Programs->query('delete from programs where comp_id = ' . $id);
 	    	$this->Service->query('delete from services where comp_id = ' . $id);
 	    	
 	    	$message = 'Computer ' . $computer['Computer']['ComputerName'] . ' has been deleted';
@@ -191,6 +191,7 @@ class InventoryController extends AppController {
 	        $this->redirect(array('action' => 'computerInventory'));
 	    }
 		
+		$this->redirect(array('action' => 'computerInventory'));
 	}
 	
 	
