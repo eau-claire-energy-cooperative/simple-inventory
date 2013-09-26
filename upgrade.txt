@@ -1,0 +1,8 @@
+This is a log of changes that affect version upgrades 
+
+9/26/2013
+
+-add inventory_url parameter to config.xml
+-add custom logging parameter to config.xml
+-remove "should_add" parameter from config.xml
+
