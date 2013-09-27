@@ -3,7 +3,7 @@
 class ApiController extends AppController {
 	var $layout = '';
 	var $helpers = array('Js');
-	var $uses = array('Computer','Setting','Command','Service','RestrictedProgram','Programs','Location','Logs','User');
+	var $uses = array('Computer','Setting','Command','Service','RestrictedProgram','Programs','Location','EmailMessage','Logs');
 	var $json_data = null;
 	
 	function beforeFilter(){
@@ -90,6 +90,32 @@ class ApiController extends AppController {
 		{
 			$result["type"] = 'error';
 			$result['message'] = 'must call an action';
+		}
+		
+		$this->set('result',$result);
+		$this->render('api');
+	}
+	
+	function send_email(){
+		$result = array();
+		
+		$subject = $this->json_data->subject;
+		$message = $this->json_data->message;
+		
+		if(isset($subject) && isset($message))
+		{
+			$this->EmailMessage->create();
+			$this->EmailMessage->set('subject',$subject);
+			$this->EmailMessage->set('message',$message);
+			$this->EmailMessage->save();
+			
+			$result['type'] = 'success';
+			$result['message'] = 'sending email ' . $subject;
+		}
+		else
+		{
+			$result["type"] = 'error';
+			$result['message'] = 'need a subject and message content to send';		
 		}
 		
 		$this->set('result',$result);
@@ -290,49 +316,6 @@ class ApiController extends AppController {
 			{
 				$result["type"] = 'error';
 				$result['message'] = 'error getting settings';
-			}
-		}
-		else
-		{
-			$result["type"] = 'error';
-			$result['message'] = 'must call an action';
-		}
-		
-		$this->set('result',$result);
-		$this->render('api');
-	}
-	
-	function users($action = 'get'){
-		$result = array();
-		
-		if($action == 'get')
-		{
-			$users= $this->User->find('all',array('order'=>array('User.name')));
-			
-			if($users)
-			{
-				$result['type'] = "success";
-				$result['result'] = $users;
-			}
-			else
-			{
-				$result["type"] = 'error';
-				$result['message'] = 'error getting users';
-			}
-		}
-		else if($action == 'email')
-		{
-			$users= $this->User->find('all',array('conditions'=>array('User.send_email'=>'true'),'order'=>array('User.name')));
-			
-			if($users)
-			{
-				$result['type'] = "success";
-				$result['result'] = $users;
-			}
-			else
-			{
-				$result["type"] = 'error';
-				$result['message'] = 'error getting users';
 			}
 		}
 		else
