@@ -22,17 +22,15 @@ public class ApiManager {
 	public static final String SERVICE_CLEAR = "clear";
 	public static final String SERVICE_ADD = "add";
 	public static final String SERVICE_FIND = "get";
-	public static final String USERS_ALL = "get";
-	public static final String USERS_EMAIL = "email";
-	
+
 	private String baseUrl = null;
 	private Endpoint inventory = null;
 	private Endpoint settings = null;
 	private Endpoint log = null;
 	private Endpoint location = null;
-	private Endpoint users = null;
 	private Endpoint programs = null;
 	private Endpoint services = null;
+	private Endpoint email = null;
 	
 	public static ApiManager getInstance(String url){
 		
@@ -51,9 +49,10 @@ public class ApiManager {
 		settings = new Endpoint(baseUrl,"settings");
 		log = new Endpoint(baseUrl,"add_log");
 		location = new Endpoint(baseUrl,"location");
-		users = new Endpoint(baseUrl,"users");
 		programs = new Endpoint(baseUrl,"programs");
 		services = new Endpoint(baseUrl,"services");
+		email = new Endpoint(baseUrl,"send_email");
+		
 	}
 	
 	public JSONObject inventory(String action, Map<String,String> parameters){
@@ -86,15 +85,19 @@ public class ApiManager {
 		return log.sendRequest(params);
 	}
 	
-	public JSONObject users(String action){
-		return users.sendRequest(action, null);
-	}
-	
 	public JSONObject programs(String action, Map<String,String> params){
 		return programs.sendRequest(action, params);
 	}
 	
 	public JSONObject services(String action, Map<String,String> params){
 		return services.sendRequest(action, params);
+	}
+	
+	public JSONObject send_email(String subject,String message){
+		Map<String,String> params = new HashMap<String,String>();
+		params.put("subject", subject);
+		params.put("message", message);
+		
+		return email.sendRequest(params);
 	}
 }

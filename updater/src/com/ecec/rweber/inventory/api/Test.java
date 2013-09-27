@@ -11,10 +11,10 @@ public class Test {
 		ApiManager manager = ApiManager.getInstance("http://inventory.ecec.com/inventory/");
 		
 		Map<String,String> parameters = new HashMap<String,String>();
-		parameters.put("id","116");
-		parameters.put("program","Test Program");
+		parameters.put("subject","How are you");
+		parameters.put("message","<p><b>Just a test message</b></p>");
 		
-		JSONObject result = manager.services(ApiManager.PROGRAMS_CLEAR, parameters);
+		JSONObject result = manager.send_email("how are you", "<p><b>Just a test message</b></p>");
 		
 		System.out.println(result.toJSONString());
 	}

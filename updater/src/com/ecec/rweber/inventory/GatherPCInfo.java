@@ -146,7 +146,8 @@ public class GatherPCInfo extends Car{
 	
 	private boolean addComputer(PCInfo info){
 		boolean result = false;	//by default assume we did not add the computer
-		EmailMessage emailM = null;
+		String subject = "";
+		String message = "";
 
 		if(this.db_settings.get("computer_auto_add").equals("true"))
 		{
@@ -161,12 +162,12 @@ public class GatherPCInfo extends Car{
 				api.inventory(ApiManager.INVENTORY_ADD, params);
 				
 				//notify the admins
-				String message = "Computer <b>" + info.get("ComputerName") + "</b> has been automatically added to the inventory system. Details are below: <br><br>" + 
+				subject = "Computer Added";
+				message = "Computer <b>" + info.get("ComputerName") + "</b> has been automatically added to the inventory system. Details are below: <br><br>" + 
 					"Model: " + info.get("Model") + "<br>" + 
 					"Serial Number: " + info.get("SerialNumber") + "<br>" + 
 					"Current User: " + info.get("CurrentUser") + "<br>" + 
 					"Computer Location: " + ((JSONObject)defaultLocation.get("result")).get("location");
-				emailM = new EmailMessage(db_settings.get("outgoing_email"), "Computer Added", this.getAdminEmail(), message);
 	
 				
 				logInfo("Computer " + info.get("ComputerName") + " added to database");
@@ -178,41 +179,15 @@ public class GatherPCInfo extends Car{
 			logInfo("Sending add request for computer " + info.get("ComputerName"));
 	
 			//create the body of the message
-			String message = "Computer <b>" + info.get("ComputerName") + "</b> is requesting to be added to the inventory. Details are below: <br><br>" +
+			subject = "Computer Add Request";
+			message = "Computer <b>" + info.get("ComputerName") + "</b> is requesting to be added to the inventory. Details are below: <br><br>" +
 			    "Model: " + info.get("Model") + "<br>" + 
 				"Serial Number: " + info.get("SerialNumber") + "<br>" + 
 				"Current User: " + info.get("CurrentUser");
-			
-			emailM = new EmailMessage(db_settings.get("outgoing_email"), "Computer Add Request", this.getAdminEmail(), message);
-			
+						
 		}
 		
-
-		EmailSender sender = new EmailSender(db_settings.get("smtp_server"),db_settings.get("smtp_user"),db_settings.get("smtp_pass"),db_settings.get("smtp_auth"));
-		sender.sendTo(emailM);
-		
-		return result;
-	}
-	
-	private String getAdminEmail(){
-		String result = "";
-		
-		//get the admin email addresses
-		JSONObject webResponse = api.users(ApiManager.USERS_EMAIL);
-		System.out.println(webResponse.toJSONString());
-		if(webResponse != null && webResponse.get("type").equals(ApiManager.RESPONSE_SUCCESS))
-		{
-			JSONArray userList = (JSONArray)webResponse.get("result");
-			JSONObject temp = null;
-			
-			for(int count = 0; count < userList.size(); count ++)
-			{
-				temp = (JSONObject)userList.get(count);
-				
-				result = result + ((JSONObject)temp.get("User")).get("email") + ",";
-			}
-			
-		}
+		api.send_email(subject, message);
 		
 		return result;
 	}
