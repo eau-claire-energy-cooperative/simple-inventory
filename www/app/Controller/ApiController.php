@@ -224,6 +224,7 @@ class ApiController extends AppController {
 		{
 			$this->Programs->create();
 			$this->Programs->set('program',$this->json_data->program);
+			$this->Programs->set('version',$this->json_data->version);
 			$this->Programs->set('comp_id',$this->json_data->id);
 			$this->Programs->save();
 			

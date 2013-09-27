@@ -162,7 +162,7 @@
 		$row_class = 'restricted';
 	}
 ?>
-    	<td class="<?php echo $row_class ?>"> <?php echo $this->Html->link( $post['Programs']['program'] , '/search/searchProgram/' . $post['Programs']['program']); ?></td>
+    	<td class="<?php echo $row_class ?>"> <?php echo $this->Html->link( $post['Programs']['program'] . " v" . $post["Programs"]["version"], '/search/searchProgram/' . $post['Programs']['program']); ?></td>
     </tr>
     
     <?php endforeach; ?>
