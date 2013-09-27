@@ -2,23 +2,18 @@ package com.ecec.rweber.inventory;
 
 import java.util.ArrayList;
 
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.jdom.Element;
 import org.json.simple.JSONObject;
-
-import com.citumpe.ctpTools.jWMI;
 import com.ecec.rweber.conductor.framework.Car;
 import com.ecec.rweber.conductor.framework.Helper;
-import com.ecec.rweber.conductor.framework.datasources.exception.InvalidDatasourceException;
-import com.ecec.rweber.conductor.framework.datasources.sql.SQLDatasource;
 import com.ecec.rweber.inventory.api.ApiManager;
-import com.ecec.rweber.inventory.utils.Database;
 import com.ecec.rweber.inventory.utils.GetDBSettings;
 import com.ecec.rweber.inventory.utils.PCInfo;
-import com.ecec.rweber.utils.SettingsReader;
+import com.ecec.rweber.inventory.utils.WinRegistry;
 
 public class FindPrograms extends Car{
 	private Integer computerId = null;
@@ -58,25 +53,22 @@ public class FindPrograms extends Car{
 	protected void runImp(Helper arg0) {
 		List<PCProgram> allPrograms = new ArrayList<PCProgram>();
 		
-		try{
-			
-			List<Element> wmi = jWMI.getWMIValues("select * from Win32_Product", "Name");
-			
-			Element temp = null;
-			for(int i = 0; i < wmi.size(); i ++)
-			{
-				temp = wmi.get(i);
-				allPrograms.add(new PCProgram(temp.getChildText("Name"),temp.getChildText("Name")));
-					
-			}
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		
 		if(computerId != null)
 		{
+			try{
+				
+				//first get the 32 bit keys
+				allPrograms.addAll(this.findPrograms(WinRegistry.readStringSubKeys(WinRegistry.HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall"),"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\"));
+
+				//try and get the 64 bit software
+				allPrograms.addAll(this.findPrograms(WinRegistry.readStringSubKeys(WinRegistry.HKEY_LOCAL_MACHINE,"SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall"),"SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall"));				
+				
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			
 			logInfo("Found " + allPrograms.size() + " programs for computer " + PCInfo.getComputerName());
 			
 			//reuse these parameters, just reset the program name
@@ -92,6 +84,7 @@ public class FindPrograms extends Car{
 				//add the program for this computer
 				p = allPrograms.get(i);
 				params.put("program", p.name);
+				params.put("version",p.version);
 				api.programs(ApiManager.PROGRAMS_ADD, params);
 			}
 		}
@@ -102,18 +95,70 @@ public class FindPrograms extends Car{
 	
 	}
 
+	public List<PCProgram> findPrograms(List<String> regList, String regKey){
+		List<PCProgram> result = new ArrayList<PCProgram>();
+		
+		try{
+			for(String guid : regList)
+			{
+				String displayName = WinRegistry.readString(WinRegistry.HKEY_LOCAL_MACHINE, regKey + guid, "DisplayName");
+				String displayVersion = WinRegistry.readString(WinRegistry.HKEY_LOCAL_MACHINE, regKey + guid, "DisplayVersion");
+				
+				if(displayVersion == null)
+				{
+					displayVersion = "?";
+				}
+				
+				if(displayName != null)
+				{
+					PCProgram newProg = new PCProgram(displayName,displayVersion);
+					
+					if(!result.contains(newProg))
+					{
+						result.add(newProg);
+					}
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			
+		}
+		
+		return result;
+	}
+	
 	public class PCProgram {
 		public String name; 
 		public String version;
 		
 		public PCProgram(String name, String version)
 		{
-			this.name = name;
-			this.version = version;
+			this.name = name.trim();
+			this.version = version.trim();
 		}
 		
 		public String toString(){
 			return name + ": " + version;
 		}
+
+		@Override
+		public boolean equals(Object obj) {
+			boolean result = false;
+			
+			if(obj instanceof PCProgram)
+			{
+				PCProgram program = (PCProgram)obj;
+				
+				if(program.name.equals(this.name) && program.version.equals(this.version))
+				{
+					result = true;
+				}
+			}
+			
+			return result;
+		}
+		
+		
 	}
 }
