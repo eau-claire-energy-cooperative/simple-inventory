@@ -78,6 +78,7 @@ class ApiController extends AppController {
 				
 				$result['type'] = 'success';
 				$result['message'] = 'computer ' . $this->json_data->ComputerName . ' added to database';
+				$result['result'] = array('id'=>$this->Computer->id);
 			}
 			else
 			{
