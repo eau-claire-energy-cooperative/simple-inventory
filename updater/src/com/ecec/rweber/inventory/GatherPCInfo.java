@@ -159,19 +159,25 @@ public class GatherPCInfo extends Car{
 				//automatically add the computer
 				Map<String,String> params = new HashMap<String,String>();
 				params.put("ComputerName",info.get("ComputerName"));
-				api.inventory(ApiManager.INVENTORY_ADD, params);
+				JSONObject addResult = api.inventory(ApiManager.INVENTORY_ADD, params);
 				
-				//notify the admins
-				subject = "Computer Added";
-				message = "Computer <b>" + info.get("ComputerName") + "</b> has been automatically added to the inventory system. Details are below: <br><br>" + 
-					"Model: " + info.get("Model") + "<br>" + 
-					"Serial Number: " + info.get("SerialNumber") + "<br>" + 
-					"Current User: " + info.get("CurrentUser") + "<br>" + 
-					"Computer Location: " + ((JSONObject)defaultLocation.get("result")).get("location");
-	
-				
-				logInfo("Computer " + info.get("ComputerName") + " added to database");
-				result = true;
+				if(addResult != null && addResult.get("type").equals(ApiManager.RESPONSE_SUCCESS))
+				{
+					String computerUrl = parameters.get("inventory_url") + "inventory/moreInfo/" + ((JSONObject)addResult.get("result")).get("id");
+							
+					//notify the admins
+					subject = "Computer Added";
+					message = "Computer <b>" + info.get("ComputerName") + "</b> has been automatically added to the inventory system. Details are below: <br><br>" + 
+						"Model: " + info.get("Model") + "<br>" + 
+						"Serial Number: " + info.get("SerialNumber") + "<br>" + 
+						"Current User: " + info.get("CurrentUser") + "<br>" + 
+						"Computer Location: " + ((JSONObject)defaultLocation.get("result")).get("location") + "<br><br>" + 
+						"<a href=\"" + computerUrl + "\">" + computerUrl + "</a>";
+		
+					
+					logInfo("Computer " + info.get("ComputerName") + " added to database");
+					result = true;
+				}
 			}
 		}
 		else
