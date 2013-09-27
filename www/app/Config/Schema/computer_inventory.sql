@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 18, 2012 at 11:56 AM
+-- Generation Time: Sep 27, 2013 at 09:20 AM
 -- Server version: 5.1.54
--- PHP Version: 5.3.5-1ubuntu7.10
+-- PHP Version: 5.3.5-1ubuntu7.11
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -22,10 +22,22 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `commands`
+--
+
+CREATE TABLE IF NOT EXISTS `commands` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL,
+  `parameters` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `computer`
 --
 
-DROP TABLE IF EXISTS `computer`;
 CREATE TABLE IF NOT EXISTS `computer` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ComputerName` varchar(100) NOT NULL,
@@ -51,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `computer` (
   `notes` text NOT NULL,
   `WindowsIndex` double(10,2) NOT NULL DEFAULT '0.00',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=85 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=119 ;
 
 -- --------------------------------------------------------
 
@@ -59,7 +71,6 @@ CREATE TABLE IF NOT EXISTS `computer` (
 -- Table structure for table `decommissioned`
 --
 
-DROP TABLE IF EXISTS `decommissioned`;
 CREATE TABLE IF NOT EXISTS `decommissioned` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ComputerName` varchar(100) NOT NULL,
@@ -81,7 +92,20 @@ CREATE TABLE IF NOT EXISTS `decommissioned` (
   `RedeployedAs` varchar(255) NOT NULL,
   `notes` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `email_queue`
+--
+
+CREATE TABLE IF NOT EXISTS `email_queue` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `subject` varchar(45) NOT NULL,
+  `message` text,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 -- --------------------------------------------------------
 
@@ -89,14 +113,14 @@ CREATE TABLE IF NOT EXISTS `decommissioned` (
 -- Table structure for table `location`
 --
 
-DROP TABLE IF EXISTS `location`;
 CREATE TABLE IF NOT EXISTS `location` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `location` varchar(255) NOT NULL,
   `is_default` varchar(6) NOT NULL DEFAULT 'false',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=20 ;
 
+-- --------------------------------------------------------
 --
 -- Dumping data for table `location`
 --
@@ -110,13 +134,11 @@ INSERT INTO `location` (`id`, `location`, `is_default`) VALUES
 (13, 'Operations', 'false'),
 (15, 'Board Room', 'false');
 
--- --------------------------------------------------------
 
 --
 -- Table structure for table `logs`
 --
 
-DROP TABLE IF EXISTS `logs`;
 CREATE TABLE IF NOT EXISTS `logs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `DATED` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -124,13 +146,14 @@ CREATE TABLE IF NOT EXISTS `logs` (
   `LEVEL` varchar(10) NOT NULL,
   `MESSAGE` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16213 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=107824 ;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `programs`
 --
 
-DROP TABLE IF EXISTS `programs`;
 CREATE TABLE IF NOT EXISTS `programs` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `comp_id` int(11) NOT NULL,
@@ -138,8 +161,9 @@ CREATE TABLE IF NOT EXISTS `programs` (
   `version` text NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `comp_id` (`comp_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=613066 ;
 
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `restricted_programs`
@@ -149,8 +173,21 @@ CREATE TABLE IF NOT EXISTS `restricted_programs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `schedules`
+--
+
+CREATE TABLE IF NOT EXISTS `schedules` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `schedule` varchar(15) NOT NULL,
+  `command_id` int(11) NOT NULL,
+  `parameters` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
 
 -- --------------------------------------------------------
 
@@ -158,7 +195,6 @@ CREATE TABLE IF NOT EXISTS `restricted_programs` (
 -- Table structure for table `services`
 --
 
-DROP TABLE IF EXISTS `services`;
 CREATE TABLE IF NOT EXISTS `services` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `comp_id` int(11) NOT NULL,
@@ -166,19 +202,21 @@ CREATE TABLE IF NOT EXISTS `services` (
   `startmode` varchar(20) NOT NULL,
   `status` varchar(15) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25758 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1126761 ;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `settings`
 --
 
-DROP TABLE IF EXISTS `settings`;
 CREATE TABLE IF NOT EXISTS `settings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `key` varchar(100) NOT NULL,
   `value` varchar(150) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
+
 
 --
 -- Dumping data for table `settings`
@@ -209,7 +247,6 @@ INSERT INTO `settings` (`id`, `key`, `value`) VALUES
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) NOT NULL,
@@ -218,7 +255,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(100) NOT NULL,
   `send_email` varchar(10) NOT NULL DEFAULT 'false',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `users`
@@ -227,35 +264,4 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`id`, `name`, `username`, `password`, `email`) VALUES
 (2, 'Temp', 'test', '1a1dc91c907325c69271ddf0c944bc72', 'test@domain.com');
 
-
---
--- Table structure for table `commands`
---
-
-CREATE TABLE IF NOT EXISTS `commands` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) NOT NULL,
-  `parameters` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `commands`
---
-
-INSERT INTO `commands` (`id`, `name`, `parameters`) VALUES
-(1, 'Restricted Programs', ''),
-(2, 'Wake Computer', 'Computer Name');
-
---
--- Table structure for table `schedules`
---
-
-CREATE TABLE IF NOT EXISTS `schedules` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `schedule` varchar(15) NOT NULL,
-  `command_id` int(11) NOT NULL,
-  `parameters` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 

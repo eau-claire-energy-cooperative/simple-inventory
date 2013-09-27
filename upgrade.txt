@@ -1,4 +1,12 @@
-This is a log of changes that affect version upgrades 
+This is a log of changes that affect version upgrades, these changes must be made on existing installs so that they don't break.
+
+9/27/2013
+
+add email_queue to database. fields are id, subject, message
+
+add 'Send Emails' to command list in database
+
+setup Send Emails command in scheduler to make sure it is running
 
 9/26/2013
 
