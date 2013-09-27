@@ -61,7 +61,7 @@ public class FindPrograms extends Car{
 				allPrograms.addAll(this.findPrograms(WinRegistry.readStringSubKeys(WinRegistry.HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall"),"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\"));
 
 				//try and get the 64 bit software
-				allPrograms.addAll(this.findPrograms(WinRegistry.readStringSubKeys(WinRegistry.HKEY_LOCAL_MACHINE,"SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall"),"SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall"));				
+				allPrograms.addAll(this.findPrograms(WinRegistry.readStringSubKeys(WinRegistry.HKEY_LOCAL_MACHINE,"SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall"),"SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\"));				
 				
 			}
 			catch(Exception e)
@@ -122,7 +122,7 @@ public class FindPrograms extends Car{
 		}
 		catch(Exception e)
 		{
-			
+			e.printStackTrace();
 		}
 		
 		return result;
