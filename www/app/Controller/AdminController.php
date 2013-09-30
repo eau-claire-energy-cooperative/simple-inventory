@@ -1,8 +1,8 @@
 <?php
 	
 class AdminController extends AppController {
-	var $uses = array('Logs','Location','Setting','User','Command','Schedule','Programs','RestrictedProgram');
-	var $helpers = array('Html','Session','Time','Form');
+	var $uses = array('Computer','Logs','Location','Setting','User','Command','Schedule','Programs','RestrictedProgram');
+	var $helpers = array('Html','Session','Time','Form','LogParser');
 	var $paginate = array('limit'=>100, order=>array('Logs.id'=>'desc'));
 	
 	public function beforeFilter(){
@@ -33,6 +33,7 @@ class AdminController extends AppController {
 	{
 	 	$this->set('title_for_layout','Logs');
 	 	$this->set('logs',$this->paginate('Logs'));
+		$this->set('inventory',$this->Computer->find('list',array('fields'=>array('Computer.ComputerName','Computer.id'))));
 	}
 	
 	public function settings(){

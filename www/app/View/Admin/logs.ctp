@@ -16,7 +16,7 @@
         <td> <?php echo  $this->Time->nice( $post['Logs']['DATED']) ; ?></td>
         <td> <?php echo  $post['Logs']['LOGGER']; ?></td>
         <td> <?php echo  $post['Logs']['LEVEL']; ?></td>
-        <td> <?php echo  $post['Logs']['MESSAGE']; ?></td>
+        <td> <?php echo  $this->LogParser->parseMessage($inventory,$post['Logs']['MESSAGE']); ?></td>
     </tr>
     
     <?php endforeach; ?>
