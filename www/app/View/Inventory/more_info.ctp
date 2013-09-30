@@ -58,6 +58,13 @@
 	function wol(mac){
 		$.ajax('<?php echo $this->webroot ?>ajax/wol?mac=' + mac);
 	}
+	
+	function toggleMonitoring(id){
+		$.getJSON('<?php echo $this->webroot ?>ajax/toggle_monitoring/' + id,function(data){
+			$('#monitorToggle').html(data.message);
+		});
+	}
+	
 </script>
 
 <?php echo $this->Html->link('Edit', array('action' => 'edit', $computer['Computer']['id'])); ?> | 
@@ -66,7 +73,9 @@
                 array('action' => 'delete', $computer['Computer']['id']),
                 array('confirm' => 'Are you sure?'));
             ?>
-<span style="float:right"><?php echo $this->Html->link('Decommission', array('action' => 'confirmDecommission', $computer['Computer']['id'])); ?></span>
+<span style="float:right"><?php echo $this->Html->link('Decommission', array('action' => 'confirmDecommission', $computer['Computer']['id'])); ?> | 
+	<a href="#" id="monitorToggle" onClick="toggleMonitoring(<?php echo $computer['Computer']['id'] ?>)"><?php echo ($computer['Computer']['EnableMonitoring'] == 'true' ? "Disable Monitoring" : "Enable Monitoring"); ?></a>
+</span>
 <table>
     <tr>
         <th style="width: 200px;">Computer Name</th>

@@ -43,5 +43,26 @@ class AjaxController extends AppController {
 			$this->RestrictedProgram->save();
 		}
 	}
+	
+	function toggle_monitoring($id){
+		//get the computer in question
+		$computer = $this->Computer->find('first',array('conditions'=>array('Computer.id'=>$id)));
+		
+		if($computer){
+			
+			if($computer['Computer']['EnableMonitoring'] == 'false')
+			{
+				$computer['Computer']['EnableMonitoring'] = 'true';
+				$this->set('result',array('message'=>'Disable Monitoring'));
+			}
+			else
+			{
+				$computer['Computer']['EnableMonitoring'] = 'false';
+				$this->set('result',array('message'=>'Enable Monitoring'));
+			}
+				
+			$this->Computer->save($computer);
+		}
+	}
 }
 ?>
