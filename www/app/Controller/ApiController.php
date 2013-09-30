@@ -38,26 +38,29 @@ class ApiController extends AppController {
 		}
 		else if($action == 'update')
 		{
+			//get this computer first from the DB
+			$aComputer = $this->Computer->find('first',array('conditions'=>array('Computer.id'=>$this->json_data->id)));
+			
 			$this->Computer->create();
 			$this->Computer->id = $this->json_data->id;
 			
 			//add the fields
-			$this->Computer->set('SerialNumber',$this->json_data->SerialNumber);	
-			$this->Computer->set('CurrentUser',$this->json_data->CurrentUser);
-			$this->Computer->set('Model',$this->json_data->Model);
-			$this->Computer->set('OS',$this->json_data->OS . " " . $this->json_data->OS_Arch);
-			$this->Computer->set('Memory',$this->json_data->Memory);
-			$this->Computer->set('MemoryFree',$this->json_data->MemoryFree);
-			$this->Computer->set('CPU',$this->json_data->CPU);
-			$this->Computer->set('IPaddress',$this->json_data->IPaddress);
-			$this->Computer->set('MACaddress',$this->json_data->MACaddress);
-			$this->Computer->set('DiskSpace',$this->json_data->DiskSpace);
-			$this->Computer->set('DiskSpaceFree',$this->json_data->DiskSpaceFree);
-			$this->Computer->set('NumberOfMonitors',$this->json_data->NumberOfMonitors);
-			$this->Computer->set('LastUpdated',$this->json_data->LastUpdated);
-			$this->Computer->set('LastBooted',$this->json_data->LastBootTime);
+			$aComputer['Computer']['SerialNumber'] = $this->json_data->SerialNumber;	
+			$aComputer['Computer']['CurrentUser'] = $this->json_data->CurrentUser;
+			$aComputer['Computer']['Model'] = $this->json_data->Model;
+			$aComputer['Computer']['OS'] = $this->json_data->OS . " " . $this->json_data->OS_Arch;
+			$aComputer['Computer']['Memory'] = $this->json_data->Memory;
+			$aComputer['Computer']['MemoryFree'] = $this->json_data->MemoryFree;
+			$aComputer['Computer']['CPU'] = $this->json_data->CPU;
+			$aComputer['Computer']['IPaddress'] = $this->json_data->IPaddress;
+			$aComputer['Computer']['MACaddress'] = $this->json_data->MACaddress;
+			$aComputer['Computer']['DiskSpace'] = $this->json_data->DiskSpace;
+			$aComputer['Computer']['DiskSpaceFree'] = $this->json_data->DiskSpaceFree;
+			$aComputer['Computer']['NumberOfMonitors'] = $this->json_data->NumberOfMonitors;
+			$aComputer['Computer']['LastUpdated'] = $this->json_data->LastUpdated;
+			$aComputer['Computer']['LastBooted'] = $this->json_data->LastBootTime;
 			
-			$this->Computer->save();
+			$this->Computer->save($aComputer);
 			
 			$result['type'] = 'success';
 			$result['message'] = 'computer ' . $this->json_data->ComputerName . ' has been updated';
