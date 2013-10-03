@@ -17,7 +17,7 @@
         <th>Operating System	&uArr;&dArr;</th>	
         <th>Memory	&uArr;&dArr;</th>
         <th>Model &uArr;&dArr;</th>
-        <th>Location	&uArr;&dArr;</th>
+        <th>Tag	&uArr;&dArr;</th>
         <th>Last Update	&uArr;&dArr;</th>
     </tr>
 	</thead>

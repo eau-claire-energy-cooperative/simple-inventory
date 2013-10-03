@@ -91,12 +91,12 @@ class AdminController extends AppController {
 	}
 	
 	public function location() {
-	 	$this->set('title_for_layout','Locations');
+	 	$this->set('title_for_layout','Tags');
         $this->set('location', $this->Location->find('all', array('order'=> array('is_default desc, location ASC'))));// gets all data
     }
 	
 	public function editLocation($id= null) {
-		$this->set('title_for_layout','Edit Location');
+		$this->set('title_for_layout','Edit Tag');
     	$this->Location->id = $id;
     	
     	if ($this->request->is('get')) {
@@ -128,7 +128,7 @@ class AdminController extends AppController {
 	}
 	
 	public function addLocation() {
-		$this->set('title_for_layout','Add Location');
+		$this->set('title_for_layout','Add Tag');
 		
         if ($this->request->is('post')) {
             if ($this->Location->save($this->request->data)) {

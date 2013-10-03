@@ -2,7 +2,7 @@
 <table>
     <tr>
         <th style="width: 200px;">Computer Name</th>
-        <th style="width: 250px;">Location</th>
+        <th style="width: 250px;">Tag</th>
         <th style="width: 250px;">Current User</th>
         <th style="width: 250px;">Serial Number</th>
         <th style="width: 250px;">Asset ID</th>
