@@ -11,7 +11,7 @@ class ComputerMonitoringTask extends AppShell {
 		{
 			foreach($computerList as $computer){
 				
-				if(date('U',strtotime($computer['Computer']['LastUpdated'])) < time() - 120)
+				if(date('U',strtotime($computer['Computer']['LastUpdated'])) < time() - 345)
 				{
 					if($computer['Computer']['IsAlive'] == 'true')
 					{
