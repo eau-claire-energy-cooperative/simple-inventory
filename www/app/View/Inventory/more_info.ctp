@@ -65,6 +65,15 @@
 		});
 	}
 	
+	function toggleServiceMonitor(id,name){
+		
+		checkbox = $('#service' + id);
+		if(checkbox.is(':checked'))
+		{
+			alert('hey');
+		}
+	}
+	
 </script>
 
 <?php echo $this->Html->link('Edit', array('action' => 'edit', $computer['Computer']['id'])); ?> | 
@@ -73,8 +82,10 @@
                 array('action' => 'delete', $computer['Computer']['id']),
                 array('confirm' => 'Are you sure?'));
             ?>
-<span style="float:right"><?php echo $this->Html->link('Decommission', array('action' => 'confirmDecommission', $computer['Computer']['id'])); ?> | 
-	<a href="#" id="monitorToggle" onClick="toggleMonitoring(<?php echo $computer['Computer']['id'] ?>)"><?php echo ($computer['Computer']['EnableMonitoring'] == 'true' ? "Disable Monitoring" : "Enable Monitoring"); ?></a>
+<span style="float:right"><?php echo $this->Html->link('Decommission', array('action' => 'confirmDecommission', $computer['Computer']['id'])); ?> 
+<?php if($settings['enable_monitoring'] == 'true'): ?>
+| <a href="#" id="monitorToggle" onClick="toggleMonitoring(<?php echo $computer['Computer']['id'] ?>)"><?php echo ($computer['Computer']['EnableMonitoring'] == 'true' ? "Disable Monitoring" : "Enable Monitoring"); ?></a>
+<?php endif; ?>
 </span>
 <table>
     <tr>
@@ -181,7 +192,7 @@
  <?php if(count($services) > 0): ?>
  <table id="services">
     <tr>
-        <th colspan="3"><h1><a href="#" onClick="expandTable('services')">Services</a></h1></th>
+        <th colspan="4"><h1><a href="#" onClick="expandTable('services')">Services</a></h1></th>
     </tr>
     
     <?php foreach ($services as $post): ?>
@@ -189,6 +200,11 @@
     	<td width="33%"> <?php echo $this->Html->link( $post['Service']['name'] , '/search/searchService/' . $post['Service']['name']); ?></td>
     	<td width="33%"><?php echo $post['Service']['startmode'] ?></td>
     	<td><?php echo $post['Service']['status'] ?></td>
+    	<?php if($settings['enable_monitoring'] == 'true'): ?>
+    	<td><input type="checkbox" id="service<?php echo $post['Service']['id'] ?>" onClick="toggleServiceMonitor(<?php echo $post['Service']['id'] ?>,'<?php echo $post['Service']['name'] ?>')" /></td>
+    	<?php else: ?>
+    	<td></td>
+    	<?php endif; ?>
     </tr>
     
     <?php endforeach; ?>

@@ -1,6 +1,9 @@
 <p><?php echo $this->Html->link('Admin', array('action'=>"index")); ?> </p>
 
 <?php echo $this->Form->create('Setting',array('url'=>'/admin/settings')) ?>
+<div align="right">
+	<?php echo $this->Form->Submit('Update') ?>
+</div>
 <h2>General</h2>
 <table>
 	<tr>
@@ -14,6 +17,10 @@
 	<tr>
 		<td>Enable Computer Auto Add</td>
 		<td><?php echo $this->Form->select('computer_auto_add',array('true'=>'Yes','false'=>'No'),array('value'=>$settings['computer_auto_add'],'empty'=>false)) ?></td>
+	</tr>
+	<tr>
+		<td>Allow Live Monitoring</td>
+		<td><?php echo $this->Form->select('enable_monitoring',array('true'=>'Yes','false'=>'No'),array('value'=>$settings['enable_monitoring'],'empty'=>false)) ?></td>
 	</tr>
 </table>
 
