@@ -31,9 +31,9 @@
 					<option name="remote_path">smb://10.10.10.15/backups/Shortcuts/</option>
 				</options>
 			</car>
-			-->
+			
 			<car name="Get Services" class="com.ecec.rweber.inventory.WindowsServices" />
-		
+		-->
 		</train>
 	</trains>
 	
