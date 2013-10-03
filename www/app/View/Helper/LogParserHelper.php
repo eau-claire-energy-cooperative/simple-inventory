@@ -11,7 +11,7 @@ class LogParserHelper extends AppHelper {
 		
 		for($i = 0; $i < count($messageArray); $i ++)
 		{
-			$aString = $messageArray[$i];
+			$aString = trim($messageArray[$i]);
 				
 			if(array_key_exists($aString, $inventory))
 			{

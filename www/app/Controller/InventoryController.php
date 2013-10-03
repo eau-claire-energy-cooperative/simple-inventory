@@ -138,6 +138,9 @@ class InventoryController extends AppController {
 		
 		$this->set('location', $this->Location->find('list', array('fields' => array("Location.Location"), 'order'=>array('is_default desc, location asc'))));
         if ($this->request->is('post')) {
+        	
+			//trim computername
+			$this->request->data['Computer']['ComputerName'] = trim($this->data['Computer']['ComputerName']); 
             if ($this->Computer->save($this->request->data)) {
             	//create log entry
             	$this->_saveLog("Computer " . $this->request->data['Computer']['ComputerName'] . " added to database");

@@ -21,7 +21,7 @@ class ApiController extends AppController {
 		
 		if($action == "exists")
 		{
-			$computerName = $this->json_data->computer;
+			$computerName = trim($this->json_data->computer);
 			
 			//check if this computer exists
 			$computer = $this->Computer->find('first',array('conditions'=>array('ComputerName'=>$computerName)));
@@ -73,7 +73,7 @@ class ApiController extends AppController {
 			if($locations)
 			{
 				$this->Computer->create();
-				$this->Computer->set('ComputerName',$this->json_data->ComputerName);
+				$this->Computer->set('ComputerName',trim($this->json_data->ComputerName));
 				$this->Computer->set('AssetId',1);
 				$this->Computer->set('ComputerLocation',$locations['Location']['id']);
 				
