@@ -67,11 +67,9 @@
 	
 	function toggleServiceMonitor(id,name){
 		
-		checkbox = $('#service' + id);
-		if(checkbox.is(':checked'))
-		{
-			alert('hey');
-		}
+		$.getJSON('<?php echo $this->webroot ?>ajax/toggle_service_monitor/' + id + "/" + name,function(data){
+			//do nothing here
+		});
 	}
 	
 </script>
@@ -188,7 +186,7 @@
     <?php endforeach; ?>
  </table>
  <?php endif; ?>
- 
+
  <?php if(count($services) > 0): ?>
  <table id="services">
     <tr>
@@ -201,7 +199,7 @@
     	<td width="33%"><?php echo $post['Service']['startmode'] ?></td>
     	<td><?php echo $post['Service']['status'] ?></td>
     	<?php if($settings['enable_monitoring'] == 'true'): ?>
-    	<td><input type="checkbox" id="service<?php echo $post['Service']['id'] ?>" onClick="toggleServiceMonitor(<?php echo $post['Service']['id'] ?>,'<?php echo $post['Service']['name'] ?>')" /></td>
+    	<td><input type="checkbox" id="service<?php echo $post['Service']['id'] ?>" onClick="toggleServiceMonitor(<?php echo $post['Computer']['id'] ?>,'<?php echo $post['Service']['name'] ?>')" <?php echo (array_key_exists($post['Service']['name'],$service_monitors) ? "checked": "test") ?>/></td>
     	<?php else: ?>
     	<td></td>
     	<?php endif; ?>

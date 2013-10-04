@@ -4,7 +4,7 @@ class AjaxController extends AppController {
     var $components = array('Session','Ping');
     var $helpers = array('Js');
 	var $layout = '';
-	var $uses = array('Computer','Setting','Command','RestrictedProgram');
+	var $uses = array('Computer','Setting','Command','RestrictedProgram','ServiceMonitor');
 
 	function checkRunning($name){
 		$isRunning = $this->Ping->ping($name);
@@ -62,6 +62,25 @@ class AjaxController extends AppController {
 			}
 				
 			$this->Computer->save($computer);
+		}
+	}
+	
+	function toggle_service_monitor($compid,$service){
+		//check if this service exists
+		$serviceExists = $this->ServiceMonitor->find('first',array('conditions'=>array('ServiceMonitor.comp_id'=>$compid,'ServiceMonitor.service'=>$service)));
+		
+		if($serviceExists)
+		{
+			//remove it
+			$this->ServiceMonitor->delete($serviceExists['ServiceMonitor']['id']);
+		}
+		else
+		{
+			//create it
+			$this->ServiceMonitor->create();
+			$this->ServiceMonitor->set('comp_id',$compid);
+			$this->ServiceMonitor->set('service',$service);
+			$this->ServiceMonitor->save();
 		}
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 class ComputerMonitoringTask extends AppShell {
-    public $uses = array('Computer');
+    public $uses = array('Computer','ServiceMonitor','Service');
 
     public function execute($params) {
 		
@@ -38,10 +38,52 @@ class ComputerMonitoringTask extends AppShell {
 						$this->log('Computer ' . $computer['Computer']['ComputerName'] . ' has come online');
 						$this->sendMail($computer['Computer']['ComputerName'] . ' Is Online','Monitoring has detected that the computer: ' . $computer['Computer']['ComputerName'] . ' with IP address: ' . $computer['Computer']['IPaddress'] . ' is now online.');
 						
-					}		
+					}
+					else
+					{
+						//computer is still online from before, check services
+						$this->_checkServices($computer['Computer']['id'],$computer['Computer']['ComputerName']);
+					}	
 				}
 			}
 		}
     }
+
+	function _checkServices($compid,$name){
+		//figure out what services we need to check
+		$serviceMonitors = $this->ServiceMonitor->find('all',array('conditions'=>array('ServiceMonitor.comp_id'=>$compid)));
+		
+		if($serviceMonitors)
+		{
+			$allServices = $this->Service->find('list',array('fields'=>array('Service.name','Service.status'),'conditions'=>array('comp_id'=>$compid)));
+		
+			foreach($serviceMonitors as $monitor){
+				
+				if(array_key_exists($monitor['ServiceMonitor']['service'], $allServices))
+				{
+					//see if the service is running
+					if($allServices[$monitor['ServiceMonitor']['service']] != 'Running' && $monitor['ServiceMonitor']['isalive'] == 'true')
+					{
+						//service was a live, not it isn't
+						$this->out("Service " . $monitor['ServiceMonitor']['service'] . ' on ' . $name . ' has stopped');
+						$this->sendMail($monitor['ServiceMonitor']['service'] . ' Has Stopped','The service ' . $monitor['ServiceMonitor']['service'] . ' on computer '. $name . ' has stopped');
+						
+						$monitor['ServiceMonitor']['isalive'] = 'false';
+						$this->ServiceMonitor->save($monitor);
+					}
+					else if($allServices[$monitor['ServiceMonitor']['service']] == 'Running' && $monitor['ServiceMonitor']['isalive'] == 'false')
+					{
+						//service just came back online
+						$this->out("Service " . $monitor['ServiceMonitor']['service'] . ' on ' . $name . ' is running');
+						$this->sendMail($monitor['ServiceMonitor']['service'] . ' Is Online','The service ' . $monitor['ServiceMonitor']['service'] . ' on computer '. $name . ' is now running');
+					}
+				}
+				else
+				{
+					//has this service been uninstalled?
+				}
+			}
+		}
+	}
 }
 ?>
