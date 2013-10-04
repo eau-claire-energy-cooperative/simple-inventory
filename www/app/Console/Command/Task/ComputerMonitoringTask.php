@@ -79,6 +79,9 @@ class ComputerMonitoringTask extends AppShell {
 						//service just came back online
 						$this->out("Service " . $monitor['ServiceMonitor']['service'] . ' on ' . $name . ' is running');
 						$this->_triggerAction($monitor['ServiceMonitor']['service'] . ' Is Online','The service ' . $monitor['ServiceMonitor']['service'] . ' on computer '. $name . ' is now running');
+						
+						$monitor['ServiceMonitor']['isalive'] = 'true';
+						$this->ServiceMonitor->save($monitor);
 					}
 				}
 				else
