@@ -1,5 +1,19 @@
 This is a log of changes that affect version upgrades, these changes must be made on existing installs so that they don't break.
 
+10/4/2013
+
+adding settings "monitoring_script" and "monitoring_email"
+
+10/3/2013
+
+added setting enable_monitoring to the settings table
+
+created service_monitor table
+
+9/30/2013
+
+added 'IsAlive' to computer table with default value of true
+
 9/27/2013
 
 add email_queue to database. fields are id, subject, message
@@ -7,6 +21,10 @@ add email_queue to database. fields are id, subject, message
 add 'Send Emails' to command list in database
 
 setup Send Emails command in scheduler to make sure it is running
+
+added 'EnableMonitoring' field to computer table with default value of false
+
+added 'Active Monitoring' task to commands table
 
 9/26/2013
 
