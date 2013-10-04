@@ -11,7 +11,17 @@ public class CurrentUserCommand implements SigarCommand{
 	@Override
 	public PCInfo runCommand(Sigar sigar, PCInfo currentInfo) {
 
-		currentInfo.addField("CurrentUser", System.getProperty("user.name"));
+		String currentUser =  System.getProperty("user.name");
+		
+		if(currentUser.equals(PCInfo.getComputerName().toUpperCase() + "$"))
+		{
+			//no user is logged in, or using system account
+			currentUser = "Local System Account";
+		}
+		
+		currentInfo.addField("CurrentUser", currentUser);
+		
+		
 		
 		return currentInfo;
 	}
