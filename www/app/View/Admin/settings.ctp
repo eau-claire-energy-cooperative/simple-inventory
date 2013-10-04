@@ -18,10 +18,6 @@
 		<td>Enable Computer Auto Add</td>
 		<td><?php echo $this->Form->select('computer_auto_add',array('true'=>'Yes','false'=>'No'),array('value'=>$settings['computer_auto_add'],'empty'=>false)) ?></td>
 	</tr>
-	<tr>
-		<td>Allow Live Monitoring</td>
-		<td><?php echo $this->Form->select('enable_monitoring',array('true'=>'Yes','false'=>'No'),array('value'=>$settings['enable_monitoring'],'empty'=>false)) ?></td>
-	</tr>
 </table>
 
 <h2>Computer Commands</h2>
@@ -72,6 +68,21 @@
 	</tr>
 </table>
 
+<h2>Monitoring</h2>
+<table>
+	<tr>
+		<td width="50%">Allow Live Monitoring</td>
+		<td><?php echo $this->Form->select('enable_monitoring',array('true'=>'Yes','false'=>'No'),array('value'=>$settings['enable_monitoring'],'empty'=>false)) ?></td>
+	</tr>
+	<tr>
+		<td>Send Emails on Trigger</td>
+		<td><?php echo $this->Form->select('monitoring_email',array('true'=>'Yes','false'=>'No'),array('value'=>$settings['monitoring_email'],'empty'=>false)) ?></td>
+	</tr>
+	<tr>
+		<td>Run Script on Trigger</td>
+		<td><?php echo $this->Form->input('monitoring_script',array('label'=>false,'value'=>$settings['monitoring_script'])) ?></td>
+	</tr>
+</table>
 <h2>Mail Settings</h2>
 <table>
 	<tr>

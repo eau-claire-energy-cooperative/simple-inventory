@@ -1,9 +1,12 @@
 <?php
 class ComputerMonitoringTask extends AppShell {
     public $uses = array('Computer','ServiceMonitor','Service');
-
+	
+	var $settings = null;
+	
     public function execute($params) {
-		
+		$this->settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
+			
 		//first check on any computers that need monitoring
 		$computerList = $this->Computer->find('all',array('conditions'=>array('Computer.EnableMonitoring'=>'true')));
 		
@@ -22,7 +25,7 @@ class ComputerMonitoringTask extends AppShell {
 						$this->Computer->save($computer);
 						
 						$this->log('Computer ' . $computer['Computer']['ComputerName'] . ' has gone offline');
-						$this->sendMail($computer['Computer']['ComputerName'] . ' Has Gone Offline','Monitoring has detected that the computer: ' . $computer['Computer']['ComputerName'] . ' with IP address: ' . $computer['Computer']['IPaddress'] . ' has gone offline.');
+						$this->_triggerAction($computer['Computer']['ComputerName'] . ' Has Gone Offline','Monitoring has detected that the computer: ' . $computer['Computer']['ComputerName'] . ' with IP address: ' . $computer['Computer']['IPaddress'] . ' has gone offline.');
 					}	
 				}
 				else
@@ -36,7 +39,7 @@ class ComputerMonitoringTask extends AppShell {
 						$this->Computer->save($computer);
 						
 						$this->log('Computer ' . $computer['Computer']['ComputerName'] . ' has come online');
-						$this->sendMail($computer['Computer']['ComputerName'] . ' Is Online','Monitoring has detected that the computer: ' . $computer['Computer']['ComputerName'] . ' with IP address: ' . $computer['Computer']['IPaddress'] . ' is now online.');
+						$this->_triggerAction($computer['Computer']['ComputerName'] . ' Is Online','Monitoring has detected that the computer: ' . $computer['Computer']['ComputerName'] . ' with IP address: ' . $computer['Computer']['IPaddress'] . ' is now online.');
 						
 					}
 					else
@@ -66,7 +69,7 @@ class ComputerMonitoringTask extends AppShell {
 					{
 						//service was a live, not it isn't
 						$this->out("Service " . $monitor['ServiceMonitor']['service'] . ' on ' . $name . ' has stopped');
-						$this->sendMail($monitor['ServiceMonitor']['service'] . ' Has Stopped','The service ' . $monitor['ServiceMonitor']['service'] . ' on computer '. $name . ' has stopped');
+						$this->_triggerAction($monitor['ServiceMonitor']['service'] . ' Has Stopped','The service ' . $monitor['ServiceMonitor']['service'] . ' on computer '. $name . ' has stopped');
 						
 						$monitor['ServiceMonitor']['isalive'] = 'false';
 						$this->ServiceMonitor->save($monitor);
@@ -75,7 +78,7 @@ class ComputerMonitoringTask extends AppShell {
 					{
 						//service just came back online
 						$this->out("Service " . $monitor['ServiceMonitor']['service'] . ' on ' . $name . ' is running');
-						$this->sendMail($monitor['ServiceMonitor']['service'] . ' Is Online','The service ' . $monitor['ServiceMonitor']['service'] . ' on computer '. $name . ' is now running');
+						$this->_triggerAction($monitor['ServiceMonitor']['service'] . ' Is Online','The service ' . $monitor['ServiceMonitor']['service'] . ' on computer '. $name . ' is now running');
 					}
 				}
 				else
@@ -83,6 +86,19 @@ class ComputerMonitoringTask extends AppShell {
 					//has this service been uninstalled?
 				}
 			}
+		}
+	}
+
+	function _triggerAction($subject,$message){
+		
+		if($this->settings['monitoring_email'] == 'true')
+		{
+			$this->sendMail($subject,$message);
+		}
+		
+		if(trim($this->settings['monitoring_script']) != '')
+		{
+			exec($this->settings['monitoring_script'] . ' "' . $subject . '" "' . $message . '"');
 		}
 	}
 }
