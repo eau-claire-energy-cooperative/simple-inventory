@@ -9,7 +9,7 @@ class DashboardController extends AppController {
 		$offlineComputers = array();
 		
 		//first check on any computers that need monitoring
-		$computerList = $this->Computer->find('all',array('conditions'=>array('Computer.EnableMonitoring'=>'true')));
+		$computerList = $this->Computer->find('all',array('conditions'=>array('Computer.EnableMonitoring'=>'true'),'order'=>array('Computer.ComputerName')));
 		
 		if($computerList)
 		{
