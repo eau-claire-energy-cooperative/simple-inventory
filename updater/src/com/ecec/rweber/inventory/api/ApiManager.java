@@ -22,7 +22,8 @@ public class ApiManager {
 	public static final String SERVICE_CLEAR = "clear";
 	public static final String SERVICE_ADD = "add";
 	public static final String SERVICE_FIND = "get";
-
+	public static final String SERVICE_UPDATE = "update";
+	
 	private String baseUrl = null;
 	private Endpoint inventory = null;
 	private Endpoint settings = null;

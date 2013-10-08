@@ -15,7 +15,7 @@
 	
 	<!-- a listing of all the 'trains' the conductor must keep track of -->
 	<trains>
-		<train name="Update Info" schedule="*/5 * * * *">
+		<train name="Update Info" schedule="*/2 * * * *">
 			<options>
 				<option name="network">10.10.10.x</option>
 				<option name="inventory_url">http://inventory.ecec.com/inventory/</option>
@@ -23,9 +23,9 @@
 			 
 			<car name="Update PC Info" class="com.ecec.rweber.inventory.GatherPCInfo" />
 			
-			 
-			<car name="Find Programs" class="com.ecec.rweber.inventory.FindPrograms" />
 			<!--
+			<car name="Find Programs" class="com.ecec.rweber.inventory.FindPrograms" />
+			
 			<car name="Move Shortcuts" class="com.ecec.rweber.inventory.MoveShortcuts">
 				<options>
 					<option name="remote_path">smb://10.10.10.15/backups/Shortcuts/</option>
@@ -33,7 +33,8 @@
 			</car>
 			
 			<car name="Get Services" class="com.ecec.rweber.inventory.WindowsServices" />
-		-->
+			-->
+			<car name="Monitor Services" class="com.ecec.rweber.inventory.MonitorServices" />
 		</train>
 	</trains>
 	
