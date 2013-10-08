@@ -20,19 +20,14 @@
 				<option name="inventory_url">http://inventory.ecec.com/inventory/</option>
 			</options>
 			<car name="Update PC Info" class="com.ecec.rweber.inventory.GatherPCInfo" />
+			<car name="Monitor Services" class="com.ecec.rweber.inventory.MonitorServices" />
 		</train>
-		<train name="Periodic Update" schedule="0 */5 * * *">
+		<train name="Periodic Update" schedule="01 */5 * * *">
 			<options>
 				<option name="inventory_url">http://inventory.ecec.com/inventory/</option>
 			</options>
 			<car name="Find Programs" class="com.ecec.rweber.inventory.FindPrograms" />
 			<car name="Find Services" class="com.ecec.rweber.inventory.WindowsServices" />
-		</train>
-		<train name="Monitor Services" schedule="*/2 * * * *">
-			<options>
-				<option name="inventory_url">http://inventory.ecec.com/inventory/</option>
-			</options>
-			<car name="Monitor Services" class="com.ecec.rweber.inventory.MonitorServices" />
 		</train>
 	</trains>
 	
