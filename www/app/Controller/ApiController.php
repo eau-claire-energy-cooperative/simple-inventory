@@ -295,6 +295,21 @@ class ApiController extends AppController {
 			$result['type'] = 'success';
 			$result['result'] = "Service added for computer id " . $this->json_data->id;
 		}
+		else if($action == 'update')
+		{
+			$existingService = $this->Service->find('first',array('conditions'=>array('Service.name'=>$this->json_data->name,'Service.comp_id'=>$this->json_data->id)));
+			
+			if($existingService)
+			{
+				$existingService['Service']['startmode'] = $this->json_data->mode;
+				$existingService['Service']['status'] = $this->json_data->status;
+				
+				$this->Service->save($existingService);
+				
+				$result['type'] = 'success';
+				$result['result'] = $this->json_data->name . ' updated';
+			}
+		}
 		else
 		{
 			$result["type"] = 'error';
