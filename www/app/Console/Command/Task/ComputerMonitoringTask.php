@@ -69,7 +69,7 @@ class ComputerMonitoringTask extends AppShell {
 					{
 						//service was a live, not it isn't
 						$this->out("Service " . $monitor['ServiceMonitor']['service'] . ' on ' . $name . ' has stopped');
-						$this->_triggerAction($monitor['ServiceMonitor']['service'] . ' Has Stopped','The service ' . $monitor['ServiceMonitor']['service'] . ' on computer '. $name . ' has stopped');
+						$this->_triggerAction($monitor['ServiceMonitor']['service'] . ' On ' . $name . ' Has Stopped','The service ' . $monitor['ServiceMonitor']['service'] . ' on computer '. $name . ' has stopped');
 						
 						$monitor['ServiceMonitor']['isalive'] = 'false';
 						$this->ServiceMonitor->save($monitor);
@@ -78,7 +78,7 @@ class ComputerMonitoringTask extends AppShell {
 					{
 						//service just came back online
 						$this->out("Service " . $monitor['ServiceMonitor']['service'] . ' on ' . $name . ' is running');
-						$this->_triggerAction($monitor['ServiceMonitor']['service'] . ' Is Online','The service ' . $monitor['ServiceMonitor']['service'] . ' on computer '. $name . ' is now running');
+						$this->_triggerAction($monitor['ServiceMonitor']['service'] . ' On ' . $name . ' Is Online','The service ' . $monitor['ServiceMonitor']['service'] . ' on computer '. $name . ' is now running');
 						
 						$monitor['ServiceMonitor']['isalive'] = 'true';
 						$this->ServiceMonitor->save($monitor);
