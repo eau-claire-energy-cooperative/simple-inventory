@@ -8,7 +8,7 @@ adding settings "monitoring_script" and "monitoring_email"
 
 added setting enable_monitoring to the settings table
 
-created service_monitor table
+created service_monitor table fields are id, comp_id, service, isalive = true
 
 9/30/2013
 

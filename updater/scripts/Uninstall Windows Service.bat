@@ -1,5 +1,5 @@
 @echo off
 
-SimpleInventory.exe -uninstall "Simple Inventory Service"
+InventoryService.exe -uninstall "Simple Inventory Service"
 
 @pause

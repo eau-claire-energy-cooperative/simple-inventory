@@ -46,7 +46,8 @@
 	</copy>
 
 	<chmod dir="${dest_dir}/" perm="777" includes="*" type="both" />
-
+	<chmod dir="${dest_dir}/lib/Cake/Console" perm="+x" includes="cake" type="file" />
+	
 	<!-- copy the config file back -->
 	<copy file="${dir.build}/www_config/database.php" tofile="${dest_dir}/app/Config/database.php" failonerror="false" overwrite="true" />
 	
@@ -78,6 +79,15 @@
 	 <copy todir="${dest_dir}/jars/">
 	   <fileset dir="${dir.updater}/jars/" />
   	 </copy>
+	 
+		<!-- delete the scripts install directory and copy the ones from source -->
+		<delete>
+			<fileset dir="${dest_dir}/scripts/" includes="**/*" />
+		</delete>
+		
+		<copy todir="${dest_dir}/scripts/">
+			<fileset dir="${dir.updater}/scripts/" />
+		</copy>
        </then>
        <else>
           <echo message="Destination does not exist or is not a directory" />
