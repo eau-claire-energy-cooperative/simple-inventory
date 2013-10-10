@@ -75,6 +75,10 @@
 		<td><?php echo $this->Form->select('enable_monitoring',array('true'=>'Yes','false'=>'No'),array('value'=>$settings['enable_monitoring'],'empty'=>false)) ?></td>
 	</tr>
 	<tr>
+		<td>Disk Space Warning (%)</td>
+		<td><?php echo $this->Form->input('monitor_disk_space_warning',array('label'=>false,'value'=>$settings['monitor_disk_space_warning'])) ?></td>
+	</tr>
+	<tr>
 		<td>Send Emails on Trigger</td>
 		<td><?php echo $this->Form->select('monitoring_email',array('true'=>'Yes','false'=>'No'),array('value'=>$settings['monitoring_email'],'empty'=>false)) ?></td>
 	</tr>

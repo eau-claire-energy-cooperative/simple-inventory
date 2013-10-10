@@ -1,6 +1,6 @@
 <script type="text/javascript">
     $(document).ready(function(){
-		setInterval(refreshPage,30 * 1000);
+		setInterval(refreshPage,20 * 1000);
 	});
 	
 function refreshPage(){
@@ -30,6 +30,10 @@ function refreshPage(){
 				<?php foreach($computer['OfflineServices'] as $service): ?>
 					<h3><?php echo $this->Html->image('/img/test-fail-icon.png') .  " " . $service ?></h3>
 				<?php endforeach; ?>
+			<?php endif; ?>
+			
+			<?php if($computer['DiskAlert']): ?>
+				<h3><?php echo $this->Html->image('/img/test-fail-icon.png') ?> Disk Space is at <?php echo $this->DiskSpace->compare($computer['Computer']['DiskSpace'],$computer['Computer']['DiskSpaceFree']) ?>%</h3>
 			<?php endif; ?>
 		</div>
 	<?php endforeach ?>

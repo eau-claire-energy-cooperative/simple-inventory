@@ -1,10 +1,12 @@
 <?php
 	
 class DashboardController extends AppController {
-	var $uses = array('Computer','Service','ServiceMonitor');
-	var $helpers = array('Session','Html','Time');
+	var $uses = array('Computer','Service','ServiceMonitor','Setting');
+	var $helpers = array('Session','Html','Time','DiskSpace');
 	
 	function index(){
+		$settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
+		
 		$onlineComputers = array();
 		$offlineComputers = array();
 		
@@ -14,6 +16,8 @@ class DashboardController extends AppController {
 		if($computerList)
 		{
 			foreach($computerList as $computer){
+				$isOffline = false;
+				
 				if($computer['Computer']['IsAlive'] == 'true')
 				{
 					//check if this computer has any offline services
@@ -23,16 +27,31 @@ class DashboardController extends AppController {
 					{
 						$computer['OfflineServices'] = $services;
 						
-						$offlineComputers[] = $computer;
+						$isOffline = true;
 					}
-					else
+					
+					if(($computer['Computer']['DiskSpaceFree']/$computer['Computer']['DiskSpace']) * 100 < $settings['monitor_disk_space_warning'])
 					{
-						$onlineComputers[] = $computer;		
+						$computer['DiskAlert'] = true;
+						$isOffline = true;
+					}
+					else 
+					{
+						$computer['DiskAlert'] = false;
 					}
 				}
 				else
 				{
+					$isOffline = true;
+				}
+				
+				if($isOffline)
+				{
 					$offlineComputers[] = $computer;
+				}
+				else
+				{
+					$onlineComputers[] = $computer;
 				}
 			}
 		}

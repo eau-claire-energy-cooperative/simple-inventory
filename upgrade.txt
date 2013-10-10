@@ -1,5 +1,9 @@
 This is a log of changes that affect version upgrades, these changes must be made on existing installs so that they don't break.
+10/10/2013
 
+Add setting monitor_disk_space_warning = 5
+
+---------
 10/8/2013
 
 make scripts directory in updater deployment folder
