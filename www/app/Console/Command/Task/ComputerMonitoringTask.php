@@ -1,18 +1,20 @@
 <?php
 class ComputerMonitoringTask extends AppShell {
-    public $uses = array('Computer','ServiceMonitor','Service');
+    public $uses = array('Computer','ServiceMonitor','Service','TriggeredAlarm');
 	
 	var $settings = null;
 	
     public function execute($params) {
 		$this->settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
-			
+
 		//first check on any computers that need monitoring
 		$computerList = $this->Computer->find('all',array('conditions'=>array('Computer.EnableMonitoring'=>'true')));
 		
 		if($computerList)
 		{
 			foreach($computerList as $computer){
+				
+				$alarms = $this->TriggeredAlarm->find('list',array('fields'=>array('TriggeredAlarm.alarm','TriggeredAlarm.id'),'conditions'=>array("TriggeredAlarm.comp_id"=>$computer['Computer']['id'])));
 				
 				if(date('U',strtotime($computer['Computer']['LastUpdated'])) < time() - 345)
 				{
@@ -46,6 +48,22 @@ class ComputerMonitoringTask extends AppShell {
 					{
 						//computer is still online from before, check services
 						$this->_checkServices($computer['Computer']['id'],$computer['Computer']['ComputerName']);
+						
+						//also check disk space
+						if(($computer['Computer']['DiskSpaceFree']/$computer['Computer']['DiskSpace']) * 100 <= $this->settings['monitor_disk_space_warning'] && !isset($alarms['disk_space_warning_c']))
+						{
+							$this->log($computer['Computer']['ComputerName'] . ' Disk Space Warning');
+							$this->_triggerAction($computer['Computer']['ComputerName'] . ' Disk Space Warning', 'The computer ' . $computer['Computer']['ComputerName'] . ' has ' . $this->settings['monitor_disk_space_warning'] . '% or less disk space remaining');
+							
+							$this->TriggeredAlarm->create();
+							$this->TriggeredAlarm->set('comp_id',$computer['Computer']['id']);
+							$this->TriggeredAlarm->set('alarm',"disk_space_warning_c");
+							$this->TriggeredAlarm->save();
+						}
+						else if(($computer['Computer']['DiskSpaceFree']/$computer['Computer']['DiskSpace']) * 100 > $this->settings['monitor_disk_space_warning'] && isset($alarms['disk_space_warning_c']))
+						{
+							$this->TriggeredAlarm->delete($alarms['disk_space_warning_c']);
+						}
 					}	
 				}
 			}

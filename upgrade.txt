@@ -1,4 +1,9 @@
 This is a log of changes that affect version upgrades, these changes must be made on existing installs so that they don't break.
+
+10/14/2013
+
+created table triggered_alarm with fields id, comp_id, and alarm
+
 10/10/2013
 
 Add setting monitor_disk_space_warning = 5
