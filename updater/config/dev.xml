@@ -33,8 +33,9 @@
 			</car>
 			
 			<car name="Get Services" class="com.ecec.rweber.inventory.WindowsServices" />
-			-->
+			
 			<car name="Monitor Services" class="com.ecec.rweber.inventory.MonitorServices" />
+			-->
 		</train>
 	</trains>
 	

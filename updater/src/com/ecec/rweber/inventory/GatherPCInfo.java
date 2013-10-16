@@ -2,6 +2,7 @@ package com.ecec.rweber.inventory;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.cmd.Shell;
@@ -14,6 +15,7 @@ import com.ecec.rweber.conductor.framework.mail.EmailMessage;
 import com.ecec.rweber.conductor.framework.mail.EmailSender;
 import com.ecec.rweber.inventory.api.ApiManager;
 import com.ecec.rweber.inventory.commands.*;
+import com.ecec.rweber.inventory.utils.Disk;
 import com.ecec.rweber.inventory.utils.GetDBSettings;
 import com.ecec.rweber.inventory.utils.PCInfo;
 
@@ -103,6 +105,17 @@ public class GatherPCInfo extends Car{
 			
 			//update the computer info in the database
 			api.inventory(ApiManager.INVENTORY_UPDATE, info);
+			
+			//update the disk information
+			Iterator<Disk> disks = info.getDisks().iterator();
+			Disk aDisk = null;
+			
+			while(disks.hasNext())
+			{
+				aDisk = disks.next();
+				aDisk.put("comp_id", info.get("id"));
+				api.disk(ApiManager.DISK_UPDATE, aDisk);
+			}
 			
 			logInfo("Updating computer " + info.get("ComputerName"));
 		}

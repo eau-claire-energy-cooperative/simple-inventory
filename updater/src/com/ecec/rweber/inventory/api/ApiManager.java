@@ -23,6 +23,7 @@ public class ApiManager {
 	public static final String SERVICE_ADD = "add";
 	public static final String SERVICE_FIND = "get";
 	public static final String SERVICE_UPDATE = "update";
+	public static final String DISK_UPDATE = "update";
 	
 	private String baseUrl = null;
 	private Endpoint inventory = null;
@@ -32,6 +33,7 @@ public class ApiManager {
 	private Endpoint programs = null;
 	private Endpoint services = null;
 	private Endpoint email = null;
+	private Endpoint disk = null;
 	
 	public static ApiManager getInstance(String url){
 		
@@ -53,7 +55,7 @@ public class ApiManager {
 		programs = new Endpoint(baseUrl,"programs");
 		services = new Endpoint(baseUrl,"services");
 		email = new Endpoint(baseUrl,"send_email");
-		
+		disk = new Endpoint(baseUrl,"disk");
 	}
 	
 	public JSONObject inventory(String action, Map<String,String> parameters){
@@ -65,6 +67,10 @@ public class ApiManager {
 		params.put("computer", name);
 		
 		return inventory.sendRequest(ApiManager.INVENTORY_EXISTS,params);
+	}
+	
+	public JSONObject disk(String action, Map<String,String> parameters){
+		return disk.sendRequest(action, parameters);
 	}
 	
 	public JSONObject location(String action){

@@ -4,6 +4,8 @@ This is a log of changes that affect version upgrades, these changes must be mad
 
 created table triggered_alarm with fields id, comp_id, and alarm
 
+created table disk with fields id, comp_id, label, total_space, space_free
+
 10/10/2013
 
 Add setting monitor_disk_space_warning = 5
