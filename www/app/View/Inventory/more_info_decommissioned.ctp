@@ -50,16 +50,16 @@
     <tr>
         <th style="width: 200px;">IP Address</th>
         <th style="width: 250px;">MAC Address</th>
- 		<th style="width: 250px;">C: Drive Space</th>
  		<th style="width: 250px;">Last Updated</th>
  		<th style="width: 250px;"></th>
-     
+     	<th style="width: 250px;"></th>
+     	
     </tr>
 	    <tr>
         <td><?php echo $decommissioned['Decommissioned']['IPaddress']?></td>
          <td><?php echo $decommissioned['Decommissioned']['MACaddress']?></td>
-          <td><?php echo round( $decommissioned['Decommissioned']['DiskSpace']/1048576, 0 ) . " GB"?></td>
-            <td><?php echo $this->Time->niceShort($decommissioned['Decommissioned']['LastUpdated']);?></td>
+         <td><?php echo $this->Time->niceShort($decommissioned['Decommissioned']['LastUpdated']);?></td>
+            <td></td>
             <td></td>
          
             

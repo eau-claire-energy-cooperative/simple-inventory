@@ -3,7 +3,7 @@
 class ApiController extends AppController {
 	var $layout = '';
 	var $helpers = array('Js');
-	var $uses = array('Computer','Setting','Command','Service','RestrictedProgram','Programs','Location','EmailMessage','Logs');
+	var $uses = array('Computer','Disk','Setting','Command','Service','RestrictedProgram','Programs','Location','EmailMessage','Logs');
 	var $json_data = null;
 	
 	function beforeFilter(){
@@ -54,8 +54,6 @@ class ApiController extends AppController {
 			$aComputer['Computer']['CPU'] = $this->json_data->CPU;
 			$aComputer['Computer']['IPaddress'] = $this->json_data->IPaddress;
 			$aComputer['Computer']['MACaddress'] = $this->json_data->MACaddress;
-			$aComputer['Computer']['DiskSpace'] = $this->json_data->DiskSpace;
-			$aComputer['Computer']['DiskSpaceFree'] = $this->json_data->DiskSpaceFree;
 			$aComputer['Computer']['NumberOfMonitors'] = $this->json_data->NumberOfMonitors;
 			$aComputer['Computer']['LastUpdated'] = $this->json_data->LastUpdated;
 			$aComputer['Computer']['LastBooted'] = $this->json_data->LastBootTime;
@@ -120,6 +118,70 @@ class ApiController extends AppController {
 		{
 			$result["type"] = 'error';
 			$result['message'] = 'need a subject and message content to send';		
+		}
+		
+		$this->set('result',$result);
+		$this->render('api');
+	}
+	
+	function disk($action = 'get'){
+		$result = array();
+		
+		if($action == 'get')
+		{
+			$disks = $this->Disk->find('all',array('conditions'=>array('Disk.comp_id'=>$this->json_data->comp_id),'order'=>array('Disk.label')));
+			
+			if($disks)
+			{
+				$result['type'] = "success";
+				$result['result'] = $disks;
+			}
+			else
+			{
+				$result["type"] = 'error';
+				$result['message'] = 'error getting disks';
+			}
+		}
+		else if($action == 'update')
+		{
+			$aDisk = $this->Disk->find('first',array('conditions'=>array('Disk.label'=>$this->json_data->label,'Disk.comp_id'=>$this->json_data->comp_id)));
+			
+			if($aDisk)
+			{
+				//update the disk
+				$aDisk['Disk']['total_space'] = $this->json_data->total_space;
+				$aDisk['Disk']['space_free'] = $this->json_data->space_free;
+				$this->Disk->save($aDisk);
+				
+				$result['type'] = "success";
+				$result['message'] = 'Disk updated for computer ' . $this->json_data->comp_id;
+			}
+			else
+			{
+				//create a new disk entry
+				$this->Disk->create();
+				$this->Disk->set('comp_id',$this->json_data->comp_id);
+				$this->Disk->set('label',$this->json_data->label);
+				$this->Disk->set('total_space',$this->json_data->total_space);
+				$this->Disk->set('space_free',$this->json_data->space_free);
+				$this->Disk->save();
+				
+				$result["type"] = 'success';
+				$result['message'] = 'Disk added for computer ' . $this->json_data->comp_id;
+			}
+		}
+		else if($action == 'delete')
+		{
+			//delete
+			$this->Disk->delete($this->json_data->id);
+			
+			$result["type"] = 'success';
+			$result['message'] = 'Disk deleted';	
+		}
+		else
+		{
+			$result["type"] = 'error';
+			$result['message'] = 'must call an action';
 		}
 		
 		$this->set('result',$result);

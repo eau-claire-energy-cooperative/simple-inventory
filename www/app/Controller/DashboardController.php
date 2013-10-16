@@ -30,14 +30,14 @@ class DashboardController extends AppController {
 						$isOffline = true;
 					}
 					
-					if(($computer['Computer']['DiskSpaceFree']/$computer['Computer']['DiskSpace']) * 100 < $settings['monitor_disk_space_warning'])
-					{
-						$computer['DiskAlert'] = true;
-						$isOffline = true;
-					}
-					else 
-					{
-						$computer['DiskAlert'] = false;
+					$computer['DiskAlert'] = array();
+					foreach($computer['Disk'] as $aDisk){
+						
+						if(($aDisk['space_free']/$aDisk['total_space']) * 100 < $settings['monitor_disk_space_warning'])
+						{
+							$computer['DiskAlert'][] = $aDisk; 
+							$isOffline = true;
+						}
 					}
 				}
 				else

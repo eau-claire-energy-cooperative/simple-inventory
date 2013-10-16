@@ -32,8 +32,10 @@ function refreshPage(){
 				<?php endforeach; ?>
 			<?php endif; ?>
 			
-			<?php if($computer['DiskAlert']): ?>
-				<h3><?php echo $this->Html->image('/img/test-fail-icon.png') ?> Disk Space is at <?php echo $this->DiskSpace->compare($computer['Computer']['DiskSpace'],$computer['Computer']['DiskSpaceFree']) ?>%</h3>
+			<?php if(count($computer['DiskAlert']) > 0): ?>
+				<?php foreach($computer['DiskAlert'] as $aDisk): ?>
+					<h3><?php echo $this->Html->image('/img/test-fail-icon.png') . ' ' . $aDisk['label'] . ' - ' . $this->DiskSpace->compare($aDisk['total_space'],$aDisk['space_free']) ?>% free)</h3>
+				<?php endforeach; ?>
 			<?php endif; ?>
 		</div>
 	<?php endforeach ?>

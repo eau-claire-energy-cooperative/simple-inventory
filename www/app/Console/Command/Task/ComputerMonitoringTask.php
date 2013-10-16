@@ -1,6 +1,6 @@
 <?php
 class ComputerMonitoringTask extends AppShell {
-    public $uses = array('Computer','ServiceMonitor','Service','TriggeredAlarm');
+    public $uses = array('Computer','Disk','ServiceMonitor','Service','TriggeredAlarm');
 	
 	var $settings = null;
 	
@@ -50,19 +50,22 @@ class ComputerMonitoringTask extends AppShell {
 						$this->_checkServices($computer['Computer']['id'],$computer['Computer']['ComputerName']);
 						
 						//also check disk space
-						if(($computer['Computer']['DiskSpaceFree']/$computer['Computer']['DiskSpace']) * 100 <= $this->settings['monitor_disk_space_warning'] && !isset($alarms['disk_space_warning_c']))
+						foreach($computer['Disk'] as $aDisk)
 						{
-							$this->log($computer['Computer']['ComputerName'] . ' Disk Space Warning');
-							$this->_triggerAction($computer['Computer']['ComputerName'] . ' Disk Space Warning', 'The computer ' . $computer['Computer']['ComputerName'] . ' has ' . $this->settings['monitor_disk_space_warning'] . '% or less disk space remaining');
-							
-							$this->TriggeredAlarm->create();
-							$this->TriggeredAlarm->set('comp_id',$computer['Computer']['id']);
-							$this->TriggeredAlarm->set('alarm',"disk_space_warning_c");
-							$this->TriggeredAlarm->save();
-						}
-						else if(($computer['Computer']['DiskSpaceFree']/$computer['Computer']['DiskSpace']) * 100 > $this->settings['monitor_disk_space_warning'] && isset($alarms['disk_space_warning_c']))
-						{
-							$this->TriggeredAlarm->delete($alarms['disk_space_warning_c']);
+							if(($aDisk['space_free']/$aDisk['total_space']) * 100 <= $this->settings['monitor_disk_space_warning'] && !isset($alarms['disk_space_warning_' . $aDisk['label']]))
+							{
+								$this->log($computer['Computer']['ComputerName'] . ' Disk Space Warning');
+								$this->_triggerAction($computer['Computer']['ComputerName'] . ' Disk Space Warning', 'The computer ' . $computer['Computer']['ComputerName'] . ' has ' . $this->settings['monitor_disk_space_warning'] . '% or less disk space remaining on drive ' . $aDisk['label']);
+								
+								$this->TriggeredAlarm->create();
+								$this->TriggeredAlarm->set('comp_id',$computer['Computer']['id']);
+								$this->TriggeredAlarm->set('alarm',"disk_space_warning_" . $aDisk['label']);
+								$this->TriggeredAlarm->save();
+							}
+							else if(($aDisk['space_free']/$aDisk['total_space']) * 100 > $this->settings['monitor_disk_space_warning'] && isset($alarms['disk_space_warning_' . $aDisk['label']]))
+							{
+								$this->TriggeredAlarm->delete($alarms['disk_space_warning_' . $aDisk['label']]);
+							}
 						}
 					}	
 				}
@@ -119,7 +122,7 @@ class ComputerMonitoringTask extends AppShell {
 		
 		if(trim($this->settings['monitoring_script']) != '')
 		{
-			exec($this->settings['monitoring_script'] . ' "' . $subject . '" "' . $message . '"');
+			exec($this->settings['monitoring_script'] . ' "' . escapeshellarg($subject) . '" "' . escapeshellarg($message) . '"');
 		}
 	}
 }

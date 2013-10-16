@@ -138,7 +138,7 @@
     <tr>
         <th style="width: 200px;">IP Address</th>
         <th style="width: 250px;">MAC Address</th>
- 		<th style="width: 250px;">C: Drive Space</th>
+ 		<th style="width: 250px;">Drive Space</th>
  		<th style="width: 250px;">Last Updated</th>
  		<th style="width: 250px;"></th>
      
@@ -146,7 +146,11 @@
     <tr>
 		<td><?php echo $computer['Computer']['IPaddress']?></td>
 		<td><?php echo $computer['Computer']['MACaddress']?></td>
-		<td><?php echo $this->DiskSpace->toString($computer['Computer']['DiskSpace']) ?> (<?php echo $this->DiskSpace->compare($computer['Computer']['DiskSpace'],$computer['Computer']['DiskSpaceFree']) ?>% free)</td>
+		<td>
+			<?php foreach($computer['Disk'] as $aDisk): ?>
+				<?php echo $aDisk['label'] . " - " . $this->DiskSpace->toString($aDisk['total_space']) ?> (<?php echo $this->DiskSpace->compare($aDisk['total_space'],$aDisk['space_free']) ?>% free)<br>
+			<?php endforeach; ?>
+		</td>
 		<td><?php echo $this->Time->niceShort($computer['Computer']['LastUpdated']);?></td>
 		<td><p id="is_running" class="red">Not Running</p></td> 
      </tr>

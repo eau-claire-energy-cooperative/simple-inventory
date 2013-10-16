@@ -4,7 +4,7 @@ class InventoryController extends AppController {
     var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace');
     var $components = array('Session','Ldap');
 
-	public $uses = array('Computer','Location', 'Programs', 'Logs','Service','Decommissioned','Setting','User','RestrictedProgram','ServiceMonitor');
+	public $uses = array('Computer','Disk','Location', 'Programs', 'Logs','Service','Decommissioned','Setting','User','RestrictedProgram','ServiceMonitor');
 
 	public function beforeFilter(){
 		//check if we are using a login method
@@ -186,7 +186,8 @@ class InventoryController extends AppController {
 	    	//also delete programs and services
 	    	$this->Programs->query('delete from programs where comp_id = ' . $id);
 	    	$this->Service->query('delete from services where comp_id = ' . $id);
-	    	
+	    	$this->Disk->query('delete from disk where comp_id = ' . $id);
+			
 	    	$message = 'Computer ' . $computer['Computer']['ComputerName'] . ' has been deleted';
 	    	
 	    	$this->_saveLog($message);
@@ -252,7 +253,6 @@ class InventoryController extends AppController {
 			$this->Decommissioned->set('NumberOfMonitors',$comp ['Computer']['NumberOfMonitors']);
 			$this->Decommissioned->set('IPaddress',$comp ['Computer']['IPaddress']);
 			$this->Decommissioned->set('MACaddress',$comp ['Computer']['MACaddress']);
-			$this->Decommissioned->set('DiskSpace',$comp ['Computer']['DiskSpace']);
 			$this->Decommissioned->set('LastUpdated',$comp ['Computer']['LastUpdated']);
 			$this->Decommissioned->set('WipedHD',$comp ['Computer']['WipedHD']);
 			$this->Decommissioned->set('Recycled',$comp ['Computer']['Recycled']);
@@ -264,7 +264,7 @@ class InventoryController extends AppController {
 			//also delete programs and services 
 			$this->Programs->query('delete from programs where comp_id = ' . $id);
 			$this->Service->query('delete from services where comp_id = ' . $id);
-			
+			$this->Disk->query('delete from disk where comp_id = ' . $id);
 		
 			if( $this->Decommissioned->save())
 			{
