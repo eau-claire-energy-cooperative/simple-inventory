@@ -23,6 +23,12 @@
 			<car name="Update PC Info" class="com.ecec.rweber.inventory.GatherPCInfo" />
 			<car name="Find Programs" class="com.ecec.rweber.inventory.FindPrograms" />
 			<car name="Find Services" class="com.ecec.rweber.inventory.WindowsServices" />
+			<car name="Monitor Files" class="com.ecec.rweber.inventory.MonitorFiles">
+			    <options>
+			        <option name="files"></option>
+			        <option name="days_to_live">10</option>
+			    </options>
+			</car>
 		</train>
 	</trains>
 	

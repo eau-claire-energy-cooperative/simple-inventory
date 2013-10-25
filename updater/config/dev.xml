@@ -23,6 +23,12 @@
 			 
 			<car name="Update PC Info" class="com.ecec.rweber.inventory.GatherPCInfo" />
 			
+			<car name="Monitor Files" class="com.ecec.rweber.inventory.MonitorFiles">
+			    <options>
+			        <option name="files">Z:/Word Docs/ECEC docs/budget/ECEC 2014.docx</option>
+			        <option name="days_to_live">10</option>
+			    </options>
+			</car>
 			<!--
 			<car name="Find Programs" class="com.ecec.rweber.inventory.FindPrograms" />
 			
