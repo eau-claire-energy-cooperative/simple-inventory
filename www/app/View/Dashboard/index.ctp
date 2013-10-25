@@ -37,6 +37,12 @@ function refreshPage(){
 					<h3><?php echo $this->Html->image('/img/test-fail-icon.png') . ' ' . $aDisk['label'] . ' - ' . $this->DiskSpace->compare($aDisk['total_space'],$aDisk['space_free']) ?>% free</h3>
 				<?php endforeach; ?>
 			<?php endif; ?>
+			
+			<?php if(count($computer['FileAlert']) > 0): ?>
+				<?php foreach($computer['FileAlert'] as $anAlert): ?>
+					<h3><?php echo $this->Html->image('/img/test-fail-icon.png') . ' File Expiration on ' . $anAlert['TriggeredAlarm']['note'] ?></h3>
+				<?php endforeach ?>
+			<?php endif; ?>
 		</div>
 	<?php endforeach ?>
 </div>

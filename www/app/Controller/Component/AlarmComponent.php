@@ -64,8 +64,6 @@ class AlarmComponent extends Component {
 		$users = $this->User->find('all',array('conditions'=>array('User.send_email'=>'true')));
 		
 		foreach($users as $aUser){
-			//log email
-			$this->_log(date("Y-m-d H:i:s",time()),"API Manager","INFO","Sending email to " . $aUser['User']['email']);
 			
 			$email->AddAddress($aUser['User']['email']);
 		}

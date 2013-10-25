@@ -1,7 +1,7 @@
 <?php
 	
 class DashboardController extends AppController {
-	var $uses = array('Computer','Service','ServiceMonitor','Setting');
+	var $uses = array('Computer','Service','ServiceMonitor','Setting','TriggeredAlarm');
 	var $helpers = array('Session','Html','Time','DiskSpace');
 	
 	function index(){
@@ -30,6 +30,7 @@ class DashboardController extends AppController {
 						$isOffline = true;
 					}
 					
+					//check disk alerts
 					$computer['DiskAlert'] = array();
 					foreach($computer['Disk'] as $aDisk){
 						
@@ -39,6 +40,19 @@ class DashboardController extends AppController {
 							$isOffline = true;
 						}
 					}
+					
+					//get any file alerts
+					$fileAlarms = $this->TriggeredAlarm->find('all',array('conditions'=>array('TriggeredAlarm.comp_id' => $computer['Computer']['id'],'TriggeredAlarm.type'=>'file')));
+					
+					if($fileAlarms)
+					{
+						$computer['FileAlert']  = $fileAlarms;
+						$isOffline = true;
+					}
+					else {
+						$computer['FileAlert'] = array();
+					}
+					
 				}
 				else
 				{
