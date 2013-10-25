@@ -68,7 +68,7 @@ public class Endpoint {
 			conn.disconnect();
 			
 			String resultString = response;
-			System.out.println(resultString);
+			//System.out.println(resultString);
 			result = (JSONObject) parser.parse(resultString);
 			
 			
