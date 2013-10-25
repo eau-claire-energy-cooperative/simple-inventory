@@ -5,6 +5,12 @@ class ComputerMonitoringTask extends AppShell {
 	var $settings = null;
 	
     public function execute($params) {
+    	//setup the alarm component
+    	App::uses("AlarmComponent","Controller/Component");
+		App::uses('ComponentCollection', 'Controller');
+		$collection = new ComponentCollection();
+    	$this->Alarm = new AlarmComponent($collection);
+		
 		$this->settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
 
 		//first check on any computers that need monitoring
@@ -27,7 +33,7 @@ class ComputerMonitoringTask extends AppShell {
 						$this->Computer->save($computer);
 						
 						$this->log('Computer ' . $computer['Computer']['ComputerName'] . ' has gone offline');
-						$this->_triggerAction($computer['Computer']['ComputerName'] . ' Has Gone Offline','Monitoring has detected that the computer: ' . $computer['Computer']['ComputerName'] . ' with IP address: ' . $computer['Computer']['IPaddress'] . ' has gone offline.');
+						$this->Alarm->triggerAlarm($computer['Computer']['id'],'offline',$computer['Computer']['IPaddress']);
 					}	
 				}
 				else
@@ -41,7 +47,7 @@ class ComputerMonitoringTask extends AppShell {
 						$this->Computer->save($computer);
 						
 						$this->log('Computer ' . $computer['Computer']['ComputerName'] . ' has come online');
-						$this->_triggerAction($computer['Computer']['ComputerName'] . ' Is Online','Monitoring has detected that the computer: ' . $computer['Computer']['ComputerName'] . ' with IP address: ' . $computer['Computer']['IPaddress'] . ' is now online.');
+						$this->Alarm->triggerAlarm($computer['Computer']['id'],'online',$computer['Computer']['IPaddress']);
 						
 					}
 					else
@@ -55,10 +61,12 @@ class ComputerMonitoringTask extends AppShell {
 							if(($aDisk['space_free']/$aDisk['total_space']) * 100 <= $this->settings['monitor_disk_space_warning'] && !isset($alarms['disk_space_warning_' . $aDisk['label']]))
 							{
 								$this->log($computer['Computer']['ComputerName'] . ' Disk Space Warning');
-								$this->_triggerAction($computer['Computer']['ComputerName'] . ' Disk Space Warning', 'The computer ' . $computer['Computer']['ComputerName'] . ' has ' . $this->settings['monitor_disk_space_warning'] . '% or less disk space remaining on drive ' . $aDisk['label']);
+								$this->Alarm->triggerAlarm($computer['Computer']['id'],'disk_space',$this->settings['monitor_disk_space_warning'] . "," . $aDisk['label']);
 								
 								$this->TriggeredAlarm->create();
 								$this->TriggeredAlarm->set('comp_id',$computer['Computer']['id']);
+								$this->TriggeredAlarm->set('type','disk_space');
+								$this->TriggeredAlarm->set('note',$aDisk['label']);
 								$this->TriggeredAlarm->set('alarm',"disk_space_warning_" . $aDisk['label']);
 								$this->TriggeredAlarm->save();
 							}
@@ -90,7 +98,7 @@ class ComputerMonitoringTask extends AppShell {
 					{
 						//service was a live, not it isn't
 						$this->out("Service " . $monitor['ServiceMonitor']['service'] . ' on ' . $name . ' has stopped');
-						$this->_triggerAction($monitor['ServiceMonitor']['service'] . ' On ' . $name . ' Has Stopped','The service ' . $monitor['ServiceMonitor']['service'] . ' on computer '. $name . ' has stopped');
+						$this->Alarm->triggerAlarm($compid,'service_offline',$monitor['ServiceMonitor']['service']);
 						
 						$monitor['ServiceMonitor']['isalive'] = 'false';
 						$this->ServiceMonitor->save($monitor);
@@ -99,8 +107,8 @@ class ComputerMonitoringTask extends AppShell {
 					{
 						//service just came back online
 						$this->out("Service " . $monitor['ServiceMonitor']['service'] . ' on ' . $name . ' is running');
-						$this->_triggerAction($monitor['ServiceMonitor']['service'] . ' On ' . $name . ' Is Online','The service ' . $monitor['ServiceMonitor']['service'] . ' on computer '. $name . ' is now running');
-						
+						$this->Alarm->triggerAlarm($compid,'service_online',$monitor['ServiceMonitor']['service']);
+
 						$monitor['ServiceMonitor']['isalive'] = 'true';
 						$this->ServiceMonitor->save($monitor);
 					}
@@ -110,19 +118,6 @@ class ComputerMonitoringTask extends AppShell {
 					//has this service been uninstalled?
 				}
 			}
-		}
-	}
-
-	function _triggerAction($subject,$message){
-		
-		if($this->settings['monitoring_email'] == 'true')
-		{
-			$this->sendMail($subject,$message);
-		}
-		
-		if(trim($this->settings['monitoring_script']) != '')
-		{
-			exec($this->settings['monitoring_script'] . ' "' . escapeshellarg($subject) . '" "' . escapeshellarg($message) . '"');
 		}
 	}
 }
