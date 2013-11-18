@@ -220,7 +220,7 @@ class ApiController extends AppController {
 		}
 		else if($action == 'remove')
 		{
-			if(!isset($alarms[$this->json_data->alarm]))
+			if(isset($alarms[$this->json_data->alarm]))
 			{
 				$this->TriggeredAlarm->delete($alarms[$this->json_data->alarm]);
 				
