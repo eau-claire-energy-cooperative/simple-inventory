@@ -10,6 +10,13 @@ class PingComponent extends Component {
 		$pingObj = Net_Ping::factory();
 		$response = $pingObj->ping($host);
 		
+		if(!isset($response->_transmitted))
+		{
+			//we can't find the host name, assume it's off
+			$response->_transmitted = 1;
+			$response->_received = 0;
+		}
+		
 		$result = array('transmitted'=>$response->_transmitted,'received'=>$response->_received);
 		
 		return $result;
