@@ -80,9 +80,9 @@ public class GatherLinuxInfo extends Car{
 		results = c.runCommand(sigar, results);
 		
 		//add in missing pieces
-		results.addField("SerialNumber", "");
+		results.addField("SerialNumber", "0");
 		results.addField("Manufacturer","");
-		results.addField("Model", "");
+		results.addField("Model", "Unknown");
 		results.addField("LastBootTime", new Timestamp(System.currentTimeMillis()).toString());
 		
 		results.addField("ComputerName", PCInfo.getComputerName());
