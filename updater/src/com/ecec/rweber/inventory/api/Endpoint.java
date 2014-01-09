@@ -46,7 +46,7 @@ public class Endpoint {
 		
 		try{
 			//send the request - this is pretty quick and dirty, should probably clean it up
-			System.out.println(jsonRequest.toJSONString());
+			//System.out.println(jsonRequest.toJSONString());
 			URL url = new URL(requestURL);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoInput(true);
@@ -68,7 +68,7 @@ public class Endpoint {
 			conn.disconnect();
 			
 			String resultString = response;
-			System.out.println(resultString);
+			//System.out.println(resultString);
 			result = (JSONObject) parser.parse(resultString);
 			
 			
