@@ -83,7 +83,7 @@ public class GatherLinuxInfo extends Car{
 		results.addField("SerialNumber", "");
 		results.addField("Manufacturer","");
 		results.addField("Model", "");
-		results.addField("LastBootTime", "");
+		results.addField("LastBootTime", new Timestamp(System.currentTimeMillis()).toString());
 		
 		results.addField("ComputerName", PCInfo.getComputerName());
 		
