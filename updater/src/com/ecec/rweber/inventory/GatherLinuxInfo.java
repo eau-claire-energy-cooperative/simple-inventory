@@ -9,6 +9,8 @@ import org.hyperic.sigar.cmd.Shell;
 import org.jdom.Element;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import com.citumpe.ctpTools.jWMI;
 import com.ecec.rweber.conductor.framework.Car;
 import com.ecec.rweber.conductor.framework.Helper;
 import com.ecec.rweber.conductor.framework.mail.EmailMessage;
@@ -76,6 +78,12 @@ public class GatherLinuxInfo extends Car{
 		
 		c = new MonitorsCommand();
 		results = c.runCommand(sigar, results);
+		
+		//add in missing pieces
+		results.addField("SerialNumber", "");
+		results.addField("Manufacturer","");
+		results.addField("Model", "");
+		results.addField("LastBootTime", "");
 		
 		results.addField("ComputerName", PCInfo.getComputerName());
 		
