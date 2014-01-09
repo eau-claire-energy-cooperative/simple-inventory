@@ -67,20 +67,20 @@ public class GatherPCInfo extends Car{
 		results = c.runCommand(sigar, results);
 		
 		//operating system
-		c = new OSCommand();
+		c = new OSWindowsCommand();
 		results = c.runCommand(sigar, results);
 		
 		//disk usage
 		c = new DiskUsageCommand();
 		results = c.runCommand(sigar, results);
 		
-		c = new ModelInfoCommand();
+		c = new ModelInfoWindowsCommand();
 		results = c.runCommand(sigar, results);
 		
 		c = new MonitorsCommand();
 		results = c.runCommand(sigar, results);
 		
-		c = new LastBootCommand();
+		c = new LastBootWindowsCommand();
 		results = c.runCommand(sigar, results);
 		
 		results.addField("ComputerName", PCInfo.getComputerName());

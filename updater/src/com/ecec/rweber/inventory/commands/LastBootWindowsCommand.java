@@ -6,7 +6,7 @@ import com.citumpe.ctpTools.jWMI;
 import com.ecec.rweber.inventory.utils.PCInfo;
 import com.ecec.rweber.utils.SettingsReader;
 
-public class LastBootCommand implements SigarCommand{
+public class LastBootWindowsCommand implements SigarCommand{
 
 	@Override
 	public PCInfo runCommand(Sigar sigar, PCInfo currentInfo) {

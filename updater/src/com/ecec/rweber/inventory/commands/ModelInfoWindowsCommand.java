@@ -6,7 +6,7 @@ import com.citumpe.ctpTools.jWMI;
 import com.ecec.rweber.inventory.utils.PCInfo;
 
 
-public class ModelInfoCommand implements SigarCommand{
+public class ModelInfoWindowsCommand implements SigarCommand{
 
 	@Override
 	public PCInfo runCommand(Sigar sigar, PCInfo currentInfo) {

@@ -6,7 +6,7 @@ import org.hyperic.sigar.Sigar;
 import com.citumpe.ctpTools.jWMI;
 import com.ecec.rweber.inventory.utils.PCInfo;
 
-public class OSCommand implements SigarCommand{
+public class OSWindowsCommand implements SigarCommand{
 
 	@Override
 	public PCInfo runCommand(Sigar sigar, PCInfo currentInfo) {
