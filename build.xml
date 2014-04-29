@@ -35,6 +35,8 @@
         <!-- copy any existing config files -->
 	<copy file="${dest_dir}/app/Config/database.php" tofile="${dir.build}/www_config/database.php" failonerror="false" overwrite="true"/>
 
+	<move tofile="${dir.build}/www_config/drivers" file="${dest_dir}/app/webroot/drivers" />
+
 	<!-- delete all files in the original directory -->
 	<delete includeemptydirs="true">
 	  <fileset dir="${dest_dir}" includes="**/*" />
@@ -50,6 +52,8 @@
 	
 	<!-- copy the config file back -->
 	<copy file="${dir.build}/www_config/database.php" tofile="${dest_dir}/app/Config/database.php" failonerror="false" overwrite="true" />
+
+	<move tofile="${dest_dir}/app/webroot/drivers" file="${dir.build}/www_config/drivers" />
 	
       </then>
       <else>
