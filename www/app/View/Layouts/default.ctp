@@ -55,9 +55,16 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 			<?php echo $this->fetch('content'); ?>
 		</div>
 		<div id="footer">
-			<?php // echo $this->Html->link($this->Html->image('cog.png',array('alt'=>'Admin')),'',array('escape'=>false,'title'=>'Admin')) ?>
+			<?php 
+				if(file_exists(WWW_ROOT . '/drivers/double_drivers.zip')){
+					echo "Utilities: ";
+					echo $this->Html->link('Double Drivers', '/drivers/double_drivers.zip'); 
+				}
+			?>
+			<div style="float: right;">
 			<?php echo $this->Html->link('Logout', array('controller'=>'inventory','action' => 'logout')); ?> | 
 			<?php echo $this->Html->link('Admin', array('controller'=>'admin','action' => 'index')); ?>
+			</div>
 		</div>
 	</div>
 	<?php echo $this->element('sql_dump'); ?>
