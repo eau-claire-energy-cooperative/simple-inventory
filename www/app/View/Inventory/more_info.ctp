@@ -1,7 +1,25 @@
+<?php 
+		echo $this->Html->script("fancybox/jquery.mousewheel-3.0.6.pack.js",false);
+		echo $this->Html->script("fancybox/jquery.fancybox.js",false);
+		echo $this->Html->css('jquery.fancybox.css');
+?>
+
 <script type="text/javascript">
     $(document).ready(function(){
     	checkRunning();
 		setInterval(checkRunning,40 * 1000);
+		
+		$(".popup").fancybox({
+		maxWidth	: 600,
+		maxHeight	: 400,
+		fitToView	: false,
+		width		: '70%',
+		height		: '70%',
+		autoSize	: false,
+		closeClick	: false,
+		openEffect	: 'none',
+		closeEffect	: 'none'
+		});
 	});
 
 	function checkRunning(){
@@ -80,7 +98,13 @@
                 array('action' => 'delete', $computer['Computer']['id']),
                 array('confirm' => 'Are you sure?'));
             ?>
-<span style="float:right"><?php echo $this->Html->link('Decommission', array('action' => 'confirmDecommission', $computer['Computer']['id'])); ?> 
+<span style="float:right"><?php echo $this->Html->link('Decommission', array('action' => 'confirmDecommission', $computer['Computer']['id'])); ?>
+<?php if(file_exists(WWW_ROOT . '/drivers/' . str_replace(' ','_',$computer['Computer']['Model']) . '.zip')): ?>
+| <?php echo $this->Html->link("Download Drivers","/drivers/" . str_replace(' ','_',$computer['Computer']['Model']) . ".zip") ?>
+<?php else: ?>
+| <?php echo $this->Html->link("Upload Drivers",'/ajax/uploadDrivers/' . $computer['Computer']['id'],array('class'=>'popup fancybox.ajax')) ?>
+<?php endif; ?>
+ 
 <?php if($settings['enable_monitoring'] == 'true'): ?>
 | <a href="#" id="monitorToggle" onClick="toggleMonitoring(<?php echo $computer['Computer']['id'] ?>)"><?php echo ($computer['Computer']['EnableMonitoring'] == 'true' ? "Disable Monitoring" : "Enable Monitoring"); ?></a>
 <?php endif; ?>

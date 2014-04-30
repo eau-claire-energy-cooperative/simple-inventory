@@ -2,7 +2,7 @@
 	
 class InventoryController extends AppController {
     var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace');
-    var $components = array('Session','Ldap');
+    var $components = array('Session','Ldap','FileUpload');
 
 	public $uses = array('Computer','Disk','Location', 'Programs', 'Logs','Service','Decommissioned','Setting','User','RestrictedProgram','ServiceMonitor');
 
@@ -394,6 +394,19 @@ class InventoryController extends AppController {
 			$this->set('computers',$result);
 		}
 		
+	}
+	
+	function do_drivers_upload(){
+		
+		if($this->FileUpload->success){
+			$this->Session->setFlash('Drivers Uploaded');
+		}
+		else
+		{
+			$this->Session->setFlash('Error Uploading Drivers');
+		}
+	
+		$this->redirect('/inventory/moreInfo/' . $this->data['File']['id']);
 	}
 	
 	function _saveLog($message){

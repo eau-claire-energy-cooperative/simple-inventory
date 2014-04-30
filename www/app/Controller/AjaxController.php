@@ -83,5 +83,12 @@ class AjaxController extends AppController {
 			$this->ServiceMonitor->save();
 		}
 	}
+	
+	function uploadDrivers($id){
+		$computer = $this->Computer->find('first',array('conditions'=>array('Computer.id'=>$id)));
+		
+		$this->set('computer',$computer['Computer']);
+		$this->set('id',$id);
+	}
 }
 ?>
