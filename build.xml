@@ -54,6 +54,7 @@
 	<copy file="${dir.build}/www_config/database.php" tofile="${dest_dir}/app/Config/database.php" failonerror="false" overwrite="true" />
 
 	<move tofile="${dest_dir}/app/webroot/drivers" file="${dir.build}/www_config/drivers" />
+	<chmod dir="${dest_dir}/app/webroot/drivers" perm="777" includes="*" type="both" />
 	
       </then>
       <else>
