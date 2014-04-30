@@ -1,5 +1,10 @@
 This is a log of changes that affect version upgrades, these changes must be made on existing installs so that they don't break.
 
+4/30/2014
+
+update /etc/php5/apache2/php.ini to include post and upload sizes of 200M or more
+
+
 10/25/2013
 
 added fields "type" and "note" to triggered_alarms table
