@@ -1,13 +1,15 @@
 package com.ecec.rweber.inventory;
 
-import java.util.ArrayList;
-
-
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import org.jdom.Element;
 import org.json.simple.JSONObject;
+
 import com.ecec.rweber.conductor.framework.Car;
 import com.ecec.rweber.conductor.framework.Helper;
 import com.ecec.rweber.inventory.api.ApiManager;
@@ -51,7 +53,7 @@ public class FindPrograms extends Car{
 
 	@Override
 	protected void runImp(Helper arg0) {
-		List<PCProgram> allPrograms = new ArrayList<PCProgram>();
+		Set<PCProgram> allPrograms = new HashSet<PCProgram>();
 		
 		if(computerId != null)
 		{
@@ -59,7 +61,7 @@ public class FindPrograms extends Car{
 				
 				//first get the 32 bit keys
 				allPrograms.addAll(this.findPrograms(WinRegistry.readStringSubKeys(WinRegistry.HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall"),"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\"));
-
+				
 				//try and get the 64 bit software
 				allPrograms.addAll(this.findPrograms(WinRegistry.readStringSubKeys(WinRegistry.HKEY_LOCAL_MACHINE,"SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall"),"SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\"));				
 				
@@ -78,13 +80,15 @@ public class FindPrograms extends Car{
 			//clear out the current programs list
 			api.programs(ApiManager.PROGRAMS_CLEAR, params);
 			
+			Iterator<PCProgram> iter = allPrograms.iterator();
 			PCProgram p = null;
-			for(int i = 0; i < allPrograms.size(); i ++)
+			while(iter.hasNext())
 			{
 				//add the program for this computer
-				p = allPrograms.get(i);
+				p = iter.next();
 				params.put("program", p.name);
 				params.put("version",p.version);
+				//logDebug(p.name + ": " + p.version);
 				api.programs(ApiManager.PROGRAMS_ADD, params);
 			}
 		}
@@ -95,8 +99,8 @@ public class FindPrograms extends Car{
 	
 	}
 
-	public List<PCProgram> findPrograms(List<String> regList, String regKey){
-		List<PCProgram> result = new ArrayList<PCProgram>();
+	public Set<PCProgram> findPrograms(List<String> regList, String regKey){
+		Set<PCProgram> result = new HashSet<PCProgram>();
 		
 		try{
 			for(String guid : regList)
@@ -157,6 +161,11 @@ public class FindPrograms extends Car{
 			}
 			
 			return result;
+		}
+
+		@Override
+		public int hashCode() {
+			return new String(this.name + this.version).hashCode();
 		}
 		
 		
