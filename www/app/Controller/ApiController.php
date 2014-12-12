@@ -4,7 +4,7 @@ class ApiController extends AppController {
 	var $layout = '';
 	var $helpers = array('Js');
 	var $components = array('Alarm');
-	var $uses = array('Computer','ComputerLogin','Disk','Setting','Command','Service','RestrictedProgram','Programs','Location','EmailMessage','Logs','TriggeredAlarm','User');
+	var $uses = array('Computer','ComputerLogin','Disk','Setting','Command','Service','RestrictedProgram','Programs','Location','EmailMessage','Logs','User');
 	var $json_data = null;
 	
 	function beforeFilter(){
@@ -190,55 +190,6 @@ class ApiController extends AppController {
 		{
 			$result["type"] = 'error';
 			$result['message'] = 'must call an action';
-		}
-		
-		$this->set('result',$result);
-		$this->render('api');
-	}
-	
-	function alarm($action = 'trigger'){
-		$result = array();
-		
-		$alarms = $this->TriggeredAlarm->find('list',array('fields'=>array('TriggeredAlarm.alarm','TriggeredAlarm.id'),'conditions'=>array("TriggeredAlarm.comp_id"=>$this->json_data->id)));
-
-		if($action == 'trigger')
-		{
-			if(!isset($alarms[$this->json_data->alarm]))
-			{
-				//trigger this alarm
-				$this->TriggeredAlarm->create();
-				$this->TriggeredAlarm->set('comp_id',$this->json_data->id);
-				$this->TriggeredAlarm->set('type',$this->json_data->type);
-				$this->TriggeredAlarm->set('note',$this->json_data->note);
-				$this->TriggeredAlarm->set('alarm',$this->json_data->alarm);
-				$this->TriggeredAlarm->save();
-				
-				//trigger any alarm actions
-				$this->Alarm->triggerAlarm($this->json_data->id,$this->json_data->type,$this->json_data->note);
-				
-				$result['type'] = "success";
-				$result['result'] = "alarm set";
-			}
-			else
-			{
-				$result["type"] = 'error';
-				$result['message'] = 'alarm is already set';
-			}
-		}
-		else if($action == 'remove')
-		{
-			if(isset($alarms[$this->json_data->alarm]))
-			{
-				$this->TriggeredAlarm->delete($alarms[$this->json_data->alarm]);
-				
-				$result['type'] = "success";
-				$result['result'] = "alarm deleted";
-			}
-			else
-			{
-				$result["type"] = 'error';
-				$result['message'] = 'alarm is not set';
-			}
 		}
 		
 		$this->set('result',$result);
