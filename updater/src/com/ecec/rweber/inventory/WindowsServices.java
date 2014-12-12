@@ -3,21 +3,14 @@ package com.ecec.rweber.inventory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.jdom.Element;
 import org.json.simple.JSONObject;
-
 import com.citumpe.ctpTools.jWMI;
 import com.ecec.rweber.conductor.framework.Car;
 import com.ecec.rweber.conductor.framework.Helper;
-import com.ecec.rweber.conductor.framework.datasources.exception.InvalidDatasourceException;
-import com.ecec.rweber.conductor.framework.datasources.sql.SQLDatasource;
-import com.ecec.rweber.inventory.FindPrograms.PCProgram;
 import com.ecec.rweber.inventory.api.ApiManager;
-import com.ecec.rweber.inventory.utils.Database;
 import com.ecec.rweber.inventory.utils.GetDBSettings;
 import com.ecec.rweber.inventory.utils.PCInfo;
-import com.ecec.rweber.utils.SettingsReader;
 
 
 public class WindowsServices extends Car{
