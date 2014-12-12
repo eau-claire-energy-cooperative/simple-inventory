@@ -77,19 +77,6 @@
 		$.ajax('<?php echo $this->webroot ?>ajax/wol?mac=' + mac);
 	}
 	
-	function toggleMonitoring(id){
-		$.getJSON('<?php echo $this->webroot ?>ajax/toggle_monitoring/' + id,function(data){
-			$('#monitorToggle').html(data.message);
-		});
-	}
-	
-	function toggleServiceMonitor(id,name){
-		
-		$.getJSON('<?php echo $this->webroot ?>ajax/toggle_service_monitor/' + id + "/" + name,function(data){
-			//do nothing here
-		});
-	}
-	
 </script>
 
 <?php echo $this->Html->link('Edit', array('action' => 'edit', $computer['Computer']['id'])); ?> | 
@@ -105,9 +92,6 @@
 | <?php echo $this->Html->link("Upload Drivers",'/ajax/uploadDrivers/' . $computer['Computer']['id'],array('class'=>'popup fancybox.ajax')) ?>
 <?php endif; ?>
  
-<?php if($settings['enable_monitoring'] == 'true'): ?>
-| <a href="#" id="monitorToggle" onClick="toggleMonitoring(<?php echo $computer['Computer']['id'] ?>)"><?php echo ($computer['Computer']['EnableMonitoring'] == 'true' ? "Disable Monitoring" : "Enable Monitoring"); ?></a>
-<?php endif; ?>
 </span>
 <table>
     <tr>
@@ -226,11 +210,6 @@
     	<td width="33%"> <?php echo $this->Html->link( $post['Service']['name'] , '/search/searchService/' . $post['Service']['name']); ?></td>
     	<td width="33%"><?php echo $post['Service']['startmode'] ?></td>
     	<td><?php echo $post['Service']['status'] ?></td>
-    	<?php if($settings['enable_monitoring'] == 'true'): ?>
-    	<td><input type="checkbox" id="service<?php echo $post['Service']['id'] ?>" onClick="toggleServiceMonitor(<?php echo $post['Computer']['id'] ?>,'<?php echo $post['Service']['name'] ?>')" <?php echo (array_key_exists($post['Service']['name'],$service_monitors) ? "checked": "test") ?>/></td>
-    	<?php else: ?>
-    	<td></td>
-    	<?php endif; ?>
     </tr>
     
     <?php endforeach; ?>
