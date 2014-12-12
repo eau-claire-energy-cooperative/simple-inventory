@@ -24,8 +24,6 @@ public class ApiManager {
 	public static final String SERVICE_FIND = "get";
 	public static final String SERVICE_UPDATE = "update";
 	public static final String DISK_UPDATE = "update";
-	public static final String ALARM_TRIGGER = "trigger";
-	public static final String ALARM_REMOVE = "remove";
 	
 	private String baseUrl = null;
 	private Endpoint inventory = null;
@@ -36,7 +34,6 @@ public class ApiManager {
 	private Endpoint services = null;
 	private Endpoint email = null;
 	private Endpoint disk = null;
-	private Endpoint alarm = null;
 	
 	public static ApiManager getInstance(String url){
 		
@@ -59,11 +56,6 @@ public class ApiManager {
 		services = new Endpoint(baseUrl,"services");
 		email = new Endpoint(baseUrl,"send_email");
 		disk = new Endpoint(baseUrl,"disk");
-		alarm = new Endpoint(baseUrl,"alarm");
-	}
-	
-	public JSONObject alarm(String action, Map<String,String> parameters){
-		return alarm.sendRequest(action,parameters);
 	}
 	
 	public JSONObject inventory(String action, Map<String,String> parameters){
