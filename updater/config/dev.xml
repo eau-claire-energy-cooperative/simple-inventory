@@ -23,25 +23,11 @@
 			 
 			<car name="Update PC Info" class="com.ecec.rweber.inventory.GatherPCInfo" />
 			
-			<car name="Monitor Files" class="com.ecec.rweber.inventory.MonitorFiles">
-			    <options>
-			        <option name="files">Z:/Word Docs/ECEC docs/budget/ECEC 2014.docx</option>
-			        <option name="days_to_live">10</option>
-			    </options>
-			</car>
-			<!--
+			
 			<car name="Find Programs" class="com.ecec.rweber.inventory.FindPrograms" />
 			
-			<car name="Move Shortcuts" class="com.ecec.rweber.inventory.MoveShortcuts">
-				<options>
-					<option name="remote_path">smb://10.10.10.15/backups/Shortcuts/</option>
-				</options>
-			</car>
-			
 			<car name="Get Services" class="com.ecec.rweber.inventory.WindowsServices" />
-			
-			<car name="Monitor Services" class="com.ecec.rweber.inventory.MonitorServices" />
-			-->
+
 		</train>
 	</trains>
 	
