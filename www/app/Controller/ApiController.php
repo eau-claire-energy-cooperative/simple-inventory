@@ -4,7 +4,7 @@ class ApiController extends AppController {
 	var $layout = '';
 	var $helpers = array('Js');
 	var $components = array('Alarm');
-	var $uses = array('Computer','Disk','Setting','Command','Service','RestrictedProgram','Programs','Location','EmailMessage','Logs','TriggeredAlarm','User');
+	var $uses = array('Computer','ComputerLogin','Disk','Setting','Command','Service','RestrictedProgram','Programs','Location','EmailMessage','Logs','TriggeredAlarm','User');
 	var $json_data = null;
 	
 	function beforeFilter(){
@@ -60,6 +60,13 @@ class ApiController extends AppController {
 			$aComputer['Computer']['LastBooted'] = $this->json_data->LastBootTime;
 			
 			$this->Computer->save($aComputer);
+			
+			//also add the computer login information
+			$this->ComputerLogin->create();
+			$this->ComputerLogin->set('Username',$this->json_data->CurrentUser);
+			$this->ComputerLogin->set('comp_id',$this->json_data->id);
+			$this->ComputerLogin->set('LoginDate',$this->json_data->LastUpdated);
+			$this->ComputerLogin->save();
 			
 			$result['type'] = 'success';
 			$result['message'] = 'computer ' . $this->json_data->ComputerName . ' has been updated';

@@ -5,7 +5,7 @@
 
 	
 	var $belongsTo = array('Location' => array('foreignKey' => 'ComputerLocation') ); 
-	var $hasMany = array('Disk'=>array('foreignKey'=>"comp_id"));
+	var $hasMany = array('Disk'=>array('foreignKey'=>"comp_id"),'ComputerLogin'=>array('foreignKey'=>'comp_id','order'=>'ComputerLogin.LoginDate desc'));
 	
 	
 	

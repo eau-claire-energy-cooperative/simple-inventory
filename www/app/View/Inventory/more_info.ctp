@@ -123,7 +123,7 @@
         <td><?php echo $computer['Computer']['ComputerName']?></td>
         <td><?php echo $this->Html->link( $computer['Location']['location'], array('controller'=>'search','action' => 'search', 0, $computer['Computer']['ComputerLocation'])); ?></td>
          
-          <td><?php echo $computer['Computer']['CurrentUser']?></td>
+          <td><?php echo $this->Html->link($computer['Computer']['CurrentUser'],array('controller'=>'inventory','action'=>'loginHistory',$computer['Computer']['id'])); ?></td>
            <td><?php echo $computer['Computer']['SerialNumber']?></td>
             <td><?php echo $computer['Computer']['AssetId']?> </td>
 

@@ -409,6 +409,16 @@ class InventoryController extends AppController {
 		$this->redirect('/inventory/moreInfo/' . $this->data['File']['id']);
 	}
 	
+	function loginHistory($id){
+		$this->set('title_for_layout','Login History');
+		
+		$computer = $this->Computer->find('first',array('conditions'=>array('Computer.id'=>$id)));
+		
+		$this->set('id',$id);
+		$this->set('computerName',$computer['Computer']['ComputerName']);
+		$this->set('history',$computer['ComputerLogin']);
+	}
+	
 	function _saveLog($message){
 		$this->Logs->create();
 		$this->Logs->set('LOGGER','Website');
