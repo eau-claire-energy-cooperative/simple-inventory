@@ -2,10 +2,9 @@
 	
 class InventoryController extends AppController {
     var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace');
-    var $components = array('Session','Ldap','FileUpload');
-
-	public $uses = array('Computer','Disk','Location', 'Programs', 'Logs','Service','Decommissioned','Setting','User','RestrictedProgram');
-
+    var $components = array('Session','Ldap','FileUpload','Paginator');
+	public $uses = array('Computer','Disk','Location', 'Programs', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User','RestrictedProgram');
+	
 	public function beforeFilter(){
 		//check if we are using a login method
 		if(!$this->Session->check('authenticated')){
@@ -411,11 +410,13 @@ class InventoryController extends AppController {
 	function loginHistory($id){
 		$this->set('title_for_layout','Login History');
 		
+		$this->Paginator->settings = array('limit'=>50, 'order'=>array('ComputerLogin.LoginDate'=>'desc'),'conditions' => array('ComputerLogin.comp_id'=>$id));
+		$history = $this->Paginator->paginate('ComputerLogin');
 		$computer = $this->Computer->find('first',array('conditions'=>array('Computer.id'=>$id)));
 		
 		$this->set('id',$id);
 		$this->set('computerName',$computer['Computer']['ComputerName']);
-		$this->set('history',$computer['ComputerLogin']);
+		$this->set('history',$history);
 	}
 	
 	function _saveLog($message){
