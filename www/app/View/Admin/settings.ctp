@@ -43,7 +43,7 @@
 <h2>LDAP Settings</h2>
 <table>
 	<tr>
-		<td>LDAP Host</td>
+		<td width="50%">LDAP Host</td>
 		<td><?php echo $this->Form->input('ldap_host',array('label'=>false,'value'=>$settings['ldap_host'])) ?></td>
 	</tr>
 	<tr>
