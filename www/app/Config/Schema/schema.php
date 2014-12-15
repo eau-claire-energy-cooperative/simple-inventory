@@ -1,11 +1,64 @@
 <?php 
+App::uses('Location','Model');
+App::uses('User','Model');
+App::uses('ClassRegistry','Utility');
+
 class AppSchema extends CakeSchema {
 
 	public function before($event = array()) {
-		return true;
+		$db = ConnectionManager::getDataSource($this->connection);
+    	$db->cacheSources = false;
+    	return true;
 	}
 
 	public function after($event = array()) {
+		
+		if(isset($event['create']))
+		{
+			switch ($event['create']){
+				case 'location':
+					//when creating the location table, insert some default locations
+					$location = ClassRegistry::init('Location');
+					$location->create();
+					$location->saveMany(array(array('Location'=>array('location'=>'IT','is_default'=>false)),
+											  array('Location'=>array('location'=>'Human Resources','is_default'=>false)),
+											  array('Location'=>array('location'=>'Office','is_default'=>true)),
+											  array('Location'=>array('location'=>'Operations','is_default'=>false))));			
+					
+					break;
+				case 'users':
+					//create a default user for first time login
+					$user = ClassRegistry::init('User');
+					$user->create();
+					$user->save(array('User'=>array('name'=>'Temp','username'=>'test','password'=>'1a1dc91c907325c69271ddf0c944bc72','email'=>'test@domain.com')));
+					break;
+				
+				case 'settings':
+					//create some default settings
+					$settings = ClassRegistry::init('Setting');
+					$settings->create();
+					$settings->saveMany(array(array('Setting'=>array('Setting.key'=>'smtp_server','Setting.value'=>'')),
+											  array('Setting'=>array('Setting.key'=>'smtp_user','Setting.value'=>'')),
+											  array('Setting'=>array('Setting.key'=>'smtp_pass','Setting.value'=>'')),
+											  array('Setting'=>array('Setting.key'=>'smtp_auth','Setting.value'=>'')),
+											  array('Setting'=>array('Setting.key'=>'outgoing_email','Setting.value'=>'admin@domain.com')),
+											  array('Setting'=>array('Setting.key'=>'computer_ignore_list','Setting.value'=>'')),
+											  array('Setting'=>array('Setting.key'=>'auth_type','Setting.value'=>'local')),
+											  array('Setting'=>array('Setting.key'=>'ldap_host','Setting.value'=>'')),
+											  array('Setting'=>array('Setting.key'=>'ldap_port','Setting.value'=>'389')),
+											  array('Setting'=>array('Setting.key'=>'ldap_basedn','Setting.value'=>'')),
+											  array('Setting'=>array('Setting.key'=>'ldap_user','Setting.value'=>'')),
+											  array('Setting'=>array('Setting.key'=>'ldap_password','Setting.value'=>'')),
+											  array('Setting'=>array('Setting.key'=>'ldap_computers_basedn','Setting.value'=>'')),
+											  array('Setting'=>array('Setting.key'=>'show_computer_commands','Setting.value'=>'true')),
+											  array('Setting'=>array('Setting.key'=>'domain_username','Setting.value'=>'administrator')),
+											  array('Setting'=>array('Setting.key'=>'domain_password','Setting.value'=>'password')),
+											  array('Setting'=>array('Setting.key'=>'shutdown_message','Setting.value'=>'The Administrator has initiated a shutdown of your PC')),
+											  array('Setting'=>array('Setting.key'=>'computer_auto_add','Setting.value'=>'false'))));
+					break;
+			}	
+		}
+		
 	}
 
 	public $commands = array(
