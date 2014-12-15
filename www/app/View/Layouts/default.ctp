@@ -24,7 +24,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 <head>
 	<?php echo $this->Html->charset(); ?>
 	<title>
-		Computer Inventory Manager
+		<?php echo $title_for_layout ?> | Computer Inventory Manager
 	</title>
 	<?php
 	
