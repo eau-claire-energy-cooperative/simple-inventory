@@ -2,7 +2,7 @@
 
 class SchedulerShell extends AppShell {
 	var $uses = array('Schedule');
-	var $tasks = array('RestrictedPrograms','WakeComputer','SendEmails','ComputerMonitoring');
+	var $tasks = array('RestrictedPrograms','WakeComputer','SendEmails','DiskSpace');
 	
 	public function main(){
 		App::import('Vendor','Cron/CronExpression');
@@ -36,7 +36,7 @@ class SchedulerShell extends AppShell {
 						$this->SendEmails->execute($schedule_params);
 						break;
 					case 5:
-						$this->ComputerMonitoring->execute($schedule_params);
+						$this->DiskSpace->execute($schedule_params);
 						break;
 				}
 

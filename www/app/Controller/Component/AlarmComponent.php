@@ -1,12 +1,7 @@
 <?php
 class AlarmComponent extends Component {
     var $name = "Alarm Component";
-	var $alarms = array('disk_space'=>array('subject'=>'%s Disk Space Warning','message'=>'This computer has %s percent or less disk space remaining on drive %s'),
-						'file'=>array('subject'=>'File Expiration Warning on %s','message'=>'File monitoring services has detected the file %s has expired'),
-						'offline'=>array('subject'=>'%s Has Gone Offline','message'=>'Monitoring has detected that the computer with IP address %s has gone offline'),
-						'online'=>array('subject'=>'%s Is Online','message'=>'Monitoring has detected that the computer with IP address %s is no online'),
-						'service_offline'=>array('subject'=>'Service on %s has stopped','message'=>'The %s service has stopped running'),
-						'service_online'=>array('subject'=>'Service on %s is running','message'=>'The %s service is now running'));
+	var $alarms = array('disk_space'=>array('subject'=>'%s Disk Space Warning','message'=>'This computer has %s percent or less disk space remaining on drive %s'));
 						
 												
 	var $settings = null;
@@ -32,15 +27,7 @@ class AlarmComponent extends Component {
 		$subject = sprintf($subject,$computer['Computer']['ComputerName']);
 		$message = vsprintf($message,explode(',',$note));		
 		
-		if($this->settings['monitoring_email'] == 'true')
-		{
-			$this->_sendMail($subject,$message);
-		}
-		
-		if(trim($this->settings['monitoring_script']) != '')
-		{
-			exec($this->settings['monitoring_script'] . ' "' . escapeshellarg($subject) . '" "' . escapeshellarg($message) . '"');
-		}
+		$this->_sendMail($subject,$message);
 	}
 	
 	function _sendMail($subject,$message){
