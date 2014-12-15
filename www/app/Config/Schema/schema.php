@@ -1,6 +1,7 @@
 <?php 
 App::uses('Location','Model');
 App::uses('User','Model');
+App::uses('Command','Model');
 App::uses('ClassRegistry','Utility');
 
 class AppSchema extends CakeSchema {
@@ -55,6 +56,16 @@ class AppSchema extends CakeSchema {
 											  array('Setting'=>array('Setting.key'=>'domain_password','Setting.value'=>'password')),
 											  array('Setting'=>array('Setting.key'=>'shutdown_message','Setting.value'=>'The Administrator has initiated a shutdown of your PC')),
 											  array('Setting'=>array('Setting.key'=>'computer_auto_add','Setting.value'=>'false'))));
+					break;
+				case 'commands':
+					//create some of the default commands
+					$command = ClassRegistry::init('Command');
+					$command->create();
+					$command->saveMany(array(array('Command'=>array('name'=>'Restricted Programs','parameters'=>'')),
+											array('Command'=>array('name'=>'Wake Computer','parameters'=>'Computer Name')),
+											array('Command'=>array('name'=>'Shutdown/Restart Computer','parameters'=>'Computer Name, Restart')),
+											array('Command'=>array('name'=>'Send Emails','parameters'=>'')),
+											array('Command'=>array('name'=>'Check Disk space','parameters'=>'Minimum Space Threshold'))));
 					break;
 			}	
 		}
