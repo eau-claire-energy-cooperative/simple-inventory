@@ -2,27 +2,26 @@
 /**
  * SessionComponent. Provides access to Sessions from the Controller layer
  *
- * PHP 5
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.Controller.Component
  * @since         CakePHP(tm) v 0.10.0.1232
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('Component', 'Controller');
 App::uses('CakeSession', 'Model/Datasource');
 
 /**
- * The CakePHP SessionComponent provides a way to persist client data between 
- * page requests. It acts as a wrapper for the `$_SESSION` as well as providing 
+ * The CakePHP SessionComponent provides a way to persist client data between
+ * page requests. It acts as a wrapper for the `$_SESSION` as well as providing
  * convenience methods for several `$_SESSION` related functions.
  *
  * @package       Cake.Controller.Component
@@ -49,7 +48,7 @@ class SessionComponent extends Component {
  * @param string $name The name of the key your are setting in the session.
  * 							This should be in a Controller.key format for better organizing
  * @param string $value The value you want to store in a session.
- * @return boolean Success
+ * @return bool Success
  * @link http://book.cakephp.org/2.0/en/core-libraries/components/sessions.html#SessionComponent::write
  */
 	public function write($name, $value = null) {
@@ -76,7 +75,7 @@ class SessionComponent extends Component {
  * In your controller: $this->Session->delete('Controller.sessKey');
  *
  * @param string $name the name of the session key you want to delete
- * @return boolean true is session variable is set and can be deleted, false is variable was not set.
+ * @return bool true is session variable is set and can be deleted, false is variable was not set.
  * @link http://book.cakephp.org/2.0/en/core-libraries/components/sessions.html#SessionComponent::delete
  */
 	public function delete($name) {
@@ -89,7 +88,7 @@ class SessionComponent extends Component {
  * In your controller: $this->Session->check('Controller.sessKey');
  *
  * @param string $name the name of the session key you want to check
- * @return boolean true is session variable is set, false if not
+ * @return bool true is session variable is set, false if not
  * @link http://book.cakephp.org/2.0/en/core-libraries/components/sessions.html#SessionComponent::check
  */
 	public function check($name) {
@@ -143,7 +142,7 @@ class SessionComponent extends Component {
  *
  * In your controller: $this->Session->valid();
  *
- * @return boolean true is session is valid, false is session is invalid
+ * @return bool true is session is valid, false is session is invalid
  */
 	public function valid() {
 		return CakeSession::valid();
@@ -165,7 +164,7 @@ class SessionComponent extends Component {
  * Get/Set the session id.
  *
  * When fetching the session id, the session will be started
- * if it has not already been started.  When setting the session id,
+ * if it has not already been started. When setting the session id,
  * the session will not be started.
  *
  * @param string $id Id to use (optional)
@@ -181,7 +180,7 @@ class SessionComponent extends Component {
 /**
  * Returns a bool, whether or not the session has been started.
  *
- * @return boolean
+ * @return bool
  */
 	public function started() {
 		return CakeSession::started();

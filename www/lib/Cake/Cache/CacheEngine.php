@@ -1,16 +1,17 @@
 <?php
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.Cache
  * @since         CakePHP(tm) v 1.2.0.4933
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 /**
@@ -28,19 +29,33 @@ abstract class CacheEngine {
 	public $settings = array();
 
 /**
+ * Contains the compiled string with all groups
+ * prefixes to be prepended to every key in this cache engine
+ *
+ * @var string
+ */
+	protected $_groupPrefix = null;
+
+/**
  * Initialize the cache engine
  *
  * Called automatically by the cache frontend
  *
  * @param array $settings Associative array of parameters for the engine
- * @return boolean True if the engine has been successfully initialized, false if not
+ * @return bool True if the engine has been successfully initialized, false if not
  */
 	public function init($settings = array()) {
-		$this->settings = array_merge(
-			array('prefix' => 'cake_', 'duration' => 3600, 'probability' => 100),
-			$this->settings,
-			$settings
+		$settings += $this->settings + array(
+			'prefix' => 'cake_',
+			'duration' => 3600,
+			'probability' => 100,
+			'groups' => array()
 		);
+		$this->settings = $settings;
+		if (!empty($this->settings['groups'])) {
+			sort($this->settings['groups']);
+			$this->_groupPrefix = str_repeat('%s_', count($this->settings['groups']));
+		}
 		if (!is_numeric($this->settings['duration'])) {
 			$this->settings['duration'] = strtotime($this->settings['duration']) - time();
 		}
@@ -51,9 +66,11 @@ abstract class CacheEngine {
  * Garbage collection
  *
  * Permanently remove all expired and deleted data
+ *
+ * @param int $expires [optional] An expires timestamp, invalidating all data before.
  * @return void
  */
-	public function gc() {
+	public function gc($expires = null) {
 	}
 
 /**
@@ -61,8 +78,8 @@ abstract class CacheEngine {
  *
  * @param string $key Identifier for the data
  * @param mixed $value Data to be cached
- * @param mixed $duration How long to cache for.
- * @return boolean True if the data was successfully cached, false on failure
+ * @param int $duration How long to cache for.
+ * @return bool True if the data was successfully cached, false on failure
  */
 	abstract public function write($key, $value, $duration);
 
@@ -78,7 +95,7 @@ abstract class CacheEngine {
  * Increment a number under the key and return incremented value
  *
  * @param string $key Identifier for the data
- * @param integer $offset How much to add
+ * @param int $offset How much to add
  * @return New incremented value, false otherwise
  */
 	abstract public function increment($key, $offset = 1);
@@ -87,7 +104,7 @@ abstract class CacheEngine {
  * Decrement a number under the key and return decremented value
  *
  * @param string $key Identifier for the data
- * @param integer $offset How much to subtract
+ * @param int $offset How much to subtract
  * @return New incremented value, false otherwise
  */
 	abstract public function decrement($key, $offset = 1);
@@ -96,17 +113,40 @@ abstract class CacheEngine {
  * Delete a key from the cache
  *
  * @param string $key Identifier for the data
- * @return boolean True if the value was successfully deleted, false if it didn't exist or couldn't be removed
+ * @return bool True if the value was successfully deleted, false if it didn't exist or couldn't be removed
  */
 	abstract public function delete($key);
 
 /**
  * Delete all keys from the cache
  *
- * @param boolean $check if true will check expiration, otherwise delete all
- * @return boolean True if the cache was successfully cleared, false otherwise
+ * @param bool $check if true will check expiration, otherwise delete all
+ * @return bool True if the cache was successfully cleared, false otherwise
  */
 	abstract public function clear($check);
+
+/**
+ * Clears all values belonging to a group. Is up to the implementing engine
+ * to decide whether actually delete the keys or just simulate it to achieve
+ * the same result.
+ *
+ * @param string $group name of the group to be cleared
+ * @return bool
+ */
+	public function clearGroup($group) {
+		return false;
+	}
+
+/**
+ * Does whatever initialization for each group is required
+ * and returns the `group value` for each of them, this is
+ * the token representing each group in the cache key
+ *
+ * @return array
+ */
+	public function groups() {
+		return $this->settings['groups'];
+	}
 
 /**
  * Cache Engine settings
@@ -127,8 +167,14 @@ abstract class CacheEngine {
 		if (empty($key)) {
 			return false;
 		}
-		$key = Inflector::underscore(str_replace(array(DS, '/', '.'), '_', strval($key)));
-		return $key;
+
+		$prefix = '';
+		if (!empty($this->_groupPrefix)) {
+			$prefix = vsprintf($this->_groupPrefix, $this->groups());
+		}
+
+		$key = preg_replace('/[\s]+/', '_', strtolower(trim(str_replace(array(DS, '/', '.'), '_', strval($key)))));
+		return $prefix . $key;
 	}
 
 }
