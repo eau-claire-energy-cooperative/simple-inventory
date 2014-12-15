@@ -47,14 +47,14 @@
 	  <fileset dir="${dir.www}" />
 	</copy>
 
-	<chmod dir="${dest_dir}/" perm="777" includes="*" type="both" />
+	<chmod dir="${dest_dir}/" perm="777" excludes="${dest_dir}/app/webroot/drivers/*.zip" type="both" />
 	<chmod dir="${dest_dir}/lib/Cake/Console" perm="+x" includes="cake" type="file" />
-	
+	<chmod dir="${dest_dir}/app/Console" perm="+x" includes="cake" type="file" />
+
 	<!-- copy the config file back -->
 	<copy file="${dir.build}/www_config/database.php" tofile="${dest_dir}/app/Config/database.php" failonerror="false" overwrite="true" />
 
 	<move tofile="${dest_dir}/app/webroot/drivers" file="${dir.build}/www_config/drivers" />
-	<chmod dir="${dest_dir}/app/webroot/drivers" perm="777" includes="*" type="both" />
 	
       </then>
       <else>
