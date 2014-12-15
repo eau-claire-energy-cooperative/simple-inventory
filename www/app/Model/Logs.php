@@ -1,7 +1,7 @@
 <?php
    class Logs extends AppModel {
    			
-   	var $useTable = 'LOGS';
+   	var $useTable = 'logs';
 	
 	//var $hasMany = array('Computer', array('className' =>'Computer', 'foreignKey' => 'id', 'fields' => 'ComputerName'));
 }

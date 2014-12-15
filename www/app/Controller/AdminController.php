@@ -3,7 +3,7 @@
 class AdminController extends AppController {
 	var $uses = array('Computer','Logs','Location','Setting','User','Command','Schedule','Programs','RestrictedProgram');
 	var $helpers = array('Html','Session','Time','Form','LogParser');
-	var $paginate = array('limit'=>100, order=>array('Logs.id'=>'desc'));
+	var $paginate = array('limit'=>100, 'order'=>array('Logs.id'=>'desc'));
 	
 	public function beforeFilter(){
 		//check if we are using a login method
