@@ -4,6 +4,8 @@ App::uses('User','Model');
 App::uses('Command','Model');
 App::uses('ClassRegistry','Utility');
 
+//USE: Console/cake schema generate|update|create
+
 class AppSchema extends CakeSchema {
 
 	public function before($event = array()) {
