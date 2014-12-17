@@ -4,6 +4,23 @@
 		echo $this->Html->css('jquery.fancybox.css');
 ?>
 
+<script>
+	$(document).ready(function() {	
+    	$(".popup").fancybox({
+		maxWidth	: 600,
+		maxHeight	: 400,
+		fitToView	: false,
+		width		: '70%',
+		height		: '70%',
+		autoSize	: false,
+		closeClick	: false,
+		openEffect	: 'none',
+		closeEffect	: 'none'
+	});
+    });
+      
+</script>
+
 <table width="100%">
 	<tr>
 		<td width="60%"><h2>Currently Scheduled Tasks</h2></td>
@@ -40,19 +57,18 @@
 	</tr>
 </table>
 
-<script>
-	$(document).ready(function() {	
-    	$(".popup").fancybox({
-		maxWidth	: 600,
-		maxHeight	: 400,
-		fitToView	: false,
-		width		: '70%',
-		height		: '70%',
-		autoSize	: false,
-		closeClick	: false,
-		openEffect	: 'none',
-		closeEffect	: 'none'
-	});
-    });
-      
-</script>
+<h1>Cron syntax </h1>
+<p>A <a href="http://en.wikipedia.org/wiki/Cron ">Cron expression</a> is made up for 5 parts (see below).
+
+<p>.--------------- minute (0 - 59)<br>
+|   .------------ hour (0 - 23)<br>
+    |   |   .--------- day of month (1 - 31)<br>
+    |   |   |   .------ month (1 - 12) or Jan, Feb ... Dec<br>
+    |   |   |   |  .---- day of week (0 - 6) or Sun(0 or 7), Mon(1) ... Sat(6)<br>
+    V   V   V   V  V<br>
+    *   *   *   *  *</p>
+<p>Example:</p>
+<ul>
+	<li>0 */5 ** 1-5 - runs every five hours Monday - Friday</li>
+	<li>0,15,30,45 0,15-18 * * * - runs every quarter hour during midnight hour and 3pm-6pm</li>
+</ul>
