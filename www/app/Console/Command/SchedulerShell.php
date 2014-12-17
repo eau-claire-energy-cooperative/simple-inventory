@@ -2,7 +2,7 @@
 
 class SchedulerShell extends AppShell {
 	var $uses = array('Schedule');
-	var $tasks = array('RestrictedPrograms','WakeComputer','SendEmails','DiskSpace');
+	var $tasks = array('RestrictedPrograms','WakeComputer','SendEmails','DiskSpace','ShutdownComputer');
 	
 	public function main(){
 		App::import('Vendor','Cron/CronExpression');
@@ -21,7 +21,7 @@ class SchedulerShell extends AppShell {
 			{
 				//run the command
 				$this->out("Running " . $schedule['Command']['name']);
-				
+
 				//create the parameter array for this task
 				eval("\$schedule_params = " . $schedule['Schedule']['parameters'] . ";");
 
@@ -32,11 +32,19 @@ class SchedulerShell extends AppShell {
 					case 2:
 						$this->WakeComputer->execute($schedule_params);
 						break;
+					case 3:
+						$schedule_params['Restart'] = false;
+						$this->ShutdownComputer->execute($schedule_params);
+						break;
 					case 4:
 						$this->SendEmails->execute($schedule_params);
 						break;
 					case 5:
 						$this->DiskSpace->execute($schedule_params);
+						break;
+					case 6:
+						$schedule_params['Restart'] = true;
+						$this->ShutdownComputer->execute($schedule_params);
 						break;
 				}
 
