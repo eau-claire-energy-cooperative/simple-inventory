@@ -56,6 +56,7 @@ class SchemaShell extends AppShell {
 		Configure::write('Cache.disable', 1);
 
 		$name = $path = $connection = $plugin = null;
+		
 		if (!empty($this->params['name'])) {
 			$name = $this->params['name'];
 		} elseif (!empty($this->args[0]) && $this->args[0] !== 'snapshot') {
@@ -66,6 +67,7 @@ class SchemaShell extends AppShell {
 			list($this->params['plugin'], $splitName) = pluginSplit($name);
 			$name = $this->params['name'] = $splitName;
 		}
+		
 		if ($name && empty($this->params['file'])) {
 			$this->params['file'] = Inflector::underscore($name);
 		} elseif (empty($this->params['file'])) {
@@ -91,6 +93,7 @@ class SchemaShell extends AppShell {
 		}
 		$name = Inflector::camelize($name);
 		$this->Schema = new CakeSchema(compact('name', 'path', 'file', 'connection', 'plugin'));
+		
 	}
 
 /**
@@ -366,7 +369,9 @@ class SchemaShell extends AppShell {
 	protected function _update(&$Schema, $table = null) {
 		$db = ConnectionManager::getDataSource($this->Schema->connection);
 
+		$this->out("Using file: " . $this->Schema->file);
 		$this->out(__d('cake_console', 'Comparing Database to Schema...'));
+		
 		$options = array();
 		if (isset($this->params['force'])) {
 			$options['models'] = false;
@@ -444,7 +449,7 @@ class SchemaShell extends AppShell {
 					} catch (PDOException $e) {
 						$error = $table . ': ' . $e->getMessage();
 					}
-
+					
 					$Schema->after(array($event => $table, 'errors' => $error));
 
 					if (!empty($error)) {
