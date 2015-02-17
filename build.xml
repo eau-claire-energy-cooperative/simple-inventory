@@ -26,16 +26,26 @@
   </target>
 
   <target name="update_site" description="Updates Website Data" depends="build_temp">
-    <property name="dest_dir" value="/home/inventory/www" />
+    <property name="dest_dir" value="../www" />
     <echo message="Updating site in directory ${dest_dir}" />
 
     <if>
       <available file="${dest_dir}" type="dir" />
       <then>
         <!-- copy any existing config files -->
-	<copy file="${dest_dir}/app/Config/database.php" tofile="${dir.build}/www_config/database.php" failonerror="false" overwrite="true"/>
+	<if>
+	   <available file="${dest_dir}/app/Config/database.php" type="file" />
+ 	   <then>
+		<copy file="${dest_dir}/app/Config/database.php" tofile="${dir.build}/www_config/database.php" failonerror="false" overwrite="true"/>
+	   </then>
+	</if>
 
-	<move tofile="${dir.build}/www_config/drivers" file="${dest_dir}/app/webroot/drivers" />
+	<if>
+	   <available file="${dest_dir}/app/webroot/drivers" type="dir" />
+	   <then>
+	     <move tofile="${dir.build}/www_config/driver/" file="${dest_dir}/app/webroot/drivers" />
+	   </then>
+	</if>
 
 	<!-- delete all files in the original directory -->
 	<delete includeemptydirs="true">
@@ -52,13 +62,24 @@
 	<chmod dir="${dest_dir}/app/Console" perm="+x" includes="cake" type="file" />
 
 	<!-- copy the config file back -->
-	<copy file="${dir.build}/www_config/database.php" tofile="${dest_dir}/app/Config/database.php" failonerror="false" overwrite="true" />
+ 	<if>
+	   <available file="${dir.build}/www_config/database.php" type="file" />
+	   <then>
+	      <copy file="${dir.build}/www_config/database.php" tofile="${dest_dir}/app/Config/database.php" failonerror="false" overwrite="true" />
+	   </then>
+	</if>
 
-	<move tofile="${dest_dir}/app/webroot/drivers" file="${dir.build}/www_config/drivers" />
+	<if>
+	   <available file="${dir.build}/www_config/drivers" type="dir" />
+	   <then>
+	     <move tofile="${dest_dir}/app/webroot/drivers" file="${dir.build}/www_config/drivers" />
+	   </then>
+	</if>
 	
       </then>
       <else>
-        <echo message="Destination does not exist or is not a directory" />
+        <echo message="Destination does not exist, creating, please run this again" />
+	<mkdir dir="${dest_dir}" />
       </else>
     </if>
         
@@ -69,7 +90,7 @@
     <antcall target="makejar" />
 
     <!-- get the location of the updater folder -->
-    <property name="dest_dir" value="/home/inventory/updater" />
+    <property name="dest_dir" value="../updater" />
     <if>
        <available file="${dest_dir}" type="dir" />
        <then>
@@ -77,32 +98,76 @@
 	 <copy file="${dir.build}/inventory.jar" tofile="${dest_dir}/inventory.jar" overwrite="true" failonerror="true" />
 
          <!-- delete the jar files and copy the ones from the source dir -->
-	 <delete>
-	   <fileset dir="${dest_dir}/jars/" includes="**/*" />
-	 </delete>
+	 <if>
+	   <available file="${dest_dir}/jars/" type="dir" />
+	   <then>
+		<delete>
+		   <fileset dir="${dest_dir}/jars/" includes="**/*" />
+		</delete>
+	   </then>
+	   <else>
+		<mkdir dir="${dest_dir}/jars/" />
+	   </else>
+	 </if>
 
 	 <copy todir="${dest_dir}/jars/">
 	   <fileset dir="${dir.updater}/jars/" />
   	 </copy>
 	 
+	<if>
+	    <available file="${dest_dir}/scripts/" type="dir" />
+	    <then>
 		<!-- delete the scripts install directory and copy the ones from source -->
 		<delete>
 			<fileset dir="${dest_dir}/scripts/" includes="**/*" />
 		</delete>
-		
-		<copy todir="${dest_dir}/scripts/">
-			<fileset dir="${dir.updater}/scripts/" />
-		</copy>
+	     </then>
+	 </if>		
+	
+	<copy todir="${dest_dir}/scripts/">
+		<fileset dir="${dir.updater}/scripts/" />
+	</copy>
+
+	<!-- check if any other required folders exist -->
+	<if>
+	    <not>
+	      <available file="${dest_dir}/config/" type="dir" />
+	    </not>
+            <then>
+                <mkdir dir="${dest_dir}/config/" />
+                <copy todir="${dest_dir}/config/">
+                    <fileset dir="${dir.updater}/config/" includes="**/*" />
+                </copy>
+             </then>
+         </if>
+
+	  <if>
+            <not>
+              <available file="${dest_dir}/sigar-bin/" type="dir" />
+            </not>
+            <then>
+                <mkdir dir="${dest_dir}/sigar-bin/" />
+		<mkdir dir="${dest_dir}/logs" />
+		<mkdir dir="${dest_dir}/files" />
+		<mkdir dir="${dest_dir}/data" />
+
+                <copy todir="${dest_dir}/sigar-bin/">
+                    <fileset dir="${dir.updater}/sigar-bin/" includes="**/*" />
+                </copy>
+             </then>
+         </if>
+
        </then>
        <else>
-          <echo message="Destination does not exist or is not a directory" />
+          <echo message="Destination does not exist, creating, please run this again" />
+	  <mkdir dir="${dest_dir}" />
        </else>
     </if>
   </target>
 
   <target name="create_batch_file" description="Creates the batch file for the login script">
     <!-- get the location of the updater directory -->
-    <property name="dest_dir" value="/home/inventory/updater" />
+    <property name="dest_dir" value="../updater" />
 
     <if>
       <available file="${dest_dir}" type="dir" />
@@ -126,7 +191,7 @@
 	</if>
       </then>
       <else>
-        <echo message="Destination does not exist or is not a directory" />
+        <echo message="Destination does not exist or is not a directory, run update_program" />
       </else> 
     </if>
   </target>
