@@ -2,6 +2,7 @@
 App::uses('Location','Model');
 App::uses('User','Model');
 App::uses('Command','Model');
+App::uses('Setting','Model');
 App::uses('ClassRegistry','Utility');
 
 //USE: Console/cake schema generate|update|create
