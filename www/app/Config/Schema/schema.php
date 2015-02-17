@@ -24,10 +24,10 @@ class AppSchema extends CakeSchema {
 					//when creating the location table, insert some default locations
 					$location = ClassRegistry::init('Location');
 					$location->create();
-					$location->saveMany(array(array('Location'=>array('location'=>'IT','is_default'=>false)),
-											  array('Location'=>array('location'=>'Human Resources','is_default'=>false)),
-											  array('Location'=>array('location'=>'Office','is_default'=>true)),
-											  array('Location'=>array('location'=>'Operations','is_default'=>false))));			
+					$location->saveMany(array(array('Location'=>array('location'=>'IT','is_default'=>"false")),
+											  array('Location'=>array('location'=>'Human Resources','is_default'=>"false")),
+											  array('Location'=>array('location'=>'Office','is_default'=>"true")),
+											  array('Location'=>array('location'=>'Operations','is_default'=>"false"))));			
 					
 					break;
 				case 'users':
