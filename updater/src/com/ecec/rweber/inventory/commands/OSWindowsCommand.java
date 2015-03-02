@@ -27,7 +27,19 @@ public class OSWindowsCommand implements SigarCommand{
 			//don't do anything, we'll just the sigar arch value
 		}
 		
-		currentInfo.addField("OS",os.getDescription());
+		//let's do a check for Windows 8
+		String osDescription = os.getDescription();
+		if(os.getDescription().startsWith("Microsoft Windows"))
+		{
+			double version = Double.parseDouble(os.getVersion());
+			
+			if(version > 6.1 && version < 6.4)
+			{
+				osDescription = "Microsoft Windows 8";
+			}
+		}
+		
+		currentInfo.addField("OS",osDescription);
 		currentInfo.addField("OS_Arch", arch);
 		currentInfo.addField("OS_Version", os.getVersion());
 		currentInfo.addField("OS_Patch_Level",os.getPatchLevel());
@@ -36,5 +48,4 @@ public class OSWindowsCommand implements SigarCommand{
 		
 		return currentInfo;
 	}
-
 }
