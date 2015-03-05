@@ -159,6 +159,8 @@ class ApiController extends AppController {
 				//update the disk
 				$aDisk['Disk']['total_space'] = $this->json_data->total_space;
 				$aDisk['Disk']['space_free'] = $this->json_data->space_free;
+				$aDisk['Disk']['type'] = $this->json_data->type;
+				
 				$this->Disk->save($aDisk);
 				
 				$result['type'] = "success";
@@ -172,6 +174,7 @@ class ApiController extends AppController {
 				$this->Disk->set('label',$this->json_data->label);
 				$this->Disk->set('total_space',$this->json_data->total_space);
 				$this->Disk->set('space_free',$this->json_data->space_free);
+				$this->Disk->set('type',$this->json_data->type);
 				$this->Disk->save();
 				
 				$result["type"] = 'success';

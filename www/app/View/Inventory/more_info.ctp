@@ -156,7 +156,11 @@
 		<td><?php echo $computer['Computer']['MACaddress']?></td>
 		<td>
 			<?php foreach($computer['Disk'] as $aDisk): ?>
-				<?php echo $aDisk['label'] . " - " . $this->DiskSpace->toString($aDisk['total_space']) ?> (<?php echo $this->DiskSpace->compare($aDisk['total_space'],$aDisk['space_free']) ?>% free)<br>
+				<?php if($aDisk['type'] == 'Local'): ?>
+					<?php echo $aDisk['label'] . " - " . $this->DiskSpace->toString($aDisk['total_space']) ?> (<?php echo $this->DiskSpace->compare($aDisk['total_space'],$aDisk['space_free']) ?>% free)<br>
+				<?php else: ?>
+					<?php echo $aDisk['label'] . " - " . $aDisk['type'] ?><br>
+				<?php endif; ?>
 			<?php endforeach; ?>
 		</td>
 		<td><?php echo $this->Time->niceShort($computer['Computer']['LastUpdated']);?></td>
