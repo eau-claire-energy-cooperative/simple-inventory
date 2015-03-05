@@ -28,6 +28,10 @@ public class DiskUsageCommand implements SigarCommand{
 					
 					currentInfo.addDisk(new Disk(fs.getDirName(),fsUsage.getTotal() + "", fsUsage.getFree() + ""));
 				}
+				else if(fs.getType() == FileSystem.TYPE_NETWORK)
+				{
+					currentInfo.addDisk(new Disk(fs.getDirName(),"0","0","Network"));
+				}
 			}			
 			
 		} catch (SigarException e) {
