@@ -29,10 +29,11 @@ public class OSWindowsCommand implements SigarCommand{
 		
 		//let's do a check for Windows
 		String osDescription = os.getDescription();
+		System.out.println(osDescription);
 		if(os.getDescription().startsWith("Microsoft Windows"))
 		{
 			double version = Double.parseDouble(os.getVersion());
-			
+			System.out.println(version);
 			if(version > 6.1 && version < 6.4)
 			{
 				osDescription = "Microsoft Windows 8";
