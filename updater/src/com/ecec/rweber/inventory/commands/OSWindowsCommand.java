@@ -27,7 +27,7 @@ public class OSWindowsCommand implements SigarCommand{
 			//don't do anything, we'll just the sigar arch value
 		}
 		
-		//let's do a check for Windows 8
+		//let's do a check for Windows
 		String osDescription = os.getDescription();
 		if(os.getDescription().startsWith("Microsoft Windows"))
 		{
@@ -36,6 +36,10 @@ public class OSWindowsCommand implements SigarCommand{
 			if(version > 6.1 && version < 6.4)
 			{
 				osDescription = "Microsoft Windows 8";
+			}
+			else if(version >= 10)
+			{
+				osDescription = "Microsoft Windows 10";
 			}
 		}
 		
