@@ -14,8 +14,12 @@ public class OSWindowsCommand implements SigarCommand{
 		OperatingSystem os = OperatingSystem.getInstance();
 		
 		String arch = os.getArch();
+		double version = Double.parseDouble(os.getVersion());
 		try {
 			String tempArch = jWMI.getWMIValue("select * from Win32_OperatingSystem", "OSArchitecture");
+			String[] vTemp = jWMI.getWMIValue("select * from Win32_OperatingSystem", "Version").split(".");
+			
+			version = Double.parseDouble(vTemp[0] + "." + vTemp[1]);
 			
 			//this might be blank, on XP systems it appears to be
 			if(!tempArch.trim().equals(""))
@@ -32,7 +36,6 @@ public class OSWindowsCommand implements SigarCommand{
 		System.out.println(osDescription);
 		if(os.getDescription().startsWith("Microsoft Windows"))
 		{
-			double version = Double.parseDouble(os.getVersion());
 			System.out.println(version);
 			if(version > 6.1 && version < 6.4)
 			{
@@ -46,7 +49,7 @@ public class OSWindowsCommand implements SigarCommand{
 		
 		currentInfo.addField("OS",osDescription);
 		currentInfo.addField("OS_Arch", arch);
-		currentInfo.addField("OS_Version", os.getVersion());
+		currentInfo.addField("OS_Version", version + "");
 		currentInfo.addField("OS_Patch_Level",os.getPatchLevel());
 		currentInfo.addField("OS_Vendor", os.getVendor());
 		currentInfo.addField("OS_Code_Name", os.getVendorCodeName());
