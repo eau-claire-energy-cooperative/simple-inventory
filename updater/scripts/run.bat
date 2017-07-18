@@ -1,3 +1,5 @@
+@echo off 
+set INVENTORY_PATH=PATH
 cd "%USERPROFILE%" 
 del runInventory.vbs 
 
@@ -8,6 +10,8 @@ echo If ofso.FileExists("%WINDIR%\system32\java.exe") Then >> runInventory.vbs
 echo javaPath = "%WINDIR%\system32\java.exe" >> runInventory.vbs 
 echo ElseIf ofso.FileExists("%WINDIR%\syswow64\java.exe") Then >> runInventory.vbs 
 echo javaPath = "%WINDIR%\syswow64\java.exe" >> runInventory.vbs 
+echo ElseIf ofso.FileExists("%SYSTEMDRIVE%\ProgramData\Oracle\Java\javapath\java.exe") Then >> runInventory.vbs
+echo javaPath = "%SYSTEMDRIVE%\ProgramData\Oracle\Java\javapath\java.exe" >> runInventory.vbs
 echo Else >> runInventory.vbs 
 echo IF ofso.FileExists("%INVENTORY_PATH%\java.exe") Then >> runInventory.vbs 
 echo Dim aShell >> runInventory.vbs 
