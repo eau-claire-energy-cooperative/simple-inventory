@@ -3,8 +3,8 @@
 
 <table>
 	<tr>
-		<th width="33%"><?echo $this->Paginator->prev("<< Newer "); ?></th>
-		<th width="33%"><p align="center"><?echo $this->Paginator->counter('Displaying page {:page} of {:pages}') ?></p></th>
+		<th width="33%"><?php echo $this->Paginator->prev("<< Newer "); ?></th>
+		<th width="33%"><p align="center"><?php echo $this->Paginator->counter('Displaying page {:page} of {:pages}') ?></p></th>
 		<th align="right"><p align="right"><?php echo $this->Paginator->next("Older >> ") ?></p></th>
 	</tr>
 </table>
