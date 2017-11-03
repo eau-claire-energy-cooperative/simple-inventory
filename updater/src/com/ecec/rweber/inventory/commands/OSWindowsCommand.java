@@ -37,7 +37,7 @@ public class OSWindowsCommand implements SigarCommand{
 		
 		//let's do a check for Windows
 		String osDescription = os.getDescription();
-		if(os.getDescription().startsWith("Microsoft Windows"))
+		if(os.getDescription().startsWith("Microsoft"))
 		{
 			if(version > 6.1 && version < 6.4)
 			{
