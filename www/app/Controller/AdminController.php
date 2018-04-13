@@ -41,8 +41,16 @@ class AdminController extends AppController {
 		{
 			foreach(array_keys($this->data['Setting']) as $key)
 			{
-				$this->Setting->query(sprintf('update settings set settings.value = "%s" where settings.key = "%s"',$this->data['Setting'][$key],$key));
+				//if setting is array, make it a string
+				$value = $this->data['Setting'][$key];
+				if(is_array($this->data['Setting'][$key]))
+				{
+					$value = implode(",",$this->data['Setting'][$key]);
+				}
+				
+				$this->Setting->query(sprintf('update settings set settings.value = "%s" where settings.key = "%s"',$value,$key));
 			}
+			
 		}
 		
 		$this->set('title_for_layout','Settings');

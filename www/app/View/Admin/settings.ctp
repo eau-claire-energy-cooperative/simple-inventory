@@ -20,7 +20,7 @@
 	</tr>
 </table>
 
-<h2>Computer Commands</h2>
+<h2>Computer Info Page</h2>
 <table>
 	<tr>
 		<td width="50%">Show Computer Commands</td>
@@ -37,6 +37,14 @@
 	<tr>
 		<td>Admin Password</td>
 		<td><?php echo $this->Form->input('domain_password',array('label'=>false,'value'=>$settings['domain_password'])) ?></td>
+	</tr>
+	<tr>
+		<td>Fields To Display</td>
+		<?php
+			//convert string to array
+			$displayAttributes = explode(',',$settings['display_attributes']);
+		?>
+		<td><?php echo $this->Form->select('display_attributes',array("ComputerName"=>"Computer Name","Tag"=>"Tag","CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID","Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors","IPAddress"=>"IP Address","MACAddress"=>"MAC Address","DriveSpace"=>"Drive Space","LastUpdated"=>"Last Updated","Status"=>"Status"),array('multiple'=>true,'label'=>false,'value'=>$displayAttributes)) ?></td>
 	</tr>
 </table>
 

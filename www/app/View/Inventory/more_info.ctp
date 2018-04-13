@@ -93,81 +93,33 @@
 <?php endif; ?>
  
 </span>
+
+<?php foreach($tables as $aTable): ?>
 <table>
-    <tr>
-        <th style="width: 200px;">Computer Name</th>
-        <th style="width: 250px;">Tag</th>
-        <th style="width: 250px;">Current User</th>
-        <th style="width: 250px;">Serial Number</th>
-        <th style="width: 250px;">Asset ID</th>
-     
-    </tr>
-
-    <tr>
-        <td><?php echo $computer['Computer']['ComputerName']?></td>
-        <td><?php echo $this->Html->link( $computer['Location']['location'], array('controller'=>'search','action' => 'search', 0, $computer['Computer']['ComputerLocation'])); ?></td>
-         
-          <td><?php echo $this->Html->link($computer['Computer']['CurrentUser'],array('controller'=>'inventory','action'=>'loginHistory',$computer['Computer']['id'])); ?></td>
-           <td><?php echo $computer['Computer']['SerialNumber']?></td>
-            <td><?php echo $computer['Computer']['AssetId']?> </td>
-
-    </tr>
-
+	<tr>
+		<?php foreach($aTable as $attribute): ?>
+			<th style="width: 250px;"><?php echo $validAttributes[$attribute] ?></th>
+		<?php endforeach; ?>
+		<?php
+			$tableCount = count($aTable); 
+			while($tableCount < 5): ?>
+			<th style="width: 250px;"></th>
+			<?php $tableCount ++; ?>
+		<?php endwhile; ?>
+	</tr>
+	<tr>
+		<?php foreach($aTable as $attribute): ?>
+			<td><?php echo $this->AttributeDisplay->displayAttribute($attribute,$computer)?></td>
+		<?php endforeach; ?>
+		<?php
+			$tableCount = count($aTable); 
+			while($tableCount < 5): ?>
+			<td></td>
+			<?php $tableCount ++; ?>
+		<?php endwhile; ?>
+	</tr>
 </table>
-
-<table>
-    <tr>
-        <th style="width: 200px;">Model</th>
-        <th style="width: 250px;">Operating System</th>
-        <th style="width: 250px;">CPU</th>
-        <th style="width: 250px;">Memory</th>
-        <th style="width: 250px;">Number of Monitors</th>
-     
-    </tr>
-	    <tr>
-        <td> <?php echo $this->Html->link($computer['Computer']['Model'], array('controller'=>'search','action' => 'search', 1, $computer['Computer']['Model'])); ?></td>
-       
-        <td><?php echo $this->Html->link( $computer['Computer']['OS'], array('controller'=>'search','action' => 'search', 2, $computer['Computer']['OS'])); ?></td> <!--  $comparisonID,$columnID,$modelID,$nameID -->
-      
-          <td><?php echo $computer['Computer']['CPU']?></td>
-    
-           <td> <?php echo $this->Html->link($computer['Computer']['Memory'] . " GB", array('controller'=>'search','action' => 'search', 3, $computer['Computer']['Memory'])); ?> 
-           	    (<?php echo $this->DiskSpace->compare($computer['Computer']['Memory'],$computer['Computer']['MemoryFree']) ?>% free)</td>
-        
-
-             <td> <?php echo $this->Html->link( $computer['Computer']['NumberOfMonitors'], array('controller'=>'search','action' => 'search', 4, $computer['Computer']['NumberOfMonitors'])); ?></td>
-         </tr>
-        
-	
-</table>
-
-<table>
-		
-    <tr>
-        <th style="width: 200px;">IP Address</th>
-        <th style="width: 250px;">MAC Address</th>
- 		<th style="width: 250px;">Drive Space</th>
- 		<th style="width: 250px;">Last Updated</th>
- 		<th style="width: 250px;"></th>
-     
-    </tr>
-    <tr>
-		<td><?php echo $computer['Computer']['IPaddress']?></td>
-		<td><?php echo $computer['Computer']['MACaddress']?></td>
-		<td>
-			<?php foreach($computer['Disk'] as $aDisk): ?>
-				<?php if($aDisk['type'] == 'Local'): ?>
-					<?php echo $aDisk['label'] . " - " . $this->DiskSpace->toString($aDisk['total_space']) ?> (<?php echo $this->DiskSpace->compare($aDisk['total_space'],$aDisk['space_free']) ?>% free)<br>
-				<?php else: ?>
-					<?php echo $aDisk['label'] . " - " . $aDisk['type'] ?><br>
-				<?php endif; ?>
-			<?php endforeach; ?>
-		</td>
-		<td><?php echo $this->Time->niceShort($computer['Computer']['LastUpdated']);?></td>
-		<td><p id="is_running" class="red">Not Running</p></td> 
-     </tr>
-       
-</table> 
+<?php endforeach; ?>
 
 <?php if($computer['Computer']['notes'] != ''): ?>
 <table>

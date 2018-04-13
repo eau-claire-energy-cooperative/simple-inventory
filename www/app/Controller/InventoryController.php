@@ -1,7 +1,7 @@
 <?php
 	
 class InventoryController extends AppController {
-    var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace');
+    var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace','AttributeDisplay');
     var $components = array('Session','Ldap','FileUpload','Paginator');
 	public $uses = array('Computer','Disk','Location', 'Programs', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User','RestrictedProgram');
 	
@@ -116,12 +116,40 @@ class InventoryController extends AppController {
 	 public function moreInfo( $id) {
 	 	$this->set('title_for_layout','Computer Detail');
 	 	
+		//get the info about this computer
 	 	$this->Computer->id = $id;
 		$this->Programs->id = $id;
         $this->set('computer', $this->Computer->read());
 		$this->set('programs', $this->Programs->find('all',array('conditions' => array('comp_id' => $id), 'order' => array('program ASC'))));
 		$this->set('services', $this->Service->find('all',array('conditions' => array('comp_id' => $id), 'order' => array('name ASC'))));
 		$this->set('restricted_programs',$this->RestrictedProgram->find('list',array('fields'=>array('RestrictedProgram.name','RestrictedProgram.id'))));
+		
+		//figure out what attributes to display
+		$validAttributes = array("ComputerName"=>"Computer Name","Tag"=>"Tag","CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID","Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors","IPAddress"=>"IP Address","MACAddress"=>"MAC Address","DriveSpace"=>"Drive Space","LastUpdated"=>"Last Updated","Status"=>"Status");
+		$displaySetting = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'display_attributes')));
+		$displayAttributes = explode(",",$displaySetting['Setting']['value']);
+		$colCount = 0; //current number of columns 
+		$tables = array();
+		$currentTable = array();
+		
+		foreach(array_keys($validAttributes) as $aKey){
+			if(in_array($aKey, $displayAttributes))
+			{
+				if($colCount >= 5){
+					$tables[] = $currentTable;
+					$currentTable = array();
+					$colCount = 0;
+				}
+		
+				$currentTable[] = $aKey;
+				$colCount ++;
+			}	
+		} 
+
+		//save the last table
+		$tables[] = $currentTable;
+		$this->set('validAttributes',$validAttributes);
+		$this->set('tables',$tables);
     }
     
 	 public function moreInfoDecommissioned( $id) {
