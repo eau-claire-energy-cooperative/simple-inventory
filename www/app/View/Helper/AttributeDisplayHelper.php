@@ -26,6 +26,10 @@ class AttributeDisplayHelper extends AppHelper {
 		{
 			$result = $computer['Computer']['AssetId'];
 		}
+		else if($attribute == 'ApplicationUpdates')
+		{
+			$result = $computer['Computer']['ApplicationUpdates'];
+		}
 		else if ($attribute == 'Model')
 		{
 			$result = $this->Html->link($computer['Computer']['Model'], array('controller'=>'search','action' => 'search', 1, $computer['Computer']['Model']));

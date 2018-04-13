@@ -81,6 +81,9 @@ public class GatherPCInfo extends Car{
 		c = new LastBootWindowsCommand();
 		results = c.runCommand(sigar, results);
 		
+		c = new ChocoPackagesCommand();
+		results = c.runCommand(sigar, results);
+		
 		results.addField("ComputerName", PCInfo.getComputerName());
 		
 		return results;

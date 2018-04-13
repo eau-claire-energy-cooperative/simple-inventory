@@ -58,6 +58,7 @@ class ApiController extends AppController {
 			$aComputer['Computer']['NumberOfMonitors'] = $this->json_data->NumberOfMonitors;
 			$aComputer['Computer']['LastUpdated'] = $this->json_data->LastUpdated;
 			$aComputer['Computer']['LastBooted'] = $this->json_data->LastBootTime;
+			$aComputer['Computer']['ApplicationUpdates'] = $this->json_data->ApplicationUpdates;
 			
 			$this->Computer->save($aComputer);
 			
