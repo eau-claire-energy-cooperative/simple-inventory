@@ -1,7 +1,7 @@
 @echo off 
 set INVENTORY_PATH=PATH
 cd "%USERPROFILE%" 
-del runInventory.vbs 
+if exist runInventory.vbs del runInventory.vbs
 
 
 echo Set ofso = CreateObject("Scripting.FileSystemObject") >> runInventory.vbs 
@@ -12,6 +12,8 @@ echo ElseIf ofso.FileExists("%WINDIR%\syswow64\java.exe") Then >> runInventory.v
 echo javaPath = "%WINDIR%\syswow64\java.exe" >> runInventory.vbs 
 echo ElseIf ofso.FileExists("%SYSTEMDRIVE%\ProgramData\Oracle\Java\javapath\java.exe") Then >> runInventory.vbs
 echo javaPath = "%SYSTEMDRIVE%\ProgramData\Oracle\Java\javapath\java.exe" >> runInventory.vbs
+echo ElseIf ofso.FileExists("C:\Program Files (x86)\Common Files\Oracle\Java\javapath\java.exe") Then >> runInventory.vbs
+echo javaPath = "C:\Program Files (x86)\Common Files\Oracle\Java\javapath\java.exe" >> runInventory.vbs
 echo Else >> runInventory.vbs 
 echo IF ofso.FileExists("%INVENTORY_PATH%\java.exe") Then >> runInventory.vbs 
 echo Dim aShell >> runInventory.vbs 
@@ -27,7 +29,7 @@ echo End If >> runInventory.vbs
 echo Dim WshShell >> runInventory.vbs 
 echo Set WshShell = CreateObject("WScript.Shell") >> runInventory.vbs 
 echo WshShell.CurrentDirectory = "%INVENTORY_PATH%" >> runInventory.vbs 
-echo cmds=WshShell.Run(javaPath ^& " -jar inventory.jar -schedule=false",0,True) >> runInventory.vbs  
+echo cmds=WshShell.Run(chr(34) ^& javaPath ^& chr(34) ^& " -jar inventory.jar -schedule=false",0,True) >> runInventory.vbs  
 
 runInventory.vbs 
-del runInventory.vbs 
+if exist runInventory.vbs del runInventory.vbs 
