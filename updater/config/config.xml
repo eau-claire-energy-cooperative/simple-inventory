@@ -5,7 +5,7 @@
 
 	<!-- setup the different types of logging -->
 	<log debug="false">
-		<console>false</console>
+		<console>true</console>
 		<file>false</file>
 		<custom class="com.ecec.rweber.inventory.utils.WebsiteLogger" url="http://inventory.ecec.com/inventory/">true</custom>
 	</log>

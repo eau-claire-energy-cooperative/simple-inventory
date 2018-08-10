@@ -2,17 +2,17 @@
 /**
  * The ModelTask handles creating and updating models files.
  *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP(tm) Project
  * @since         CakePHP(tm) v 1.2
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('AppShell', 'Console/Command');
@@ -383,6 +383,8 @@ class ModelTask extends BakeTask {
 		if (class_exists('Validation')) {
 			$options = get_class_methods('Validation');
 		}
+		$deprecatedOptions = array('notEmpty', 'between', 'ssn');
+		$options = array_diff($options, $deprecatedOptions);
 		sort($options);
 		$default = 1;
 		foreach ($options as $option) {
@@ -443,10 +445,14 @@ class ModelTask extends BakeTask {
 				} elseif ($metaData['type'] === 'string' && $metaData['length'] == 36) {
 					$guess = $methods['uuid'];
 				} elseif ($metaData['type'] === 'string') {
-					$guess = $methods['notEmpty'];
+					$guess = $methods['notBlank'];
 				} elseif ($metaData['type'] === 'text') {
-					$guess = $methods['notEmpty'];
+					$guess = $methods['notBlank'];
 				} elseif ($metaData['type'] === 'integer') {
+					$guess = $methods['numeric'];
+				} elseif ($metaData['type'] === 'smallinteger') {
+					$guess = $methods['numeric'];
+				} elseif ($metaData['type'] === 'tinyinteger') {
 					$guess = $methods['numeric'];
 				} elseif ($metaData['type'] === 'float') {
 					$guess = $methods['numeric'];
@@ -460,6 +466,8 @@ class ModelTask extends BakeTask {
 					$guess = $methods['datetime'];
 				} elseif ($metaData['type'] === 'inet') {
 					$guess = $methods['ip'];
+				} elseif ($metaData['type'] === 'decimal') {
+					$guess = $methods['decimal'];
 				}
 			}
 
@@ -926,7 +934,7 @@ class ModelTask extends BakeTask {
 				$tableIsGood = $this->in(__d('cake_console', 'Do you want to use this table?'), array('y', 'n'), 'y');
 			}
 			if (strtolower($tableIsGood) === 'n') {
-				$useTable = $this->in(__d('cake_console', 'What is the name of the table?'));
+				$useTable = $this->in(__d('cake_console', 'What is the name of the table (without prefix)?'));
 			}
 		}
 		return $useTable;

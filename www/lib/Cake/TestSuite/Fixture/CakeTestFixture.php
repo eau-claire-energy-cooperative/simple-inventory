@@ -1,17 +1,17 @@
 <?php
 /**
- * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) Tests <https://book.cakephp.org/2.0/en/development/testing.html>
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
  * @package       Cake.TestSuite.Fixture
  * @since         CakePHP(tm) v 1.2.0.4667
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('CakeSchema', 'Model');
@@ -287,17 +287,25 @@ class CakeTestFixture {
 				$fields = array_unique($fields);
 				$default = array_fill_keys($fields, null);
 				foreach ($this->records as $record) {
-					$merge = array_values(array_merge($default, $record));
+					$mergeData = array_merge($default, $record);
+					$merge = array_values($mergeData);
 					if (count($fields) !== count($merge)) {
-						throw new CakeException('Fixture invalid: Count of fields does not match count of values in ' . get_class($this));
+
+						$mergeFields = array_diff_key(array_keys($mergeData), $fields);
+
+						$message = 'Fixture invalid: Count of fields does not match count of values in ' . get_class($this) . "\n";
+						foreach ($mergeFields as $field) {
+							$message .= "The field '" . $field . "' is in the data fixture but not in the schema." . "\n";
+						}
+
+						throw new CakeException($message);
 					}
 					$values[] = $merge;
 				}
 				$nested = $db->useNestedTransactions;
 				$db->useNestedTransactions = false;
 				$result = $db->insertMulti($this->table, $fields, $values);
-				if (
-					$this->primaryKey &&
+				if ($this->primaryKey &&
 					isset($this->fields[$this->primaryKey]['type']) &&
 					in_array($this->fields[$this->primaryKey]['type'], array('integer', 'biginteger'))
 				) {

@@ -1,19 +1,17 @@
 <?php
 /**
- * PostgreSQL layer for DBO.
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP(tm) Project
  * @package       Cake.Model.Datasource.Database
  * @since         CakePHP(tm) v 0.9.1.114
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('DboSource', 'Model/Datasource');
@@ -46,6 +44,7 @@ class Postgres extends DboSource {
 		'schema' => 'public',
 		'port' => 5432,
 		'encoding' => '',
+		'sslmode' => 'allow',
 		'flags' => array()
 	);
 
@@ -53,12 +52,15 @@ class Postgres extends DboSource {
  * Columns
  *
  * @var array
+ * @link https://www.postgresql.org/docs/9.6/static/datatype.html PostgreSQL Data Types
  */
 	public $columns = array(
 		'primary_key' => array('name' => 'serial NOT NULL'),
 		'string' => array('name' => 'varchar', 'limit' => '255'),
 		'text' => array('name' => 'text'),
 		'integer' => array('name' => 'integer', 'formatter' => 'intval'),
+		'smallinteger' => array('name' => 'smallint', 'formatter' => 'intval'),
+		'tinyinteger' => array('name' => 'smallint', 'formatter' => 'intval'),
 		'biginteger' => array('name' => 'bigint', 'limit' => '20'),
 		'float' => array('name' => 'float', 'formatter' => 'floatval'),
 		'decimal' => array('name' => 'decimal', 'formatter' => 'floatval'),
@@ -69,7 +71,8 @@ class Postgres extends DboSource {
 		'binary' => array('name' => 'bytea'),
 		'boolean' => array('name' => 'boolean'),
 		'number' => array('name' => 'numeric'),
-		'inet' => array('name' => 'inet')
+		'inet' => array('name' => 'inet'),
+		'uuid' => array('name' => 'uuid')
 	);
 
 /**
@@ -99,7 +102,7 @@ class Postgres extends DboSource {
  *
  * @var array
  */
-	protected $_sqlOps = array('like', 'ilike', 'or', 'not', 'in', 'between', '~', '~*', '!~', '!~*', 'similar to');
+	protected $_sqlOps = array('like', 'ilike', 'or', 'not', 'in', 'between', '~', '~\*', '\!~', '\!~\*', 'similar to');
 
 /**
  * Connects to the database using options in the given configuration array.
@@ -118,7 +121,7 @@ class Postgres extends DboSource {
 
 		try {
 			$this->_connection = new PDO(
-				"pgsql:host={$config['host']};port={$config['port']};dbname={$config['database']}",
+				"pgsql:host={$config['host']};port={$config['port']};dbname={$config['database']};sslmode={$config['sslmode']}",
 				$config['login'],
 				$config['password'],
 				$flags
@@ -198,14 +201,26 @@ class Postgres extends DboSource {
 		$fields = parent::describe($table);
 		$this->_sequenceMap[$table] = array();
 		$cols = null;
+		$hasPrimary = false;
 
 		if ($fields === null) {
 			$cols = $this->_execute(
-				"SELECT DISTINCT table_schema AS schema, column_name AS name, data_type AS type, is_nullable AS null,
-					column_default AS default, ordinal_position AS position, character_maximum_length AS char_length,
-					character_octet_length AS oct_length FROM information_schema.columns
-				WHERE table_name = ? AND table_schema = ?  ORDER BY position",
-				array($table, $this->config['schema'])
+				'SELECT DISTINCT table_schema AS schema,
+					column_name AS name,
+					data_type AS type,
+					is_nullable AS null,
+					column_default AS default,
+					ordinal_position AS position,
+					character_maximum_length AS char_length,
+					character_octet_length AS oct_length,
+					pg_get_serial_sequence(attr.attrelid::regclass::text, attr.attname) IS NOT NULL AS has_serial
+				FROM information_schema.columns c
+				INNER JOIN pg_catalog.pg_namespace ns ON (ns.nspname = table_schema)
+				INNER JOIN pg_catalog.pg_class cl ON (cl.relnamespace = ns.oid AND cl.relname = table_name)
+				LEFT JOIN pg_catalog.pg_attribute attr ON (cl.oid = attr.attrelid AND column_name = attr.attname)
+				WHERE table_name = ? AND table_schema = ? AND table_catalog = ?
+				ORDER BY ordinal_position',
+				array($table, $this->config['schema'], $this->config['database'])
 			);
 
 			// @codingStandardsIgnoreStart
@@ -217,6 +232,7 @@ class Postgres extends DboSource {
 						$length = null;
 						$type = 'text';
 					} elseif ($c->type === 'uuid') {
+						$type = 'uuid';
 						$length = 36;
 					} else {
 						$length = (int)$c->oct_length;
@@ -237,14 +253,25 @@ class Postgres extends DboSource {
 						"$1",
 						preg_replace('/::.*/', '', $c->default)
 					),
-					'length' => $length
+					'length' => $length,
 				);
-				if ($model instanceof Model) {
-					if ($c->name === $model->primaryKey) {
-						$fields[$c->name]['key'] = 'primary';
-						if ($fields[$c->name]['type'] !== 'string') {
-							$fields[$c->name]['length'] = 11;
-						}
+
+				// Serial columns are primary integer keys
+				if ($c->has_serial) {
+					$fields[$c->name]['key'] = 'primary';
+					$fields[$c->name]['length'] = 11;
+					$hasPrimary = true;
+				}
+				if ($hasPrimary === false &&
+					$model instanceof Model &&
+					$c->name === $model->primaryKey
+				) {
+					$fields[$c->name]['key'] = 'primary';
+					if (
+						$fields[$c->name]['type'] !== 'string' &&
+						$fields[$c->name]['type'] !== 'uuid'
+					) {
+						$fields[$c->name]['length'] = 11;
 					}
 				}
 				if (
@@ -557,7 +584,11 @@ class Postgres extends DboSource {
 									$colList[] = 'ALTER COLUMN ' . $fieldName . '  SET DEFAULT NULL';
 									$colList[] = 'ALTER COLUMN ' . $fieldName . ' TYPE ' . str_replace(array($fieldName, 'NOT NULL'), '', $this->buildColumn($col)) . ' USING CASE WHEN TRUE THEN 1 ELSE 0 END';
 								} else {
-									$colList[] = 'ALTER COLUMN ' . $fieldName . ' TYPE ' . str_replace(array($fieldName, 'NOT NULL'), '', $this->buildColumn($col));
+									if ($original['type'] === 'text' && $col['type'] === 'integer') {
+										$colList[] = 'ALTER COLUMN ' . $fieldName . ' TYPE ' . str_replace(array($fieldName, 'NOT NULL'), '', $this->buildColumn($col)) . " USING cast({$fieldName} as INTEGER)";
+									} else {
+										$colList[] = 'ALTER COLUMN ' . $fieldName . ' TYPE ' . str_replace(array($fieldName, 'NOT NULL'), '', $this->buildColumn($col));
+									}
 								}
 
 								if (isset($nullable)) {
@@ -693,10 +724,14 @@ class Postgres extends DboSource {
 				return 'time';
 			case ($col === 'bigint'):
 				return 'biginteger';
+			case ($col === 'smallint'):
+				return 'smallinteger';
 			case (strpos($col, 'int') !== false && $col !== 'interval'):
 				return 'integer';
-			case (strpos($col, 'char') !== false || $col === 'uuid'):
+			case (strpos($col, 'char') !== false):
 				return 'string';
+			case (strpos($col, 'uuid') !== false):
+				return 'uuid';
 			case (strpos($col, 'text') !== false):
 				return 'text';
 			case (strpos($col, 'bytea') !== false):
@@ -717,19 +752,14 @@ class Postgres extends DboSource {
  * @return int An integer representing the length of the column
  */
 	public function length($real) {
-		$col = str_replace(array(')', 'unsigned'), '', $real);
-		$limit = null;
-
-		if (strpos($col, '(') !== false) {
-			list($col, $limit) = explode('(', $col);
+		$col = $real;
+		if (strpos($real, '(') !== false) {
+			list($col, $limit) = explode('(', $real);
 		}
 		if ($col === 'uuid') {
 			return 36;
 		}
-		if ($limit) {
-			return (int)$limit;
-		}
-		return null;
+		return parent::length($real);
 	}
 
 /**
@@ -917,6 +947,17 @@ class Postgres extends DboSource {
 			$join[] = $out;
 		}
 		return $join;
+	}
+
+/**
+ * {@inheritDoc}
+ */
+	public function value($data, $column = null, $null = true) {
+		$value = parent::value($data, $column, $null);
+		if ($column === 'uuid' && is_scalar($data) && $data === '') {
+			return 'NULL';
+		}
+		return $value;
 	}
 
 /**

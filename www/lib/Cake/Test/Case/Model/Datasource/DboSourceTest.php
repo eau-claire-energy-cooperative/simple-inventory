@@ -2,18 +2,18 @@
 /**
  * DboSourceTest file
  *
- * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) Tests <https://book.cakephp.org/2.0/en/development/testing.html>
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
  * @package       Cake.Test.Case.Model.Datasource
  * @since         CakePHP(tm) v 1.2.0.4206
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('Model', 'Model');
@@ -27,7 +27,7 @@ App::uses('MockDataSource', 'Model/Datasource');
 require_once dirname(dirname(__FILE__)) . DS . 'models.php';
 
 /**
- * Class MockPDO
+ * MockPDO
  *
  * @package       Cake.Test.Case.Model.Datasource
  */
@@ -42,7 +42,7 @@ class MockPDO extends PDO {
 }
 
 /**
- * Class MockDataSource
+ * MockDataSource
  *
  * @package       Cake.Test.Case.Model.Datasource
  */
@@ -50,7 +50,7 @@ class MockDataSource extends DataSource {
 }
 
 /**
- * Class DboTestSource
+ * DboTestSource
  *
  * @package       Cake.Test.Case.Model.Datasource
  */
@@ -81,7 +81,7 @@ class DboTestSource extends DboSource {
 }
 
 /**
- * Class DboSecondTestSource
+ * DboSecondTestSource
  *
  * @package       Cake.Test.Case.Model.Datasource
  */
@@ -105,6 +105,52 @@ class DboSecondTestSource extends DboSource {
 
 	public function setConnection($conn) {
 		$this->_connection = $conn;
+	}
+
+}
+
+/**
+ * DboThirdTestSource
+ *
+ * @package       Cake.Test.Case.Model.Datasource
+ */
+class DboThirdTestSource extends DboSource {
+
+	public function connect($config = array()) {
+		$this->connected = true;
+	}
+
+	public function cacheMethodHasher($value) {
+		return hash('sha1', $value);
+	}
+
+}
+
+/**
+ * DboFourthTestSource
+ *
+ * @package       Cake.Test.Case.Model.Datasource
+ */
+class DboFourthTestSource extends DboSource {
+
+	public function connect($config = array()) {
+		$this->connected = true;
+	}
+
+	public function cacheMethodFilter($method, $key, $value) {
+		if ($method === 'name') {
+			if ($value === '`menus`') {
+				return false;
+			} elseif ($key === '1fca740733997f1ebbedacfc7678592a') {
+				return false;
+			}
+		} elseif ($method === 'fields') {
+			$endsWithName = preg_grep('/`name`$/', $value);
+
+			return count($endsWithName) === 0;
+		}
+
+		return true;
 	}
 
 }
@@ -195,6 +241,27 @@ class DboSourceTest extends CakeTestCase {
 
 		$result = $this->testDb->conditions(array('OR' => array('OR' => array())));
 		$this->assertEquals(' WHERE  1 = 1', $result, 'nested empty conditions failed');
+	}
+
+/**
+ * test that SQL JSON operators can be used.
+ *
+ * @return void
+ */
+	public function testColumnHyphenOperator() {
+		//PostgreSQL style
+		$result = $this->testDb->conditions(array('Foo.bar->>\'fieldName\'' => 42));
+		$this->assertEquals(' WHERE `Foo`.`bar`->>\'fieldName\' = 42', $result, 'SQL JSON operator failed');
+		$result = $this->testDb->conditions(array('Foo.bar->\'fieldName\'' => 42));
+		$this->assertEquals(' WHERE `Foo`.`bar`->\'fieldName\' = 42', $result, 'SQL JSON operator failed');
+
+		// MYSQL style
+		$result = $this->testDb->conditions(array('Foo.bar->>\'$.fieldName\'' => 42));
+		$this->assertEquals(' WHERE `Foo`.`bar`->>\'$.fieldName\' = 42', $result, 'SQL JSON operator failed');
+
+		//Without defining table name.
+		$result = $this->testDb->conditions(array('bar->>\'$.fieldName\'' => 42));
+		$this->assertEquals(' WHERE `bar`->>\'$.fieldName\' = 42', $result, 'SQL JSON operator failed');
 	}
 
 /**
@@ -542,6 +609,73 @@ class DboSourceTest extends CakeTestCase {
 		$result = $this->db->query('findByFieldName', array(), $this->Model);
 		$expected = false;
 		$this->assertEquals($expected, $result);
+
+		// findBy<X>And<Y>
+		$result = $this->db->query('findByFieldXAndFieldY', array('x', 'y'), $this->Model);
+		$expected = array('first', array(
+			'conditions' => array('TestModel.field_x' => 'x', 'TestModel.field_y' => 'y'),
+			'fields' => null, 'order' => null, 'recursive' => null
+		));
+		$this->assertEquals($expected, $result);
+
+		// findBy<X>Or<Y>
+		$result = $this->db->query('findByFieldXOrFieldY', array('x', 'y'), $this->Model);
+		$expected = array('first', array(
+			'conditions' => array('OR' => array('TestModel.field_x' => 'x', 'TestModel.field_y' => 'y')),
+			'fields' => null, 'order' => null, 'recursive' => null
+		));
+		$this->assertEquals($expected, $result);
+
+		// findMyFancySearchBy<X>
+		$result = $this->db->query('findMyFancySearchByFieldX', array('x'), $this->Model);
+		$expected = array('myFancySearch', array(
+			'conditions' => array('TestModel.field_x' => 'x'),
+			'fields' => null, 'order' => null, 'limit' => null,
+			'page' => null, 'recursive' => null
+		));
+		$this->assertEquals($expected, $result);
+
+		// findFirstBy<X>
+		$result = $this->db->query('findFirstByFieldX', array('x'), $this->Model);
+		$expected = array('first', array(
+			'conditions' => array('TestModel.field_x' => 'x'),
+			'fields' => null, 'order' => null, 'recursive' => null
+		));
+		$this->assertEquals($expected, $result);
+
+		// findBy<X> with optional parameters
+		$result = $this->db->query('findByFieldX', array('x', 'y', 'priority', -1), $this->Model);
+		$expected = array('first', array(
+			'conditions' => array('TestModel.field_x' => 'x'),
+			'fields' => 'y', 'order' => 'priority', 'recursive' => -1
+		));
+		$this->assertEquals($expected, $result);
+
+		// findBy<X>And<Y> with optional parameters
+		$result = $this->db->query('findByFieldXAndFieldY', array('x', 'y', 'z', 'priority', -1), $this->Model);
+		$expected = array('first', array(
+			'conditions' => array('TestModel.field_x' => 'x', 'TestModel.field_y' => 'y'),
+			'fields' => 'z', 'order' => 'priority', 'recursive' => -1
+		));
+		$this->assertEquals($expected, $result);
+
+		// findAllBy<X> with optional parameters
+		$result = $this->db->query('findAllByFieldX', array('x', 'y', 'priority', 10, 2, -1), $this->Model);
+		$expected = array('all', array(
+			'conditions' => array('TestModel.field_x' => 'x'),
+			'fields' => 'y', 'order' => 'priority', 'limit' => 10,
+			'page' => 2, 'recursive' => -1
+		));
+		$this->assertEquals($expected, $result);
+
+		// findAllBy<X>And<Y> with optional parameters
+		$result = $this->db->query('findAllByFieldXAndFieldY', array('x', 'y', 'z', 'priority', 10, 2, -1), $this->Model);
+		$expected = array('all', array(
+			'conditions' => array('TestModel.field_x' => 'x', 'TestModel.field_y' => 'y'),
+			'fields' => 'z', 'order' => 'priority', 'limit' => 10,
+			'page' => 2, 'recursive' => -1
+		));
+		$this->assertEquals($expected, $result);
 	}
 
 /**
@@ -671,6 +805,106 @@ class DboSourceTest extends CakeTestCase {
 	}
 
 /**
+ * Test that cacheMethodFilter does not filter by default.
+ *
+ * @return void
+ */
+	public function testCacheMethodFilter() {
+		$method = 'name';
+		$key = '49d9207adfce6df1dd3ee8c30c434414';
+		$value = '`menus`';
+		$actual = $this->testDb->cacheMethodFilter($method, $key, $value);
+
+		$this->assertTrue($actual);
+
+		$method = 'fields';
+		$key = '2b57253ab1fffb3e95fa4f95299220b1';
+		$value = array("`Menu`.`id`", "`Menu`.`name`");
+		$actual = $this->testDb->cacheMethodFilter($method, $key, $value);
+
+		$this->assertTrue($actual);
+
+		$method = 'non-existing';
+		$key = '';
+		$value = '``';
+		$actual = $this->testDb->cacheMethodFilter($method, $key, $value);
+
+		$this->assertTrue($actual);
+	}
+
+/**
+ * Test that cacheMethodFilter can be overridden to do actual filtering.
+ *
+ * @return void
+ */
+	public function testCacheMethodFilterOverridden() {
+		$testDb = new DboFourthTestSource();
+
+		$method = 'name';
+		$key = '49d9207adfce6df1dd3ee8c30c434414';
+		$value = '`menus`';
+		$actual = $testDb->cacheMethodFilter($method, $key, $value);
+
+		$this->assertFalse($actual);
+
+		$method = 'name';
+		$key = '1fca740733997f1ebbedacfc7678592a';
+		$value = '`Menu`.`id`';
+		$actual = $testDb->cacheMethodFilter($method, $key, $value);
+
+		$this->assertFalse($actual);
+
+		$method = 'fields';
+		$key = '2b57253ab1fffb3e95fa4f95299220b1';
+		$value = array("`Menu`.`id`", "`Menu`.`name`");
+		$actual = $testDb->cacheMethodFilter($method, $key, $value);
+
+		$this->assertFalse($actual);
+
+		$method = 'name';
+		$key = 'd2bc458620afb092c61ab4383b7475e0';
+		$value = '`Menu`';
+		$actual = $testDb->cacheMethodFilter($method, $key, $value);
+
+		$this->assertTrue($actual);
+
+		$method = 'non-existing';
+		$key = '';
+		$value = '``';
+		$actual = $testDb->cacheMethodFilter($method, $key, $value);
+
+		$this->assertTrue($actual);
+	}
+
+/**
+ * Test that cacheMethodHasher uses md5 by default.
+ *
+ * @return void
+ */
+	public function testCacheMethodHasher() {
+		$name = 'Model.fieldlbqndkezcoapfgirmjsh';
+		$actual = $this->testDb->cacheMethodHasher($name);
+		$expected = '4a45dc9ed52f98c393d04ac424ee5078';
+
+		$this->assertEquals($expected, $actual);
+	}
+
+/**
+ * Test that cacheMethodHasher can be overridden to use a different hashing algorithm.
+ *
+ * @return void
+ */
+	public function testCacheMethodHasherOverridden() {
+		$testDb = new DboThirdTestSource();
+
+		$name = 'Model.fieldlbqndkezcoapfgirmjsh';
+		$actual = $testDb->cacheMethodHasher($name);
+		$expected = 'beb8b6469359285b7c2865dce0ef743feb16cb71';
+
+		$this->assertEquals($expected, $actual);
+	}
+
+/**
  * Test that rare collisions do not happen with method caching
  *
  * @return void
@@ -782,6 +1016,35 @@ class DboSourceTest extends CakeTestCase {
 		$query = "DROP TABLE {$name};";
 		$result = $this->db->query($query);
 		$this->assertTrue($result, 'Query did not return a boolean');
+	}
+
+/**
+ * Test NOT NULL on ENUM data type with empty string as a value
+ *
+ * @return void
+ */
+	public function testNotNullOnEnum() {
+		if (!$this->db instanceof Mysql) {
+			$this->markTestSkipped('This test can only run on MySQL');
+		}
+		$name = $this->db->fullTableName('enum_tests');
+		$query = "CREATE TABLE {$name} (mood ENUM('','happy','sad','ok') NOT NULL);";
+		$result = $this->db->query($query);
+		$this->assertTrue($result);
+
+		$EnumTest = ClassRegistry::init('EnumTest');
+		$enumResult = $EnumTest->save(array('mood' => ''));
+
+		$query = "DROP TABLE {$name};";
+		$result = $this->db->query($query);
+		$this->assertTrue($result);
+
+		$this->assertEquals(array(
+			'EnumTest' => array(
+				'mood' => '',
+				'id' => '0'
+			)
+		), $enumResult);
 	}
 
 /**
@@ -1032,6 +1295,33 @@ class DboSourceTest extends CakeTestCase {
 	}
 
 /**
+ * Test having method
+ *
+ * @return void
+ */
+	public function testHaving() {
+		$this->loadFixtures('User');
+
+		$result = $this->testDb->having(array('COUNT(*) >' => 0));
+		$this->assertEquals(' HAVING COUNT(*) > 0', $result);
+
+		$User = ClassRegistry::init('User');
+		$result = $this->testDb->having('COUNT(User.id) > 0', true, $User);
+		$this->assertEquals(' HAVING COUNT(`User`.`id`) > 0', $result);
+	}
+
+/**
+ * Test getLockingHint method
+ *
+ * @return void
+ */
+	public function testGetLockingHint() {
+		$this->assertEquals(' FOR UPDATE', $this->testDb->getLockingHint(true));
+		$this->assertNull($this->testDb->getLockingHint(false));
+		$this->assertNull($this->testDb->getLockingHint(null));
+	}
+
+/**
  * Test getting the last error.
  *
  * @return void
@@ -1164,24 +1454,82 @@ class DboSourceTest extends CakeTestCase {
  */
 	public function testBuildStatementDefaults() {
 		$conn = $this->getMock('MockPDO', array('quote'));
-		$conn->expects($this->at(0))
+		$conn->expects($this->any())
 			->method('quote')
-			->will($this->returnValue('foo bar'));
+			->will($this->returnArgument(0));
 		$db = new DboTestSource();
 		$db->setConnection($conn);
+
 		$subQuery = $db->buildStatement(
 			array(
 				'fields' => array('DISTINCT(AssetsTag.asset_id)'),
-				'table' => "assets_tags",
-				'alias' => "AssetsTag",
-				'conditions' => array("Tag.name" => 'foo bar'),
+				'table' => 'assets_tags',
+				'alias' => 'AssetsTag',
+				'conditions' => array('Tag.name' => 'foo bar'),
 				'limit' => null,
-				'group' => "AssetsTag.asset_id"
+				'group' => 'AssetsTag.asset_id'
 			),
 			$this->Model
 		);
 		$expected = 'SELECT DISTINCT(AssetsTag.asset_id) FROM assets_tags AS AssetsTag   WHERE Tag.name = foo bar  GROUP BY AssetsTag.asset_id';
 		$this->assertEquals($expected, $subQuery);
+	}
+
+/**
+ * Test build statement with having option
+ *
+ * @return void
+ */
+	public function testBuildStatementWithHaving() {
+		$conn = $this->getMock('MockPDO', array('quote'));
+		$conn->expects($this->any())
+			->method('quote')
+			->will($this->returnArgument(0));
+		$db = new DboTestSource();
+		$db->setConnection($conn);
+
+		$sql = $db->buildStatement(
+			array(
+				'fields' => array('user_id', 'COUNT(*) AS count'),
+				'table' => 'articles',
+				'alias' => 'Article',
+				'group' => 'user_id',
+				'order' => array('COUNT(*)' => 'DESC'),
+				'limit' => 5,
+				'having' => array('COUNT(*) >' => 10),
+			),
+			$this->Model
+		);
+		$expected = 'SELECT user_id, COUNT(*) AS count FROM articles AS Article   WHERE 1 = 1  GROUP BY user_id  HAVING COUNT(*) > 10  ORDER BY COUNT(*) DESC  LIMIT 5';
+		$this->assertEquals($expected, $sql);
+	}
+
+/**
+ * Test build statement with lock option
+ *
+ * @return void
+ */
+	public function testBuildStatementWithLockingHint() {
+		$conn = $this->getMock('MockPDO', array('quote'));
+		$conn->expects($this->any())
+			->method('quote')
+			->will($this->returnArgument(0));
+		$db = new DboTestSource();
+		$db->setConnection($conn);
+
+		$sql = $db->buildStatement(
+			array(
+				'fields' => array('id'),
+				'table' => 'users',
+				'alias' => 'User',
+				'order' => array('id'),
+				'limit' => 1,
+				'lock' => true,
+			),
+			$this->Model
+		);
+		$expected = 'SELECT id FROM users AS User   WHERE 1 = 1   ORDER BY id ASC  LIMIT 1  FOR UPDATE';
+		$this->assertEquals($expected, $sql);
 	}
 
 /**
@@ -1299,6 +1647,42 @@ class DboSourceTest extends CakeTestCase {
 		$conditions = array('Article.name' => array('just text', 'other text'));
 		$result = $db->conditionKeysToString($conditions, true, $Article);
 		$expected = "Article.name IN (just text, other text)";
+		$this->assertEquals($expected, $result[0]);
+	}
+
+/**
+ * Test conditionKeysToString() with virtual field
+ *
+ * @return void
+ */
+	public function testConditionKeysToStringVirtualFieldExpression() {
+		$Article = ClassRegistry::init('Article');
+		$Article->virtualFields = array(
+			'extra' => $Article->getDataSource()->expression('something virtual')
+		);
+		$conn = $this->getMock('MockPDO', array('quote'));
+		$db = new DboTestSource();
+		$db->setConnection($conn);
+
+		$conn->expects($this->at(0))
+			->method('quote')
+			->will($this->returnValue('just text'));
+
+		$conditions = array('Article.extra' => 'just text');
+		$result = $db->conditionKeysToString($conditions, true, $Article);
+		$expected = "(" . $Article->virtualFields['extra']->value . ") = just text";
+		$this->assertEquals($expected, $result[0]);
+
+		$conn->expects($this->at(0))
+			->method('quote')
+			->will($this->returnValue('just text'));
+		$conn->expects($this->at(1))
+			->method('quote')
+			->will($this->returnValue('other text'));
+
+		$conditions = array('Article.extra' => array('just text', 'other text'));
+		$result = $db->conditionKeysToString($conditions, true, $Article);
+		$expected = "(" . $Article->virtualFields['extra']->value . ") IN (just text, other text)";
 		$this->assertEquals($expected, $result[0]);
 	}
 
@@ -1463,7 +1847,7 @@ class DboSourceTest extends CakeTestCase {
 	}
 
 /**
- * Test that count how many times is afterFind called
+ * Test that count how many times afterFind is called
  *
  * @return void
  */
@@ -1472,7 +1856,6 @@ class DboSourceTest extends CakeTestCase {
 
 		// Use alias to make testing "primary = true" easy
 		$Primary = $this->getMock('Comment', array('afterFind'), array(array('alias' => 'Primary')), '', true);
-		$Primary->expects($this->any())->method('afterFind')->will($this->returnArgument(0));
 
 		$Article = $this->getMock('Article', array('afterFind'), array(), '', true);
 		$User = $this->getMock('User', array('afterFind'), array(), '', true);
@@ -1507,6 +1890,99 @@ class DboSourceTest extends CakeTestCase {
 		$result = $Primary->find('first', array('conditions' => array('Primary.id' => 5), 'recursive' => 2));
 		$this->assertCount(2, $result['Article']['Tag']);
 		$this->assertCount(2, $result['Article']['Comment']);
+
+		// hasMany special case
+		// Both User and Article has many Comments
+		$User = $this->getMock('User', array('afterFind'), array(), '', true);
+		$Article = $this->getMock('Article', array('afterFind'), array(), '', true);
+		$Comment = $this->getMock('Comment', array('afterFind'), array(), '', true);
+
+		$User->bindModel(array('hasMany' => array('Comment', 'Article')));
+		$Article->unbindModel(array('belongsTo' => array('User'), 'hasAndBelongsToMany' => array('Tag')));
+		$Comment->unbindModel(array('belongsTo' => array('User', 'Article'), 'hasOne' => 'Attachment'));
+
+		$User->Comment = $Comment;
+		$User->Article = $Article;
+		$User->Article->Comment = $Comment;
+
+		// primary = true
+		$User->expects($this->once())
+			->method('afterFind')->with($this->anything(), $this->isTrue())->will($this->returnArgument(0));
+
+		$Article->expects($this->exactly(2)) // User has 2 Articles
+			->method('afterFind')->with($this->anything(), $this->isFalse())->will($this->returnArgument(0));
+
+		$Comment->expects($this->exactly(7)) // User1 has 3 Comments, Article[id=1] has 4 Comments and Article[id=3] has 0 Comments
+			->method('afterFind')->with($this->anything(), $this->isFalse())->will($this->returnArgument(0));
+
+		$result = $User->find('first', array('conditions' => array('User.id' => 1), 'recursive' => 2));
+		$this->assertCount(3, $result['Comment']);
+		$this->assertCount(2, $result['Article']);
+		$this->assertCount(4, $result['Article'][0]['Comment']);
+		$this->assertCount(0, $result['Article'][1]['Comment']);
+	}
+
+/**
+ * Test format of $results in afterFind
+ *
+ * @return void
+ */
+	public function testUseConsistentAfterFind() {
+		$this->loadFixtures('Author', 'Post');
+
+		$expected = array(
+			'Author' => array(
+				'id' => '1',
+				'user' => 'mariano',
+				'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
+				'created' => '2007-03-17 01:16:23',
+				'updated' => '2007-03-17 01:18:31',
+				'test' => 'working',
+			),
+			'Post' => array(
+				array(
+					'id' => '1',
+					'author_id' => '1',
+					'title' => 'First Post',
+					'body' => 'First Post Body',
+					'published' => 'Y',
+					'created' => '2007-03-18 10:39:23',
+					'updated' => '2007-03-18 10:41:31',
+				),
+				array(
+					'id' => '3',
+					'author_id' => '1',
+					'title' => 'Third Post',
+					'body' => 'Third Post Body',
+					'published' => 'Y',
+					'created' => '2007-03-18 10:43:23',
+					'updated' => '2007-03-18 10:45:31',
+				),
+			),
+		);
+
+		$Author = new Author();
+		$Post = $this->getMock('Post', array('afterFind'), array(), '', true);
+		$Post->expects($this->at(0))->method('afterFind')->with(array(array('Post' => $expected['Post'][0])), $this->isFalse())->will($this->returnArgument(0));
+		$Post->expects($this->at(1))->method('afterFind')->with(array(array('Post' => $expected['Post'][1])), $this->isFalse())->will($this->returnArgument(0));
+
+		$Author->bindModel(array('hasMany' => array('Post' => array('limit' => 2, 'order' => 'Post.id'))));
+		$Author->Post = $Post;
+
+		$result = $Author->find('first', array('conditions' => array('Author.id' => 1), 'recursive' => 1));
+		$this->assertEquals($expected, $result);
+
+		// Backward compatiblity
+		$Author = new Author();
+		$Post = $this->getMock('Post', array('afterFind'), array(), '', true);
+		$Post->expects($this->once())->method('afterFind')->with($expected['Post'], $this->isFalse())->will($this->returnArgument(0));
+		$Post->useConsistentAfterFind = false;
+
+		$Author->bindModel(array('hasMany' => array('Post' => array('limit' => 2, 'order' => 'Post.id'))));
+		$Author->Post = $Post;
+
+		$result = $Author->find('first', array('conditions' => array('Author.id' => 1), 'recursive' => 1));
+		$this->assertEquals($expected, $result);
 	}
 
 /**
@@ -1621,5 +2097,77 @@ class DboSourceTest extends CakeTestCase {
 
 		$User->Article = $Article;
 		$User->find('first', array('conditions' => array('User.id' => 1), 'recursive' => 2));
+	}
+
+/**
+ * Test that flushQueryCache works as expected
+ *
+ * @return void
+ */
+	public function testFlushQueryCache() {
+		$this->db->flushQueryCache();
+		$this->db->query('SELECT 1');
+		$this->db->query('SELECT 1');
+		$this->db->query('SELECT 2');
+		$this->assertAttributeCount(2, '_queryCache', $this->db);
+
+		$this->db->flushQueryCache();
+		$this->assertAttributeCount(0, '_queryCache', $this->db);
+	}
+
+/**
+ * Test length parsing.
+ *
+ * @return void
+ */
+	public function testLength() {
+		$result = $this->db->length('varchar(255)');
+		$this->assertEquals(255, $result);
+
+		$result = $this->db->length('integer(11)');
+		$this->assertEquals(11, $result);
+
+		$result = $this->db->length('integer unsigned');
+		$this->assertNull($result);
+
+		$result = $this->db->length('integer(11) unsigned');
+		$this->assertEquals(11, $result);
+
+		$result = $this->db->length('integer(11) zerofill');
+		$this->assertEquals(11, $result);
+
+		$result = $this->db->length('decimal(20,3)');
+		$this->assertEquals('20,3', $result);
+
+		$result = $this->db->length('enum("one", "longer")');
+		$this->assertEquals(6, $result);
+
+		$result = $this->db->length("enum('One Value','ANOTHER ... VALUE ...')");
+		$this->assertEquals(21, $result);
+	}
+
+/**
+ * Test find with locking hint
+ */
+	public function testFindWithLockingHint() {
+		$db = $this->getMock('DboTestSource', array('connect', '_execute', 'execute', 'describ'));
+
+		$Test = $this->getMock('Test', array('getDataSource'));
+		$Test->expects($this->any())
+			->method('getDataSource')
+			->will($this->returnValue($db));
+
+		$expected = 'SELECT Test.id FROM tests AS Test   WHERE id = 1   ORDER BY Test.id ASC  LIMIT 1  FOR UPDATE';
+
+		$db->expects($this->once())
+			->method('execute')
+			->with($expected);
+
+		$Test->find('first', array(
+			'recursive' => -1,
+			'fields' => array('id'),
+			'conditions' => array('id' => 1),
+			'lock' => true,
+		));
 	}
 }

@@ -4,18 +4,18 @@
  *
  * Test Case for CakeTestCase class
  *
- * CakePHP : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP Project
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP Project
  * @package       Cake.Test.Case.TestSuite
  * @since         CakePHP v 1.2.0.4487
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 App::uses('CakePlugin', 'Core');
 App::uses('Controller', 'Controller');
@@ -36,6 +36,23 @@ class SecondaryPost extends Model {
  * @var string
  */
 	public $useDbConfig = 'secondary';
+
+}
+
+/**
+ * ConstructorPost test stub.
+ */
+class ConstructorPost extends Model {
+
+/**
+ * @var string
+ */
+	public $useTable = 'posts';
+
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->getDataSource()->cacheMethods = false;
+	}
 
 }
 
@@ -327,7 +344,6 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextStartsWith() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
-		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
 
 		$this->assertStringStartsWith("some\nstring", $stringDirty);
 		$this->assertStringStartsNotWith("some\r\nstring\r\nwith", $stringDirty);
@@ -344,8 +360,6 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextStartsNotWith() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
-		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
-
 		$this->assertTextStartsNotWith("some\nstring\nwithout", $stringDirty);
 	}
 
@@ -356,8 +370,6 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextEndsWith() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
-		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
-
 		$this->assertTextEndsWith("string\nwith\r\ndifferent\rline endings!", $stringDirty);
 		$this->assertTextEndsWith("string\r\nwith\ndifferent\nline endings!", $stringDirty);
 	}
@@ -369,8 +381,6 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextEndsNotWith() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
-		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
-
 		$this->assertStringEndsNotWith("different\nline endings", $stringDirty);
 		$this->assertTextEndsNotWith("different\rline endings", $stringDirty);
 	}
@@ -382,11 +392,8 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextContains() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
-		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
-
 		$this->assertContains("different", $stringDirty);
 		$this->assertNotContains("different\rline", $stringDirty);
-
 		$this->assertTextContains("different\rline", $stringDirty);
 	}
 
@@ -397,8 +404,6 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextNotContains() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
-		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
-
 		$this->assertTextNotContains("different\rlines", $stringDirty);
 	}
 
@@ -414,7 +419,7 @@ class CakeTestCaseTest extends CakeTestCase {
 			)
 		), App::RESET);
 		$Post = $this->getMockForModel('Post');
-
+		$this->assertEquals('test', $Post->useDbConfig);
 		$this->assertInstanceOf('Post', $Post);
 		$this->assertNull($Post->save(array()));
 		$this->assertNull($Post->find('all'));
@@ -440,11 +445,22 @@ class CakeTestCaseTest extends CakeTestCase {
 		), App::RESET);
 		CakePlugin::load('TestPlugin');
 		ConnectionManager::create('test_secondary', array(
-			'datasource' => 'Database/TestLocalDriver'
+			'datasource' => 'Database/TestLocalDriver',
+			'prefix' => ''
 		));
 		$post = $this->getMockForModel('SecondaryPost', array('save'));
 		$this->assertEquals('test_secondary', $post->useDbConfig);
 		ConnectionManager::drop('test_secondary');
+	}
+
+/**
+ * Test getMockForModel when the model accesses the datasource in the constructor.
+ *
+ * @return void
+ */
+	public function testGetMockForModelConstructorDatasource() {
+		$post = $this->getMockForModel('ConstructorPost', array('save'), array('ds' => 'test'));
+		$this->assertEquals('test', $post->useDbConfig);
 	}
 
 /**
@@ -460,7 +476,7 @@ class CakeTestCaseTest extends CakeTestCase {
 		), App::RESET);
 		CakePlugin::load('TestPlugin');
 		$this->getMockForModel('TestPlugin.TestPluginAppModel');
-		$TestPluginComment = $this->getMockForModel('TestPlugin.TestPluginComment');
+		$this->getMockForModel('TestPlugin.TestPluginComment');
 
 		$result = ClassRegistry::init('TestPlugin.TestPluginComment');
 		$this->assertInstanceOf('TestPluginComment', $result);

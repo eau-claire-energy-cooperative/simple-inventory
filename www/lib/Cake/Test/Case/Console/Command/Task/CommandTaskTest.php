@@ -1,17 +1,17 @@
 <?php
 /**
- * CakePHP : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP Project
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP Project
  * @package       Cake.Test.Case.Console.Command
  * @since         CakePHP v 2.5
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('CommandTask', 'Console/Command/Task');
@@ -85,9 +85,10 @@ class CommandTaskTest extends CakeTestCase {
 				'upgrade'
 			),
 			'TestPlugin' => array(
-				'example'
+				'example',
+				'test_plugin'
 			),
-				'TestPluginTwo' => array(
+			'TestPluginTwo' => array(
 				'example',
 				'welcome'
 			),
@@ -108,6 +109,7 @@ class CommandTaskTest extends CakeTestCase {
 
 		$expected = array(
 			'TestPlugin.example',
+			'TestPlugin.test_plugin',
 			'TestPluginTwo.example',
 			'TestPluginTwo.welcome',
 			'acl',

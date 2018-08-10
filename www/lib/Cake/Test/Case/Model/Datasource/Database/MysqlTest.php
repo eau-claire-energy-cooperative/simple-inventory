@@ -2,18 +2,18 @@
 /**
  * DboMysqlTest file
  *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP(tm) Project
  * @package       Cake.Test.Case.Model.Datasource.Database
  * @since         CakePHP(tm) v 1.2.0
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('Model', 'Model');
@@ -201,7 +201,7 @@ class MysqlTest extends CakeTestCase {
 	public function testTinyintCasting() {
 		$this->Dbo->cacheSources = false;
 		$tableName = 'tinyint_' . uniqid();
-		$this->Dbo->rawQuery('CREATE TABLE ' . $this->Dbo->fullTableName($tableName) . ' (id int(11) AUTO_INCREMENT, bool tinyint(1), small_int tinyint(2), primary key(id));');
+		$this->Dbo->rawQuery('CREATE TABLE ' . $this->Dbo->fullTableName($tableName) . ' (id int(11) AUTO_INCREMENT, bool tinyint(1), tiny_int tinyint(2), primary key(id));');
 
 		$this->model = new CakeTestModel(array(
 			'name' => 'Tinyint', 'table' => $tableName, 'ds' => 'test'
@@ -209,24 +209,24 @@ class MysqlTest extends CakeTestCase {
 
 		$result = $this->model->schema();
 		$this->assertEquals('boolean', $result['bool']['type']);
-		$this->assertEquals('integer', $result['small_int']['type']);
+		$this->assertEquals('tinyinteger', $result['tiny_int']['type']);
 
-		$this->assertTrue((bool)$this->model->save(array('bool' => 5, 'small_int' => 5)));
+		$this->assertTrue((bool)$this->model->save(array('bool' => 5, 'tiny_int' => 5)));
 		$result = $this->model->find('first');
 		$this->assertTrue($result['Tinyint']['bool']);
-		$this->assertSame($result['Tinyint']['small_int'], '5');
+		$this->assertSame($result['Tinyint']['tiny_int'], '5');
 		$this->model->deleteAll(true);
 
-		$this->assertTrue((bool)$this->model->save(array('bool' => 0, 'small_int' => 100)));
+		$this->assertTrue((bool)$this->model->save(array('bool' => 0, 'tiny_int' => 100)));
 		$result = $this->model->find('first');
 		$this->assertFalse($result['Tinyint']['bool']);
-		$this->assertSame($result['Tinyint']['small_int'], '100');
+		$this->assertSame($result['Tinyint']['tiny_int'], '100');
 		$this->model->deleteAll(true);
 
-		$this->assertTrue((bool)$this->model->save(array('bool' => true, 'small_int' => 0)));
+		$this->assertTrue((bool)$this->model->save(array('bool' => true, 'tiny_int' => 0)));
 		$result = $this->model->find('first');
 		$this->assertTrue($result['Tinyint']['bool']);
-		$this->assertSame($result['Tinyint']['small_int'], '0');
+		$this->assertSame($result['Tinyint']['tiny_int'], '0');
 		$this->model->deleteAll(true);
 
 		$this->Dbo->rawQuery('DROP TABLE ' . $this->Dbo->fullTableName($tableName));
@@ -526,6 +526,14 @@ class MysqlTest extends CakeTestCase {
 		$expected = 'boolean';
 		$this->assertEquals($expected, $result);
 
+		$result = $this->Dbo->column('tinyint');
+		$expected = 'tinyinteger';
+		$this->assertEquals($expected, $result);
+
+		$result = $this->Dbo->column('smallint');
+		$expected = 'smallinteger';
+		$this->assertEquals($expected, $result);
+
 		$result = $this->Dbo->column('boolean');
 		$expected = 'boolean';
 		$this->assertEquals($expected, $result);
@@ -552,6 +560,10 @@ class MysqlTest extends CakeTestCase {
 
 		$result = $this->Dbo->column('decimal(14,7) unsigned');
 		$expected = 'decimal';
+		$this->assertEquals($expected, $result);
+
+		$result = $this->Dbo->column("set('a','b','c')");
+		$expected = "set('a','b','c')";
 		$this->assertEquals($expected, $result);
 	}
 
@@ -704,7 +716,8 @@ class MysqlTest extends CakeTestCase {
 				'tableParameters' => array(
 					'charset' => 'utf8',
 					'collate' => 'utf8_general_ci',
-					'engine' => 'InnoDB'
+					'engine' => 'InnoDB',
+					'comment' => 'Newly table added comment.',
 				)
 			)
 		));
@@ -712,6 +725,7 @@ class MysqlTest extends CakeTestCase {
 		$this->assertContains('DEFAULT CHARSET=utf8', $result);
 		$this->assertContains('ENGINE=InnoDB', $result);
 		$this->assertContains('COLLATE=utf8_general_ci', $result);
+		$this->assertContains('COMMENT=\'Newly table added comment.\'', $result);
 
 		$this->Dbo->rawQuery($result);
 		$result = $this->Dbo->listDetailedSources($this->Dbo->fullTableName('altertest', false, false));
@@ -775,13 +789,15 @@ class MysqlTest extends CakeTestCase {
 		$this->assertEquals($expected, $result);
 
 		$table = $this->Dbo->fullTableName($tableName);
-		$this->Dbo->rawQuery('CREATE TABLE ' . $table . ' (id int(11) AUTO_INCREMENT, bool tinyint(1), small_int tinyint(2), primary key(id)) ENGINE=MyISAM DEFAULT CHARSET=cp1250 COLLATE=cp1250_general_ci;');
+		$this->Dbo->rawQuery('CREATE TABLE ' . $table . ' (id int(11) AUTO_INCREMENT, bool tinyint(1), small_int tinyint(2), primary key(id)) ENGINE=MyISAM DEFAULT CHARSET=cp1250 COLLATE=cp1250_general_ci COMMENT=\'Table\'\'s comment\';');
 		$result = $this->Dbo->readTableParameters($this->Dbo->fullTableName($tableName, false, false));
 		$this->Dbo->rawQuery('DROP TABLE ' . $table);
 		$expected = array(
 			'charset' => 'cp1250',
 			'collate' => 'cp1250_general_ci',
-			'engine' => 'MyISAM');
+			'engine' => 'MyISAM',
+			'comment' => 'Table\'s comment',
+		);
 		$this->assertEquals($expected, $result);
 	}
 
@@ -906,8 +922,54 @@ SQL;
 			'alias' => 'TimestampDefaultValue'
 		));
 		$result = $this->Dbo->describe($model);
-		$this->assertEquals('', $result['limit_date']['default']);
 		$this->Dbo->execute('DROP TABLE ' . $name);
+
+		$this->assertNull($result['limit_date']['default']);
+
+		$schema = new CakeSchema(array(
+			'connection' => 'test',
+			'testdescribes' => $result
+		));
+		$result = $this->Dbo->createSchema($schema);
+		$this->assertContains('`limit_date` timestamp NOT NULL,', $result);
+	}
+
+/**
+ * Test that describe() ignores `default current_timestamp` in datetime columns.
+ * This is for MySQL >= 5.6.
+ *
+ * @return void
+ */
+	public function testDescribeHandleCurrentTimestampDatetime() {
+		$mysqlVersion = $this->Dbo->query('SELECT VERSION() as version', array('log' => false));
+		$this->skipIf(version_compare($mysqlVersion[0][0]['version'], '5.6.0', '<'));
+
+		$name = $this->Dbo->fullTableName('timestamp_default_values');
+		$sql = <<<SQL
+CREATE TABLE $name (
+	id INT(11) NOT NULL AUTO_INCREMENT,
+	phone VARCHAR(10),
+	limit_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY(id)
+);
+SQL;
+		$this->Dbo->execute($sql);
+		$model = new Model(array(
+			'table' => 'timestamp_default_values',
+			'ds' => 'test',
+			'alias' => 'TimestampDefaultValue'
+		));
+		$result = $this->Dbo->describe($model);
+		$this->Dbo->execute('DROP TABLE ' . $name);
+
+		$this->assertNull($result['limit_date']['default']);
+
+		$schema = new CakeSchema(array(
+			'connection' => 'test',
+			'testdescribes' => $result
+		));
+		$result = $this->Dbo->createSchema($schema);
+		$this->assertContains('`limit_date` datetime NOT NULL,', $result);
 	}
 
 /**
@@ -1223,6 +1285,8 @@ SQL;
 			'limit' => array(),
 			'offset' => array(),
 			'group' => array(),
+			'having' => null,
+			'lock' => null,
 			'callbacks' => null
 		);
 		$queryData['joins'][0]['table'] = $this->Dbo->fullTableName($queryData['joins'][0]['table']);
@@ -2380,6 +2444,10 @@ SQL;
 		$expected = " WHERE ((`User`.`user` = 'mariano') OR (`User`.`user` = 'nate'))";
 		$this->assertEquals($expected, $result);
 
+		$result = $this->Dbo->conditions(array('User.user RLIKE' => 'mariano|nate'));
+		$expected = " WHERE `User`.`user` RLIKE 'mariano|nate'";
+		$this->assertEquals($expected, $result);
+
 		$result = $this->Dbo->conditions(array('or' => array(
 			'score BETWEEN ? AND ?' => array('4', '5'), 'rating >' => '20'
 		)));
@@ -2852,9 +2920,15 @@ SQL;
  *
  * @expectedException PHPUnit_Framework_Error
  * @return void
+ * @throws PHPUnit_Framework_Error
  */
 	public function testDropSchemaNoSchema() {
-		$this->Dbo->dropSchema(null);
+		try {
+			$this->Dbo->dropSchema(null);
+			$this->fail('No exception');
+		} catch (TypeError $e) {
+			throw new PHPUnit_Framework_Error('Raised an error', 100, __FILE__, __LINE__);
+		}
 	}
 
 /**
@@ -3015,7 +3089,7 @@ SQL;
 		$this->assertSame($expected, $result);
 
 		$result = $this->Dbo->length(false);
-		$this->assertTrue($result === null);
+		$this->assertNull($result);
 
 		$result = $this->Dbo->length('datetime');
 		$expected = null;
@@ -3217,7 +3291,7 @@ SQL;
  */
 	public function buildColumnUnsignedProvider() {
 		return array(
-			//set #0
+			// unsigned int
 			array(
 				array(
 					'name' => 'testName',
@@ -3227,7 +3301,7 @@ SQL;
 				),
 				'`testName` int(11) UNSIGNED'
 			),
-			//set #1
+			// unsigned bigint
 			array(
 				array(
 					'name' => 'testName',
@@ -3237,7 +3311,7 @@ SQL;
 				),
 				'`testName` bigint(20) UNSIGNED'
 			),
-			//set #2
+			// unsigned float
 			array(
 				array(
 					'name' => 'testName',
@@ -3246,7 +3320,7 @@ SQL;
 				),
 				'`testName` float UNSIGNED'
 			),
-			//set #3
+			// varchar
 			array(
 				array(
 					'name' => 'testName',
@@ -3256,7 +3330,7 @@ SQL;
 				),
 				'`testName` varchar(255)'
 			),
-			//set #4
+			// date unsigned
 			array(
 				array(
 					'name' => 'testName',
@@ -3265,7 +3339,7 @@ SQL;
 				),
 				'`testName` date'
 			),
-			//set #5
+			// date
 			array(
 				array(
 					'name' => 'testName',
@@ -3274,7 +3348,7 @@ SQL;
 				),
 				'`testName` date'
 			),
-			//set #6
+			// integer with length
 			array(
 				array(
 					'name' => 'testName',
@@ -3284,7 +3358,7 @@ SQL;
 				),
 				'`testName` int(11)'
 			),
-			//set #7
+			// unsigned decimal
 			array(
 				array(
 					'name' => 'testName',
@@ -3293,7 +3367,7 @@ SQL;
 				),
 				'`testName` decimal UNSIGNED'
 			),
-			//set #8
+			// decimal with default
 			array(
 				array(
 					'name' => 'testName',
@@ -3302,6 +3376,26 @@ SQL;
 					'default' => 1
 				),
 				'`testName` decimal UNSIGNED DEFAULT 1'
+			),
+			// smallinteger
+			array(
+				array(
+					'name' => 'testName',
+					'type' => 'smallinteger',
+					'length' => 6,
+					'unsigned' => true
+				),
+				'`testName` smallint(6) UNSIGNED'
+			),
+			// tinyinteger
+			array(
+				array(
+					'name' => 'testName',
+					'type' => 'tinyinteger',
+					'length' => 4,
+					'unsigned' => true
+				),
+				'`testName` tinyint(4) UNSIGNED'
 			)
 		);
 	}
@@ -3983,6 +4077,32 @@ SQL;
 	}
 
 /**
+ * Test deletes without complex conditions.
+ *
+ * @return void
+ */
+	public function testDeleteNoComplexCondition() {
+		$this->loadFixtures('Article', 'User');
+		$test = ConnectionManager::getDatasource('test');
+		$db = $test->config['database'];
+
+		$this->Dbo = $this->getMock('Mysql', array('execute'), array($test->config));
+
+		$this->Dbo->expects($this->at(0))->method('execute')
+			->with("DELETE `Article` FROM `$db`.`articles` AS `Article`   WHERE `id` = 1");
+
+		$this->Dbo->expects($this->at(1))->method('execute')
+			->with("DELETE `Article` FROM `$db`.`articles` AS `Article`   WHERE NOT (`id` = 1)");
+
+		$Article = new Article();
+
+		$conditions = array('id' => 1);
+		$this->Dbo->delete($Article, $conditions);
+		$conditions = array('NOT' => array('id' => 1));
+		$this->Dbo->delete($Article, $conditions);
+	}
+
+/**
  * Test truncate with a mock.
  *
  * @return void
@@ -4055,4 +4175,90 @@ SQL;
 		$this->Dbo->useNestedTransactions = $nested;
 	}
 
+/**
+ * Test that value() quotes set values even when numeric.
+ *
+ * @return void
+ */
+	public function testSetValue() {
+		$column = "set('a','b','c')";
+		$result = $this->Dbo->value('1', $column);
+		$this->assertEquals("'1'", $result);
+
+		$result = $this->Dbo->value(1, $column);
+		$this->assertEquals("'1'", $result);
+
+		$result = $this->Dbo->value('a', $column);
+		$this->assertEquals("'a'", $result);
+	}
+
+/**
+ * Test isConnected
+ *
+ * @return void
+ */
+	public function testIsConnected() {
+		$this->Dbo->disconnect();
+		$this->assertFalse($this->Dbo->isConnected(), 'Not connected now.');
+
+		$this->Dbo->connect();
+		$this->assertTrue($this->Dbo->isConnected(), 'Should be connected.');
+	}
+
+/**
+ * Test insertMulti with id position.
+ *
+ * @return void
+ */
+	public function testInsertMultiId() {
+		$this->loadFixtures('Article');
+		$Article = ClassRegistry::init('Article');
+		$db = $Article->getDatasource();
+		$datetime = date('Y-m-d H:i:s');
+		$data = array(
+			array(
+				'user_id' => 1,
+				'title' => 'test',
+				'body' => 'test',
+				'published' => 'N',
+				'created' => $datetime,
+				'updated' => $datetime,
+				'id' => 100,
+			),
+			array(
+				'user_id' => 1,
+				'title' => 'test 101',
+				'body' => 'test 101',
+				'published' => 'N',
+				'created' => $datetime,
+				'updated' => $datetime,
+				'id' => 101,
+			)
+		);
+		$result = $db->insertMulti('articles', array_keys($data[0]), $data);
+		$this->assertTrue($result, 'Data was saved');
+
+		$data = array(
+			array(
+				'id' => 102,
+				'user_id' => 1,
+				'title' => 'test',
+				'body' => 'test',
+				'published' => 'N',
+				'created' => $datetime,
+				'updated' => $datetime,
+			),
+			array(
+				'id' => 103,
+				'user_id' => 1,
+				'title' => 'test 101',
+				'body' => 'test 101',
+				'published' => 'N',
+				'created' => $datetime,
+				'updated' => $datetime,
+			)
+		);
+		$result = $db->insertMulti('articles', array_keys($data[0]), $data);
+		$this->assertTrue($result, 'Data was saved');
+	}
 }

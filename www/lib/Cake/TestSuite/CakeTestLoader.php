@@ -4,17 +4,17 @@
  *
  * Turns partial paths used on the testsuite console and web UI into full file paths.
  *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP(tm) Project
  * @since         CakePHP(tm) v 2.0
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  * @package Cake.TestSuite
  */
 
@@ -42,9 +42,9 @@ class CakeTestLoader extends PHPUnit_Runner_StandardTestSuiteLoader {
 /**
  * Convert path fragments used by CakePHP's test runner to absolute paths that can be fed to PHPUnit.
  *
- * @param string $filePath The file path to load
- * @param string $params Additional parameters
- * @return void
+ * @param string $filePath The file path to load.
+ * @param string $params Additional parameters.
+ * @return string Converted path fragments.
  */
 	protected function _resolveTestFile($filePath, $params) {
 		$basePath = $this->_basePath($params) . DS . $filePath;
@@ -85,8 +85,8 @@ class CakeTestLoader extends PHPUnit_Runner_StandardTestSuiteLoader {
  * @return array
  */
 	public static function generateTestList($params) {
-		$directory = self::_basePath($params);
-		$fileList = self::_getRecursiveFileList($directory);
+		$directory = static::_basePath($params);
+		$fileList = static::_getRecursiveFileList($directory);
 
 		$testCases = array();
 		foreach ($fileList as $testCaseFile) {

@@ -1,16 +1,16 @@
 <?php
 /**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP(tm) Project
  * @since         CakePHP(tm) v 1.2.0.5550
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('AppShell', 'Console/Command');
@@ -25,7 +25,7 @@ App::uses('CakeSchema', 'Model');
  * of your database.
  *
  * @package       Cake.Console.Command
- * @link          http://book.cakephp.org/2.0/en/console-and-shells/schema-management-and-migrations.html
+ * @link          https://book.cakephp.org/2.0/en/console-and-shells/schema-management-and-migrations.html
  */
 class SchemaShell extends AppShell {
 
@@ -56,7 +56,6 @@ class SchemaShell extends AppShell {
 		Configure::write('Cache.disable', 1);
 
 		$name = $path = $connection = $plugin = null;
-		
 		if (!empty($this->params['name'])) {
 			$name = $this->params['name'];
 		} elseif (!empty($this->args[0]) && $this->args[0] !== 'snapshot') {
@@ -67,7 +66,6 @@ class SchemaShell extends AppShell {
 			list($this->params['plugin'], $splitName) = pluginSplit($name);
 			$name = $this->params['name'] = $splitName;
 		}
-		
 		if ($name && empty($this->params['file'])) {
 			$this->params['file'] = Inflector::underscore($name);
 		} elseif (empty($this->params['file'])) {
@@ -93,7 +91,6 @@ class SchemaShell extends AppShell {
 		}
 		$name = Inflector::camelize($name);
 		$this->Schema = new CakeSchema(compact('name', 'path', 'file', 'connection', 'plugin'));
-		
 	}
 
 /**
@@ -125,7 +122,7 @@ class SchemaShell extends AppShell {
 		if ($this->params['force']) {
 			$options['models'] = false;
 		} elseif (!empty($this->params['models'])) {
-			$options['models'] = String::tokenize($this->params['models']);
+			$options['models'] = CakeText::tokenize($this->params['models']);
 		}
 
 		$snapshot = false;
@@ -154,14 +151,14 @@ class SchemaShell extends AppShell {
 		Configure::write('Cache.disable', $cacheDisable);
 
 		if (!empty($this->params['exclude']) && !empty($content)) {
-			$excluded = String::tokenize($this->params['exclude']);
+			$excluded = CakeText::tokenize($this->params['exclude']);
 			foreach ($excluded as $table) {
 				unset($content['tables'][$table]);
 			}
 		}
 
 		if ($snapshot === true) {
-			$fileName = rtrim($this->params['file'], '.php');
+			$fileName = basename($this->params['file'], '.php');
 			$Folder = new Folder($this->Schema->path);
 			$result = $Folder->read();
 
@@ -288,7 +285,7 @@ class SchemaShell extends AppShell {
 			'connection' => $this->params['connection'],
 		);
 		if (!empty($this->params['snapshot'])) {
-			$fileName = rtrim($this->Schema->file, '.php');
+			$fileName = basename($this->Schema->file, '.php');
 			$options['file'] = $fileName . '_' . $this->params['snapshot'] . '.php';
 		}
 
@@ -337,8 +334,7 @@ class SchemaShell extends AppShell {
 		$this->out("\n" . __d('cake_console', 'The following table(s) will be dropped.'));
 		$this->out(array_keys($drop));
 
-		if (
-			!empty($this->params['yes']) ||
+		if (!empty($this->params['yes']) ||
 			$this->in(__d('cake_console', 'Are you sure you want to drop the table(s)?'), array('y', 'n'), 'n') === 'y'
 		) {
 			$this->out(__d('cake_console', 'Dropping table(s).'));
@@ -348,8 +344,7 @@ class SchemaShell extends AppShell {
 		$this->out("\n" . __d('cake_console', 'The following table(s) will be created.'));
 		$this->out(array_keys($create));
 
-		if (
-			!empty($this->params['yes']) ||
+		if (!empty($this->params['yes']) ||
 			$this->in(__d('cake_console', 'Are you sure you want to create the table(s)?'), array('y', 'n'), 'y') === 'y'
 		) {
 			$this->out(__d('cake_console', 'Creating table(s).'));
@@ -369,9 +364,7 @@ class SchemaShell extends AppShell {
 	protected function _update(&$Schema, $table = null) {
 		$db = ConnectionManager::getDataSource($this->Schema->connection);
 
-		$this->out("Using file: " . $this->Schema->file);
 		$this->out(__d('cake_console', 'Comparing Database to Schema...'));
-		
 		$options = array();
 		if (isset($this->params['force'])) {
 			$options['models'] = false;
@@ -404,13 +397,15 @@ class SchemaShell extends AppShell {
 
 		$this->out("\n" . __d('cake_console', 'The following statements will run.'));
 		$this->out(array_map('trim', $contents));
-		if (
-			!empty($this->params['yes']) ||
+		if (!empty($this->params['yes']) ||
 			$this->in(__d('cake_console', 'Are you sure you want to alter the tables?'), array('y', 'n'), 'n') === 'y'
 		) {
 			$this->out();
 			$this->out(__d('cake_console', 'Updating Database...'));
 			$this->_run($contents, 'update', $Schema);
+
+			Configure::write('Cache.disable', false);
+			Cache::clear(false, '_cake_model_');
 		}
 
 		$this->out(__d('cake_console', 'End update.'));
@@ -449,7 +444,7 @@ class SchemaShell extends AppShell {
 					} catch (PDOException $e) {
 						$error = $table . ': ' . $e->getMessage();
 					}
-					
+
 					$Schema->after(array($event => $table, 'errors' => $error));
 
 					if (!empty($error)) {
@@ -481,7 +476,7 @@ class SchemaShell extends AppShell {
 		);
 		$path = array(
 			'help' => __d('cake_console', 'Path to read and write schema.php'),
-			'default' => APP . 'Config' . DS . 'Schema'
+			'default' => CONFIG . 'Schema'
 		);
 		$file = array(
 			'help' => __d('cake_console', 'File name to read and write.'),

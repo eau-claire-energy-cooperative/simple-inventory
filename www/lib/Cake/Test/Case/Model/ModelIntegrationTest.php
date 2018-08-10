@@ -2,18 +2,18 @@
 /**
  * ModelIntegrationTest file
  *
- * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) Tests <https://book.cakephp.org/2.0/en/development/testing.html>
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
  * @package       Cake.Test.Case.Model
  * @since         CakePHP(tm) v 1.2.0.4206
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
 require_once dirname(__FILE__) . DS . 'ModelTestBase.php';
@@ -226,7 +226,8 @@ class ModelIntegrationTest extends BaseModelTest {
 			'scope' => '1 = 1',
 			'type' => 'nested',
 			'__parentChange' => false,
-			'recursive' => -1
+			'recursive' => -1,
+			'level' => null
 		);
 		$this->assertEquals($expected, $TestModel->Behaviors->Tree->settings['Apple']);
 
@@ -237,6 +238,32 @@ class ModelIntegrationTest extends BaseModelTest {
 		$TestModel->Behaviors->unload('Tree');
 		$this->assertEquals(array(), $TestModel->Behaviors->loaded());
 		$this->assertFalse(isset($TestModel->Behaviors->Tree));
+	}
+
+/**
+ * testTreeWithContainable method
+ *
+ * @return void
+ */
+	public function testTreeWithContainable() {
+		$this->loadFixtures('Ad', 'Campaign');
+		$TestModel = new Ad();
+		$TestModel->Behaviors->load('Tree');
+		$TestModel->Behaviors->load('Containable');
+
+		$node = $TestModel->findById(2);
+		$node['Ad']['parent_id'] = 1;
+		$TestModel->save($node);
+
+		$result = $TestModel->getParentNode(array('id' => 2, 'contain' => 'Campaign'));
+		$this->assertTrue(array_key_exists('Campaign', $result));
+
+		$result = $TestModel->children(array('id' => 1, 'contain' => 'Campaign'));
+		$this->assertTrue(array_key_exists('Campaign', $result[0]));
+
+		$result = $TestModel->getPath(array('id' => 2, 'contain' => 'Campaign'));
+		$this->assertTrue(array_key_exists('Campaign', $result[0]));
+		$this->assertTrue(array_key_exists('Campaign', $result[1]));
 	}
 
 /**
@@ -1307,7 +1334,7 @@ class ModelIntegrationTest extends BaseModelTest {
 		$Article->useTable = false;
 		$Article->id = 1;
 		$result = $Article->exists();
-		$this->assertTrue($result);
+		$this->assertFalse($result);
 	}
 
 /**
@@ -1590,10 +1617,12 @@ class ModelIntegrationTest extends BaseModelTest {
 	public function testAutoConstructPluginAssociations() {
 		$Comment = ClassRegistry::init('TestPluginComment');
 
-		$this->assertEquals(2, count($Comment->belongsTo), 'Too many associations');
+		$this->assertEquals(3, count($Comment->belongsTo), 'Too many associations');
 		$this->assertFalse(isset($Comment->belongsTo['TestPlugin.User']));
+		$this->assertFalse(isset($Comment->belongsTo['TestPlugin.Source']));
 		$this->assertTrue(isset($Comment->belongsTo['User']), 'Missing association');
 		$this->assertTrue(isset($Comment->belongsTo['TestPluginArticle']), 'Missing association');
+		$this->assertTrue(isset($Comment->belongsTo['Source']), 'Missing association');
 	}
 
 /**
@@ -1967,7 +1996,7 @@ class ModelIntegrationTest extends BaseModelTest {
 					'afterFind' => 'Successfully added by AfterFind'
 				)
 			));
-		$this->assertEquals(self::date(), $result['Something']['updated']);
+		$this->assertEquals(static::date(), $result['Something']['updated']);
 		unset($result['Something']['updated']);
 		$this->assertEquals($expected, $result);
 	}
@@ -2470,5 +2499,18 @@ class ModelIntegrationTest extends BaseModelTest {
 		$model->useTable = false;
 		$model->expects($this->never())->method('getDataSource');
 		$this->assertEmpty($model->schema());
+	}
+
+/**
+ * Tests that calling getColumnType() on a model that is not supposed to use a table
+ * does not trigger any calls on any datasource
+ *
+ * @return void
+ */
+	public function testGetColumnTypeNoDB() {
+		$model = $this->getMock('Example', array('getDataSource'));
+		$model->expects($this->never())->method('getDataSource');
+		$result = $model->getColumnType('filefield');
+		$this->assertEquals('string', $result);
 	}
 }

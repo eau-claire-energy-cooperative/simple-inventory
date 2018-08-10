@@ -4,18 +4,18 @@
  *
  * Handles loading of core files needed on every request
  *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP(tm) Project
  * @package       Cake
  * @since         CakePHP(tm) v 0.2.9
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
 define('TIME_START', microtime(true));
@@ -51,6 +51,13 @@ if (!defined('WEBROOT_DIR')) {
  */
 if (!defined('APP')) {
 	define('APP', ROOT . DS . APP_DIR . DS);
+}
+
+/**
+ * Config Directory
+ */
+if (!defined('CONFIG')) {
+	define('CONFIG', ROOT . DS . APP_DIR . DS . 'Config' . DS);
 }
 
 /**
@@ -145,6 +152,7 @@ App::uses('ErrorHandler', 'Error');
 App::uses('Configure', 'Core');
 App::uses('CakePlugin', 'Core');
 App::uses('Cache', 'Cache');
+App::uses('CakeObject', 'Core');
 App::uses('Object', 'Core');
 App::uses('Multibyte', 'I18n');
 
@@ -172,17 +180,6 @@ Configure::write('App.imageBaseUrl', IMAGES_URL);
 Configure::write('App.cssBaseUrl', CSS_URL);
 Configure::write('App.jsBaseUrl', JS_URL);
 
-Configure::bootstrap(isset($boot) ? $boot : true);
-
-if (function_exists('mb_internal_encoding')) {
-	$encoding = Configure::read('App.encoding');
-	if (!empty($encoding)) {
-		mb_internal_encoding($encoding);
-	}
-	if (!empty($encoding) && function_exists('mb_regex_encoding')) {
-		mb_regex_encoding($encoding);
-	}
-}
 
 if (!function_exists('mb_stripos')) {
 
@@ -437,4 +434,16 @@ if (!function_exists('mb_encode_mimeheader')) {
 		return Multibyte::mimeEncode($str, $charset, $linefeed);
 	}
 
+}
+
+Configure::bootstrap(isset($boot) ? $boot : true);
+
+if (function_exists('mb_internal_encoding')) {
+	$encoding = Configure::read('App.encoding');
+	if (!empty($encoding)) {
+		mb_internal_encoding($encoding);
+	}
+	if (!empty($encoding) && function_exists('mb_regex_encoding')) {
+		mb_regex_encoding($encoding);
+	}
 }
