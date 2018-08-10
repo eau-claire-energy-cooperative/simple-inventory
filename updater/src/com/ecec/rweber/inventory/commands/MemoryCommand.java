@@ -10,7 +10,6 @@ import com.ecec.rweber.inventory.utils.PCInfo;
 
 public class MemoryCommand implements SigarCommand{
 
-	@Override
 	public PCInfo runCommand(Sigar sigar, PCInfo currentInfo) {
 		DecimalFormat df = new DecimalFormat("#.###");
 

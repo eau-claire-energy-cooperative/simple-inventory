@@ -8,7 +8,6 @@ import com.ecec.rweber.utils.SettingsReader;
 
 public class LastBootWindowsCommand implements SigarCommand{
 
-	@Override
 	public PCInfo runCommand(Sigar sigar, PCInfo currentInfo) {
 		
 		String lastBoot = "";

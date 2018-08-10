@@ -1,9 +1,10 @@
 package com.ecec.rweber.inventory;
 
 import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
-import org.jdom.Element;
+import org.jdom2.Element;
 import org.json.simple.JSONObject;
 import com.citumpe.ctpTools.jWMI;
 import com.ecec.rweber.conductor.framework.Car;

@@ -10,7 +10,6 @@ import com.ecec.rweber.inventory.utils.PCInfo;
 
 public class MonitorsCommand implements SigarCommand{
 
-	@Override
 	public PCInfo runCommand(Sigar sigar, PCInfo currentInfo) {
 		
 		//use the graphics info to find the number of displays

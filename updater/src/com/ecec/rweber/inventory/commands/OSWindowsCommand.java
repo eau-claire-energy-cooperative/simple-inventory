@@ -8,7 +8,6 @@ import com.ecec.rweber.inventory.utils.PCInfo;
 
 public class OSWindowsCommand implements SigarCommand{
 
-	@Override
 	public PCInfo runCommand(Sigar sigar, PCInfo currentInfo) {
 		
 		OperatingSystem os = OperatingSystem.getInstance();

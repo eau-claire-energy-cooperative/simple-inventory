@@ -8,7 +8,6 @@ import com.ecec.rweber.inventory.utils.PCInfo;
 
 public class ProcessorCommand implements SigarCommand{
 
-	@Override
 	public PCInfo runCommand(Sigar sigar, PCInfo currentInfo) {
 		
 		try {
