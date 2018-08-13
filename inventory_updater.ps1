@@ -1,3 +1,12 @@
+#################################################################
+#inventory_updater.ps1 
+#Author: Rob Weber
+#
+# This is a drop-in replacement for the java based inventory updater program
+#
+#
+##################################################################
+
 param([string]$Url, 
 [boolean]$debug = $False,
 [ValidateSet("true","false")][string]$CheckChoco = "False",
@@ -42,6 +51,7 @@ function web-call{
 	return $output 
 }
 
+#log to website log file
 function web-log{
 	param([string]$logger = "Main", 
 	[string]$level = "INFO", 
@@ -65,7 +75,7 @@ web-log -Message "Starting inventory collection"
 $settingsObj = web-call -Endpoint "/settings" -Data @{}
 $settings = $settingsObj."result"
 
-###PART 1
+###PART 1 - collect PC info
 
 $computerInfo = @{} #hashtable to store information
 
@@ -89,8 +99,14 @@ $computerInfo.CPU = $win32_processor.name
 #gets network info where the adapter is enabled and has an IP, use the first one
 $win32_network = Get-WmiObject win32_networkadapterconfiguration | Select-Object -Property @{name='IPAddress';Expression={($_.IPAddress[0])}},MacAddress | Where IPAddress -NE $null
 
-$computerInfo.IPaddress = $win32_network[0].IPAddress
-$computerInfo.MACaddress = $win32_network[0].MacAddress
+if($win32_network.count -gt 0){
+	$computerInfo.IPaddress = $win32_network[0].IPAddress
+	$computerInfo.MACaddress = $win32_network[0].MacAddress
+}
+else{
+	$computerInfo.IPaddress = ""
+	$computerInfo.MACaddress = ""
+}
 
 #CURRENT USER
 $win32_user = $(Get-WMIObject -class Win32_ComputerSystem | select username).username
@@ -128,7 +144,7 @@ $computerInfo.NumberOfMonitors = (Get-CimInstance -Namespace root\wmi -ClassName
 #LAST BOOT TIME
 $computerInfo.LastBootTime = $win32Output.LastBootUpTime | Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 
-#CHOCO
+#CHOCO - not everyone will want this
 if(evalBool $CheckChoco){
 	$computerInfo.ApplicationUpdates = (choco outdated --limit-output).count
 }
@@ -139,9 +155,11 @@ else{
 #DATE/TIME OF UPDATE
 $computerInfo.LastUpdated = (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 
-#print out the computer update string
+#print out the computer update string if on debug
 if($debug){
+	Write-Host ""
 	$computerInfo | ConvertTo-Json -Compress
+	Write-Host ""
 }
 
 
@@ -238,7 +256,7 @@ else
 	}
 }
 
-###PART 2
+###PART 2 - find drives, programs, and services
 
 if($ComputerId -eq $null)
 {
