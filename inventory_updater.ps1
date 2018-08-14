@@ -108,18 +108,12 @@ $computerInfo.CPU = $win32_processor.name
 
 #NETWORK
 #gets network info where the adapter is enabled and has an IP, use the first one
-$win32_network = Get-WmiObject win32_networkadapterconfiguration | Select-Object -Property @{name='IPAddress';Expression={($_.IPAddress[0])}},MacAddress | Where IPAddress -NE $null
+$win32_network = @(Get-WmiObject win32_networkadapterconfiguration | Select-Object -Property @{name='IPAddress';Expression={($_.IPAddress[0])}},MacAddress | Where IPAddress -NE $null)
 
 if($win32_network -ne $null -And $win32_network.count -gt 0){
 	#returned array of addresses
 	$computerInfo.IPaddress = $win32_network[0].IPAddress
 	$computerInfo.MACaddress = $win32_network[0].MacAddress
-}
-elseif($win32_network -ne $null)
-{
-	#returned single address
-	$computerInfo.IPaddress = $win32_network.IPAddress
-	$computerInfo.MACaddress = $win32_network.MacAddress
 }
 else{
 	$computerInfo.IPaddress = ""
@@ -165,7 +159,7 @@ $computerInfo.LastBootTime = $win32Output.LastBootUpTime | Get-Date -Format "yyy
 #CHOCO - not everyone will want this
 if(evalBool $CheckChoco -And (Get-Command "choco" -errorAction SilentlyContinue)){
 	
-	$computerInfo.ApplicationUpdates = (choco outdated --limit-output).count
+	$computerInfo.ApplicationUpdates = @((choco outdated --limit-output)).count
 	
 }
 else{
@@ -287,7 +281,7 @@ if($ComputerId -eq $null)
 #DISKS
 
 #only get local drives
-$disks = $(Get-WmiObject -Class Win32_LogicalDisk -Filter "DriveType=3" | Select DeviceId, FreeSpace, Size)
+$disks = @($(Get-WmiObject -Class Win32_LogicalDisk -Filter "DriveType=3" | Select DeviceId, FreeSpace, Size))
 
 foreach ($disk in $disks.GetEnumerator()){
 	$diskOutput = web-call -Endpoint "/disk/update" -Data @{comp_id = $ComputerId; type = "Local"; label=$disk.DeviceId; total_space = $disk.Size/1025; space_free = $disk.FreeSpace/1024}
