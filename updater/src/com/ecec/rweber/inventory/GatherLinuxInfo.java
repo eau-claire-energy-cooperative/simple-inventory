@@ -2,12 +2,13 @@ package com.ecec.rweber.inventory;
 
 import java.sql.Timestamp;
 
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.cmd.Shell;
-import org.jdom.Element;
+import org.jdom2.Element;
 import org.json.simple.JSONObject;
 import com.ecec.rweber.conductor.framework.Car;
 import com.ecec.rweber.conductor.framework.Helper;

@@ -11,7 +11,6 @@ import com.ecec.rweber.inventory.utils.PCInfo;
 
 public class PrintersCommand implements SigarCommand{
 
-	@Override
 	public PCInfo runCommand(Sigar sigar, PCInfo currentInfo) {
 	
 		PrintService[] p = PrintServiceLookup.lookupPrintServices(null, null);

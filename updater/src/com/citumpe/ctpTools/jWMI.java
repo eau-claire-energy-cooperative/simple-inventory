@@ -1,17 +1,13 @@
 package com.citumpe.ctpTools;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.List;
-
-import org.jdom.Element;
-
-import com.ecec.rweber.utils.SettingsReader;
+import org.jdom2.Element;
+import com.ecec.rweber.inventory.utils.SettingsReader;
 
 /**
  * File: jWMI.java

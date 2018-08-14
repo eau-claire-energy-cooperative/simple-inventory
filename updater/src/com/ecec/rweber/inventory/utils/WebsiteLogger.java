@@ -16,12 +16,10 @@ public class WebsiteLogger extends AppenderSkeleton{
 		manager.settings();
 	}
 
-	@Override
 	public void close() {
 		
 	}
 
-	@Override
 	public boolean requiresLayout() {
 		// TODO Auto-generated method stub
 		return false;

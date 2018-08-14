@@ -28,7 +28,6 @@ public class ChocoPackagesCommand implements SigarCommand{
 		return result;
 	}
 	
-	@Override
 	public PCInfo runCommand(Sigar sigar, PCInfo currentInfo) {
 		int needsUpdating = 0;
 			
@@ -102,7 +101,6 @@ public class ChocoPackagesCommand implements SigarCommand{
 	        return this.version;
 	    }
 
-	    @Override 
 	    public int compareTo(Version that) {
 	        if(that == null)
 	            return 1;

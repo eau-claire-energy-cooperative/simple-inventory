@@ -10,7 +10,6 @@ import com.ecec.rweber.inventory.api.ApiManager;
 
 public class GetDBSettings implements GetSettings{
 
-	@Override
 	public Map<String, String> getSettings(Helper h, Map<String, String> params) {
 		Map<String,String> result = new HashMap<String,String>();
 		

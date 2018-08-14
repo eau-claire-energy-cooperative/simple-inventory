@@ -1,21 +1,25 @@
 package com.ecec.rweber.inventory.api;
 
-import java.io.BufferedReader;
 
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Map;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 public class Endpoint {
 	
 	protected String endpoint = null;
-
+	private Client http = null;
+	
 	public Endpoint(String baseUrl, String name){
 		endpoint = baseUrl + name + "/";
+		
+		http = ClientBuilder.newClient();
 	}
 	
 	public JSONObject sendRequest(Map<String,String> parameters){
@@ -26,15 +30,12 @@ public class Endpoint {
 		JSONObject result = null;
 		JSONParser parser = new JSONParser();
 		
+		WebTarget target = http.target(this.endpoint);
+		
 		//catch for no action type endpoints
-		String requestURL = null;
-		if(action == null)
+		if(action != null)
 		{
-			requestURL = endpoint;
-		}
-		else
-		{
-			 requestURL = endpoint + action + "/";
+			target = target.path(action);
 		}
 		
 		//create the json request
@@ -45,29 +46,10 @@ public class Endpoint {
 		}
 		
 		try{
-			//send the request - this is pretty quick and dirty, should probably clean it up
-			//System.out.println(jsonRequest.toJSONString());
-			URL url = new URL(requestURL);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setDoInput(true);
-			conn.setDoOutput(true);
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Length", String.valueOf(jsonRequest.toJSONString()));
-			OutputStream os = conn.getOutputStream();
-			os.write(jsonRequest.toJSONString().getBytes());
 			
-			//get the response
-			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			Response response = target.request().post(Entity.entity(jsonRequest.toJSONString(), MediaType.APPLICATION_JSON_TYPE));
 			
-			String response = "";
-			while(reader.ready())
-			{
-				response = response + reader.readLine();
-			}
-			
-			conn.disconnect();
-			
-			String resultString = response;
+			String resultString = response.readEntity(String.class);
 			//System.out.println(resultString);
 			result = (JSONObject) parser.parse(resultString);
 			

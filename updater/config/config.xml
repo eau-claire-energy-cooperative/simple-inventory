@@ -7,7 +7,7 @@
 	<log debug="false">
 		<console>true</console>
 		<file>false</file>
-		<custom class="com.ecec.rweber.inventory.utils.WebsiteLogger" url="http://inventory.ecec.com/inventory/">true</custom>
+		<custom class="com.ecec.rweber.inventory.utils.WebsiteLogger" url="https://spiderman.ecec.com/inventory/">true</custom>
 	</log>
 	
 	<!-- set the data and files directory manually -->
@@ -18,7 +18,7 @@
 		<train name="Update Info" schedule="*/5 * * * *">
 			<options>
 				<option name="network">10.10.10.x</option>
-				<option name="inventory_url">http://inventory.ecec.com/inventory/</option>
+				<option name="inventory_url">https://spiderman.ecec.com/inventory/</option>
 			</options>
 			<car name="Update PC Info" class="com.ecec.rweber.inventory.GatherPCInfo" />
 			<car name="Find Programs" class="com.ecec.rweber.inventory.FindPrograms" />
@@ -28,11 +28,5 @@
 	
 	<!-- a list of different data sources and their information -->
 	<datasources>
-		<inventory name="Computer Inventory DB" type="mysql">
-			<option name="database">10.10.10.35</option>
-			<option name="username">root</option>
-			<option name="password">password</option>
-			<option name="schema_name">computer_inventory</option>
-		</inventory>
 	</datasources>
 </config>
