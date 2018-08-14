@@ -163,8 +163,10 @@ $computerInfo.NumberOfMonitors = (Get-CimInstance -Namespace root\wmi -ClassName
 $computerInfo.LastBootTime = $win32Output.LastBootUpTime | Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 
 #CHOCO - not everyone will want this
-if(evalBool $CheckChoco){
+if(evalBool $CheckChoco -And (Get-Command "choco" -errorAction SilentlyContinue)){
+	
 	$computerInfo.ApplicationUpdates = (choco outdated --limit-output).count
+	
 }
 else{
 	$computerInfo.ApplicationUpdates = 0
