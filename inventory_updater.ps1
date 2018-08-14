@@ -17,15 +17,15 @@
     Author: Rob Weber   
 #>
 param(
-[Parameter(Mandatory=$true,ParameterSetName="InventoryUrl")][string]$Url, 
-[ValidateSet("true","false")][string]$CheckPrograms = "True",
-[ValidateSet("true","false")][string]$CheckServices = "True",
-[ValidateSet("true","false")][string]$CheckChoco = "False",
-[boolean]$DebugLogLog = $False
+[Parameter(Mandatory=$true,Position=0)][ValidateNotNullOrEmpty()][string]$Url, 
+[Parameter(Mandatory=$false,Position=1)][ValidateSet("true","false")][string]$CheckPrograms = "True",
+[Parameter(Mandatory=$false,Position=2)][ValidateSet("true","false")][string]$CheckServices = "True",
+[Parameter(Mandatory=$false,Position=3)][ValidateSet("true","false")][string]$CheckChoco = "False",
+[Parameter(Mandatory=$false,Position=4)][boolean]$DebugLog = $False
 )
 
 #BaseURL
-$apiUrl = $InventoryUrl + "/api"
+$apiUrl = $Url + "/api"
 
 #for SSL
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -110,9 +110,16 @@ $computerInfo.CPU = $win32_processor.name
 #gets network info where the adapter is enabled and has an IP, use the first one
 $win32_network = Get-WmiObject win32_networkadapterconfiguration | Select-Object -Property @{name='IPAddress';Expression={($_.IPAddress[0])}},MacAddress | Where IPAddress -NE $null
 
-if($win32_network.count -gt 0){
+if($win32_network -ne $null -And $win32_network.count -gt 0){
+	#returned array of addresses
 	$computerInfo.IPaddress = $win32_network[0].IPAddress
 	$computerInfo.MACaddress = $win32_network[0].MacAddress
+}
+elseif($win32_network -ne $null)
+{
+	#returned single address
+	$computerInfo.IPaddress = $win32_network.IPAddress
+	$computerInfo.MACaddress = $win32_network.MacAddress
 }
 else{
 	$computerInfo.IPaddress = ""
@@ -237,7 +244,7 @@ else
 			$updateOutput = web-call -Endpoint "/inventory/update" -Data $computerInfo
 			
 			#notify admin via email
-			$compUrl = $InventoryUrl + "/inventory/moreInfo/$ComputerId"
+			$compUrl = $Url + "/inventory/moreInfo/$ComputerId"
 			$message = "Computer <b>$ComputerName</b> has been added to the inventory. Details are below: <br><br>" + 
 			"Model: $($computerInfo.Model)<br>" + 
 			"Serial Number: $($computerInfo.SerialNumber)<br>" + 
