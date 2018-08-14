@@ -1,20 +1,31 @@
-#################################################################
-#inventory_updater.ps1 
-#Author: Rob Weber
-#
-# This is a drop-in replacement for the java based inventory updater program
-#
-#
-##################################################################
-
-param([string]$Url, 
-[boolean]$debug = $False,
-[ValidateSet("true","false")][string]$CheckChoco = "False",
+<#
+.SYNOPSIS
+    Inventory Updater Powershell Script
+.DESCRIPTION
+    This is a drop-in replacement for the java based inventory updater program
+.PARAMETER Url
+    Full path to the inventory website to be used for web calls, example http://localhost/inventory
+.PARAMETER CheckPrograms
+    True/False value that defines if the programs on the computer should be sent. Defaults to True
+.PARAMETER CheckServices
+    True/False value that defines if the services on the computer should be sent. Defaults to True
+.PARAMETER CheckChoco
+    True/False value that defines if the chocolatey applications outdated check should be performed. Defaults to False
+.EXAMPLE
+    C:\PS>inventory_updater.ps1 -Url http://localhost/inventory -CheckPrograms False
+.NOTES
+    Author: Rob Weber   
+#>
+param(
+[Parameter(Mandatory=$true,ParameterSetName="InventoryUrl")][string]$Url, 
 [ValidateSet("true","false")][string]$CheckPrograms = "True",
-[ValidateSet("true","false")][string]$CheckServices = "True")
+[ValidateSet("true","false")][string]$CheckServices = "True",
+[ValidateSet("true","false")][string]$CheckChoco = "False",
+[boolean]$DebugLogLog = $False
+)
 
 #BaseURL
-$apiUrl = $Url + "/api"
+$apiUrl = $InventoryUrl + "/api"
 
 #for SSL
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -53,7 +64,7 @@ function web-call{
 
 #log to website log file
 function web-log{
-	param([string]$logger = "Main", 
+	param([string]$logger = "Updater", 
 	[string]$level = "INFO", 
 	[string]$message)
 	
@@ -61,7 +72,7 @@ function web-log{
 	$now = (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 	
 	#send the log message
-	if($debug){
+	if($DebugLog){
 		Write-Host $message
 	}
 	
@@ -156,7 +167,7 @@ else{
 $computerInfo.LastUpdated = (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 
 #print out the computer update string if on debug
-if($debug){
+if($DebugLog){
 	Write-Host ""
 	$computerInfo | ConvertTo-Json -Compress
 	Write-Host ""
@@ -226,7 +237,7 @@ else
 			$updateOutput = web-call -Endpoint "/inventory/update" -Data $computerInfo
 			
 			#notify admin via email
-			$compUrl = $Url + "/inventory/moreInfo/$ComputerId"
+			$compUrl = $InventoryUrl + "/inventory/moreInfo/$ComputerId"
 			$message = "Computer <b>$ComputerName</b> has been added to the inventory. Details are below: <br><br>" + 
 			"Model: $($computerInfo.Model)<br>" + 
 			"Serial Number: $($computerInfo.SerialNumber)<br>" + 
