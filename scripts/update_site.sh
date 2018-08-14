@@ -22,7 +22,8 @@ cp -R ../www/. $COPYDIR
 #set the permissions
 chown -R www-data:www-data $COPYDIR
 chmod +x $COPYDIR/lib/Cake/Console
-chmod +x $COPYDIR/app/Console
+chmod +x $COPYDIR/app/Console/cake
+chmod -R 777 $COPYDIR/app/tmp
 
 if [ -e "database.php" ]; then
 	echo "Restoring database file"
