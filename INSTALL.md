@@ -1,8 +1,8 @@
 Instructions for how to install the various components. 
 
-##Web Site
+## Web Site
 
-###PHP7
+### PHP7
 
 Install default on from Linux package manager, also install the following modules. 
 
@@ -12,24 +12,17 @@ sudo apt-get install -y php7.0-ldap php7.0-mysql php7.0-xml
 
 ```
 
-###Apache 2
+### Apache 2
 
-Install default from Linux package manager. Move the files from the www/ directory to the folder where Apache will load the site from. 
-
-
-###Mysql
-
-Install default from Linux Package Manager. Create a DB user and import the sql file
+Install default from Linux package manager. Move the files from the www/ directory to the folder where Apache will load the site from. This can be done easily with the provided install script. 
 
 ```
 
-mysql -u root -p inventory < www/Config/schema/database.sql
+sudo ./install.sh /path/to/www/directory
 
 ```
 
-Also setup the DB login information in the www/Config/database.php file. 
-
-###Pear 
+### Pear 
 
 Install with:
 
@@ -55,7 +48,20 @@ sudo pear install Pear/Net_Ping
 
 ```
 
-##Powershell 
+### Mysql
+
+Install default from Linux Package Manager. Create a DB user and edit the app/Config.database.php file with the correct login information. 
+
+Run the CakePHP Schema manager with
+
+```
+
+app/Console/cake schema create
+
+```
+
+
+## Powershell 
 
 The update_inventory.ps1 script actually pulls the information from the computer and sends it to the inventory site via a REST API. The updater should run at login for each computer. This can be most easily accomplished via a Group Policy login script or just adding a call to the existing login script for users. The updater script needs to be somewhere on your network it can be called by all computers. 
 
