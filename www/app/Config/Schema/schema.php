@@ -41,25 +41,25 @@ class AppSchema extends CakeSchema {
 						//create some default settings
 						$settings = ClassRegistry::init('Setting');
 						$settings->create();
-						$settings->saveMany(array(array('Setting'=>array('Setting.key'=>'smtp_server','Setting.value'=>'')),
-												  array('Setting'=>array('Setting.key'=>'smtp_user','Setting.value'=>'')),
-												  array('Setting'=>array('Setting.key'=>'smtp_pass','Setting.value'=>'')),
-												  array('Setting'=>array('Setting.key'=>'smtp_auth','Setting.value'=>'')),
-												  array('Setting'=>array('Setting.key'=>'outgoing_email','Setting.value'=>'admin@domain.com')),
-												  array('Setting'=>array('Setting.key'=>'computer_ignore_list','Setting.value'=>'')),
-												  array('Setting'=>array('Setting.key'=>'auth_type','Setting.value'=>'local')),
-												  array('Setting'=>array('Setting.key'=>'ldap_host','Setting.value'=>'')),
-												  array('Setting'=>array('Setting.key'=>'ldap_port','Setting.value'=>'389')),
-												  array('Setting'=>array('Setting.key'=>'ldap_basedn','Setting.value'=>'')),
-												  array('Setting'=>array('Setting.key'=>'ldap_user','Setting.value'=>'')),
-												  array('Setting'=>array('Setting.key'=>'ldap_password','Setting.value'=>'')),
-												  array('Setting'=>array('Setting.key'=>'ldap_computers_basedn','Setting.value'=>'')),
-												  array('Setting'=>array('Setting.key'=>'show_computer_commands','Setting.value'=>'true')),
-												  array('Setting'=>array('Setting.key'=>'domain_username','Setting.value'=>'administrator')),
-												  array('Setting'=>array('Setting.key'=>'domain_password','Setting.value'=>'password')),
-												  array('Setting'=>array('Setting.key'=>'shutdown_message','Setting.value'=>'The Administrator has initiated a shutdown of your PC')),
-												  array('Setting'=>array('Setting.key'=>'display_attributes','Setting.value'=>'ComputerName,Tag,CurrentUser,SerialNumber,ApplicationUpdates,Model,OS,CPU,Memory,NumberOfMonitors,IPAddress,MACAddress,DriveSpace,Status')),
-												  array('Setting'=>array('Setting.key'=>'computer_auto_add','Setting.value'=>'false'))));
+						$settings->saveMany(array(array('Setting'=>array('key'=>'smtp_server','value'=>'')),
+												  array('Setting'=>array('key'=>'smtp_user','value'=>'')),
+												  array('Setting'=>array('key'=>'smtp_pass','value'=>'')),
+												  array('Setting'=>array('key'=>'smtp_auth','value'=>'')),
+												  array('Setting'=>array('key'=>'outgoing_email','value'=>'admin@domain.com')),
+												  array('Setting'=>array('key'=>'computer_ignore_list','value'=>'')),
+												  array('Setting'=>array('key'=>'auth_type','value'=>'local')),
+												  array('Setting'=>array('key'=>'ldap_host','value'=>'')),
+												  array('Setting'=>array('key'=>'ldap_port','value'=>'389')),
+												  array('Setting'=>array('key'=>'ldap_basedn','value'=>'')),
+												  array('Setting'=>array('key'=>'ldap_user','value'=>'')),
+												  array('Setting'=>array('key'=>'ldap_password','value'=>'')),
+												  array('Setting'=>array('key'=>'ldap_computers_basedn','value'=>'')),
+												  array('Setting'=>array('key'=>'show_computer_commands','value'=>'true')),
+												  array('Setting'=>array('key'=>'domain_username','value'=>'administrator')),
+												  array('Setting'=>array('key'=>'domain_password','value'=>'password')),
+												  array('Setting'=>array('key'=>'shutdown_message','value'=>'The Administrator has initiated a shutdown of your PC')),
+												  array('Setting'=>array('key'=>'display_attributes','value'=>'ComputerName,Tag,CurrentUser,SerialNumber,ApplicationUpdates,Model,OS,CPU,Memory,NumberOfMonitors,IPAddress,MACAddress,DriveSpace,Status')),
+												  array('Setting'=>array('key'=>'computer_auto_add','value'=>'false'))));
 						break;
 					case 'commands':
 						//create some of the default commands
