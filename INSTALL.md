@@ -60,6 +60,9 @@ app/Console/cake schema create
 
 ```
 
+### Logging In
+
+Log in to the site by going to the URL created (http://localhost if on same machine) and use the default username of __test__ and the password of __pass__.
 
 ## Powershell 
 
