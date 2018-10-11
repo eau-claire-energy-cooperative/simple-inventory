@@ -1,4 +1,4 @@
-$COPYDIR=$1
+COPYDIR=$1
 
 #install the site
 sudo ./update_site.sh $COPYDIR
