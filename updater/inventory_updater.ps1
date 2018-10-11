@@ -24,6 +24,9 @@ param(
 [Parameter(Mandatory=$false,Position=4)][boolean]$DebugLog = $False
 )
 
+#lowest powershell version this script will support
+$minPowerShellVersion = 5
+
 #BaseURL
 $apiUrl = $Url + "/api"
 
@@ -93,8 +96,13 @@ $computerInfo = @{} #hashtable to store information
 #COMPUTER NAME
 $win32Output = (Get-CimInstance Win32_OperatingSystem)
 $ComputerName = $win32Output.csname
-#$ComputerName = "Thor2"
 $computerInfo.ComputerName = $ComputerName
+
+#check the powershell version
+if($PSVersionTable.PSVersion.major -lt $minPowerShellVersion){
+	web-log -Message "$ComputerName powershell version not compatible" -Level "ERROR"
+	exit 2
+}
 
 web-log -Message "Gathering PC Information"
 
