@@ -112,7 +112,14 @@ $computerInfo.MemoryFree = [math]::round($win32Output.freephysicalmemory / 1024/
 
 #PROCESSOR
 $win32_processor = (Get-WmiObject win32_processor)
-$computerInfo.CPU = $win32_processor.name
+
+if($win32_processor -ne $null -And $win32_processor.count -gt 1){
+	$computerInfo.CPU = $win32_processor[0].name
+}
+else
+{
+	$computerInfo.CPU = $win32_processor.name
+}
 
 #NETWORK
 #gets network info where the adapter is enabled and has an IP, use the first one
