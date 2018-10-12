@@ -158,8 +158,16 @@ $computerInfo.Manufacturer = $win32_bios.Manufacturer
 $computerInfo.Model = $win32_computersystem.Model
 
 #MONITORS
-#gets number of active monitors
-$computerInfo.NumberOfMonitors = (Get-CimInstance -Namespace root\wmi -ClassName WmiMonitorBasicDisplayParams | where {$_.Active -like "True"}).Active.Count
+#check if class is implemented
+Get-CimInstance -Namespace root\wmi -ClassName WmiMonitorBasicDisplayParams -ErrorAction SilentlyContinue 2> $NULL > $NULL
+
+if($?){
+	$computerInfo.NumberOfMonitors = (Get-CimInstance -Namespace root\wmi -ClassName WmiMonitorBasicDisplayParams | where {$_.Active -like "True"}).Active.Count
+}
+else{
+	#wmi class not implemented, assume 1
+	$computerInfo.NumberOfMonitors = 1
+}
 
 #LAST BOOT TIME
 $computerInfo.LastBootTime = $win32Output.LastBootUpTime | Get-Date -Format "yyyy-MM-dd HH:mm:ss"
