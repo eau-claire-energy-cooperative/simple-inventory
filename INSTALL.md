@@ -1,10 +1,10 @@
-Instructions for how to install the various components. 
+Instructions for how to install the various components (assumes Debian type system). 
 
 ## Web Site
 
 ### PHP7
 
-Install default on from Linux package manager, also install the following modules. 
+Install default from from Linux package manager, also install the following modules. 
 
 ```
 
@@ -27,6 +27,7 @@ sudo ./install.sh /path/to/www/directory
 Install with:
 
 ```
+
 wget http://pear.php.net/go-pear.phar
 sudo php go-pear.phar
 
@@ -62,7 +63,7 @@ app/Console/cake schema create
 
 ### Logging In
 
-Log in to the site by going to the URL created (http://localhost if on same machine) and use the default username of __test__ and the password of __pass__.
+Log in to the site by going to the URL created (http://localhost/inventory if on same machine) and use the default username of __test__ and the password of __pass__.
 
 ## Powershell 
 
