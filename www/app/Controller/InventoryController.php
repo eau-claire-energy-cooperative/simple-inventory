@@ -352,6 +352,10 @@ class InventoryController extends AppController {
 		{
 			$settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
 		
+			//set the baseDN and action
+			$this->set('baseDN',$settings['ldap_computers_basedn']);
+			$this->set('currentAction',$action);
+			
 			//get the ldap computer listing
 			$this->Ldap->setup(array('host'=>$settings['ldap_host'],'port'=>$settings['ldap_port'],'baseDN'=>$settings['ldap_computers_basedn'],'user'=>$settings['ldap_user'],'password'=>$settings['ldap_password']));
 			$ad_computers = array();
@@ -401,6 +405,10 @@ class InventoryController extends AppController {
 			}
 			else if ($action == 'find_old')
 			{
+				//get how many days back to go from GET params
+				$days_old = $this->params['url']['days_old'];
+				$this->set('days_old',$days_old);
+
 				foreach($ldap_response as $lr)
 				{
 					if(isset($lr['cn']))
@@ -408,13 +416,16 @@ class InventoryController extends AppController {
 						//convert the last login to unix time
 						$lastLogon = (($lr['lastlogon'][0]/10000000)-11644473600);
 						
-						//if user hasn't logged on in more than 60 days
-						if($lastLogon < time() - (86400 * 60))
+						//if user hasn't logged on in more than x days
+						if($lastLogon < time() - (86400 * $days_old))
 						{
 							$result[trim(strtoupper($lr['cn'][0]))] = array('value'=>'Last Active Directory Logon: ' . date('F d, Y',$lastLogon));
 						}
 					}
 				}
+				
+				//sort the final array
+				ksort($result);
 			}
 		
 			$this->set('computers',$result);
