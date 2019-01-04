@@ -30,4 +30,7 @@ if [ -e "database.php" ]; then
 	mv "./database.php" $DBFILE
 fi
 
+#copy the current updater script
+cp ../updater/inventory_updater.ps1 $COPYDIR/app/webroot/files/
+
 echo "Website Updated"
