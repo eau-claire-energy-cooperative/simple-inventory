@@ -38,3 +38,4 @@
     <?php endforeach; ?>
 </tbody>
 </table>
+<p align="right"><?php echo $this->Html->link('Download CSV','/search/listAll.csv') ?></p>
