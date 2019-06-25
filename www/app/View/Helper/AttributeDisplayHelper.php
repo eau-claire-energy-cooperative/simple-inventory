@@ -10,7 +10,7 @@ class AttributeDisplayHelper extends AppHelper {
 		{
 			$result = $computer['Computer']['ComputerName'];
 		}
-		else if($attribute == 'Tag')
+		else if($attribute == 'Location')
 		{
 			$result = $this->Html->link( $computer['Location']['location'], array('controller'=>'search','action' => 'search', 0, $computer['Computer']['ComputerLocation']));
 		}
@@ -26,7 +26,7 @@ class AttributeDisplayHelper extends AppHelper {
 		{
 			$result = $computer['Computer']['AssetId'];
 		}
-		else if($attribute == 'ApplicationUpdates')
+		else if($attribute == 'AppUpdates')
 		{
 			$result = $computer['Computer']['ApplicationUpdates'];
 		}

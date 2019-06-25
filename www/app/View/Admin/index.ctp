@@ -1,6 +1,6 @@
 <ul>
 	<li><?php echo $this->Html->link('Users',array('action'=>'users')) ?></li>
-	<li><?php echo $this->Html->link('Edit Tags', array('action' => 'location')); ?></li>
+	<li><?php echo $this->Html->link('Edit Locations', array('action' => 'location')); ?></li>
 	<li><?php echo $this->Html->link('Settings',array('action'=>'settings')) ?></li>
 	<li><?php echo $this->Html->link('Logs', array('action' => 'logs')); ?></li>
 </ul>

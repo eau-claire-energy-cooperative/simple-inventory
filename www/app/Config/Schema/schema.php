@@ -58,7 +58,7 @@ class AppSchema extends CakeSchema {
 												  array('Setting'=>array('key'=>'domain_username','value'=>'administrator')),
 												  array('Setting'=>array('key'=>'domain_password','value'=>'password')),
 												  array('Setting'=>array('key'=>'shutdown_message','value'=>'The Administrator has initiated a shutdown of your PC')),
-												  array('Setting'=>array('key'=>'display_attributes','value'=>'ComputerName,Tag,CurrentUser,SerialNumber,ApplicationUpdates,Model,OS,CPU,Memory,NumberOfMonitors,IPAddress,MACAddress,DriveSpace,Status')),
+												  array('Setting'=>array('key'=>'display_attributes','value'=>'ComputerName,Location,CurrentUser,SerialNumber,AppUpdates,Model,OS,CPU,Memory,NumberOfMonitors,IPAddress,MACAddress,DriveSpace,Status')),
 												  array('Setting'=>array('key'=>'computer_auto_add','value'=>'false'))));
 						break;
 					case 'commands':

@@ -99,7 +99,7 @@ class AdminController extends AppController {
 	}
 	
 	public function location() {
-	 	$this->set('title_for_layout','Tags');
+	 	$this->set('title_for_layout','Locations');
         $this->set('location', $this->Location->find('all', array('order'=> array('is_default desc, location ASC'))));// gets all data
     }
 	

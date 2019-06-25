@@ -1,5 +1,5 @@
 <?php echo $this->Html->link('Admin', array('action'=>"index")); ?> |
-<?php echo $this->Html->link('Add Tag', array('controller' => 'Admin', 'action' => 'addLocation')); ?> 
+<?php echo $this->Html->link('Add Location', array('controller' => 'Admin', 'action' => 'addLocation')); ?> 
  <table>
     <?php foreach ($location as $post): ?>
     <tr>

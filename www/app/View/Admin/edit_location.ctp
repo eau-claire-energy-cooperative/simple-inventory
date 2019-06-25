@@ -4,7 +4,7 @@
 <table>
 		
 	<tr>
-		<td><?php echo $this->Form->input('location',array('label'=>'Tag Name'));?></td>
+		<td><?php echo $this->Form->input('location',array('label'=>'Location Name'));?></td>
 	</tr>
 	
 </table>
