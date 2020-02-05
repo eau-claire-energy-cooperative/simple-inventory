@@ -1,7 +1,7 @@
 <?php
 	
 class AdminController extends AppController {
-	var $uses = array('Computer','Logs','Location','Setting','User','Command','Schedule','Programs','RestrictedProgram');
+	var $uses = array('Computer','License','Logs','Location','Setting','User','Command','Schedule','Programs','RestrictedProgram');
 	var $helpers = array('Html','Session','Time','Form','LogParser');
 	var $paginate = array('limit'=>100, 'order'=>array('Logs.id'=>'desc'));
 	
@@ -199,6 +199,33 @@ class AdminController extends AppController {
             	$this->Session->setFlash('Unable to update your entry.');
         	}
    		}
+	}
+	
+	function licenses(){
+	    $this->set('title_for_layout', 'Program Licenses');
+	    
+	    if($this->request->is('post')){
+
+	        $this->License->query('update licenses set comp_id = ' . $this->data['MoveLicense']['computer'] . ' where id=' . $this->data['MoveLicense']['license_id']);
+	        
+	        $this->Session->setFlash('License Moved');
+	    }
+	    
+	     //get a list of all licenses
+	    $licenses = $this->License->find('all', array('order'=>array('Computer.ComputerName desc, License.ProgramName desc')));
+	    $this->set('licenses', $licenses);
+	    
+	}
+	
+	function deleteLicense($id){
+	    if ($this->request->is('get')) {
+	        throw new MethodNotAllowedException();
+	    }
+	    
+	    if ($this->License->delete($id)) {
+	        $this->Session->setFlash('License Deleted');
+	        $this->redirect(array('action' => 'licenses'));
+	    }
 	}
 	
 	function restricted_programs(){
