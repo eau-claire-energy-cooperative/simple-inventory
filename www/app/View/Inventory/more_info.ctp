@@ -132,6 +132,20 @@
 </table> 
  <?php endif; ?>
  
+<?php if(count($computer['License']) > 0): ?>
+<table id="licenses">
+	<tr>
+		<th colspan="2"><h1><a href="#" onClick="expandTable('licenses')">Licenses</a></h1></th>
+	</tr>
+	<?php foreach($computer['License'] as $aLicense): ?>
+	<tr style="display:none">
+		<td width="33%"><?php echo $aLicense['ProgramName'] ?></td>
+		<td><?php echo $aLicense['LicenseKey'] ?></td>
+	</tr>
+	<?php endforeach ?>
+</table>
+<?php endif ?>
+ 
 <?php if(count($programs) > 0): ?>
 <table id="programs">
     <tr>
