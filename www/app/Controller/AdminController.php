@@ -220,7 +220,7 @@ class AdminController extends AppController {
 	    }
 	    
 	     //get a list of all licenses
-	    $licenses = $this->License->find('all', array('order'=>array('Computer.ComputerName desc, License.ProgramName desc')));
+	    $licenses = $this->License->find('all', array('order'=>array('Computer.ComputerName asc', 'License.ProgramName asc')));
 	    $this->set('licenses', $licenses);
 	    
 	}
