@@ -10,6 +10,12 @@ $options=array('Yes' => 'Yes', 'No' => 'No');
 $attributes=array('legend' => false,'separator'=>'<br>'); 
 
 ?> 	
+<?php if(isset($errors)): ?>
+	<p></p>
+	<h3><?php echo $errors ?></h3>
+<?php else: ?>
+
+
 <table>
 	<tr>
    		<td class="radio"><p>Did you wipe the hard drive?</p><?php echo $this->Form->radio('WipedHD', $options, $attributes);?></td>
@@ -23,3 +29,5 @@ $attributes=array('legend' => false,'separator'=>'<br>');
 	</table>
 <?php echo $this->Form->input('id', array('type' => 'hidden'));?>
 <?php echo $this->Form->end('Update');?>
+
+<?php endif ?>
