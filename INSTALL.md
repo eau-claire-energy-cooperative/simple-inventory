@@ -61,6 +61,14 @@ app/Console/cake schema create
 
 ```
 
+Updating an existing install with DB changes can be done with
+
+```
+
+app/Console/cake schema update
+
+```
+
 ### Logging In
 
 Log in to the site by going to the URL created (http://localhost/inventory if on same machine) and use the default username of __test__ and the password of __pass__.
