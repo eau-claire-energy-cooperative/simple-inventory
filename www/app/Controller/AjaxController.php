@@ -33,7 +33,7 @@ class AjaxController extends AppController {
 	function new_license(){
 	    
 	    //get a list of all computers
-	    $allComputers = $this->Computer->find('list',array('fields'=>array('Computer.id', 'Computer.ComputerName'), 'order'=>array('Computer.ComputerName desc')));
+	    $allComputers = $this->Computer->find('list',array('fields'=>array('Computer.id', 'Computer.ComputerName'), 'order'=>array('Computer.ComputerName asc')));
 	    $this->set('computers', $allComputers);
 	    
 	}
@@ -44,7 +44,7 @@ class AjaxController extends AppController {
 	    $this->set('current_comp', $current_comp);
 	    
 	    //get a list of all computers
-	    $allComputers = $this->Computer->find('list',array('fields'=>array('Computer.id', 'Computer.ComputerName'), 'order'=>array('Computer.ComputerName desc')));
+	    $allComputers = $this->Computer->find('list',array('fields'=>array('Computer.id', 'Computer.ComputerName'), 'order'=>array('Computer.ComputerName asc')));
 	    $this->set('computers', $allComputers);
 	    
 	}
