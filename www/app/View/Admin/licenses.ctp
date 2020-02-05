@@ -26,7 +26,7 @@
 <table>
 	<?php foreach($licenses as $aLicense): ?>
 	<tr>
-		<td width="20%"><?php echo $this->Html->link($aLicense['Computer']['ComputerName'], '/inventory/inventory/moreInfo/' . $aLicense['License']['comp_id']) ?></td>
+		<td width="20%"><?php echo $this->Html->link($aLicense['Computer']['ComputerName'], '/inventory/moreInfo/' . $aLicense['License']['comp_id']) ?></td>
 		<td width="25%"><?php echo $aLicense['License']['ProgramName'] ?></td>
 		<td><?php echo $aLicense['License']['LicenseKey'] ?></td>
 		<td width="12%"><?php echo $this->Html->link('Move', '/ajax/move_license/' . $aLicense['License']['id'] . '/' . $aLicense['License']['comp_id'], array('class'=>'popup fancybox.ajax')) ?> | 
