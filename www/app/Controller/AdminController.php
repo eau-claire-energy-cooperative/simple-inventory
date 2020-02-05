@@ -206,9 +206,17 @@ class AdminController extends AppController {
 	    
 	    if($this->request->is('post')){
 
-	        $this->License->query('update licenses set comp_id = ' . $this->data['MoveLicense']['computer'] . ' where id=' . $this->data['MoveLicense']['license_id']);
+	        if(isset($this->data['MoveLicense']))
+	        {
+	           $this->License->query('update licenses set comp_id = ' . $this->data['MoveLicense']['computer'] . ' where id=' . $this->data['MoveLicense']['license_id']);
 	        
-	        $this->Session->setFlash('License Moved');
+	           $this->Session->setFlash('License Moved');
+	        }
+	        else
+	        {
+	            $this->License->save($this->data['License']);
+	            $this->Session->setFlash('License Added');
+	        }
 	    }
 	    
 	     //get a list of all licenses

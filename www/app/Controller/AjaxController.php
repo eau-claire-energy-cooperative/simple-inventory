@@ -30,6 +30,14 @@ class AjaxController extends AppController {
 		$this->set('command',$command);
 	}
 	
+	function new_license(){
+	    
+	    //get a list of all computers
+	    $allComputers = $this->Computer->find('list',array('fields'=>array('Computer.id', 'Computer.ComputerName'), 'order'=>array('Computer.ComputerName desc')));
+	    $this->set('computers', $allComputers);
+	    
+	}
+	
 	function move_license($license_id, $current_comp){
 	    
 	    $this->set('license_id', $license_id);

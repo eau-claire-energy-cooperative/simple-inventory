@@ -21,6 +21,8 @@
       
 </script>
 
+<p><?php echo $this->Html->link('Add License', '/ajax/new_license', array('class'=>'popup fancybox.ajax')) ?></p>
+
 <table>
 	<?php foreach($licenses as $aLicense): ?>
 	<tr>
