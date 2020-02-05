@@ -202,7 +202,7 @@ class AdminController extends AppController {
 	}
 	
 	function restricted_programs(){
-		$this->set('title_for_layout','Restricted Programs');
+		$this->set('title_for_layout','Programs');
 		
 		//get a list of all programs on the system
 		$all_programs = $this->Programs->find('all',array('fields'=>array('DISTINCT Programs.program'),'order'=>array('Programs.program')));
