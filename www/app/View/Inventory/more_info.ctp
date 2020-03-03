@@ -79,9 +79,20 @@
 	
 </script>
 
+<div class="mb-4" align="right">
+  <a href="<?php echo $this->Html->url(array('action' => 'edit', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
+  <a href="<?php echo $this->Html->url(array('action' => 'confirmDecommission', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-ban fa-sm text-white-50"></i> Decommission</a>
+  <a href="<?php echo $this->Html->url(array('action' => 'delete', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
+  <?php if(file_exists(WWW_ROOT . '/drivers/' . str_replace(' ','_',$computer['Computer']['Model']) . '.zip')): ?>
+    <a href="<?php echo $this->Html->url("/drivers/" . str_replace(' ','_',$computer['Computer']['Model']) . ".zip") ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-download fa-sm text-white-50"></i> Download Drivers</a>
+  <?php else: ?>
+    <a href="<?php echo $this->Html->url('/ajax/uploadDrivers/' . $computer['Computer']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2 popup fancybox.ajax"><i class="fas fa-upload fa-sm text-white-50"></i> Upload Drivers</a>
+  <?php endif; ?>
+</div>
+
 <div class="row">
   <div class="col-xl-12">
-    <div class="card shadow mb-4">
+    <div class="card border-left-primary shadow mb-4">
         <div class="card-header py-3">
           <h6 class="m-0 font-weight-bold text-primary">Computer Specs</h6>
         </div>
@@ -120,34 +131,7 @@
 </div>
 
 <div class="row">
-  <div class="col-xl-4 col-md-4 mb-4">
-    <div class="card border-left-primary shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-left">
-          <div class="col mr-2">
-            <div class="h5 font-weight-bold text-uppercase mb-1">Actions</div>
-            <div class="p mb-0 font-weight-bold text-gray-800">
-              <?php echo $this->Html->link('Edit', array('action' => 'edit', $computer['Computer']['id'])); ?><br>
-              <?php echo $this->Html->link('Decommission', array('action' => 'confirmDecommission', $computer['Computer']['id'])); ?><br>
-              <?php echo $this->Form->postLink(
-                'Delete',
-                array('action' => 'delete', $computer['Computer']['id']),
-                array('confirm' => 'Are you sure?')); ?><br>
-              <?php if(file_exists(WWW_ROOT . '/drivers/' . str_replace(' ','_',$computer['Computer']['Model']) . '.zip')): ?>
-                <?php echo $this->Html->link("Download Drivers","/drivers/" . str_replace(' ','_',$computer['Computer']['Model']) . ".zip") ?>
-              <?php else: ?>
-                <?php echo $this->Html->link("Upload Drivers",'/ajax/uploadDrivers/' . $computer['Computer']['id'],array('class'=>'popup fancybox.ajax')) ?>
-              <?php endif; ?>
-            </div>
-          </div>
-          <div class="col-auto">
-            <i class="fas fa-folder fa-2x text-gray-300"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-xl-8 col-md-8 mb-4">
+  <div class="col-xl-6">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Licenses</h6>
@@ -161,6 +145,8 @@
         <?php endforeach ?>
       </div>
     </div>
+  </div>
+  <div class="col-xl-6">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Notes</h6>
