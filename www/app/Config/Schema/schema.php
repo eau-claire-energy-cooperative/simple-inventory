@@ -70,7 +70,8 @@ class AppSchema extends CakeSchema {
 												array('Command'=>array('name'=>'Shutdown Computer','parameters'=>'Computer Name','description'=>'Shutdown a computer by computer name at a given time. Please note that computers that are sleeping or hibernating will be left alone.')),
 												array('Command'=>array('name'=>'Send Emails','parameters'=>'','description'=>'This command should be kept running at all times. It will clear the email queue by sending emails to system administrators.')),
 												array('Command'=>array('name'=>'Restart Computer','parameters'=>'Computer Name','description'=>'Send a restart command to a given computer at a specific time.')),
-												array('Command'=>array('name'=>'Check Disk space','parameters'=>'Minimum Space Threshold','description'=>'Check the disk space available on all computers. Any that do not contain the minimum amount of space (in percent) will generate an email to the system administrator.'))));
+												array('Command'=>array('name'=>'Check Disk space','parameters'=>'Minimum Space Threshold','description'=>'Check the disk space available on all computers. Any that do not contain the minimum amount of space (in percent) will generate an email to the system administrator.'))),
+						                        array('Command'=>array('name'=>'Remove Old Programs','parameters'=>'','description'=>'Removes Programs that no longer are installed on any computer from the database.')));
 						break;
 				}	
 			}
