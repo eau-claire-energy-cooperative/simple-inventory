@@ -1,41 +1,48 @@
 <?php 
-		echo $this->Html->script("jquery.tablesorter.js",false);
-		echo $this->Html->script("table_utils.js",false);
+    echo $this->Html->script("jquery.dataTables.min.js", false);
+    echo $this->Html->script("dataTables.bootstrap4.min.js", false);
+    echo $this->Html->script("load_table.js", false);
+    
+    echo $this->Html->css('dataTables.bootstrap4.min', false);
 ?>
 
-<?php echo $this->Html->link('Add Computer', array('controller' => 'Inventory', 'action' => 'add')); ?> 
-<?php if($settings['ldap_computers_basedn'] != ''): ?> | 
-<?php echo $this->Html->link('Active Directory Sync', array('controller' => 'Inventory', 'action' => 'active_directory_sync')); ?>
-<?php endif; ?>
-<p></p>
+<div class="mb-4" align="right">
+  <a href="<?php echo $this->Html->url('/inventory/add') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-plus fa-sm text-white-50"></i> Add Computer</a>
+  <a href="<?php echo $this->Html->url('/search/listAll.csv') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Download CSV</a>
+</div>
 
-<table id="tableSort" class="tablesorter">
-	<thead>
-    <tr>
-        <th>Computer Name	&uArr;&dArr;</th>
-        <th>Current User	&uArr;&dArr;</th>
-        <th>Operating System	&uArr;&dArr;</th>	
-        <th>Memory	&uArr;&dArr;</th>
-        <th>Model &uArr;&dArr;</th>
-        <th>Location	&uArr;&dArr;</th>
-        <th>Last Update	&uArr;&dArr;</th>
-    </tr>
-	</thead>
-	<tbody>
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+  </div>
+  <div class="card-body">
+    <table class="table" id="dataTable">
+    	<thead>
+        <tr>
+            <th>Computer Name</th>
+            <th>Current User</th>
+            <th>Operating System</th>	
+            <th>Memory</th>
+            <th>Model</th>
+            <th>Location</th>
+            <th>Last Update</th>
+        </tr>
+    	</thead>
+    	<tbody>
+        
     
-
-    <?php foreach ($computer as $post): ?>
-    <tr>
-        <td> <?php echo $this->Html->link( $post['Computer']['ComputerName'] , array('action' => 'moreInfo', $post['Computer']['id'])); ?></td>
-         <td><?php echo $post['Computer']['CurrentUser']; ?></td>
-         <td><?php echo $post['Computer']['OS']; ?></td>
-         <td><?php echo $post['Computer']['Memory']  ?> GB</td>
-         <td><?php echo $post['Computer']['Model'] ?></td>
-         <td><?php echo $this->Html->link( $post['Location']['location'], array('controller'=>'search','action' => 'search', 0,$post['Computer']['ComputerLocation'])); ?></td>
-         <td><?php echo $this->Time->format('m/d/Y',$post['Computer']['LastUpdated']) ?></td>   
-    </tr>
-    
-    <?php endforeach; ?>
-</tbody>
-</table>
-<p align="right"><?php echo $this->Html->link('Download CSV','/search/listAll.csv') ?></p>
+        <?php foreach ($computer as $post): ?>
+        <tr>
+            <td> <?php echo $this->Html->link( $post['Computer']['ComputerName'] , array('action' => 'moreInfo', $post['Computer']['id'])); ?></td>
+             <td><?php echo $post['Computer']['CurrentUser']; ?></td>
+             <td><?php echo $post['Computer']['OS']; ?></td>
+             <td><?php echo $post['Computer']['Memory']  ?> GB</td>
+             <td><?php echo $post['Computer']['Model'] ?></td>
+             <td><?php echo $this->Html->link( $post['Location']['location'], array('controller'=>'search','action' => 'search', 0,$post['Computer']['ComputerLocation'])); ?></td>
+             <td><?php echo $this->Time->format('m/d/Y',$post['Computer']['LastUpdated']) ?></td>   
+        </tr>
+        
+        <?php endforeach; ?>
+    </tbody>
+    </table>
+  </div>
+</div>
