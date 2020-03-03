@@ -68,7 +68,9 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Manage Inventory</h6>
+            <?php if($settings['ldap_computers_basedn'] != ''): ?>
             <a class="collapse-item" href="<?php echo $this->Html->url('/inventory/active_directory_sync') ?>">Active Directory Sync</a>
+            <?php endif; ?>
             <a class="collapse-item" href="<?php echo $this->Html->url('/manage/licenses') ?>">Licenses</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/inventory/restricted_programs') ?>">Programs</a>
           </div>
@@ -193,10 +195,6 @@
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
-          <!-- Page Heading -->
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-          </div>
           <!-- Main Content -->
           <?php echo $this->Session->flash(); ?>
           <?php echo $this->fetch('content'); ?>
