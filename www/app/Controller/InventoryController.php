@@ -16,6 +16,7 @@ class InventoryController extends AppController {
 			{
 				//we aren't authenticating, just keep moving
 				$this->Session->write('authenticated','true');
+				$this->Session->write('username', 'Admin User');
 			}
 			//check, we may already be trying to go to the login page
 			else if($this->action != 'login')
@@ -56,6 +57,7 @@ class InventoryController extends AppController {
 					{
 						//success!
 						$this->Session->write('authenticated','true');
+						$this->Session->write('username',$aUser['User']['name']);
 						$this->redirect('/');
 					}
 					else
@@ -83,6 +85,7 @@ class InventoryController extends AppController {
 					{
 						//success!
 						$this->Session->write('authenticated','true');
+						$this->Session->write('username', $aUser['User']['name']);
 						$this->redirect('/');
 					}
 					else
