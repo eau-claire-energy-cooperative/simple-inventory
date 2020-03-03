@@ -69,6 +69,18 @@ app/Console/cake schema update
 
 ```
 
+### Scheduled Tasks
+
+To use the Scheduled Tasks feature of the admin panel a local process must be configured to run the SchedulerShell via the CakePHP CLI. This can be done using your local cron daemon. An example of the entry could be: 
+
+```
+# run the scheduler every minute to check if a task needs to be run
+* * * * * /path/to/inventory/app/Console/cake -app /path/to/inventory/app Scheduler > /dev/null
+
+```
+
+If you encounter issues with this make sure the ```cake``` file has execute permissions and that the user you're running the command with is able to read/write files in the directory. 
+
 ### Logging In
 
 Log in to the site by going to the URL created (http://localhost/inventory if on same machine) and use the default username of __test__ and the password of __pass__.
