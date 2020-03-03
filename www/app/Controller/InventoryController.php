@@ -356,7 +356,7 @@ class InventoryController extends AppController {
 		}
 	}
 	
-	function active_directory_sync($action = null){
+	function active_directory_sync($action = 'find_old'){
 		$this->set('title_for_layout','Active Directory Sync');
 		
 		if($action != null)
@@ -373,73 +373,77 @@ class InventoryController extends AppController {
 			$ldap_response = $this->Ldap->getComputers();
 			
 			
-			$result = array();
+			$compare_computers = array();
 			
-			if($action == 'compare')
+			foreach($ldap_response as $lr)
 			{
-				foreach($ldap_response as $lr)
+				if(isset($lr['cn']))
 				{
-					if(isset($lr['cn']))
-					{
-						$ad_computers[] = trim(strtoupper($lr['cn'][0]));
-					}
+					$ad_computers[] = trim(strtoupper($lr['cn'][0]));
 				}
-			
-				//get the computer inventory 
-				$inventory_computers = $this->Computer->find('list', array('fields'=>array('ComputerName'),'order'=> array('ComputerName ASC')));
-			
-				//transform the names to uppercase
-				for($i = 0; $i < count($inventory_computers); $i ++)
-				{
-					$inventory_computers[$i] = trim(strtoupper($inventory_computers[$i]));
-				}
-			
-				//find the differences between the two lists
-				$ad_diff = array_diff($ad_computers,$inventory_computers);
-				$inventory_diff = array_diff($inventory_computers,$ad_computers);
-				
-				//merge the lists
-				foreach($ad_diff as $diff){
-					$result[$diff] = array('value'=>'Not in Inventory','class'=>'not_inventory');
-				}
-
-				foreach($inventory_diff as $diff){
-					if($diff != '')
-					{
-						$result[$diff] = array('value'=>'Not in Active Directory','class'=>'not_ad');
-					}
-				}
-				
-				//sort the final array
-				ksort($result);
-				
-			}
-			else if ($action == 'find_old')
-			{
-				//get how many days back to go from GET params
-				$days_old = $this->params['url']['days_old'];
-				$this->set('days_old',$days_old);
-
-				foreach($ldap_response as $lr)
-				{
-					if(isset($lr['cn']))
-					{
-						//convert the last login to unix time
-						$lastLogon = (($lr['lastlogontimestamp'][0]/10000000)-11644473600);
-						
-						//if user hasn't logged on in more than x days
-						if($lastLogon < time() - (86400 * $days_old))
-						{
-							$result[trim(strtoupper($lr['cn'][0]))] = array('value'=>'Last Active Directory Logon: ' . date('F d, Y',$lastLogon));
-						}
-					}
-				}
-				
-				//sort the final array
-				ksort($result);
 			}
 		
-			$this->set('computers',$result);
+			//get the computer inventory 
+			$inventory_computers = $this->Computer->find('list', array('fields'=>array('ComputerName'),'order'=> array('ComputerName ASC')));
+		
+			//transform the names to uppercase
+			for($i = 0; $i < count($inventory_computers); $i ++)
+			{
+				$inventory_computers[$i] = trim(strtoupper($inventory_computers[$i]));
+			}
+		
+			//find the differences between the two lists
+			$ad_diff = array_diff($ad_computers,$inventory_computers);
+			$inventory_diff = array_diff($inventory_computers,$ad_computers);
+			
+			//merge the lists
+			foreach($ad_diff as $diff){
+				$compare_computers[$diff] = array('value'=>'Not in Inventory','class'=>'not_inventory');
+			}
+
+			foreach($inventory_diff as $diff){
+				if($diff != '')
+				{
+					$compare_computers[$diff] = array('value'=>'Not in Active Directory','class'=>'not_ad');
+				}
+			}
+			
+			//sort the final array
+			ksort($compare_computers);
+				
+			
+			//get how many days back to go from GET params
+			$old_computers = array();
+			$days_old = 30;
+			
+			if(isset($this->params['url']['days_old']))
+			{
+			    $days_old = $this->params['url']['days_old'];
+			}
+			
+			$this->set('days_old',$days_old);
+
+			foreach($ldap_response as $lr)
+			{
+				if(isset($lr['cn']))
+				{
+					//convert the last login to unix time
+					$lastLogon = (($lr['lastlogontimestamp'][0]/10000000)-11644473600);
+					
+					//if user hasn't logged on in more than x days
+					if($lastLogon < time() - (86400 * $days_old))
+					{
+						$old_computers[trim(strtoupper($lr['cn'][0]))] = array('value'=>'Last Active Directory Logon: ' . date('F d, Y',$lastLogon));
+					}
+				}
+			}
+			
+			//sort the final arrays
+			ksort($old_computers);
+			
+		
+			$this->set('old_computers',$old_computers);
+			$this->set('compare_computers', $compare_computers);
 		}
 		
 	}
