@@ -1,5 +1,5 @@
 <h2>Move License</h2>
-<?php echo $this->Form->create('MoveLicense',array('url'=>'/admin/licenses')) ?>
+<?php echo $this->Form->create('MoveLicense',array('url'=>'/manage/licenses')) ?>
 <?php echo $this->Form->hidden('license_id',array('value'=>$license_id)); ?>
 <table>
 	<tr>

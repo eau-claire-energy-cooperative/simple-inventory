@@ -1,5 +1,5 @@
 <h2>New License</h2>
-<?php echo $this->Form->create('License',array('url'=>'/admin/licenses')) ?>
+<?php echo $this->Form->create('License',array('url'=>'/manage/licenses')) ?>
 <table>
 	<tr>
 		<td><h3>Program Name: </h3></td>

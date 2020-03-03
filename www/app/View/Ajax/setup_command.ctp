@@ -8,7 +8,7 @@
 
 <h2>Setup Command '<?php echo $command['Command']['name']; ?>'</h2>
 <p><?php echo $command['Command']['description'] ?></p>
-<?php echo $this->Form->create('Schedule',array('url'=>'/admin/schedule')) ?>
+<?php echo $this->Form->create('Schedule',array('url'=>'/manage/schedule')) ?>
 <?php echo $this->Form->hidden('command_id',array('value'=>$command['Command']['id'])); ?>
 <?php echo $this->Form->hidden('parameter_list',array('value'=>$command['Command']['parameters'])); ?>
 <table>

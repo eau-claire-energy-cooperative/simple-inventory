@@ -39,7 +39,7 @@
 					<li><?php echo $aKey . ": " . $schedule_params[$aKey] ?></li>
 				<?php endforeach; ?>	
 				</ul>
-				<p align="right" style="margin-right:10px"><?php echo $this->Html->link('Delete','/admin/schedule/' . $schedule['Schedule']['id']); ?></p>
+				<p align="right" style="margin-right:10px"><?php echo $this->Html->link('Delete','/manage/schedule/' . $schedule['Schedule']['id']); ?></p>
 			<?php endforeach; ?>
 		</td>
 		<td>
