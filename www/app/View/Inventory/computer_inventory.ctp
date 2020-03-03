@@ -15,7 +15,7 @@
   <div class="card-header py-3">
   </div>
   <div class="card-body">
-    <table class="table" id="dataTable">
+    <table class="table table-striped" id="dataTable">
     	<thead>
         <tr>
             <th>Computer Name</th>
