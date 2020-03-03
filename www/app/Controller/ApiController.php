@@ -3,7 +3,6 @@
 class ApiController extends AppController {
 	var $layout = '';
 	var $helpers = array('Js');
-	var $components = array('Alarm');
 	var $uses = array('Computer','ComputerLogin','Disk','Setting','Command','Service','RestrictedProgram','Programs','Location','EmailMessage','Logs','User');
 	var $json_data = null;
 	
