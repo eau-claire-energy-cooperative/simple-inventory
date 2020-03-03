@@ -2,8 +2,9 @@
 	
 class InventoryController extends AppController {
     var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace','AttributeDisplay');
-    var $components = array('Session','Ldap','FileUpload','Paginator');
+    var $components = array('Session','Ldap','FileUpload','Paginator','Flash');
 	public $uses = array('Computer','Disk','Location', 'Programs', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User','RestrictedProgram');
+	var $layout = 'default2';
 	
 	public function beforeFilter(){
 		//check if we are using a login method
@@ -36,6 +37,7 @@ class InventoryController extends AppController {
 
 	public function login(){
 		$this->set('title_for_layout','Login');
+		$this->layout = 'login';
 		
 		if ($this->request->is('post')) 
 		{
@@ -58,12 +60,12 @@ class InventoryController extends AppController {
 					}
 					else
 					{
-						$this->Session->setFlash('Incorrect Password');
+						$this->Flash->error('Incorrect Password');
 					}
 				}
 				else
 				{
-					$this->Session->setFlash('Incorrect Username');
+					$this->Flash->error('Incorrect Username');
 				}
 			}
 			else if($settings['auth_type'] == 'ldap')
@@ -85,12 +87,12 @@ class InventoryController extends AppController {
 					}
 					else
 					{
-						$this->Session->setFlash('Incorrect Username/Password');
+						$this->Flash->error('Incorrect Username/Password');
 					}
 				}
 				else
 				{
-					$this->Session->setFlash('Incorrect Username/Password');
+					$this->Flash->error('Incorrect Username/Password');
 				}
 			}
 		}
@@ -171,10 +173,10 @@ class InventoryController extends AppController {
             	//create log entry
             	$this->_saveLog("Computer " . $this->request->data['Computer']['ComputerName'] . " added to database");
             	
-                $this->Session->setFlash('Your Entry has been saved.');
+                $this->Flash->success('Your Entry has been saved.');
                 $this->redirect(array('action' => 'computerInventory'));
             } else {
-                $this->Session->setFlash('Unable to add your Entry.');
+                $this->Flash->error('Unable to add your Entry.');
             }
         }
     }
@@ -191,10 +193,10 @@ class InventoryController extends AppController {
 	    else 
 	    {
 	        if ($this->Computer->save($this->request->data)) {
-	            $this->Session->setFlash('Your entry has been updated.');
+	            $this->Flash->success('Your entry has been updated.');
 	            $this->redirect("/inventory/moreInfo/" . $this->data['Computer']['id']);
 	        } else {
-	            $this->Session->setFlash('Unable to update your entry.');
+	            $this->Flash->error('Unable to update your entry.');
 	        	}
 	   	}
 	}
@@ -217,7 +219,7 @@ class InventoryController extends AppController {
 	    	$message = 'Computer ' . $computer['Computer']['ComputerName'] . ' has been deleted';
 	    	
 	    	$this->_saveLog($message);
-	        $this->Session->setFlash($message);
+	        $this->Flash->success($message);
 	        $this->redirect(array('action' => 'computerInventory'));
 	    }
 		
@@ -254,12 +256,12 @@ class InventoryController extends AppController {
         	{
         		$message = 'Computer ' . $this->request->data['Computer']['ComputerName'] . ' has been decommissioned';
         		$this->_saveLog($message);
-            	$this->Session->setFlash($message);
+            	$this->Flash->success($message);
        			$this->transferDecom($currID);
         	} 
         	else 
         	{
-            	$this->Session->setFlash('Unable to update your entry.');
+            	$this->Flash->error('Unable to update your entry.');
         	}
    		}
 	}	
@@ -300,7 +302,7 @@ class InventoryController extends AppController {
 		
 			if( $this->Decommissioned->save())
 			{
-				$this->Session->setFlash("Machine with id: " . $id . " has been moved to the decommission table");
+				$this->Flash->success("Machine with id: " . $id . " has been moved to the decommission table");
 				$this->redirect(array("action" => 'computerInventory'));
 			}
 		}
@@ -318,12 +320,12 @@ class InventoryController extends AppController {
 		}
 		if($this->Decommissioned->save())
 		{
-			$this->Session->setFlash('Wipe Hard Drive Status changed');
+			$this->Flash->success('Wipe Hard Drive Status changed');
 			$this->redirect(array('action' => 'decommission'));
 		}
 		else {
 			{
-				$this->Session->setFlash('Wipe Hard Drive Status failed to change');
+				$this->Flash->error('Wipe Hard Drive Status failed to change');
 			}
 		}
 	}
@@ -341,12 +343,12 @@ class InventoryController extends AppController {
 		}
 		if($this->Decommissioned->save())
 		{
-			$this->Session->setFlash('Recycled Status changed');
+			$this->Flash->success('Recycled Status changed');
 			$this->redirect(array('action' => 'decommission'));
 		}
 		else {
 			{
-				$this->Session->setFlash('Recycled Status failed to change');
+				$this->Flash->error('Recycled Status failed to change');
 			}
 		}
 	}
@@ -442,11 +444,11 @@ class InventoryController extends AppController {
 	function do_drivers_upload(){
 		
 		if($this->FileUpload->success){
-			$this->Session->setFlash('Drivers Uploaded');
+			$this->Flash->success('Drivers Uploaded');
 		}
 		else
 		{
-			$this->Session->setFlash('Error Uploading Drivers');
+			$this->Flash->error('Error Uploading Drivers');
 		}
 	
 		$this->redirect('/inventory/moreInfo/' . $this->data['File']['id']);
