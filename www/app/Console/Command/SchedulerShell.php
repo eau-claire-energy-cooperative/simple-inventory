@@ -2,7 +2,7 @@
 
 class SchedulerShell extends AppShell {
 	var $uses = array('Schedule');
-	var $tasks = array('RestrictedPrograms','WakeComputer','SendEmails','DiskSpace','ShutdownComputer');
+	var $tasks = array('RestrictedPrograms','WakeComputer','SendEmails','DiskSpace','ShutdownComputer','RemoveOldPrograms');
 	
 	public function main(){
 		App::import('Vendor','Cron/CronExpression');
@@ -46,6 +46,8 @@ class SchedulerShell extends AppShell {
 						$schedule_params['Restart'] = true;
 						$this->ShutdownComputer->execute($schedule_params);
 						break;
+					case 7:
+					    $this->RemoveOldPrograms->execute($schedule_params);
 				}
 
 			}
