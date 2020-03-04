@@ -66,7 +66,7 @@
             <a class="collapse-item" href="<?php echo $this->Html->url('/inventory/active_directory_sync') ?>">Active Directory Sync</a>
             <?php endif; ?>
             <a class="collapse-item" href="<?php echo $this->Html->url('/manage/licenses') ?>">Licenses</a>
-            <a class="collapse-item" href="<?php echo $this->Html->url('/inventory/restricted_programs') ?>">Programs</a>
+            <a class="collapse-item" href="<?php echo $this->Html->url('/manage/restricted_programs') ?>">Programs</a>
           </div>
         </div>
       </li>
