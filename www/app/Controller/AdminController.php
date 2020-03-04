@@ -4,6 +4,7 @@ class AdminController extends AppController {
 	var $uses = array('Computer','License','Logs','Location','Setting','User','Command','Schedule','Programs','RestrictedProgram');
 	var $helpers = array('Html','Session','Time','Form','LogParser');
 	var $paginate = array('limit'=>100, 'order'=>array('Logs.id'=>'desc'));
+	var $layout = 'default2';
 	
 	public function beforeFilter(){
 		//check if we are using a login method
@@ -88,12 +89,12 @@ class AdminController extends AppController {
 		else 
 		{
 			if ($this->Setting->save($this->request->data)) {
-            	$this->Session->setFlash('Your entry has been updated.');
+            	$this->Flash->success('Your entry has been updated.');
             	$this->redirect(array('action' => 'settings'));
         	} 
         	else 
         	{
-            	$this->Session->setFlash('Unable to update your entry.');
+            	$this->Flash->error('Unable to update your entry.');
         	}	
 		}
 	}
@@ -113,13 +114,15 @@ class AdminController extends AppController {
    		else 
    		{
         	if ($this->Location->save($this->request->data)) {
-            	$this->Session->setFlash('Your entry has been updated.');
+            	$this->Flash->success('Your entry has been updated.');
             	$this->redirect(array('action' => 'location'));
         	} 
         	else 
         	{
-            	$this->Session->setFlash('Unable to update your entry.');
+            	$this->Flash->error('Unable to update your entry.');
         	}
+        	
+        	$this->redirect('/admin/location');
    		}
 	}
 	
@@ -140,10 +143,10 @@ class AdminController extends AppController {
 		
         if ($this->request->is('post')) {
             if ($this->Location->save($this->request->data)) {
-                $this->Session->setFlash('Your Entry has been saved.');
+                $this->Flash->success('Your Entry has been saved.');
                 $this->redirect(array('action' => 'location'));
             } else {
-                $this->Session->setFlash('Unable to add your Entry.');
+                $this->Flash->error('Unable to add your Entry.');
             }
         }
     }
@@ -153,7 +156,7 @@ class AdminController extends AppController {
 	        throw new MethodNotAllowedException();
 	    }
 	    if ($this->Location->delete($id)) {
-	        $this->Session->setFlash('The entry with id: ' . $id . ' has been deleted.');
+	        $this->Flash->success('The entry with id: ' . $id . ' has been deleted.');
 	        $this->redirect(array('action' => 'location'));
 	    }
 	}
@@ -173,7 +176,7 @@ class AdminController extends AppController {
     			
     		if(isset($this->params['url']['action']) && $this->params['url']['action'] == 'delete'){
     			$this->User->delete($id);
-    			$this->Session->setFlash("Your entry has been deleted");
+    			$this->Flash->success("Your entry has been deleted");
     			$this->redirect(array('action'=>'users'));
     		}
 			else
@@ -191,12 +194,12 @@ class AdminController extends AppController {
 			}
    			
         	if ($this->User->save($this->request->data)) {
-            	$this->Session->setFlash('Your entry has been updated.');
+            	$this->Flash->success('Your entry has been updated.');
             	$this->redirect(array('action' => 'users'));
         	} 
         	else 
         	{
-            	$this->Session->setFlash('Unable to update your entry.');
+            	$this->Flash->error('Unable to update your entry.');
         	}
    		}
 	}
