@@ -46,7 +46,8 @@ class AjaxController extends AppController {
 	}
 	
 	function setup_command($id){
-
+        $this->layout = 'fancybox';
+        
 		//get the command that goes with this id
 		$command = $this->Command->find('first',array('conditions'=>array('Command.id'=>$id)));
 		$this->set('command',$command);
