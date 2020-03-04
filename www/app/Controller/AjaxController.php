@@ -53,6 +53,7 @@ class AjaxController extends AppController {
 	}
 	
 	function new_license(){
+	    $this->layout = 'fancybox';
 	    
 	    //get a list of all computers
 	    $allComputers = $this->Computer->find('list',array('fields'=>array('Computer.id', 'Computer.ComputerName'), 'order'=>array('Computer.ComputerName asc')));
@@ -61,6 +62,7 @@ class AjaxController extends AppController {
 	}
 	
 	function move_license($license_id, $current_comp){
+	    $this->layout = 'fancybox';
 	    
 	    $this->set('license_id', $license_id);
 	    $this->set('current_comp', $current_comp);
