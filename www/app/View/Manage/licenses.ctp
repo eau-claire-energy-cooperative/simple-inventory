@@ -1,7 +1,9 @@
 <?php 
     echo $this->Html->script("jquery.fancybox.min.js",false);
-    echo $this->Html->script("more_info.js",false);
+    echo $this->Html->script("jquery-confirm.min.js",false);
+    echo $this->Html->script("licenses.js",false);
     echo $this->Html->css('jquery.fancybox', array('inline'=>false));
+    echo $this->Html->css('jquery-confirm.min', array('inline'=>false));
 ?>
 
 <div class="mb-4" align="right">
@@ -16,7 +18,7 @@
 		<td><?php echo $aLicense['License']['LicenseKey'] ?></td>
 		<td width="12%" align="right">
 		  <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/move_license/' . $aLicense['License']['id'] . '/' . $aLicense['License']['comp_id']) ?>" title="Move License"><i class="fas fa-arrows-alt mr-1"></i></a>
-		  <a href="<?php echo $this->Html->url(array('action' => 'deleteLicense', $aLicense['License']['id'])) ?>" class="text-danger"><i class="fas fa-trash mr-2" title="Delete License"></i></a>
+		  <a href="<?php echo $this->Html->url(array('action' => 'deleteLicense', $aLicense['License']['id'])) ?>" class="text-danger delete-license" data-title="Confirm delete license"><i class="fas fa-trash mr-2" title="Delete License"></i></a>
 		</td>
 	</tr>
 	<?php endforeach ?>
