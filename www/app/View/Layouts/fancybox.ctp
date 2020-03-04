@@ -30,7 +30,7 @@
   <div id="content-wrapper">
 
       <!-- Begin Page Content -->
-      <div>
+      <div style="min-width:500px;">
 
         <!-- Main Content -->
         <?php echo $this->Session->flash(); ?>
