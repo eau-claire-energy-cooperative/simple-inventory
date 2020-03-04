@@ -74,7 +74,7 @@
       <!-- Nav Item - decom -->
       <li class="nav-item">
         <a class="nav-link" href="<?php echo $this->Html->url('/inventory/decommission') ?>">
-          <i class="fas fa-fw fa-trash"></i>
+          <i class="fas fa-fw fa-ban"></i>
           <span>Decommissioned</span></a>
       </li>
 
