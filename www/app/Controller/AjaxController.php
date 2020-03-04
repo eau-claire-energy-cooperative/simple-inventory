@@ -27,7 +27,9 @@ class AjaxController extends AppController {
 	}
 	
 	function checkRunning($name){
-		$isRunning = $this->Ping->ping($name);
+	    //load the search domain
+	    $settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
+	    $isRunning = $this->Ping->ping($name, $settings['search_domain']);
 		$this->set('result',$isRunning);
 	}
 	
