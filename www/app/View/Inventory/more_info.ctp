@@ -54,12 +54,12 @@
 
 	function expandTable(id){
 		
-		$('#' + id + ' tr').each(function(index){
-			if(index != 0)
-			{
-				$(this).toggle();
-			}
-		});
+		$('#' + id).toggle();
+		
+		toggleId = '#' + id + '-toggle';
+		
+		$(toggleId).toggleClass('fa-chevron-circle-down');
+		$(toggleId).toggleClass('fa-chevron-circle-up');
 		
 		return false;
 	}
@@ -81,8 +81,8 @@
 
 <div class="mb-4" align="right">
   <a href="<?php echo $this->Html->url(array('action' => 'edit', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
-  <a href="<?php echo $this->Html->url(array('action' => 'confirmDecommission', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-ban fa-sm text-white-50"></i> Decommission</a>
-  <a href="<?php echo $this->Html->url(array('action' => 'delete', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
+  <a href="<?php echo $this->Html->url(array('action' => 'confirmDecommission', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mr-2"><i class="fas fa-ban fa-sm text-white-50"></i> Decommission</a>
+  <a href="<?php echo $this->Html->url(array('action' => 'delete', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
   <?php if(file_exists(WWW_ROOT . '/drivers/' . str_replace(' ','_',$computer['Computer']['Model']) . '.zip')): ?>
     <a href="<?php echo $this->Html->url("/drivers/" . str_replace(' ','_',$computer['Computer']['Model']) . ".zip") ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-download fa-sm text-white-50"></i> Download Drivers</a>
   <?php else: ?>
@@ -131,7 +131,8 @@
 </div>
 
 <div class="row">
-  <div class="col-xl-6">
+  <?php if(count($computer['License']) > 0): ?>
+  <div class="col-xl-7">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Licenses</h6>
@@ -146,7 +147,9 @@
       </div>
     </div>
   </div>
-  <div class="col-xl-6">
+  <?php endif; ?>
+  <?php if($computer['Computer']['notes'] != ''): ?>
+  <div class="col-xl-5">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Notes</h6>
@@ -158,6 +161,7 @@
       </div>
     </div>
   </div>
+  <?php endif; ?>
 </div>
  
 <?php if(count($programs) > 0): ?>
@@ -165,7 +169,7 @@
   <div class="col-xl-12">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary"><a href="#" onClick="$('#programs').toggle(); return false">Programs</a></h6>
+        <h6 class="m-0 font-weight-bold text-primary"><a href="#" onClick="return expandTable('programs')">Programs <i class="fas fa-chevron-circle-down align-middle" id="programs-toggle"></i></a></h6>
       </div>
       <div class="card-body">
         <table id="programs" class="table table-striped" style="display:none">
@@ -194,7 +198,7 @@
   <div class="col-xl-12">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary"><a href="#" onClick="$('#services').toggle(); return false">Services</a></h6>
+        <h6 class="m-0 font-weight-bold text-primary"><a href="#" onClick="return expandTable('services')">Services <i class="fas fa-chevron-circle-down align-middle" id="services-toggle"></i></a></h6>
       </div>
       <div class="card-body">
         <table id="services" class="table table-striped" style="display:none">
