@@ -1,9 +1,16 @@
 <?php 
     echo $this->Html->script("jquery.dataTables.min.js", false);
     echo $this->Html->script("dataTables.bootstrap4.min.js", false);
-    echo $this->Html->script("main.js", false);
     
-    echo $this->Html->css('dataTables.bootstrap4.min', false);
+    echo $this->Html->css('dataTables.bootstrap4.min', array('inline'=>false));
+    
+    //script to load the datatable
+    echo $this->Html->scriptBlock("$(document).ready(function() {
+        $('#dataTable').DataTable({
+          paging: false, 
+          dom: '<\"top\"ifp>rt'
+          });
+     });", array("inline"=>false)) 
 ?>
 
 <div class="mb-4" align="right">

@@ -1,9 +1,26 @@
 <?php 
 		echo $this->Html->script("jquery.fancybox.min.js",false);
     echo $this->Html->script("jquery-confirm.min.js",false);
-    echo $this->Html->script("more_info.js",false);
 		echo $this->Html->css('jquery.fancybox', array('inline'=>false));
     echo $this->Html->css('jquery-confirm.min', array('inline'=>false));
+    
+    //script to load the datatable
+    echo $this->Html->scriptBlock("$(document).ready(function() {
+      checkRunning();
+      setInterval(checkRunning,40 * 1000);
+  
+        $('a.delete-computer').confirm({
+          content: 'Are you sure you want to delete this computer?',
+          buttons: {
+              yes: function(){
+                  location.href = this.\$target.attr('href');
+              },
+              cancel: function(){
+                
+              }
+          }
+        });
+     });", array("inline"=>false)) 
 ?>
 
 <script type="text/javascript">

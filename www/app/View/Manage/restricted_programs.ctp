@@ -1,9 +1,19 @@
 <?php 
     echo $this->Html->script("jquery.dataTables.min.js", false);
     echo $this->Html->script("dataTables.bootstrap4.min.js", false);
-    echo $this->Html->script("programs.js", false);
     
     echo $this->Html->css('dataTables.bootstrap4.min', false);
+    
+    //script to load the datatable
+    echo $this->Html->scriptBlock("$(document).ready(function() {
+      $('#dataTable').DataTable({
+        paging: true, 
+        pageLength: 100,
+        dom: '<\"top\"ifp>rt',
+        columnDefs: [
+          {'searchable': false, 'targets': [-1]}
+        ]
+     })});", array("inline"=>false));
     
     $count = 0;
 ?>

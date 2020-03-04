@@ -1,9 +1,24 @@
 <?php 
     echo $this->Html->script("jquery.fancybox.min.js",false);
     echo $this->Html->script("jquery-confirm.min.js",false);
-    echo $this->Html->script("licenses.js",false);
+
     echo $this->Html->css('jquery.fancybox', array('inline'=>false));
     echo $this->Html->css('jquery-confirm.min', array('inline'=>false));
+    
+    //script to load the datatable
+    echo $this->Html->scriptBlock("$(document).ready(function() {
+        $('a.delete-license').confirm({
+              content: 'Are you sure you want to delete this license?',
+              buttons: {
+                  yes: function(){
+                      location.href = this.\$target.attr('href');
+                  },
+                  cancel: function(){
+                    
+                  }
+              }
+          });
+     });", array("inline"=>false)) 
 ?>
 
 <div class="mb-4" align="right">
