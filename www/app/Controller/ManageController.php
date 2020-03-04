@@ -56,9 +56,6 @@ class ManageController extends AppController {
 	}
 	
 	function deleteLicense($id){
-	    if ($this->request->is('get')) {
-	        throw new MethodNotAllowedException();
-	    }
 	    
 	    if ($this->License->delete($id)) {
 	        $this->Flash->success('License Deleted');
