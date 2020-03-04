@@ -12,7 +12,7 @@
   <div class="col-sm-4">License Key: </div>
   <div class="col-sm-8"><?php echo $this->Form->input('LicenseKey', array('div'=>false, label=>false, 'class'=>'form-control')) ?></div>
 </div>
-<div class="row mt-1">
+<div class="row mt-2">
   <div class="col-sm-4"></div>
   <div class="col-sm-8"><?php echo $this->Form->Submit('Save',array('class'=>'btn btn-primary btn-block')) ?></div>
 </div>

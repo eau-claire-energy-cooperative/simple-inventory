@@ -15,7 +15,7 @@
 		<td width="25%"><?php echo $aLicense['License']['ProgramName'] ?></td>
 		<td><?php echo $aLicense['License']['LicenseKey'] ?></td>
 		<td width="12%" align="right">
-		  <a href="<?php echo $this->Html->url('/ajax/move_license/' . $aLicense['License']['id'] . '/' . $aLicense['License']['comp_id']) ?>" title="Move License"><i class="fas fa-arrows-alt mr-1"></i></a>
+		  <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/move_license/' . $aLicense['License']['id'] . '/' . $aLicense['License']['comp_id']) ?>" title="Move License"><i class="fas fa-arrows-alt mr-1"></i></a>
 		  <a href="<?php echo $this->Html->url(array('action' => 'deleteLicense', $aLicense['License']['id'])) ?>" class="text-danger"><i class="fas fa-trash mr-2" title="Delete License"></i></a>
 		</td>
 	</tr>
