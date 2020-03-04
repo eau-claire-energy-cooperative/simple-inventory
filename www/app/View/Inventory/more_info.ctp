@@ -1,7 +1,9 @@
 <?php 
 		echo $this->Html->script("jquery.fancybox.min.js",false);
+    echo $this->Html->script("jquery-confirm.min.js",false);
     echo $this->Html->script("more_info.js",false);
 		echo $this->Html->css('jquery.fancybox', array('inline'=>false));
+    echo $this->Html->css('jquery-confirm.min', array('inline'=>false));
 ?>
 
 <script type="text/javascript">
@@ -64,7 +66,7 @@ function wol(mac){
 <div class="mb-4" align="right">
   <a href="<?php echo $this->Html->url(array('action' => 'edit', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
   <a href="<?php echo $this->Html->url(array('action' => 'confirmDecommission', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mr-2"><i class="fas fa-ban fa-sm text-white-50"></i> Decommission</a>
-  <a href="<?php echo $this->Html->url(array('action' => 'delete', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
+  <a href="<?php echo $this->Html->url(array('action' => 'delete', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-computer"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
   <?php if(file_exists(WWW_ROOT . '/drivers/' . str_replace(' ','_',$computer['Computer']['Model']) . '.zip')): ?>
     <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url("/drivers/" . str_replace(' ','_',$computer['Computer']['Model']) . ".zip") ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-download fa-sm text-white-50"></i> Download Drivers</a>
   <?php else: ?>
