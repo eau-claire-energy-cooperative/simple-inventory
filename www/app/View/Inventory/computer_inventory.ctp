@@ -1,7 +1,7 @@
 <?php 
     echo $this->Html->script("jquery.dataTables.min.js", false);
     echo $this->Html->script("dataTables.bootstrap4.min.js", false);
-    echo $this->Html->script("load_table.js", false);
+    echo $this->Html->script("main.js", false);
     
     echo $this->Html->css('dataTables.bootstrap4.min', false);
 ?>
