@@ -1,86 +1,131 @@
+<div class="row">
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-danger shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Wiped Hard Drive</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $decommissioned['Decommissioned']['WipedHD']?></div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-eraser fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<table>
-    <tr>
-        <th style="width: 200px;">Computer Name</th>
-        <th style="width: 250px;">Location</th>
-        <th style="width: 250px;">Current User</th>
-        <th style="width: 250px;">Serial Number</th>
-        <th style="width: 250px;">Asset ID</th>
-     
-    </tr>
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-success shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Recycled</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $decommissioned['Decommissioned']['Recycled']?></div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-recycle fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <tr>
-        <td><?php echo $decommissioned['Decommissioned']['ComputerName']?></td>
-        <td><?php echo $decommissioned['Location']['location']; ?></td>
-         
-          <td><?php echo $decommissioned['Decommissioned']['CurrentUser']?></td>
-           <td><?php echo $decommissioned['Decommissioned']['SerialNumber']?></td>
-            <td><?php echo $decommissioned['Decommissioned']['AssetId']?> </td>
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-info shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Redeployed As</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $decommissioned['Decommissioned']['RedeployedAs'];?></div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-desktop fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-    </tr>
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card border-left-primary shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Computer Specs</h6>
+        </div>
+        <div class="card-body">
+          
+          <table class="table table-striped">
+            <tr>
+                <th style="width: 200px;">Computer Name</th>
+                <th style="width: 250px;">Location</th>
+                <th style="width: 250px;">Current User</th>
+                <th style="width: 250px;">Serial Number</th>
+                <th style="width: 250px;">Asset ID</th>            
+              </tr>         
+              <tr>
+                  <td><?php echo $decommissioned['Decommissioned']['ComputerName']?></td>
+                  <td><?php echo $decommissioned['Location']['location']; ?></td>
+                  <td><?php echo $decommissioned['Decommissioned']['CurrentUser']?></td>
+                  <td><?php echo $decommissioned['Decommissioned']['SerialNumber']?></td>
+                  <td><?php echo $decommissioned['Decommissioned']['AssetId']?> </td>        
+              </tr>          
+          </table>  
+          
+          <table class="table table-striped">
+            <tr>
+                <th style="width: 200px;">Model</th>
+                <th style="width: 250px;">Operating System</th>
+                <th style="width: 250px;">CPU</th>
+                <th style="width: 250px;">Memory</th>
+                <th style="width: 250px;">Number of Monitors</th>
+             
+            </tr>
+            <tr>
+                <td> <?php echo $decommissioned['Decommissioned']['Model']; ?></td>
+                <td><?php echo $decommissioned['Decommissioned']['OS']; ?></td> <!--  $comparisonID,$columnID,$modelID,$nameID -->
+                <td><?php echo $decommissioned['Decommissioned']['CPU']?></td>
+                <td> <?php echo $decommissioned['Decommissioned']['Memory'] . " GB"; ?></td>
+                <td> <?php echo $decommissioned['Decommissioned']['NumberOfMonitors']; ?></td>
+               </tr>
+          </table>
+          
+          <table class="table table-striped">
+            <tr>
+                <th style="width: 200px;">IP Address</th>
+                <th style="width: 250px;">MAC Address</th>
+                <th style="width: 250px;">Last Updated</th>
+                <th style="width: 250px;"></th>
+                 <th style="width: 250px;"></th>
+            </tr>
+              <tr>
+                <td><?php echo $decommissioned['Decommissioned']['IPaddress']?></td>
+                 <td><?php echo $decommissioned['Decommissioned']['MACaddress']?></td>
+                 <td><?php echo $this->Time->niceShort($decommissioned['Decommissioned']['LastUpdated']);?></td>
+                  <td></td>
+                  <td></td>
+               </tr>
+          </table> 
+          
+        </div>
+    </div>
+  </div>
+</div>
 
-</table>
+<div class="row">
+  <div class="col-xl-5">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Notes</h6>
+      </div>
+      <div class="card-body">
+        <?php echo $decommissioned['Decommissioned']['notes'];?>
+      </div>
+    </div>
+  </div>
+</div>
 
-<table>
-    <tr>
-        <th style="width: 200px;">Model</th>
-        <th style="width: 250px;">Operating System</th>
-        <th style="width: 250px;">CPU</th>
-        <th style="width: 250px;">Memory</th>
-        <th style="width: 250px;">Number of Monitors</th>
-     
-    </tr>
-	    <tr>
-        <td> <?php echo $decommissioned['Decommissioned']['Model']; ?></td>
-       
-        <td><?php echo $decommissioned['Decommissioned']['OS']; ?></td> <!--  $comparisonID,$columnID,$modelID,$nameID -->
-      
-          <td><?php echo $decommissioned['Decommissioned']['CPU']?></td>
-    
-           <td> <?php echo $decommissioned['Decommissioned']['Memory'] . " GB"; ?></td>
-        
-
-             <td> <?php echo $decommissioned['Decommissioned']['NumberOfMonitors']; ?></td>
-         </tr>
-        
-	
-</table>
-
-<table>
-    <tr>
-        <th style="width: 200px;">IP Address</th>
-        <th style="width: 250px;">MAC Address</th>
- 		<th style="width: 250px;">Last Updated</th>
- 		<th style="width: 250px;"></th>
-     	<th style="width: 250px;"></th>
-     	
-    </tr>
-	    <tr>
-        <td><?php echo $decommissioned['Decommissioned']['IPaddress']?></td>
-         <td><?php echo $decommissioned['Decommissioned']['MACaddress']?></td>
-         <td><?php echo $this->Time->niceShort($decommissioned['Decommissioned']['LastUpdated']);?></td>
-            <td></td>
-            <td></td>
-         
-            
-       </tr>
- </table> 
- 
-
-<table>
-    <tr>
-        <th style="width: 200px;">Wiped Hard Drive</th>
-        <th style="width: 250px;">Recycled</th>
- 		<th style="width: 250px;">Redeployed As</th>
- 		<th style="width: 500px;">Notes</th>
-
-     
-    </tr>
-	<tr>
-        <td><?php echo $decommissioned['Decommissioned']['WipedHD']?></td>
-        <td><?php echo $decommissioned['Decommissioned']['Recycled']?></td>
-        <td><?php echo $decommissioned['Decommissioned']['RedeployedAs'];?></td>
-        <td><?php echo $decommissioned['Decommissioned']['notes'];?></td>    
-    </tr>
- </table> 
  
