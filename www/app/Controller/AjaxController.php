@@ -86,6 +86,7 @@ class AjaxController extends AppController {
 	}
 	
 	function uploadDrivers($id){
+	    $this->layout = 'fancybox';
 		$computer = $this->Computer->find('first',array('conditions'=>array('Computer.id'=>$id)));
 		
 		$this->set('computer',$computer['Computer']);
