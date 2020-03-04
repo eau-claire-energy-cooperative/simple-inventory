@@ -152,9 +152,7 @@ class AdminController extends AppController {
     }
     
     public function deleteLocation($id) {
-	    if ($this->request->is('get')) {
-	        throw new MethodNotAllowedException();
-	    }
+	   
 	    if ($this->Location->delete($id)) {
 	        $this->Flash->success('The entry with id: ' . $id . ' has been deleted.');
 	        $this->redirect(array('action' => 'location'));
