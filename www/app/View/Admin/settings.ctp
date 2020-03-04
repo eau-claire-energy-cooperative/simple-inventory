@@ -27,6 +27,10 @@
 		<td><?php echo $this->Form->select('show_computer_commands',array('true'=>'Yes','false'=>'No'),array('value'=>$settings['show_computer_commands'],'empty'=>false)) ?></td>
 	</tr>
 	<tr>
+    <td>DNS Search Domain</td>
+    <td><?php echo $this->Form->input('search_domain',array('label'=>false,'value'=>$settings['search_domain'])) ?></td>
+  </tr>
+	<tr>
 		<td>Shutdown Computer Message</td>
 		<td><?php echo $this->Form->input('shutdown_message',array('label'=>false,'value'=>$settings['shutdown_message'])) ?></td>
 	</tr>
