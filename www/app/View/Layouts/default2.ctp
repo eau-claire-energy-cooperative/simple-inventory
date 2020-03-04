@@ -84,7 +84,7 @@
 
       <!-- Nav Item Scheduled Tasks -->
       <li class="nav-item">
-        <a class="nav-link" href="<?php echo $this->Html->url('/inventory/commands') ?>">
+        <a class="nav-link" href="<?php echo $this->Html->url('/manage/commands') ?>">
           <i class="far fa-calendar-alt fa-fw"></i>
           <span>Scheduled Tasks</span></a>
       </li>
