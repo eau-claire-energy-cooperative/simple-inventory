@@ -1,82 +1,64 @@
 <?php 
-		echo $this->Html->script("fancybox/jquery.mousewheel-3.0.6.pack.js",false);
-		echo $this->Html->script("fancybox/jquery.fancybox.js",false);
-		echo $this->Html->css('jquery.fancybox.css');
+		echo $this->Html->script("jquery.fancybox.min.js",false);
+    echo $this->Html->script("more_info.js",false);
+		echo $this->Html->css('jquery.fancybox');
 ?>
 
 <script type="text/javascript">
-    $(document).ready(function(){
-    	checkRunning();
-		setInterval(checkRunning,40 * 1000);
-		
-		$(".popup").fancybox({
-		maxWidth	: 600,
-		maxHeight	: 400,
-		fitToView	: false,
-		width		: '70%',
-		height		: '70%',
-		autoSize	: false,
-		closeClick	: false,
-		openEffect	: 'none',
-		closeEffect	: 'none'
-		});
-	});
+function checkRunning(){
+$.getJSON('<?php echo $this->webroot ?>ajax/checkRunning/<?php echo $computer['Computer']['ComputerName'] ?>',function(data){
+  if(data.received == data.transmitted)
+  {
+    if(<?php echo $settings['show_computer_commands']?>)
+    {
+      $('#is_running').html('<a href="#" onClick="shutdown(\'<?php echo $computer['Computer']['ComputerName'] ?>\',false)">Shutdown</a> | <a href="#" onClick="shutdown(\'<?php echo $computer['Computer']['ComputerName'] ?>\',true)">Restart</a>');
+    }
+    else
+    {
+      $('#is_running').html('Running');
+    }
+    $('#is_running').removeClass('text-danger');
+  }
+  else
+  {
+    if(<?php echo $settings['show_computer_commands']?>)
+    {
+      $('#is_running').html('<a href="#" onClick="wol(\'<?php echo $computer['Computer']['MACaddress'] ?>\')">Turn On</a>');
+      $('#is_running').removeClass('text-danger');
+    }
+    else
+    {
+      $('#is_running').html('Not Running');
+      $('#is_running').addClass('text-danger');
+      }
+    }
+  });
+}
 
-	function checkRunning(){
-		$.getJSON('<?php echo $this->webroot ?>ajax/checkRunning/<?php echo $computer['Computer']['ComputerName'] ?>',function(data){
-			if(data.received == data.transmitted)
-			{
-				if(<?php echo $settings['show_computer_commands']?>)
-				{
-					$('#is_running').html('<a href="#" onClick="shutdown(\'<?php echo $computer['Computer']['ComputerName'] ?>\',false)">Shutdown</a> | <a href="#" onClick="shutdown(\'<?php echo $computer['Computer']['ComputerName'] ?>\',true)">Restart</a>');
-				}
-				else
-				{
-					$('#is_running').html('Running');
-				}
-				$('#is_running').removeClass('red');
-			}
-			else
-			{
-				if(<?php echo $settings['show_computer_commands']?>)
-				{
-					$('#is_running').html('<a href="#" onClick="wol(\'<?php echo $computer['Computer']['MACaddress'] ?>\')">Turn On</a>');
-					$('#is_running').removeClass('red');
-				}
-				else
-				{
-					$('#is_running').html('Not Running');
-					$('#is_running').addClass('red');
-				}
-			}
-		});
-	}
+function expandTable(id){
+  
+  $('#' + id).toggle();
+  
+  toggleId = '#' + id + '-toggle';
+  
+  $(toggleId).toggleClass('fa-chevron-circle-down');
+  $(toggleId).toggleClass('fa-chevron-circle-up');
+  
+  return false;
+}
 
-	function expandTable(id){
-		
-		$('#' + id).toggle();
-		
-		toggleId = '#' + id + '-toggle';
-		
-		$(toggleId).toggleClass('fa-chevron-circle-down');
-		$(toggleId).toggleClass('fa-chevron-circle-up');
-		
-		return false;
-	}
-	
-	function shutdown(host,shouldRestart){
-		
-		if(confirm('Shutdown or Restart this computer?'))
-		{
-			$.ajax('<?php echo $this->webroot ?>ajax/shutdown/' + host + '/' + shouldRestart);
-		}
-		return false;
-	}
-	
-	function wol(mac){
-		$.ajax('<?php echo $this->webroot ?>ajax/wol?mac=' + mac);
-	}
-	
+function shutdown(host,shouldRestart){
+  
+  if(confirm('Shutdown or Restart this computer?'))
+  {
+    $.ajax('<?php echo $this->webroot ?>ajax/shutdown/' + host + '/' + shouldRestart);
+  }
+  return false;
+}
+
+function wol(mac){
+  $.ajax('<?php echo $this->webroot ?>ajax/wol?mac=' + mac);
+}
 </script>
 
 <div class="mb-4" align="right">
