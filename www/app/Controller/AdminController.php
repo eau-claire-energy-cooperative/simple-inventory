@@ -62,7 +62,7 @@ class AdminController extends AppController {
 		}
 		
 		$this->set('title_for_layout','Settings');
-		$this->set('settings',$this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value'))));
+
 	}
 	
 	public function settings2($delete = null){
@@ -77,7 +77,7 @@ class AdminController extends AppController {
 		}
 		
 		$this->set('title_for_layout','Settings');
-		$this->set('settings',$this->Setting->find('all',array('order'=>array('Setting.key'))));
+		$this->set('settings_list',$this->Setting->find('all',array('order'=>array('Setting.key'))));
 	}
 	
 	
