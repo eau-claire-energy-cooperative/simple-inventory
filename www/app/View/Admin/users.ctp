@@ -29,11 +29,12 @@
                 <div class="col-md-12">
                   <a href="<?php echo $this->Html->url(array('action' => 'editUser', $aUser['User']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
                   <a href="<?php echo $this->Html->url("/admin/editUser/". $aUser['User']['id'] ."?action=delete") ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
+                </div>
               </div>
             </div>
-          </div>
           <?php echo $this->Form->end(); ?>
-        </div>
+          </div>
+      </div>
     </div>
   </div>
 </div>
