@@ -26,6 +26,11 @@ class AdminController extends AppController {
 		}
 	}
 	
+	function beforeRender(){
+	    $settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
+	    $this->set('settings',$settings);
+	}
+	
 	function index(){
 		$this->set('title_for_layout','Admin');
 	}

@@ -1,25 +1,4 @@
 
-
-<table>
-		
-	<tr>
-		<td></td>
-	</tr>
-	<tr>
-		<td></td>
-	</tr>
-	<tr>
-		<td></td>
-	</tr>
-	<tr>
-		<td></td>
-	</tr>
-	<tr>
-		<td></td>
-	</tr>
-</table>
-
-
 <?php echo $this->Form->create('User',array('url'=>'/admin/editUser')) ?>
 
 <div class="row">
@@ -37,10 +16,14 @@
             <div class="col-md-4">Username: </div>
             <div class="col-md-8"><?php echo $this->Form->input('username',array('label'=>false, 'div'=>false, 'class'=>'form-control'));?></div>
           </div>
+          <?php if($settings['auth_type'] == 'local'): ?>
           <div class="row mb-1">
             <div class="col-md-4">Password: </div>
             <div class="col-md-8"><?php echo $this->Form->input('password',array('label'=>false, 'div'=>false, 'class'=>'form-control')) ?></div>
           </div>
+          <?php else: ?>
+           <?php echo $this->Form->input('password',array('type'=>'hidden')); ?>
+          <?php endif; ?>
           <div class="row mb-1">
             <div class="col-md-4">Email: </div>
             <div class="col-md-8"><?php echo $this->Form->input('email',array('label'=>false, 'div'=>false, 'class'=>'form-control'));?></div>
