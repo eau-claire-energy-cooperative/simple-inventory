@@ -57,6 +57,8 @@ class AdminController extends AppController {
 				$this->Setting->query(sprintf('update settings set settings.value = "%s" where settings.key = "%s"',$value,$key));
 			}
 			
+			$this->Flash->success('Settings Saved');
+			
 		}
 		
 		$this->set('title_for_layout','Settings');
