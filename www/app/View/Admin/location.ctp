@@ -40,7 +40,7 @@
   					   <span class="btn btn-success btn-sm shadow-sm">Default</span>	
   				  <?php endif; ?>
   				    <a href="<?php echo $this->Html->url(array('action' => 'editLocation', $post['Location']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
-  				    <a href="<?php echo $this->Html->url(array('action' => 'deleteLocation', $post['Location']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-location"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
+  				    <a data-title="Delete Location" href="<?php echo $this->Html->url(array('action' => 'deleteLocation', $post['Location']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-location"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
           </td>
       </tr>
       <?php endforeach; ?>
