@@ -31,7 +31,7 @@
 		<td style="word-wrap: break-word;min-width: 160px;max-width: 500px;"><?php echo $aSetting['Setting']['value'] ?></td>
 		<td>
 		  <a href="<?php echo $this->Html->url("/admin/edit_setting/". $aSetting['Setting']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
-      <a data-title="Delete Setting" href="<?php echo $this->Html->url("/admin/settings/delete?id=". $aSetting['Setting']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-setting"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>  
+      <a data-title="Delete Setting" href="<?php echo $this->Html->url("/admin/settings2/delete?id=". $aSetting['Setting']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-setting"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>  
 		</td>
 	</tr>
 	<?php endforeach; ?>

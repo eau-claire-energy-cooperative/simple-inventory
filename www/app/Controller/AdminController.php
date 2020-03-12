@@ -42,7 +42,7 @@ class AdminController extends AppController {
 		$this->set('inventory',$this->Computer->find('list',array('fields'=>array('Computer.ComputerName','Computer.id'))));
 	}
 	
-	public function settings(){
+	public function settings($action = null){
 		if($this->request->is('post'))
 		{
 			foreach(array_keys($this->data['Setting']) as $key)
@@ -72,7 +72,7 @@ class AdminController extends AppController {
 			//delete the id given
 			$id = $this->params['url']['id'];
 			$this->Setting->delete($id);
-			$this->Session->setFlash('Your entry has been deleted.');
+			$this->Flash->success('Setting deleted');
 			
 		}
 		
