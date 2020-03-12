@@ -96,12 +96,12 @@ class AdminController extends AppController {
 		else 
 		{
 			if ($this->Setting->save($this->request->data)) {
-            	$this->Flash->success('Your entry has been updated.');
+            	$this->Flash->success('Setting saved');
             	$this->redirect(array('action' => 'settings'));
         	} 
         	else 
         	{
-            	$this->Flash->error('Unable to update your entry.');
+            	$this->Flash->error('Unable to update the setting');
         	}	
 		}
 	}
