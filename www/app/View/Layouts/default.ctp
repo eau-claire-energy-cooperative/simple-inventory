@@ -44,7 +44,7 @@
       <hr class="sidebar-divider my-0">
 
       <!-- Nav Item - Current Inventory -->
-      <li class="nav-item active">
+      <li class="nav-item <?php echo $this->Menu->getActiveMenu('inventory',$active_menu) ?>">
         <a class="nav-link" href="<?php echo $this->Html->url('/') ?>">
           <i class="fas fa-fw fa-table"></i>
           <span>Current Inventory</span></a>
@@ -54,7 +54,7 @@
       <hr class="sidebar-divider">
 
       <!-- Nav Item - Manage Collapse Menu -->
-      <li class="nav-item">
+      <li class="nav-item <?php echo $this->Menu->getActiveMenu('manage',$active_menu) ?>">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-wrench"></i>
           <span>Manage</span>
@@ -72,7 +72,7 @@
       </li>
 
       <!-- Nav Item - decom -->
-      <li class="nav-item">
+      <li class="nav-item <?php echo $this->Menu->getActiveMenu('decommission',$active_menu) ?>">
         <a class="nav-link" href="<?php echo $this->Html->url('/inventory/decommission') ?>">
           <i class="fas fa-fw fa-ban"></i>
           <span>Decommissioned</span></a>
@@ -83,14 +83,14 @@
       <hr class="sidebar-divider">
 
       <!-- Nav Item Scheduled Tasks -->
-      <li class="nav-item">
+      <li class="nav-item <?php echo $this->Menu->getActiveMenu('schedule',$active_menu) ?>">
         <a class="nav-link" href="<?php echo $this->Html->url('/manage/commands') ?>">
           <i class="far fa-calendar-alt fa-fw"></i>
           <span>Scheduled Tasks</span></a>
       </li>
 
       <!-- Nav Item - Tools Collapse Menu -->
-      <li class="nav-item">
+      <li class="nav-item <?php echo $this->Menu->getActiveMenu('admin',$active_menu) ?>">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
           <i class="fas fa-fw fa-cog"></i>
           <span>Tools</span>
@@ -170,7 +170,7 @@
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-3 d-none d-lg-inline text-gray-600 small"><?php echo $this->Session->read('User.name') ?></span>
-                <?php echo $this->Html->image($this->ProfileImage->getImage($this->Session->read('User.username')),array('class'=>'img-profile rounded-circle')) ?>
+                <?php echo $this->Html->image($this->Menu->getImage($this->Session->read('User.username')),array('class'=>'img-profile rounded-circle')) ?>
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">

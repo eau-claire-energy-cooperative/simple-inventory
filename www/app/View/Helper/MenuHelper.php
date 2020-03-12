@@ -1,6 +1,6 @@
 <?php
 
-class ProfileImageHelper extends AppHelper {
+class MenuHelper extends AppHelper {
 		
 	function getImage($username){
 		App::uses('HtmlHelper', 'View/Helper');
@@ -20,6 +20,22 @@ class ProfileImageHelper extends AppHelper {
 		}
 		
 		return $result;
+	}
+	
+	function getActiveMenu($name, $active){
+	    $result = '';
+
+	    if(trim($active) == '')
+	    {
+	        $active = $this->request->params['controller'];
+	    }
+	    
+	    if($name == $active)
+	    {
+	        $result = 'active';
+	    }
+	    
+	    return $result;
 	}
 }
 ?>

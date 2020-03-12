@@ -74,6 +74,7 @@ class ManageController extends AppController {
 	}
 	
 	function commands(){
+	    $this->set('active_menu', 'schedule');
 	    $this->set('title_for_layout','Scheduled Tasks');
 	    
 	    //get all of the commands that can be scheduled
