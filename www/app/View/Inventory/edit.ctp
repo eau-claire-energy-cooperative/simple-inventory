@@ -1,7 +1,7 @@
 <?php echo $this->Form->create('Computer', array('url' => '/Inventory/edit')); ?>
 <?php echo $this->Form->input('id', array('type' => 'hidden'));?>
 <div class="mb-4" align="right">
-      <?php echo $this->Form->Submit('Update',array('class'=>'btn btn-primary')) ?>
+      <?php echo $this->Form->Submit('Update',array('class'=>'d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2')) ?>
 </div>
 
 <div class="row">

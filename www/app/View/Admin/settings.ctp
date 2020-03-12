@@ -1,6 +1,6 @@
 <?php echo $this->Form->create('Setting',array('url'=>'/admin/settings')) ?>
 <div align="right" class="mb-2">
-	<?php echo $this->Form->Submit('Update',array('class'=>'btn btn-primary')) ?>
+	<?php echo $this->Form->Submit('Update',array('class'=>'d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2')) ?>
 </div>
 <div class="row">
   <div class="col-xl-12">
@@ -152,5 +152,5 @@
 </div>
 
 <div align="right" class="mb-2">
-  <?php echo $this->Form->Submit('Update',array('class'=>'btn btn-primary')) ?>
+  <?php echo $this->Form->Submit('Update',array('class'=>'d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2')) ?>
 </div>
