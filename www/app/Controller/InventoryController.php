@@ -4,7 +4,6 @@ class InventoryController extends AppController {
     var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace','AttributeDisplay','ProfileImage');
     var $components = array('Session','Ldap','FileUpload','Paginator','Flash');
 	public $uses = array('Computer','Disk','Location', 'Programs', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User','RestrictedProgram');
-	var $layout = 'default2';
 	
 	public function beforeFilter(){
 		//check if we are using a login method
