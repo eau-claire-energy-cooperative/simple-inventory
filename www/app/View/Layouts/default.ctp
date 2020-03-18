@@ -14,6 +14,7 @@
   <?php
 	
     echo $this->Html->css('/fontawesome/css/all.min');
+    echo $this->Html->css('jquery.fancybox');
     echo $this->Html->css('sb-admin-2');
 
 		echo $this->fetch('meta');
@@ -170,10 +171,14 @@
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-3 d-none d-lg-inline text-gray-600 small"><?php echo $this->Session->read('User.name') ?></span>
-                <?php echo $this->Html->image($this->Menu->getImage($this->Session->read('User.username')),array('class'=>'img-profile rounded-circle')) ?>
+                <?php echo $this->Html->image($this->Menu->getProfileImage($this->Session->read('User.gravatar')),array('class'=>'img-profile rounded-circle')) ?>
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/setProfileImage/') ?>" class="dropdown-item fancybox.ajax">
+                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Set Gravatar
+                </a>
                 <a class="dropdown-item" href="<?php echo $this->Html->url('/inventory/logout') ?>">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
@@ -230,6 +235,7 @@
     echo $this->Html->script("bootstrap.bundle.min.js");
     echo $this->Html->script("jquery.easing.min.js");
     echo $this->Html->script("sb-admin-2.min.js");
+    echo $this->Html->script("jquery.fancybox.min.js",false);
     
     echo $this->fetch('script');
 ?>

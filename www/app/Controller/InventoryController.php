@@ -25,9 +25,11 @@ class InventoryController extends AppController {
 				$this->redirect(array('action'=>'login'));
 			}
 		}
+
 	}
 	
-	function beforeRender(){
+	public function beforeRender(){
+	    parent::beforeRender();
 		$settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
 		$this->set('settings',$settings);
 	}
@@ -59,6 +61,7 @@ class InventoryController extends AppController {
 						$this->Session->write('authenticated','true');
 						$this->Session->write('User.username', $aUser['User']['username']);
 						$this->Session->write('User.name', $aUser['User']['name']);
+						$this->Session->write('User.gravatar', $aUser['User']['gravatar']);
 						$this->redirect('/');
 					}
 					else
@@ -88,6 +91,7 @@ class InventoryController extends AppController {
 						$this->Session->write('authenticated','true');
 						$this->Session->write('User.username', $aUser['User']['username']);
 						$this->Session->write('User.name', $aUser['User']['name']);
+						$this->Session->write('User.gravatar', $aUser['User']['gravatar']);
 						$this->redirect('/');
 					}
 					else
@@ -464,6 +468,28 @@ class InventoryController extends AppController {
 		}
 	
 		$this->redirect('/inventory/moreInfo/' . $this->data['File']['id']);
+	}
+	
+	function set_profile_image(){
+	    
+	    //get the user
+	    $aUser = $this->User->find('first',array('conditions'=>array('User.username'=>$this->Session->read('User.username'))));
+	    
+	    if($aUser)
+	    {
+	        
+	        $aUser['User']['gravatar'] = $this->data['Gravatar']['username'];
+	        $this->Session->write('User.gravatar', $this->data['Gravatar']['username']);
+	        $this->User->save($aUser);
+	        
+	        $this->Flash->success('Profile image set');
+	    }
+	    else
+	    {
+	        $this->Flash->error('Problem setting profile image');
+	    }
+	   
+	    $this->redirect('/inventory/');
 	}
 	
 	function loginHistory($id){

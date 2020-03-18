@@ -1,7 +1,5 @@
 <?php 
-		echo $this->Html->script("jquery.fancybox.min.js",false);
     echo $this->Html->script("jquery-confirm.min.js",false);
-		echo $this->Html->css('jquery.fancybox', array('inline'=>false));
     echo $this->Html->css('jquery-confirm.min', array('inline'=>false));
     
     //script to load the datatable

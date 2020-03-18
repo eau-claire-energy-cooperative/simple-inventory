@@ -4,7 +4,7 @@ class AjaxController extends AppController {
     var $components = array('Session','Ping');
     var $helpers = array('Js');
 	var $layout = '';
-	var $uses = array('Computer','Setting','Command','RestrictedProgram');
+	var $uses = array('Computer','Setting','Command','RestrictedProgram','User');
 
 	public function beforeFilter(){
 	    //check if we are using a login method
@@ -94,6 +94,15 @@ class AjaxController extends AppController {
 		
 		$this->set('computer',$computer['Computer']);
 		$this->set('id',$id);
+	}
+	
+	function setProfileImage(){
+	    $this->layout = 'fancybox';
+	    
+	    //get the current url
+	    $aUser = $this->User->find('first',array('conditions'=>array('User.username'=>$this->Session->read('User.username'))));
+
+	    $this->set('username', $aUser['User']['gravatar']);
 	}
 }
 ?>

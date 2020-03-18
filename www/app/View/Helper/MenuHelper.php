@@ -2,21 +2,13 @@
 
 class MenuHelper extends AppHelper {
 		
-	function getImage($username){
+	function getProfileImage($gravatar_address){
 		App::uses('HtmlHelper', 'View/Helper');
-		$result = '/img/profile/';
+		$result = '/img/profile/user-profile-smile.svg';
 		
-		//massage the name a bit
-		$username = strtolower($username);
-		$username = str_replace(' ', '_',$username);
-		
-		if(file_exists(WWW_ROOT . '/img/profile/' . $username . '.jpg'))
+		if($gravatar_address != null && trim($gravatar_address) != "")
 		{
-		    $result = $result . $username . '.jpg';
-		}
-		else
-		{
-		    $result = $result . 'user-profile-smile.svg';
+		  $result = 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($gravatar_address))) . "?d=mp";
 		}
 		
 		return $result;
