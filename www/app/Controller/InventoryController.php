@@ -136,18 +136,22 @@ class InventoryController extends AppController {
 		$this->set('restricted_programs',$this->RestrictedProgram->find('list',array('fields'=>array('RestrictedProgram.name','RestrictedProgram.id'))));
 		
 		//figure out what attributes to display
-		$validAttributes = array("ComputerName"=>"Computer Name","Location"=>"Location","CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID","AppUpdates"=>"Application Updates","Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors","IPAddress"=>"IP Address","MACAddress"=>"MAC Address","DriveSpace"=>"Drive Space","LastUpdated"=>"Last Updated","Status"=>"Status");
+		$generalAttributes = array("ComputerName"=>"Computer Name","Location"=>"Location","CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID","LastUpdated"=>"Last Updated");
+		$hardwareAttributes = array("Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors","DriveSpace"=>"Drive Space","AppUpdates"=>"Application Updates");
+		$networkAttributes = array("IPAddress"=>"IP Address","MACAddress"=>"MAC Address");
+		
 		$displaySetting = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'display_attributes')));
 		$displayAttributes = explode(",",$displaySetting['Setting']['value']);
 		$colCount = 0; //current number of columns 
 		$tables = array();
 		$currentTable = array();
 		
-		foreach(array_keys($validAttributes) as $aKey){
-			if(in_array($aKey, $displayAttributes))
+		//general information
+		foreach(array_keys($generalAttributes) as $aKey){
+		    if(in_array($aKey, $displayAttributes))
 			{
 				if($colCount >= 5){
-					$tables[] = $currentTable;
+					$tables['general'][] = $currentTable;
 					$currentTable = array();
 					$colCount = 0;
 				}
@@ -156,10 +160,48 @@ class InventoryController extends AppController {
 				$colCount ++;
 			}	
 		} 
-
+		$tables['general'][] = $currentTable;
+		$currentTable = array();
+        $colCount = 0;
+        
+        //hardware
+        foreach(array_keys($hardwareAttributes) as $aKey){
+            if(in_array($aKey, $displayAttributes))
+            {
+                if($colCount >= 5){
+                    $tables['hardware'][] = $currentTable;
+                    $currentTable = array();
+                    $colCount = 0;
+                }
+                
+                $currentTable[] = $aKey;
+                $colCount ++;
+            }
+        }
+        $tables['hardware'][] = $currentTable;
+        
+        $currentTable = array();
+        $colCount = 0;
+        
+        //network
+        foreach(array_keys($networkAttributes) as $aKey){
+            if(in_array($aKey, $displayAttributes))
+            {
+                if($colCount >= 5){
+                    $tables['network'][] = $currentTable;
+                    $currentTable = array();
+                    $colCount = 0;
+                }
+                
+                $currentTable[] = $aKey;
+                $colCount ++;
+            }
+        }
+        $tables['network'][] = $currentTable;
+		
+		
 		//save the last table
-		$tables[] = $currentTable;
-		$this->set('validAttributes',$validAttributes);
+		$this->set('validAttributes',$generalAttributes + $hardwareAttributes + $networkAttributes);
 		$this->set('tables',$tables);
     }
     

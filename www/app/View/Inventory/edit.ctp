@@ -38,7 +38,7 @@
 
 <div class="row">
   <div class="col-xl-12">
-    <div class="card border-left-primary shadow mb-4">
+    <div class="card border-left-warning shadow mb-4">
         <div class="card-header py-3">
           <h6 class="m-0 font-weight-bold text-primary">Hardware Information</h6>
         </div>
@@ -70,7 +70,7 @@
 
 <div class="row">
   <div class="col-xl-12">
-    <div class="card border-left-primary shadow mb-4">
+    <div class="card border-left-info shadow mb-4">
         <div class="card-header py-3">
           <h6 class="m-0 font-weight-bold text-primary">Network Information</h6>
         </div>

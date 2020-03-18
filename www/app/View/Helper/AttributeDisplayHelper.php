@@ -76,10 +76,7 @@ class AttributeDisplayHelper extends AppHelper {
 		{
 			$result = $this->Time->niceShort($computer['Computer']['LastUpdated']);
 		}
-		else if ($attribute == 'Status')
-		{
-			$result = '<p id="is_running" class="red">Not Running</p>';
-		}
+		
 		return $result;
 	}
 }

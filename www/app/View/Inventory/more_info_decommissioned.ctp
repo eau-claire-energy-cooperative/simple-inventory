@@ -54,12 +54,12 @@
   <div class="col-xl-12">
     <div class="card border-left-primary shadow mb-4">
         <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">Computer Specs</h6>
+          <h6 class="m-0 font-weight-bold text-primary">General Information</h6>
         </div>
         <div class="card-body">
-          
-          <table class="table table-striped">
-            <tr>
+          <div class="row">
+            <table class="table table-striped">
+              <tr>
                 <th style="width: 200px;">Computer Name</th>
                 <th style="width: 250px;">Location</th>
                 <th style="width: 250px;">Current User</th>
@@ -73,9 +73,22 @@
                   <td><?php echo $decommissioned['Decommissioned']['SerialNumber']?></td>
                   <td><?php echo $decommissioned['Decommissioned']['AssetId']?> </td>        
               </tr>          
-          </table>  
-          
-          <table class="table table-striped">
+            </table>
+          </div>
+        </div>
+      </div>    
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card border-left-warning shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Hardware Information</h6>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <table class="table table-striped">
             <tr>
                 <th style="width: 200px;">Model</th>
                 <th style="width: 250px;">Operating System</th>
@@ -92,8 +105,21 @@
                 <td> <?php echo $decommissioned['Decommissioned']['NumberOfMonitors']; ?></td>
                </tr>
           </table>
-          
-          <table class="table table-striped">
+          </div>
+        </div>
+      </div>    
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card border-left-info shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Network Information</h6>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <table class="table table-striped">
             <tr>
                 <th style="width: 200px;">IP Address</th>
                 <th style="width: 250px;">MAC Address</th>
@@ -108,16 +134,16 @@
                   <td></td>
                   <td></td>
                </tr>
-          </table> 
-          
+            </table> 
+          </div>
         </div>
-    </div>
+      </div>    
   </div>
 </div>
 
 <div class="row">
   <div class="col-xl-5">
-    <div class="card shadow mb-4">
+    <div class="card border-left-dark shadow mb-4">
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Notes</h6>
       </div>

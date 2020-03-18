@@ -28,7 +28,7 @@ $.getJSON('<?php echo $this->webroot ?>ajax/checkRunning/<?php echo $computer['C
   {
     if(<?php echo $settings['show_computer_commands']?>)
     {
-      $('#is_running').html('<a href="#" onClick="shutdown(\'<?php echo $computer['Computer']['ComputerName'] ?>\',false)">Shutdown</a> | <a href="#" onClick="shutdown(\'<?php echo $computer['Computer']['ComputerName'] ?>\',true)">Restart</a>');
+      $('#is_running').html('<a href="#" onClick="shutdown(\'<?php echo $computer['Computer']['ComputerName'] ?>\',false)">Shutdown</a> <br> <a href="#" onClick="shutdown(\'<?php echo $computer['Computer']['ComputerName'] ?>\',true)">Restart</a>');
     }
     else
     {
@@ -77,28 +77,45 @@ function wol(mac){
   $.ajax('<?php echo $this->webroot ?>ajax/wol?mac=' + mac);
 }
 </script>
-
-<div class="mb-4" align="right">
-  <a href="<?php echo $this->Html->url(array('action' => 'edit', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
-  <a href="<?php echo $this->Html->url(array('action' => 'confirmDecommission', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mr-2"><i class="fas fa-ban fa-sm text-white-50"></i> Decommission</a>
-  <a href="<?php echo $this->Html->url(array('action' => 'delete', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-computer"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
-  <?php if(file_exists(WWW_ROOT . '/drivers/' . str_replace(' ','_',$computer['Computer']['Model']) . '.zip')): ?>
-    <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url("/drivers/" . str_replace(' ','_',$computer['Computer']['Model']) . ".zip") ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-download fa-sm text-white-50"></i> Download Drivers</a>
-  <?php else: ?>
-    <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/uploadDrivers/' . $computer['Computer']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2 popup fancybox.ajax"><i class="fas fa-upload fa-sm text-white-50"></i> Upload Drivers</a>
-  <?php endif; ?>
+<div class="row">
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-danger shadow h-500 py-1">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Current Status</div>
+            <div class="h6 mb-0 font-weight-bold text-gray-800"><p id="is_running" class="red">Not Running</p></div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-info-circle fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-9 col-md-6 mb-4" align="right">
+    <a href="<?php echo $this->Html->url(array('action' => 'edit', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
+    <a href="<?php echo $this->Html->url(array('action' => 'confirmDecommission', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mr-2"><i class="fas fa-ban fa-sm text-white-50"></i> Decommission</a>
+    <a href="<?php echo $this->Html->url(array('action' => 'delete', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-computer"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
+    <?php if(file_exists(WWW_ROOT . '/drivers/' . str_replace(' ','_',$computer['Computer']['Model']) . '.zip')): ?>
+      <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url("/drivers/" . str_replace(' ','_',$computer['Computer']['Model']) . ".zip") ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-download fa-sm text-white-50"></i> Download Drivers</a>
+    <?php else: ?>
+      <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/uploadDrivers/' . $computer['Computer']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2 popup fancybox.ajax"><i class="fas fa-upload fa-sm text-white-50"></i> Upload Drivers</a>
+    <?php endif; ?>
+  </div>
 </div>
 
+<?php if(array_key_exists('general', $tables)): ?>
 <div class="row">
   <div class="col-xl-12">
     <div class="card border-left-primary shadow mb-4">
         <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">Computer Specs</h6>
+          <h6 class="m-0 font-weight-bold text-primary">General Information</h6>
         </div>
         <div class="card-body">
           <div class="row">
-            <?php foreach($tables as $aTable): ?>
             <table class="table table-striped">
+              <?php foreach($tables['general'] as $aTable): ?>
               <tr>
                 <?php foreach($aTable as $attribute): ?>
                   <th style="width: 250px;"><?php echo $validAttributes[$attribute] ?></th>
@@ -121,18 +138,105 @@ function wol(mac){
                   <?php $tableCount ++; ?>
                 <?php endwhile; ?>
               </tr>
+              <?php endforeach; ?>
             </table>
-            <?php endforeach; ?>
           </div>
         </div>
       </div>    
   </div>
 </div>
+<?php endif; ?>
+
+<?php if(array_key_exists('hardware', $tables)): ?>
+<?php $tableCount = 0; ?>
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card border-left-warning shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Hardware Information</h6>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <table class="table table-striped">
+              <?php foreach($tables['hardware'] as $aTable): ?>
+              <tr>
+                <?php foreach($aTable as $attribute): ?>
+                  <th style="width: 250px;"><?php echo $validAttributes[$attribute] ?></th>
+                <?php endforeach; ?>
+                <?php
+                  $tableCount = count($aTable); 
+                  while($tableCount < 5): ?>
+                  <th style="width: 250px;"></th>
+                  <?php $tableCount ++; ?>
+                <?php endwhile; ?>
+              </tr>
+              <tr>
+                <?php foreach($aTable as $attribute): ?>
+                  <td><?php echo $this->AttributeDisplay->displayAttribute($attribute,$computer)?></td>
+                <?php endforeach; ?>
+                <?php
+                  $tableCount = count($aTable); 
+                  while($tableCount < 5): ?>
+                  <td></td>
+                  <?php $tableCount ++; ?>
+                <?php endwhile; ?>
+              </tr>
+              <?php endforeach; ?>
+            </table>
+          </div>
+        </div>
+      </div>    
+  </div>
+</div>
+<?php endif; ?>
+
+<?php if(array_key_exists('network', $tables)): ?>
+<?php $tableCount = 0; ?>
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card border-left-info shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Network Information</h6>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <table class="table table-striped">
+              <?php foreach($tables['network'] as $aTable): ?>
+              <tr>
+                <?php foreach($aTable as $attribute): ?>
+                  <th style="width: 250px;"><?php echo $validAttributes[$attribute] ?></th>
+                <?php endforeach; ?>
+                <?php
+                  $tableCount = count($aTable); 
+                  while($tableCount < 5): ?>
+                  <th style="width: 250px;"></th>
+                  <?php $tableCount ++; ?>
+                <?php endwhile; ?>
+              </tr>
+              <tr>
+                <?php foreach($aTable as $attribute): ?>
+                  <td><?php echo $this->AttributeDisplay->displayAttribute($attribute,$computer)?></td>
+                <?php endforeach; ?>
+                <?php
+                  $tableCount = count($aTable); 
+                  while($tableCount < 5): ?>
+                  <td></td>
+                  <?php $tableCount ++; ?>
+                <?php endwhile; ?>
+              </tr>
+              <?php endforeach; ?>
+            </table>
+          </div>
+        </div>
+      </div>    
+  </div>
+</div>
+<?php endif; ?>
 
 <div class="row">
   <?php if(count($computer['License']) > 0): ?>
   <div class="col-xl-7">
-    <div class="card shadow mb-4">
+    <div class="card border-left-dark shadow mb-4">
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Licenses</h6>
       </div>
@@ -149,7 +253,7 @@ function wol(mac){
   <?php endif; ?>
   <?php if($computer['Computer']['notes'] != ''): ?>
   <div class="col-xl-5">
-    <div class="card shadow mb-4">
+    <div class="card border-left-dark shadow mb-4">
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Notes</h6>
       </div>
