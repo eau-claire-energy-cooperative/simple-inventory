@@ -31,6 +31,7 @@ class SearchController extends AppController {
 	}
 	
 	function beforeRender(){
+	    parent::beforeRender();
 		$this->set('locations',$this->Location->find('list',array('fields'=>array('Location.id','Location.location'))));
 	}
 	

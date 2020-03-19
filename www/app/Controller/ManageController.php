@@ -25,6 +25,12 @@ class ManageController extends AppController {
 	    }
 	}
 	
+	public function beforeRender(){
+	    parent::beforeRender();
+	    $settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
+	    $this->set('settings',$settings);
+	}
+	
 	function licenses(){
 	    $this->set('title_for_layout', 'Program Licenses');
 	    
@@ -34,12 +40,12 @@ class ManageController extends AppController {
 	        {
 	            $this->License->query('update licenses set comp_id = ' . $this->data['MoveLicense']['computer'] . ' where id=' . $this->data['MoveLicense']['license_id']);
 	            
-	            $this->Session->setFlash('License Moved');
+	            $this->Flash->success('License Moved');
 	        }
 	        else
 	        {
 	            $this->License->save($this->data['License']);
-	            $this->Session->setFlash('License Added');
+	            $this->Flash->success('License Added');
 	        }
 	    }
 	    
@@ -50,12 +56,9 @@ class ManageController extends AppController {
 	}
 	
 	function deleteLicense($id){
-	    if ($this->request->is('get')) {
-	        throw new MethodNotAllowedException();
-	    }
 	    
 	    if ($this->License->delete($id)) {
-	        $this->Session->setFlash('License Deleted');
+	        $this->Flash->success('License Deleted');
 	        $this->redirect(array('action' => 'licenses'));
 	    }
 	}
@@ -72,6 +75,7 @@ class ManageController extends AppController {
 	}
 	
 	function commands(){
+	    $this->set('active_menu', 'schedule');
 	    $this->set('title_for_layout','Scheduled Tasks');
 	    
 	    //get all of the commands that can be scheduled
@@ -109,7 +113,7 @@ class ManageController extends AppController {
 	        $this->Schedule->set('parameters',$schedule_params);
 	        $this->Schedule->save();
 	        
-	        $this->Session->setFlash('Schedule Created');
+	        $this->Flash->success('Schedule Created');
 	    }
 	    else
 	    {
@@ -117,7 +121,7 @@ class ManageController extends AppController {
 	        {
 	            $this->Schedule->delete($id);
 	            
-	            $this->Session->setFlash('Schedule Removed');
+	            $this->Flash->success('Schedule Removed');
 	        }
 	    }
 	    

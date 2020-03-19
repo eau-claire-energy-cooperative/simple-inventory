@@ -6,25 +6,29 @@
 	}
 ?>
 
-<h2>Setup Command '<?php echo $command['Command']['name']; ?>'</h2>
+<h1 class="h3 mb-2 text-gray-800">Setup Command '<?php echo $command['Command']['name']; ?>'</h1>
 <p><?php echo $command['Command']['description'] ?></p>
 <?php echo $this->Form->create('Schedule',array('url'=>'/manage/schedule')) ?>
 <?php echo $this->Form->hidden('command_id',array('value'=>$command['Command']['id'])); ?>
 <?php echo $this->Form->hidden('parameter_list',array('value'=>$command['Command']['parameters'])); ?>
-<table>
-	<tr>
-		<td><h3>Schedule: </h3></td>
-		<td><?php echo $this->Form->input('schedule',array('label'=>false)) ?></td>
-	</tr>
-	<?php
-		if(count($parameters) != 0): 
-			foreach($parameters as $param): ?>
-	<tr>
-		<td><h3><?php echo $param ?>:</h3></td>
-		<td><?php echo $this->Form->input('param_' . $param,array('label'=>false)) ?></td>
-	</tr>
-	<?php endforeach;
-		endif; ?>
-</table>
+<div class="row mb-2">
+  <div class="col-sm-4">Schedule: </div>
+  <div class="col-sm-8"><?php echo $this->Form->input('schedule',array('label'=>false,'div'=>false,'class'=>'form-control')) ?></div>
+</div>
+<?php
+    if(count($parameters) != 0): 
+      foreach($parameters as $param): ?>
+<div class="row">
+  <div class="col-sm-4"><?php echo $param ?>:</div>
+  <div class="col-sm-8"><?php echo $this->Form->input('param_' . $param,array('label'=>false, 'div'=>false, 'class'=>'form-control')) ?></div>
+</div>
+<?php endforeach;
+    endif; ?>
 
-<div align="right"><?php echo $this->Form->end('Create') ?></div>
+
+<div class="row">
+  <div class="col-sm-8"></div>
+  <div class="col-sm-4"><?php echo $this->Form->submit('Create',array('class'=>'btn btn-primary btn-user btn-block')) ?></div>
+</div>
+
+<?php echo $this->Form->end() ?>

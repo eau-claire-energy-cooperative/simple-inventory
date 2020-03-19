@@ -275,6 +275,7 @@ class AppSchema extends CakeSchema {
                 'username' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
                 'password' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
                 'email' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+                'gravatar' => array('type' => 'string', 'null' => false, 'default' => '', 'length' => 100, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
                 'send_email' => array('type' => 'string', 'null' => false, 'default' => 'false', 'length' => 10, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
                 'indexes' => array(
                         'PRIMARY' => array('column' => 'id', 'unique' => 1)

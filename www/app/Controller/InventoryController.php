@@ -1,8 +1,8 @@
 <?php
 	
 class InventoryController extends AppController {
-    var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace','AttributeDisplay');
-    var $components = array('Session','Ldap','FileUpload','Paginator');
+    var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace','AttributeDisplay','Menu');
+    var $components = array('Session','Ldap','FileUpload','Paginator','Flash');
 	public $uses = array('Computer','Disk','Location', 'Programs', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User','RestrictedProgram');
 	
 	public function beforeFilter(){
@@ -15,6 +15,8 @@ class InventoryController extends AppController {
 			{
 				//we aren't authenticating, just keep moving
 				$this->Session->write('authenticated','true');
+				$this->Session->write('User.username', 'admin');
+				$this->Session->write('User.name', 'Admin User');
 			}
 			//check, we may already be trying to go to the login page
 			else if($this->action != 'login')
@@ -23,9 +25,11 @@ class InventoryController extends AppController {
 				$this->redirect(array('action'=>'login'));
 			}
 		}
+
 	}
 	
-	function beforeRender(){
+	public function beforeRender(){
+	    parent::beforeRender();
 		$settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
 		$this->set('settings',$settings);
 	}
@@ -36,6 +40,7 @@ class InventoryController extends AppController {
 
 	public function login(){
 		$this->set('title_for_layout','Login');
+		$this->layout = 'login';
 		
 		if ($this->request->is('post')) 
 		{
@@ -54,16 +59,19 @@ class InventoryController extends AppController {
 					{
 						//success!
 						$this->Session->write('authenticated','true');
+						$this->Session->write('User.username', $aUser['User']['username']);
+						$this->Session->write('User.name', $aUser['User']['name']);
+						$this->Session->write('User.gravatar', $aUser['User']['gravatar']);
 						$this->redirect('/');
 					}
 					else
 					{
-						$this->Session->setFlash('Incorrect Password');
+						$this->Flash->error('Incorrect Password');
 					}
 				}
 				else
 				{
-					$this->Session->setFlash('Incorrect Username');
+					$this->Flash->error('Incorrect Username');
 				}
 			}
 			else if($settings['auth_type'] == 'ldap')
@@ -81,16 +89,19 @@ class InventoryController extends AppController {
 					{
 						//success!
 						$this->Session->write('authenticated','true');
+						$this->Session->write('User.username', $aUser['User']['username']);
+						$this->Session->write('User.name', $aUser['User']['name']);
+						$this->Session->write('User.gravatar', $aUser['User']['gravatar']);
 						$this->redirect('/');
 					}
 					else
 					{
-						$this->Session->setFlash('Incorrect Username/Password');
+						$this->Flash->error('Incorrect Username/Password');
 					}
 				}
 				else
 				{
-					$this->Session->setFlash('Incorrect Username/Password');
+					$this->Flash->error('Incorrect Username/Password');
 				}
 			}
 		}
@@ -125,34 +136,27 @@ class InventoryController extends AppController {
 		$this->set('restricted_programs',$this->RestrictedProgram->find('list',array('fields'=>array('RestrictedProgram.name','RestrictedProgram.id'))));
 		
 		//figure out what attributes to display
-		$validAttributes = array("ComputerName"=>"Computer Name","Location"=>"Location","CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID","AppUpdates"=>"Application Updates","Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors","IPAddress"=>"IP Address","MACAddress"=>"MAC Address","DriveSpace"=>"Drive Space","LastUpdated"=>"Last Updated","Status"=>"Status");
+		$generalAttributes = array("ComputerName"=>"Computer Name","Location"=>"Location","CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID","LastUpdated"=>"Last Updated");
+		$hardwareAttributes = array("Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors","DriveSpace"=>"Drive Space","AppUpdates"=>"Application Updates");
+		$networkAttributes = array("IPAddress"=>"IP Address","MACAddress"=>"MAC Address");
+		
 		$displaySetting = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'display_attributes')));
 		$displayAttributes = explode(",",$displaySetting['Setting']['value']);
-		$colCount = 0; //current number of columns 
 		$tables = array();
-		$currentTable = array();
 		
-		foreach(array_keys($validAttributes) as $aKey){
-			if(in_array($aKey, $displayAttributes))
-			{
-				if($colCount >= 5){
-					$tables[] = $currentTable;
-					$currentTable = array();
-					$colCount = 0;
-				}
+        //build the tables
+		$tables['general'] = $this->_processDisplayTable($generalAttributes, $displayAttributes);
+        $tables['hardware'] = $this->_processDisplayTable($hardwareAttributes, $displayAttributes);
+        $tables['network'] = $this->_processDisplayTable($networkAttributes, $displayAttributes);
+        
 		
-				$currentTable[] = $aKey;
-				$colCount ++;
-			}	
-		} 
-
-		//save the last table
-		$tables[] = $currentTable;
-		$this->set('validAttributes',$validAttributes);
+		$this->set('validAttributes',$generalAttributes + $hardwareAttributes + $networkAttributes);
+		$this->set('displayStatus', in_array('Status', $displayAttributes));
 		$this->set('tables',$tables);
     }
     
 	 public function moreInfoDecommissioned( $id) {
+	    $this->set('active_menu', 'decommission');
 	 	$this->set('title_for_layout','Decommissioned Computer Detail');
 	 	$this->Decommissioned->id = $id;
 	
@@ -171,10 +175,10 @@ class InventoryController extends AppController {
             	//create log entry
             	$this->_saveLog("Computer " . $this->request->data['Computer']['ComputerName'] . " added to database");
             	
-                $this->Session->setFlash('Your Entry has been saved.');
+                $this->Flash->success('Your Entry has been saved.');
                 $this->redirect(array('action' => 'computerInventory'));
             } else {
-                $this->Session->setFlash('Unable to add your Entry.');
+                $this->Flash->error('Unable to add your Entry.');
             }
         }
     }
@@ -191,10 +195,10 @@ class InventoryController extends AppController {
 	    else 
 	    {
 	        if ($this->Computer->save($this->request->data)) {
-	            $this->Session->setFlash('Your entry has been updated.');
+	            $this->Flash->success('Your entry has been updated.');
 	            $this->redirect("/inventory/moreInfo/" . $this->data['Computer']['id']);
 	        } else {
-	            $this->Session->setFlash('Unable to update your entry.');
+	            $this->Flash->error('Unable to update your entry.');
 	        	}
 	   	}
 	}
@@ -217,7 +221,7 @@ class InventoryController extends AppController {
 	    	$message = 'Computer ' . $computer['Computer']['ComputerName'] . ' has been deleted';
 	    	
 	    	$this->_saveLog($message);
-	        $this->Session->setFlash($message);
+	        $this->Flash->success($message);
 	        $this->redirect(array('action' => 'computerInventory'));
 	    }
 		
@@ -227,6 +231,7 @@ class InventoryController extends AppController {
 	
 	
  	public function decommission() {
+ 	    $this->set('active_menu', 'decommission');
   		$this->set('title_for_layout','Decommissioned Computers');
         $this->set('decommission', $this->Decommissioned->find('all', array('order'=> array('LastUpdated ASC'))));// gets all data
     }
@@ -234,6 +239,7 @@ class InventoryController extends AppController {
 
 	public function confirmDecommission( $id = null)
 	{
+	    $this->set('active_menu', 'decommission');
 		$currID = $id; //variable to pass to transferDecom
 		$this->Computer->id = $id;
     	
@@ -254,12 +260,12 @@ class InventoryController extends AppController {
         	{
         		$message = 'Computer ' . $this->request->data['Computer']['ComputerName'] . ' has been decommissioned';
         		$this->_saveLog($message);
-            	$this->Session->setFlash($message);
+            	$this->Flash->success($message);
        			$this->transferDecom($currID);
         	} 
         	else 
         	{
-            	$this->Session->setFlash('Unable to update your entry.');
+            	$this->Flash->error('Unable to update your entry.');
         	}
    		}
 	}	
@@ -300,7 +306,7 @@ class InventoryController extends AppController {
 		
 			if( $this->Decommissioned->save())
 			{
-				$this->Session->setFlash("Machine with id: " . $id . " has been moved to the decommission table");
+				$this->Flash->success("Machine with id: " . $id . " has been moved to the decommission table");
 				$this->redirect(array("action" => 'computerInventory'));
 			}
 		}
@@ -318,12 +324,12 @@ class InventoryController extends AppController {
 		}
 		if($this->Decommissioned->save())
 		{
-			$this->Session->setFlash('Wipe Hard Drive Status changed');
+			$this->Flash->success('Wipe Hard Drive Status changed');
 			$this->redirect(array('action' => 'decommission'));
 		}
 		else {
 			{
-				$this->Session->setFlash('Wipe Hard Drive Status failed to change');
+				$this->Flash->error('Wipe Hard Drive Status failed to change');
 			}
 		}
 	}
@@ -341,18 +347,19 @@ class InventoryController extends AppController {
 		}
 		if($this->Decommissioned->save())
 		{
-			$this->Session->setFlash('Recycled Status changed');
+			$this->Flash->success('Recycled Status changed');
 			$this->redirect(array('action' => 'decommission'));
 		}
 		else {
 			{
-				$this->Session->setFlash('Recycled Status failed to change');
+				$this->Flash->error('Recycled Status failed to change');
 			}
 		}
 	}
 	
-	function active_directory_sync($action = null){
+	function active_directory_sync($action = 'find_old'){
 		$this->set('title_for_layout','Active Directory Sync');
+		$this->set('active_menu', 'manage');
 		
 		if($action != null)
 		{
@@ -368,73 +375,77 @@ class InventoryController extends AppController {
 			$ldap_response = $this->Ldap->getComputers();
 			
 			
-			$result = array();
+			$compare_computers = array();
 			
-			if($action == 'compare')
+			foreach($ldap_response as $lr)
 			{
-				foreach($ldap_response as $lr)
+				if(isset($lr['cn']))
 				{
-					if(isset($lr['cn']))
-					{
-						$ad_computers[] = trim(strtoupper($lr['cn'][0]));
-					}
+					$ad_computers[] = trim(strtoupper($lr['cn'][0]));
 				}
-			
-				//get the computer inventory 
-				$inventory_computers = $this->Computer->find('list', array('fields'=>array('ComputerName'),'order'=> array('ComputerName ASC')));
-			
-				//transform the names to uppercase
-				for($i = 0; $i < count($inventory_computers); $i ++)
-				{
-					$inventory_computers[$i] = trim(strtoupper($inventory_computers[$i]));
-				}
-			
-				//find the differences between the two lists
-				$ad_diff = array_diff($ad_computers,$inventory_computers);
-				$inventory_diff = array_diff($inventory_computers,$ad_computers);
-				
-				//merge the lists
-				foreach($ad_diff as $diff){
-					$result[$diff] = array('value'=>'Not in Inventory','class'=>'not_inventory');
-				}
-
-				foreach($inventory_diff as $diff){
-					if($diff != '')
-					{
-						$result[$diff] = array('value'=>'Not in Active Directory','class'=>'not_ad');
-					}
-				}
-				
-				//sort the final array
-				ksort($result);
-				
-			}
-			else if ($action == 'find_old')
-			{
-				//get how many days back to go from GET params
-				$days_old = $this->params['url']['days_old'];
-				$this->set('days_old',$days_old);
-
-				foreach($ldap_response as $lr)
-				{
-					if(isset($lr['cn']))
-					{
-						//convert the last login to unix time
-						$lastLogon = (($lr['lastlogontimestamp'][0]/10000000)-11644473600);
-						
-						//if user hasn't logged on in more than x days
-						if($lastLogon < time() - (86400 * $days_old))
-						{
-							$result[trim(strtoupper($lr['cn'][0]))] = array('value'=>'Last Active Directory Logon: ' . date('F d, Y',$lastLogon));
-						}
-					}
-				}
-				
-				//sort the final array
-				ksort($result);
 			}
 		
-			$this->set('computers',$result);
+			//get the computer inventory 
+			$inventory_computers = $this->Computer->find('list', array('fields'=>array('ComputerName'),'order'=> array('ComputerName ASC')));
+		
+			//transform the names to uppercase
+			for($i = 0; $i < count($inventory_computers); $i ++)
+			{
+				$inventory_computers[$i] = trim(strtoupper($inventory_computers[$i]));
+			}
+		
+			//find the differences between the two lists
+			$ad_diff = array_diff($ad_computers,$inventory_computers);
+			$inventory_diff = array_diff($inventory_computers,$ad_computers);
+			
+			//merge the lists
+			foreach($ad_diff as $diff){
+				$compare_computers[$diff] = array('value'=>'Not in Inventory','class'=>'not_inventory');
+			}
+
+			foreach($inventory_diff as $diff){
+				if($diff != '')
+				{
+					$compare_computers[$diff] = array('value'=>'Not in Active Directory','class'=>'not_ad');
+				}
+			}
+			
+			//sort the final array
+			ksort($compare_computers);
+				
+			
+			//get how many days back to go from GET params
+			$old_computers = array();
+			$days_old = 30;
+			
+			if(isset($this->params['url']['days_old']))
+			{
+			    $days_old = $this->params['url']['days_old'];
+			}
+			
+			$this->set('days_old',$days_old);
+
+			foreach($ldap_response as $lr)
+			{
+				if(isset($lr['cn']))
+				{
+					//convert the last login to unix time
+					$lastLogon = (($lr['lastlogontimestamp'][0]/10000000)-11644473600);
+					
+					//if user hasn't logged on in more than x days
+					if($lastLogon < time() - (86400 * $days_old))
+					{
+						$old_computers[trim(strtoupper($lr['cn'][0]))] = array('value'=>'Last Active Directory Logon: ' . date('F d, Y',$lastLogon));
+					}
+				}
+			}
+			
+			//sort the final arrays
+			ksort($old_computers);
+			
+		
+			$this->set('old_computers',$old_computers);
+			$this->set('compare_computers', $compare_computers);
 		}
 		
 	}
@@ -442,14 +453,36 @@ class InventoryController extends AppController {
 	function do_drivers_upload(){
 		
 		if($this->FileUpload->success){
-			$this->Session->setFlash('Drivers Uploaded');
+			$this->Flash->success('Drivers Uploaded');
 		}
 		else
 		{
-			$this->Session->setFlash('Error Uploading Drivers');
+			$this->Flash->error('Error Uploading Drivers');
 		}
 	
 		$this->redirect('/inventory/moreInfo/' . $this->data['File']['id']);
+	}
+	
+	function set_profile_image(){
+	    
+	    //get the user
+	    $aUser = $this->User->find('first',array('conditions'=>array('User.username'=>$this->Session->read('User.username'))));
+	    
+	    if($aUser)
+	    {
+	        
+	        $aUser['User']['gravatar'] = $this->data['Gravatar']['username'];
+	        $this->Session->write('User.gravatar', $this->data['Gravatar']['username']);
+	        $this->User->save($aUser);
+	        
+	        $this->Flash->success('Profile image set');
+	    }
+	    else
+	    {
+	        $this->Flash->error('Problem setting profile image');
+	    }
+	   
+	    $this->redirect('/inventory/');
 	}
 	
 	function loginHistory($id){
@@ -471,6 +504,35 @@ class InventoryController extends AppController {
 		$this->Logs->set('MESSAGE',$message);
 		$this->Logs->set("DATED",date("Y-m-d H:i:s",time()));
 		$this->Logs->save();
+	}
+	
+	function _processDisplayTable($validAttributes, $selectedAttributes){
+        $result = array();
+        
+        $currentRow = array(); //one row in a table
+        $colCount = 0; //current number of columns
+        $maxCol = 5; //maximum number of table columns
+        
+	    foreach(array_keys($validAttributes) as $aKey){
+	        if(in_array($aKey, $selectedAttributes))
+	        {
+	            if($colCount >= 5){
+	                $result[] = $currentRow;
+	                $currentRow = array();
+	                $colCount = 0;
+	            }
+	            
+	            $currentRow[] = $aKey;
+	            $colCount ++;
+	        }
+	    }
+	    
+	    if(count($currentRow) > 0)
+	    {
+	       $result[] = $currentRow;
+	    }
+
+	    return $result;
 	}
 }
     

@@ -1,15 +1,10 @@
-
-<?php echo $this->Html->link('Admin', array('action'=>"index")); ?>
-
-<table>
-	<tr>
-		<th width="33%"><?php echo $this->Paginator->prev("<< Newer "); ?></th>
-		<th width="33%"><p align="center"><?php echo $this->Paginator->counter('Displaying page {:page} of {:pages}') ?></p></th>
-		<th align="right"><p align="right"><?php echo $this->Paginator->next("Older >> ") ?></p></th>
-	</tr>
-</table>
-<div id="logDiv">
-   <table>
+<div class="row">
+  <div class="col-md-4"><?php echo $this->Paginator->prev("<< Newer "); ?></div>
+	<div class="col-md-4"><p align="center"><?php echo $this->Paginator->counter('Displaying page {:page} of {:pages}') ?></p></div>
+	<div class="col-md-4"><p align="right"><?php echo $this->Paginator->next("Older >> ") ?></p></div>
+</div>
+<table class="table table-striped">
+  <tbody>
     <?php foreach ($logs as $post): ?>
     <tr>
         <td> <?php echo  $post['Logs']['id']; ?></td>
@@ -20,5 +15,6 @@
     </tr>
     
     <?php endforeach; ?>
-   </table>
-</div> 
+  </tbody>
+</table>
+

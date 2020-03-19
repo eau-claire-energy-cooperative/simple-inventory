@@ -25,6 +25,12 @@ class AdminController extends AppController {
 		}
 	}
 	
+	function beforeRender(){
+	    parent::beforeRender();
+	    $settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
+	    $this->set('settings',$settings);
+	}
+	
 	function index(){
 		$this->set('title_for_layout','Admin');
 	}
@@ -36,7 +42,7 @@ class AdminController extends AppController {
 		$this->set('inventory',$this->Computer->find('list',array('fields'=>array('Computer.ComputerName','Computer.id'))));
 	}
 	
-	public function settings(){
+	public function settings($action = null){
 		if($this->request->is('post'))
 		{
 			foreach(array_keys($this->data['Setting']) as $key)
@@ -51,10 +57,12 @@ class AdminController extends AppController {
 				$this->Setting->query(sprintf('update settings set settings.value = "%s" where settings.key = "%s"',$value,$key));
 			}
 			
+			$this->Flash->success('Settings Saved');
+			
 		}
 		
 		$this->set('title_for_layout','Settings');
-		$this->set('settings',$this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value'))));
+
 	}
 	
 	public function settings2($delete = null){
@@ -64,12 +72,12 @@ class AdminController extends AppController {
 			//delete the id given
 			$id = $this->params['url']['id'];
 			$this->Setting->delete($id);
-			$this->Session->setFlash('Your entry has been deleted.');
+			$this->Flash->success('Setting deleted');
 			
 		}
 		
 		$this->set('title_for_layout','Settings');
-		$this->set('settings',$this->Setting->find('all',array('order'=>array('Setting.key'))));
+		$this->set('settings_list',$this->Setting->find('all',array('order'=>array('Setting.key'))));
 	}
 	
 	
@@ -88,12 +96,12 @@ class AdminController extends AppController {
 		else 
 		{
 			if ($this->Setting->save($this->request->data)) {
-            	$this->Session->setFlash('Your entry has been updated.');
+            	$this->Flash->success('Setting saved');
             	$this->redirect(array('action' => 'settings'));
         	} 
         	else 
         	{
-            	$this->Session->setFlash('Unable to update your entry.');
+            	$this->Flash->error('Unable to update the setting');
         	}	
 		}
 	}
@@ -113,13 +121,15 @@ class AdminController extends AppController {
    		else 
    		{
         	if ($this->Location->save($this->request->data)) {
-            	$this->Session->setFlash('Your entry has been updated.');
+            	$this->Flash->success('Your entry has been updated.');
             	$this->redirect(array('action' => 'location'));
         	} 
         	else 
         	{
-            	$this->Session->setFlash('Unable to update your entry.');
+            	$this->Flash->error('Unable to update your entry.');
         	}
+        	
+        	$this->redirect('/admin/location');
    		}
 	}
 	
@@ -140,20 +150,18 @@ class AdminController extends AppController {
 		
         if ($this->request->is('post')) {
             if ($this->Location->save($this->request->data)) {
-                $this->Session->setFlash('Your Entry has been saved.');
+                $this->Flash->success('Your Entry has been saved.');
                 $this->redirect(array('action' => 'location'));
             } else {
-                $this->Session->setFlash('Unable to add your Entry.');
+                $this->Flash->error('Unable to add your Entry.');
             }
         }
     }
     
     public function deleteLocation($id) {
-	    if ($this->request->is('get')) {
-	        throw new MethodNotAllowedException();
-	    }
+	   
 	    if ($this->Location->delete($id)) {
-	        $this->Session->setFlash('The entry with id: ' . $id . ' has been deleted.');
+	        $this->Flash->success('The entry with id: ' . $id . ' has been deleted.');
 	        $this->redirect(array('action' => 'location'));
 	    }
 	}
@@ -173,7 +181,7 @@ class AdminController extends AppController {
     			
     		if(isset($this->params['url']['action']) && $this->params['url']['action'] == 'delete'){
     			$this->User->delete($id);
-    			$this->Session->setFlash("Your entry has been deleted");
+    			$this->Flash->success("Your entry has been deleted");
     			$this->redirect(array('action'=>'users'));
     		}
 			else
@@ -191,12 +199,12 @@ class AdminController extends AppController {
 			}
    			
         	if ($this->User->save($this->request->data)) {
-            	$this->Session->setFlash('Your entry has been updated.');
+            	$this->Flash->success('Your entry has been updated.');
             	$this->redirect(array('action' => 'users'));
         	} 
         	else 
         	{
-            	$this->Session->setFlash('Unable to update your entry.');
+            	$this->Flash->error('Unable to update your entry.');
         	}
    		}
 	}
