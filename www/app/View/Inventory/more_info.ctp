@@ -79,6 +79,7 @@ function wol(mac){
 </script>
 <div class="row">
   <div class="col-xl-3 col-md-6 mb-4">
+    <?php if($displayStatus): ?>
     <div class="card border-left-danger shadow h-500 py-1">
       <div class="card-body">
         <div class="row no-gutters align-items-center">
@@ -92,6 +93,7 @@ function wol(mac){
         </div>
       </div>
     </div>
+    <?php endif; ?>
   </div>
   <div class="col-xl-9 col-md-6 mb-4" align="right">
     <a href="<?php echo $this->Html->url(array('action' => 'edit', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>

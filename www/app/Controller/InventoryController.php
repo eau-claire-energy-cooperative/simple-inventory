@@ -202,6 +202,7 @@ class InventoryController extends AppController {
 		
 		//save the last table
 		$this->set('validAttributes',$generalAttributes + $hardwareAttributes + $networkAttributes);
+		$this->set('displayStatus', in_array('Status', $displayAttributes));
 		$this->set('tables',$tables);
     }
     
