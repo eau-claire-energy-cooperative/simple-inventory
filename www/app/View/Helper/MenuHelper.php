@@ -22,7 +22,7 @@ class MenuHelper extends AppHelper {
 	        $active = $this->request->params['controller'];
 	    }
 	    
-	    if($name == $active)
+	    if(trim($name) == trim($active))
 	    {
 	        $result = 'active';
 	    }

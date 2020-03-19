@@ -409,6 +409,7 @@ class InventoryController extends AppController {
 	
 	function active_directory_sync($action = 'find_old'){
 		$this->set('title_for_layout','Active Directory Sync');
+		$this->set('active_menu', 'manage');
 		
 		if($action != null)
 		{
