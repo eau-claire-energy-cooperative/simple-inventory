@@ -5,8 +5,14 @@ require ("Net/Ping.php");
 class PingComponent extends Component {
 	var $name = "Ping Component";
 
-	function ping($host){
-		
+	function ping($host, $search_domain){
+
+	    //check if the search domain is already part of the host name
+	    if(substr($host,-strlen($search_domain)) !== $search_domain)
+	    {
+	        $host = $host . '.' . $search_domain;
+	    }
+	    
 		$pingObj = Net_Ping::factory();
 		$response = $pingObj->ping($host);
 		

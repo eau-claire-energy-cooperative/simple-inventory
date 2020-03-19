@@ -37,3 +37,9 @@ Once you have that working take a look at the ```INSTALL.md``` file for more spe
 * Optionally can collect programs listed in Windows programs area
 * Optionally can list services and their running state
 * Optionally can integrate with [Chocolatey](https://chocolatey.org/) to find outdated packages
+
+
+# Attributions
+
+Framework: [CakePHP](https://cakephp.org/)
+Web Theme: [SB Admin 2](https://startbootstrap.com/themes/sb-admin-2/)

@@ -1,21 +1,27 @@
 <?php 
-		echo $this->Html->script("jquery.tablesorter.js",false);
-		echo $this->Html->script("table_utils.js",false);
+    echo $this->Html->script("jquery.dataTables.min.js", false);
+    echo $this->Html->script("dataTables.bootstrap4.min.js", false);
+    
+    echo $this->Html->css('dataTables.bootstrap4.min', false);
+    
+    //script to load the datatable
+    echo $this->Html->scriptBlock("$(document).ready(function() {
+        $('#dataTable').DataTable({
+          paging: true, 
+          pageLength: 50,
+          dom: '<\"top\"ifp>rt'
+          });
+     });", array("inline"=>false)) 
 ?>
 	
-<?php echo $this->Html->link('Home', array('action' => 'home')); ?> 
-<p></p>
-		  
-		<table id="tableSort" class="tablesorter">
+		<table id="dataTable" class="table table-striped">
 	<thead>
 
-        <th>Computer Name	&uArr;&dArr;</th>
-        <th>Redeployed As	&uArr;&dArr;</th>
-        <th>Wiped Hard Drive	&uArr;&dArr;</th>
-        <th></th>	
-        <th>Recycled	&uArr;&dArr;</th>
-        <th></th>
-        <th>Old Location	&uArr;&dArr;</th>
+        <th>Computer Name</th>
+        <th>Redeployed As</th>
+        <th>Wiped Hard Drive</th>
+        <th>Recycled</th>
+        <th>Old Location</th>
      
   
 	</thead>
@@ -28,19 +34,16 @@
          <td> <?php echo $this->Html->link( $post['Decommissioned']['ComputerName'] , array('action' => 'moreInfoDecommissioned', $post['Decommissioned']['id'])); ?></td>
            <td><?php echo $post['Decommissioned']['RedeployedAs']; ?></td>
              <td><?php echo $post['Decommissioned']['WipedHD']; ?> 
-             	<div style="float:right; "><?php echo $this->Html->link('Yes', array( 'action' => 'changeWipeStatus',$post['Decommissioned']['id'], 'Yes'));  ?> |
-             							  <?php echo $this->Html->link('No', array('action' => 'changeWipeStatus',$post['Decommissioned']['id'],'No')); ?>
+             	<div style="float:right; ">
+             	    <a href="<?php echo $this->Html->url(array( 'action' => 'changeWipeStatus',$post['Decommissioned']['id'], 'Yes')) ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-1"><i class="fas fa-check fa-sm text-white-50"></i></a>
+                  <a href="<?php echo $this->Html->url(array('action' => 'changeWipeStatus',$post['Decommissioned']['id'],'No')) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-1"><i class="fas fa-times fa-sm text-white-50"></i></a>
              	</div></td>
-             	<td></td>
                <td><?php echo $post['Decommissioned']['Recycled']; ?>
-               <div style="float:right; "><?php echo $this->Html->link('Yes', array( 'action' => 'changeRecycledStatus',$post['Decommissioned']['id'], 'Yes'));  ?> |
-             							  <?php echo $this->Html->link('No', array('action' => 'changeRecycledStatus',$post['Decommissioned']['id'],'No')); ?>
+               <div style="float:right; ">
+                 <a href="<?php echo $this->Html->url(array( 'action' => 'changeRecycledStatus',$post['Decommissioned']['id'], 'Yes')) ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-1"><i class="fas fa-check fa-sm text-white-50"></i></a>
+                 <a href="<?php echo $this->Html->url(array('action' => 'changeRecycledStatus',$post['Decommissioned']['id'],'No')) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-1"><i class="fas fa-times fa-sm text-white-50"></i></a>
              	</div></td>
-               <td></td>
                  <td><?php echo $post['Location']['location']; ?></td>
-                 
-                   
- 
     </tr>
          <?php endforeach; ?>  
 

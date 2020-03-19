@@ -4,7 +4,7 @@ class AjaxController extends AppController {
     var $components = array('Session','Ping');
     var $helpers = array('Js');
 	var $layout = '';
-	var $uses = array('Computer','Setting','Command','RestrictedProgram');
+	var $uses = array('Computer','Setting','Command','RestrictedProgram','User');
 
 	public function beforeFilter(){
 	    //check if we are using a login method
@@ -27,7 +27,9 @@ class AjaxController extends AppController {
 	}
 	
 	function checkRunning($name){
-		$isRunning = $this->Ping->ping($name);
+	    //load the search domain
+	    $settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
+	    $isRunning = $this->Ping->ping($name, $settings['search_domain']);
 		$this->set('result',$isRunning);
 	}
 	
@@ -44,13 +46,15 @@ class AjaxController extends AppController {
 	}
 	
 	function setup_command($id){
-
+        $this->layout = 'fancybox';
+        
 		//get the command that goes with this id
 		$command = $this->Command->find('first',array('conditions'=>array('Command.id'=>$id)));
 		$this->set('command',$command);
 	}
 	
 	function new_license(){
+	    $this->layout = 'fancybox';
 	    
 	    //get a list of all computers
 	    $allComputers = $this->Computer->find('list',array('fields'=>array('Computer.id', 'Computer.ComputerName'), 'order'=>array('Computer.ComputerName asc')));
@@ -59,6 +63,7 @@ class AjaxController extends AppController {
 	}
 	
 	function move_license($license_id, $current_comp){
+	    $this->layout = 'fancybox';
 	    
 	    $this->set('license_id', $license_id);
 	    $this->set('current_comp', $current_comp);
@@ -84,10 +89,20 @@ class AjaxController extends AppController {
 	}
 	
 	function uploadDrivers($id){
+	    $this->layout = 'fancybox';
 		$computer = $this->Computer->find('first',array('conditions'=>array('Computer.id'=>$id)));
 		
 		$this->set('computer',$computer['Computer']);
 		$this->set('id',$id);
+	}
+	
+	function setProfileImage(){
+	    $this->layout = 'fancybox';
+	    
+	    //get the current url
+	    $aUser = $this->User->find('first',array('conditions'=>array('User.username'=>$this->Session->read('User.username'))));
+
+	    $this->set('username', $aUser['User']['gravatar']);
 	}
 }
 ?>

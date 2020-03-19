@@ -3,6 +3,49 @@
 class AttributeDisplayHelper extends AppHelper {
 	var $helpers = array('Html','DiskSpace','Time');
 	
+	function drawTable($tableRows, $validAttributes, $computer){
+	    $result =  '<div class="row">';
+	    $result = $result . '<table class="table table-striped">';
+	    
+	    foreach($tableRows as $aTable)
+	    {
+	        $result = $result . "<tr>";
+	        foreach($aTable as $attribute)
+	        {
+	            $result = $result . '<th style="width: 250px;">' . $validAttributes[$attribute] . '</th>';
+	        }
+	        
+	        $tableCount = count($aTable);
+	        while($tableCount < 5)
+	        {
+	            $result = $result . '<th style="width: 250px;"></th>';
+	            $tableCount ++;
+	        }
+	        
+	        $result = $result . "</tr>";
+	        $result = $result . "<tr>";
+	        
+	        foreach($aTable as $attribute)
+	        {
+	            $result = $result . '<td>' . $this->displayAttribute($attribute,$computer) . '</td>';
+	        }
+	        
+	        $tableCount = count($aTable);
+	        while($tableCount < 5)
+	        {
+	            $result = $result . "<td></td>";
+                $tableCount ++;
+	        }
+	        
+	        $result = $result . "</tr>";
+	    }
+
+	    $result = $result . '</table>';
+	    $result = $result . '</div>';
+	    
+	    return $result;
+	}
+	
 	function displayAttribute($attribute,$computer){
 		$result = '';
 		
@@ -76,10 +119,7 @@ class AttributeDisplayHelper extends AppHelper {
 		{
 			$result = $this->Time->niceShort($computer['Computer']['LastUpdated']);
 		}
-		else if ($attribute == 'Status')
-		{
-			$result = '<p id="is_running" class="red">Not Running</p>';
-		}
+		
 		return $result;
 	}
 }

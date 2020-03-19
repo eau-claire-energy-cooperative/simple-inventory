@@ -1,188 +1,242 @@
 <?php 
-		echo $this->Html->script("fancybox/jquery.mousewheel-3.0.6.pack.js",false);
-		echo $this->Html->script("fancybox/jquery.fancybox.js",false);
-		echo $this->Html->css('jquery.fancybox.css');
+    echo $this->Html->script("jquery-confirm.min.js",false);
+    echo $this->Html->css('jquery-confirm.min', array('inline'=>false));
+    
+    //script to load the datatable
+    echo $this->Html->scriptBlock("$(document).ready(function() {
+      checkRunning();
+      setInterval(checkRunning,40 * 1000);
+  
+        $('a.delete-computer').confirm({
+          content: 'Are you sure you want to delete this computer?',
+          buttons: {
+              yes: function(){
+                  location.href = this.\$target.attr('href');
+              },
+              cancel: function(){
+                
+              }
+          }
+        });
+     });", array("inline"=>false)) 
 ?>
 
 <script type="text/javascript">
-    $(document).ready(function(){
-    	checkRunning();
-		setInterval(checkRunning,40 * 1000);
-		
-		$(".popup").fancybox({
-		maxWidth	: 600,
-		maxHeight	: 400,
-		fitToView	: false,
-		width		: '70%',
-		height		: '70%',
-		autoSize	: false,
-		closeClick	: false,
-		openEffect	: 'none',
-		closeEffect	: 'none'
-		});
-	});
+function checkRunning(){
+$.getJSON('<?php echo $this->webroot ?>ajax/checkRunning/<?php echo $computer['Computer']['ComputerName'] ?>',function(data){
+  if(data.received == data.transmitted)
+  {
+    if(<?php echo $settings['show_computer_commands']?>)
+    {
+      $('#is_running').html('<a href="#" onClick="shutdown(\'<?php echo $computer['Computer']['ComputerName'] ?>\',false)">Shutdown</a> <br> <a href="#" onClick="shutdown(\'<?php echo $computer['Computer']['ComputerName'] ?>\',true)">Restart</a>');
+    }
+    else
+    {
+      $('#is_running').html('Running');
+    }
+    $('#is_running').removeClass('text-danger');
+  }
+  else
+  {
+    if(<?php echo $settings['show_computer_commands']?>)
+    {
+      $('#is_running').html('<a href="#" onClick="wol(\'<?php echo $computer['Computer']['MACaddress'] ?>\')">Turn On</a>');
+      $('#is_running').removeClass('text-danger');
+    }
+    else
+    {
+      $('#is_running').html('Not Running');
+      $('#is_running').addClass('text-danger');
+      }
+    }
+  });
+}
 
-	function checkRunning(){
-		$.getJSON('<?php echo $this->webroot ?>ajax/checkRunning/<?php echo $computer['Computer']['ComputerName'] ?>',function(data){
-			if(data.received == data.transmitted)
-			{
-				if(<?php echo $settings['show_computer_commands']?>)
-				{
-					$('#is_running').html('<a href="#" onClick="shutdown(\'<?php echo $computer['Computer']['ComputerName'] ?>\',false)">Shutdown</a> | <a href="#" onClick="shutdown(\'<?php echo $computer['Computer']['ComputerName'] ?>\',true)">Restart</a>');
-				}
-				else
-				{
-					$('#is_running').html('Running');
-				}
-				$('#is_running').removeClass('red');
-			}
-			else
-			{
-				if(<?php echo $settings['show_computer_commands']?>)
-				{
-					$('#is_running').html('<a href="#" onClick="wol(\'<?php echo $computer['Computer']['MACaddress'] ?>\')">Turn On</a>');
-					$('#is_running').removeClass('red');
-				}
-				else
-				{
-					$('#is_running').html('Not Running');
-					$('#is_running').addClass('red');
-				}
-			}
-		});
-	}
+function expandTable(id){
+  
+  $('#' + id).toggle();
+  
+  toggleId = '#' + id + '-toggle';
+  
+  $(toggleId).toggleClass('fa-chevron-circle-down');
+  $(toggleId).toggleClass('fa-chevron-circle-up');
+  
+  return false;
+}
 
-	function expandTable(id){
-		
-		$('#' + id + ' tr').each(function(index){
-			if(index != 0)
-			{
-				$(this).toggle();
-			}
-		});
-		
-		return false;
-	}
-	
-	function shutdown(host,shouldRestart){
-		
-		if(confirm('Shutdown or Restart this computer?'))
-		{
-			$.ajax('<?php echo $this->webroot ?>ajax/shutdown/' + host + '/' + shouldRestart);
-		}
-		return false;
-	}
-	
-	function wol(mac){
-		$.ajax('<?php echo $this->webroot ?>ajax/wol?mac=' + mac);
-	}
-	
+function shutdown(host,shouldRestart){
+  
+  if(confirm('Shutdown or Restart this computer?'))
+  {
+    $.ajax('<?php echo $this->webroot ?>ajax/shutdown/' + host + '/' + shouldRestart);
+  }
+  return false;
+}
+
+function wol(mac){
+  $.ajax('<?php echo $this->webroot ?>ajax/wol?mac=' + mac);
+}
 </script>
+<div class="row">
+  <div class="col-xl-3 col-md-6 mb-4">
+    <?php if($displayStatus): ?>
+    <div class="card border-left-danger shadow h-500 py-1">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Current Status</div>
+            <div class="h6 mb-0 font-weight-bold text-gray-800"><p id="is_running" class="red">Not Running</p></div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-info-circle fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <?php endif; ?>
+  </div>
+  <div class="col-xl-9 col-md-6 mb-4" align="right">
+    <a href="<?php echo $this->Html->url(array('action' => 'edit', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
+    <a href="<?php echo $this->Html->url(array('action' => 'confirmDecommission', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mr-2"><i class="fas fa-ban fa-sm text-white-50"></i> Decommission</a>
+    <a href="<?php echo $this->Html->url(array('action' => 'delete', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-computer"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
+    <?php if(file_exists(WWW_ROOT . '/drivers/' . str_replace(' ','_',$computer['Computer']['Model']) . '.zip')): ?>
+      <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url("/drivers/" . str_replace(' ','_',$computer['Computer']['Model']) . ".zip") ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-download fa-sm text-white-50"></i> Download Drivers</a>
+    <?php else: ?>
+      <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/uploadDrivers/' . $computer['Computer']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2 popup fancybox.ajax"><i class="fas fa-upload fa-sm text-white-50"></i> Upload Drivers</a>
+    <?php endif; ?>
+  </div>
+</div>
 
-<?php echo $this->Html->link('Edit', array('action' => 'edit', $computer['Computer']['id'])); ?> | 
-<?php echo $this->Form->postLink(
-                'Delete',
-                array('action' => 'delete', $computer['Computer']['id']),
-                array('confirm' => 'Are you sure?'));
-            ?>
-<span style="float:right"><?php echo $this->Html->link('Decommission', array('action' => 'confirmDecommission', $computer['Computer']['id'])); ?>
-<?php if(file_exists(WWW_ROOT . '/drivers/' . str_replace(' ','_',$computer['Computer']['Model']) . '.zip')): ?>
-| <?php echo $this->Html->link("Download Drivers","/drivers/" . str_replace(' ','_',$computer['Computer']['Model']) . ".zip") ?>
-<?php else: ?>
-| <?php echo $this->Html->link("Upload Drivers",'/ajax/uploadDrivers/' . $computer['Computer']['id'],array('class'=>'popup fancybox.ajax')) ?>
+<?php if(array_key_exists('general', $tables) && count($tables['general']) > 0): ?>
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card border-left-primary shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">General Information</h6>
+        </div>
+        <div class="card-body">
+          <?php echo $this->AttributeDisplay->drawTable($tables['general'], $validAttributes, $computer); ?>
+        </div>
+      </div>    
+  </div>
+</div>
 <?php endif; ?>
- 
-</span>
 
-<?php foreach($tables as $aTable): ?>
-<table>
-	<tr>
-		<?php foreach($aTable as $attribute): ?>
-			<th style="width: 250px;"><?php echo $validAttributes[$attribute] ?></th>
-		<?php endforeach; ?>
-		<?php
-			$tableCount = count($aTable); 
-			while($tableCount < 5): ?>
-			<th style="width: 250px;"></th>
-			<?php $tableCount ++; ?>
-		<?php endwhile; ?>
-	</tr>
-	<tr>
-		<?php foreach($aTable as $attribute): ?>
-			<td><?php echo $this->AttributeDisplay->displayAttribute($attribute,$computer)?></td>
-		<?php endforeach; ?>
-		<?php
-			$tableCount = count($aTable); 
-			while($tableCount < 5): ?>
-			<td></td>
-			<?php $tableCount ++; ?>
-		<?php endwhile; ?>
-	</tr>
-</table>
-<?php endforeach; ?>
+<?php if(array_key_exists('hardware', $tables) && count($tables['hardware']) > 0): ?>
+<?php $tableCount = 0; ?>
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card border-left-warning shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Hardware Information</h6>
+        </div>
+        <div class="card-body">
+          <?php echo $this->AttributeDisplay->drawTable($tables['hardware'], $validAttributes, $computer); ?>
+        </div>
+      </div>    
+  </div>
+</div>
+<?php endif; ?>
 
-<?php if($computer['Computer']['notes'] != ''): ?>
-<table>
-	<tr>
-		<th>Notes</th>
-	</tr>
-	<tr>
-		<td><?php echo $computer['Computer']['notes']?></td>
-	</tr>
-</table> 
- <?php endif; ?>
- 
-<?php if(count($computer['License']) > 0): ?>
-<table id="licenses">
-	<tr>
-		<th colspan="2"><h1><a href="#" onClick="expandTable('licenses')">Licenses</a></h1></th>
-	</tr>
-	<?php foreach($computer['License'] as $aLicense): ?>
-	<tr style="display:none">
-		<td width="33%"><?php echo $aLicense['ProgramName'] ?></td>
-		<td><?php echo $aLicense['LicenseKey'] ?></td>
-	</tr>
-	<?php endforeach ?>
-</table>
-<?php endif ?>
+<?php if(array_key_exists('network', $tables) && count($tables['network']) > 0): ?>
+<?php $tableCount = 0; ?>
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card border-left-info shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Network Information</h6>
+        </div>
+        <div class="card-body">
+          <?php echo $this->AttributeDisplay->drawTable($tables['network'], $validAttributes, $computer); ?>
+        </div>
+      </div>    
+  </div>
+</div>
+<?php endif; ?>
+
+<div class="row">
+  <?php if(count($computer['License']) > 0): ?>
+  <div class="col-xl-7">
+    <div class="card border-left-dark shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Licenses</h6>
+      </div>
+      <div class="card-body">
+        <?php foreach($computer['License'] as $aLicense): ?>
+        <div class="row">
+          <div class="col-md-3"><?php echo $aLicense['ProgramName'] ?></div>
+          <div class="col-md-8"><?php echo $aLicense['LicenseKey'] ?></div>
+        </div>
+        <?php endforeach ?>
+      </div>
+    </div>
+  </div>
+  <?php endif; ?>
+  <?php if($computer['Computer']['notes'] != ''): ?>
+  <div class="col-xl-5">
+    <div class="card border-left-dark shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Notes</h6>
+      </div>
+      <div class="card-body">
+        <?php if($computer['Computer']['notes'] != ''): ?>
+          <?php echo $computer['Computer']['notes']?></td>
+        <?php endif; ?>
+      </div>
+    </div>
+  </div>
+  <?php endif; ?>
+</div>
  
 <?php if(count($programs) > 0): ?>
-<table id="programs">
-    <tr>
-        <th><h1><a href="#" onClick="expandTable('programs')">Programs</a></h1></th>
-    </tr>
-    
-    <?php foreach ($programs as $post): ?>
-    <tr style="display:none">
-<?php 
-	$row_class = '';
-	
-	if(key_exists($post['Programs']['program'],$restricted_programs))
-	{
-		$row_class = 'restricted';
-	}
-?>
-    	<td class="<?php echo $row_class ?>"> <?php echo $this->Html->link( $post['Programs']['program'] . " v" . $post["Programs"]["version"], '/search/searchProgram/' . $post['Programs']['program']); ?></td>
-    </tr>
-    
-    <?php endforeach; ?>
- </table>
- <?php endif; ?>
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary"><a href="#" onClick="return expandTable('programs')">Programs <i class="fas fa-chevron-circle-down align-middle" id="programs-toggle"></i></a></h6>
+      </div>
+      <div class="card-body">
+        <table id="programs" class="table table-striped" style="display:none">
+          <?php foreach ($programs as $post): ?>
+          <tr>
+          <?php 
+              $row_class = '';
+  
+              if(key_exists($post['Programs']['program'],$restricted_programs))
+              {
+                $row_class = 'restricted';
+              }
+          ?>
+          <td class="<?php echo $row_class ?>"> <?php echo $this->Html->link( $post['Programs']['program'] . " v" . $post["Programs"]["version"], '/search/searchProgram/' . $post['Programs']['program']); ?></td>
+        </tr>
+        <?php endforeach; ?>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<?php endif;?>
 
  <?php if(count($services) > 0): ?>
- <table id="services">
-    <tr>
-        <th colspan="4"><h1><a href="#" onClick="expandTable('services')">Services</a></h1></th>
-    </tr>
-    
-    <?php foreach ($services as $post): ?>
-    <tr style="display:none">
-    	<td width="33%"> <?php echo $this->Html->link( $post['Service']['name'] , '/search/searchService/' . $post['Service']['name']); ?></td>
-    	<td width="33%"><?php echo $post['Service']['startmode'] ?></td>
-    	<td><?php echo $post['Service']['status'] ?></td>
-    </tr>
-    
-    <?php endforeach; ?>
- </table>
+ <div class="row">
+  <div class="col-xl-12">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary"><a href="#" onClick="return expandTable('services')">Services <i class="fas fa-chevron-circle-down align-middle" id="services-toggle"></i></a></h6>
+      </div>
+      <div class="card-body">
+        <table id="services" class="table table-striped" style="display:none">
+          <?php foreach ($services as $post): ?>
+          <tr>
+            <td><?php echo $this->Html->link( $post['Service']['name'] , '/search/searchService/' . $post['Service']['name']); ?></td>
+            <td><?php echo $post['Service']['startmode'] ?></td>
+            <td><?php echo $post['Service']['status'] ?></td>
+        </tr>
+        <?php endforeach; ?>
+        </table>
+      </div>
+    </div>
+  </div>
+ </div>
  <?php endif ?>
  

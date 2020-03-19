@@ -57,6 +57,7 @@ class AppSchema extends CakeSchema {
 												  array('Setting'=>array('key'=>'show_computer_commands','value'=>'true')),
 												  array('Setting'=>array('key'=>'domain_username','value'=>'administrator')),
 												  array('Setting'=>array('key'=>'domain_password','value'=>'password')),
+						                          array('Setting'=>array('key'=>'search_domain','value'=>'domain.local')),
 												  array('Setting'=>array('key'=>'shutdown_message','value'=>'The Administrator has initiated a shutdown of your PC')),
 												  array('Setting'=>array('key'=>'display_attributes','value'=>'ComputerName,Location,CurrentUser,SerialNumber,AppUpdates,Model,OS,CPU,Memory,NumberOfMonitors,IPAddress,MACAddress,DriveSpace,Status')),
 												  array('Setting'=>array('key'=>'computer_auto_add','value'=>'false'))));
@@ -274,6 +275,7 @@ class AppSchema extends CakeSchema {
                 'username' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
                 'password' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
                 'email' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+                'gravatar' => array('type' => 'string', 'null' => false, 'default' => '', 'length' => 100, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
                 'send_email' => array('type' => 'string', 'null' => false, 'default' => 'false', 'length' => 10, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
                 'indexes' => array(
                         'PRIMARY' => array('column' => 'id', 'unique' => 1)

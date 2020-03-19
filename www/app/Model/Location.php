@@ -3,10 +3,11 @@
    			
    	var $useTable = 'location';
    	
- 	
- 	
+   	var $hasMany = array(
+   	    'Computer' => array(
+   	        'foreignKey' => 'ComputerLocation'
+   	    )
+   	);
 
-   		
-   	
-   }
+}
    
