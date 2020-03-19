@@ -107,7 +107,7 @@ function wol(mac){
   </div>
 </div>
 
-<?php if(array_key_exists('general', $tables)): ?>
+<?php if(array_key_exists('general', $tables) && count($tables['general']) > 0): ?>
 <div class="row">
   <div class="col-xl-12">
     <div class="card border-left-primary shadow mb-4">
@@ -115,41 +115,14 @@ function wol(mac){
           <h6 class="m-0 font-weight-bold text-primary">General Information</h6>
         </div>
         <div class="card-body">
-          <div class="row">
-            <table class="table table-striped">
-              <?php foreach($tables['general'] as $aTable): ?>
-              <tr>
-                <?php foreach($aTable as $attribute): ?>
-                  <th style="width: 250px;"><?php echo $validAttributes[$attribute] ?></th>
-                <?php endforeach; ?>
-                <?php
-                  $tableCount = count($aTable); 
-                  while($tableCount < 5): ?>
-                  <th style="width: 250px;"></th>
-                  <?php $tableCount ++; ?>
-                <?php endwhile; ?>
-              </tr>
-              <tr>
-                <?php foreach($aTable as $attribute): ?>
-                  <td><?php echo $this->AttributeDisplay->displayAttribute($attribute,$computer)?></td>
-                <?php endforeach; ?>
-                <?php
-                  $tableCount = count($aTable); 
-                  while($tableCount < 5): ?>
-                  <td></td>
-                  <?php $tableCount ++; ?>
-                <?php endwhile; ?>
-              </tr>
-              <?php endforeach; ?>
-            </table>
-          </div>
+          <?php echo $this->AttributeDisplay->drawTable($tables['general'], $validAttributes, $computer); ?>
         </div>
       </div>    
   </div>
 </div>
 <?php endif; ?>
 
-<?php if(array_key_exists('hardware', $tables)): ?>
+<?php if(array_key_exists('hardware', $tables) && count($tables['hardware']) > 0): ?>
 <?php $tableCount = 0; ?>
 <div class="row">
   <div class="col-xl-12">
@@ -158,41 +131,14 @@ function wol(mac){
           <h6 class="m-0 font-weight-bold text-primary">Hardware Information</h6>
         </div>
         <div class="card-body">
-          <div class="row">
-            <table class="table table-striped">
-              <?php foreach($tables['hardware'] as $aTable): ?>
-              <tr>
-                <?php foreach($aTable as $attribute): ?>
-                  <th style="width: 250px;"><?php echo $validAttributes[$attribute] ?></th>
-                <?php endforeach; ?>
-                <?php
-                  $tableCount = count($aTable); 
-                  while($tableCount < 5): ?>
-                  <th style="width: 250px;"></th>
-                  <?php $tableCount ++; ?>
-                <?php endwhile; ?>
-              </tr>
-              <tr>
-                <?php foreach($aTable as $attribute): ?>
-                  <td><?php echo $this->AttributeDisplay->displayAttribute($attribute,$computer)?></td>
-                <?php endforeach; ?>
-                <?php
-                  $tableCount = count($aTable); 
-                  while($tableCount < 5): ?>
-                  <td></td>
-                  <?php $tableCount ++; ?>
-                <?php endwhile; ?>
-              </tr>
-              <?php endforeach; ?>
-            </table>
-          </div>
+          <?php echo $this->AttributeDisplay->drawTable($tables['hardware'], $validAttributes, $computer); ?>
         </div>
       </div>    
   </div>
 </div>
 <?php endif; ?>
 
-<?php if(array_key_exists('network', $tables)): ?>
+<?php if(array_key_exists('network', $tables) && count($tables['network']) > 0): ?>
 <?php $tableCount = 0; ?>
 <div class="row">
   <div class="col-xl-12">
@@ -201,34 +147,7 @@ function wol(mac){
           <h6 class="m-0 font-weight-bold text-primary">Network Information</h6>
         </div>
         <div class="card-body">
-          <div class="row">
-            <table class="table table-striped">
-              <?php foreach($tables['network'] as $aTable): ?>
-              <tr>
-                <?php foreach($aTable as $attribute): ?>
-                  <th style="width: 250px;"><?php echo $validAttributes[$attribute] ?></th>
-                <?php endforeach; ?>
-                <?php
-                  $tableCount = count($aTable); 
-                  while($tableCount < 5): ?>
-                  <th style="width: 250px;"></th>
-                  <?php $tableCount ++; ?>
-                <?php endwhile; ?>
-              </tr>
-              <tr>
-                <?php foreach($aTable as $attribute): ?>
-                  <td><?php echo $this->AttributeDisplay->displayAttribute($attribute,$computer)?></td>
-                <?php endforeach; ?>
-                <?php
-                  $tableCount = count($aTable); 
-                  while($tableCount < 5): ?>
-                  <td></td>
-                  <?php $tableCount ++; ?>
-                <?php endwhile; ?>
-              </tr>
-              <?php endforeach; ?>
-            </table>
-          </div>
+          <?php echo $this->AttributeDisplay->drawTable($tables['network'], $validAttributes, $computer); ?>
         </div>
       </div>    
   </div>

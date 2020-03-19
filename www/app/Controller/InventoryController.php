@@ -142,65 +142,14 @@ class InventoryController extends AppController {
 		
 		$displaySetting = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'display_attributes')));
 		$displayAttributes = explode(",",$displaySetting['Setting']['value']);
-		$colCount = 0; //current number of columns 
 		$tables = array();
-		$currentTable = array();
 		
-		//general information
-		foreach(array_keys($generalAttributes) as $aKey){
-		    if(in_array($aKey, $displayAttributes))
-			{
-				if($colCount >= 5){
-					$tables['general'][] = $currentTable;
-					$currentTable = array();
-					$colCount = 0;
-				}
-		
-				$currentTable[] = $aKey;
-				$colCount ++;
-			}	
-		} 
-		$tables['general'][] = $currentTable;
-		$currentTable = array();
-        $colCount = 0;
+        //build the tables
+		$tables['general'] = $this->_processDisplayTable($generalAttributes, $displayAttributes);
+        $tables['hardware'] = $this->_processDisplayTable($hardwareAttributes, $displayAttributes);
+        $tables['network'] = $this->_processDisplayTable($networkAttributes, $displayAttributes);
         
-        //hardware
-        foreach(array_keys($hardwareAttributes) as $aKey){
-            if(in_array($aKey, $displayAttributes))
-            {
-                if($colCount >= 5){
-                    $tables['hardware'][] = $currentTable;
-                    $currentTable = array();
-                    $colCount = 0;
-                }
-                
-                $currentTable[] = $aKey;
-                $colCount ++;
-            }
-        }
-        $tables['hardware'][] = $currentTable;
-        
-        $currentTable = array();
-        $colCount = 0;
-        
-        //network
-        foreach(array_keys($networkAttributes) as $aKey){
-            if(in_array($aKey, $displayAttributes))
-            {
-                if($colCount >= 5){
-                    $tables['network'][] = $currentTable;
-                    $currentTable = array();
-                    $colCount = 0;
-                }
-                
-                $currentTable[] = $aKey;
-                $colCount ++;
-            }
-        }
-        $tables['network'][] = $currentTable;
 		
-		
-		//save the last table
 		$this->set('validAttributes',$generalAttributes + $hardwareAttributes + $networkAttributes);
 		$this->set('displayStatus', in_array('Status', $displayAttributes));
 		$this->set('tables',$tables);
@@ -555,6 +504,35 @@ class InventoryController extends AppController {
 		$this->Logs->set('MESSAGE',$message);
 		$this->Logs->set("DATED",date("Y-m-d H:i:s",time()));
 		$this->Logs->save();
+	}
+	
+	function _processDisplayTable($validAttributes, $selectedAttributes){
+        $result = array();
+        
+        $currentRow = array(); //one row in a table
+        $colCount = 0; //current number of columns
+        $maxCol = 5; //maximum number of table columns
+        
+	    foreach(array_keys($validAttributes) as $aKey){
+	        if(in_array($aKey, $selectedAttributes))
+	        {
+	            if($colCount >= 5){
+	                $result[] = $currentRow;
+	                $currentRow = array();
+	                $colCount = 0;
+	            }
+	            
+	            $currentRow[] = $aKey;
+	            $colCount ++;
+	        }
+	    }
+	    
+	    if(count($currentRow) > 0)
+	    {
+	       $result[] = $currentRow;
+	    }
+
+	    return $result;
 	}
 }
     
