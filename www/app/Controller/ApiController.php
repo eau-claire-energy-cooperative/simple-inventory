@@ -53,6 +53,7 @@ class ApiController extends AppController {
 			$aComputer['Computer']['MemoryFree'] = $this->json_data->MemoryFree;
 			$aComputer['Computer']['CPU'] = $this->json_data->CPU;
 			$aComputer['Computer']['IPaddress'] = $this->json_data->IPaddress;
+			$aComputer['Computer']['IPv6address'] = $this->json_data->IPv6address;
 			$aComputer['Computer']['MACaddress'] = $this->json_data->MACaddress;
 			$aComputer['Computer']['NumberOfMonitors'] = $this->json_data->NumberOfMonitors;
 			$aComputer['Computer']['LastUpdated'] = $this->json_data->LastUpdated;

@@ -98,6 +98,10 @@ class AttributeDisplayHelper extends AppHelper {
 		{
 			$result = $computer['Computer']['IPaddress'];
 		}
+		else if ($attribute == 'IPv6address')
+		{
+		    $result = $computer['Computer']['IPv6address'];
+		}
 		else if ($attribute == 'MACAddress')
 		{
 			$result = $computer['Computer']['MACaddress'];

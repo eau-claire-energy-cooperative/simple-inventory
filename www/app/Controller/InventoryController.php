@@ -138,7 +138,7 @@ class InventoryController extends AppController {
 		//figure out what attributes to display
 		$generalAttributes = array("ComputerName"=>"Computer Name","Location"=>"Location","CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID","LastUpdated"=>"Last Updated");
 		$hardwareAttributes = array("Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors","DriveSpace"=>"Drive Space","AppUpdates"=>"Application Updates");
-		$networkAttributes = array("IPAddress"=>"IP Address","MACAddress"=>"MAC Address");
+		$networkAttributes = array("IPAddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACAddress"=>"MAC Address");
 		
 		$displaySetting = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'display_attributes')));
 		$displayAttributes = explode(",",$displaySetting['Setting']['value']);

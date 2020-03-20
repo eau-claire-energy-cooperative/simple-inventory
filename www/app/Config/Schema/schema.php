@@ -105,6 +105,7 @@ class AppSchema extends CakeSchema {
                 'CPU' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'NumberOfMonitors' => array('type' => 'integer', 'null' => false, 'default' => '0', 'unsigned' => false),
                 'IPaddress' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+                'IPv6address' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'MACaddress' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'DiskSpace' => array('type' => 'biginteger', 'null' => false, 'default' => '0', 'length' => 255, 'unsigned' => false),
                 'DiskSpaceFree' => array('type' => 'biginteger', 'null' => false, 'default' => '0', 'unsigned' => false),
@@ -262,7 +263,7 @@ class AppSchema extends CakeSchema {
         public $settings = array(
                 'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
                 'key' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-                'value' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 150, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+                'value' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 200, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'indexes' => array(
                         'PRIMARY' => array('column' => 'id', 'unique' => 1)
                 ),

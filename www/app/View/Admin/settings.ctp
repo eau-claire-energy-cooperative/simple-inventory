@@ -65,7 +65,7 @@
               </div>
               <div class="row mt-2">
                 <div class="col-sm-6">Fields To Display</div>
-                <div class="col-sm-6"><?php echo $this->Form->select('display_attributes',array("ComputerName"=>"Computer Name","Location"=>"Location","CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID","AppUpdates"=>"Application Updates","Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors","IPAddress"=>"IP Address","MACAddress"=>"MAC Address","DriveSpace"=>"Drive Space","LastUpdated"=>"Last Updated","Status"=>"Status"),array('class'=>'custom-select','multiple'=>true,'label'=>false,'value'=>$displayAttributes)) ?></div>
+                <div class="col-sm-6"><?php echo $this->Form->select('display_attributes',array("ComputerName"=>"Computer Name","Location"=>"Location","CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID","AppUpdates"=>"Application Updates","Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors","IPAddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACAddress"=>"MAC Address","DriveSpace"=>"Drive Space","LastUpdated"=>"Last Updated","Status"=>"Status"),array('class'=>'custom-select','multiple'=>true,'label'=>false,'value'=>$displayAttributes)) ?></div>
               </div>
             </div>
           </div>

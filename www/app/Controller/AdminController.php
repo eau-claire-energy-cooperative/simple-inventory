@@ -53,7 +53,7 @@ class AdminController extends AppController {
 				{
 					$value = implode(",",$this->data['Setting'][$key]);
 				}
-				
+
 				$this->Setting->query(sprintf('update settings set settings.value = "%s" where settings.key = "%s"',$value,$key));
 			}
 			

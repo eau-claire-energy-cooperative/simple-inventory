@@ -123,11 +123,12 @@ else
 
 #NETWORK
 #gets network info where the adapter is enabled and has an IP, use the first one
-$win32_network = @(Get-WmiObject win32_networkadapterconfiguration | Select-Object -Property @{name='IPAddress';Expression={($_.IPAddress[0])}},MacAddress | Where IPAddress -NE $null)
+$win32_network = @(Get-WmiObject win32_networkadapterconfiguration | Select-Object -Property @{name='IPAddress';Expression={($_.IPAddress[0])}},@{name="IPV6";Expression={($_.IPAddress[1])}},MacAddress | Where IPAddress -NE $null)
 
 if($win32_network -ne $null -And $win32_network.count -gt 0){
 	#returned array of addresses
 	$computerInfo.IPaddress = $win32_network[0].IPAddress
+    $computerInfo.IPv6address = $win32_network[0].IPV6
 	$computerInfo.MACaddress = $win32_network[0].MacAddress
 }
 else{
