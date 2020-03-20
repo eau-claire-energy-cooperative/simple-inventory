@@ -63,7 +63,7 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Manage Inventory</h6>
-            <?php if($settings['ldap_computers_basedn'] != ''): ?>
+            <?php if(isset($settings) && $settings['ldap_computers_basedn'] != ''): ?>
             <a class="collapse-item" href="<?php echo $this->Html->url('/inventory/active_directory_sync') ?>">Active Directory Sync</a>
             <?php endif; ?>
             <a class="collapse-item" href="<?php echo $this->Html->url('/manage/licenses') ?>">Licenses</a>
