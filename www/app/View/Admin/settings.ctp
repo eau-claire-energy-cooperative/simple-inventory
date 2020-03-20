@@ -16,6 +16,10 @@
                 <div class="col-md-6"><?php echo $this->Form->select('auth_type',array('local'=>'Local Users','ldap'=>'LDAP Connection'),array('class'=>'custom-select','value'=>$settings['auth_type'],'empty'=>false)) ?></div>
               </div>
               <div class="row mt-2">
+                <div class="col-sm-6">Updater Script Auth Key</div>
+                <div class="col-sm-6"><?php echo $this->Form->input('api_auth_key',array('class'=>'form-control','label'=>false,'value'=>$settings['api_auth_key'])) ?></div>
+              </div>
+              <div class="row mt-2">
                 <div class="col-sm-6">Computer Ignore List (comma separated)</div>
                 <div class="col-sm-6"><?php echo $this->Form->input('computer_ignore_list',array('class'=>'form-control','label'=>false,'value'=>$settings['computer_ignore_list'])) ?></div>
               </div>

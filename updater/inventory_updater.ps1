@@ -5,6 +5,8 @@
     This is a drop-in replacement for the java based inventory updater program
 .PARAMETER Url
     Full path to the inventory website to be used for web calls, example http://localhost/inventory
+.PARAMETER ApiAuthKey
+    The authentication key for the inventory API endpoint. This is set in the inventory manager. All calls will fail if it is not matching.
 .PARAMETER CheckPrograms
     True/False value that defines if the programs on the computer should be sent. Defaults to True
 .PARAMETER CheckServices
@@ -12,16 +14,17 @@
 .PARAMETER CheckChoco
     True/False value that defines if the chocolatey applications outdated check should be performed. Defaults to False
 .EXAMPLE
-    C:\PS>inventory_updater.ps1 -Url http://localhost/inventory -CheckPrograms False
+    C:\PS>inventory_updater.ps1 -Url http://localhost/inventory -ApiAuthKey key -CheckPrograms False
 .NOTES
     Author: Rob Weber   
 #>
 param(
 [Parameter(Mandatory=$true,Position=0)][ValidateNotNullOrEmpty()][string]$Url, 
-[Parameter(Mandatory=$false,Position=1)][ValidateSet("true","false")][string]$CheckPrograms = "True",
-[Parameter(Mandatory=$false,Position=2)][ValidateSet("true","false")][string]$CheckServices = "True",
-[Parameter(Mandatory=$false,Position=3)][ValidateSet("true","false")][string]$CheckChoco = "False",
-[Parameter(Mandatory=$false,Position=4)][boolean]$DebugLog = $False
+[Parameter(Mandatory=$true,Position=1)][ValidateNotNullOrEmpty()][string]$ApiAuthKey,
+[Parameter(Mandatory=$false,Position=2)][ValidateSet("true","false")][string]$CheckPrograms = "True",
+[Parameter(Mandatory=$false,Position=3)][ValidateSet("true","false")][string]$CheckServices = "True",
+[Parameter(Mandatory=$false,Position=4)][ValidateSet("true","false")][string]$CheckChoco = "False",
+[Parameter(Mandatory=$false,Position=5)][boolean]$DebugLog = $False
 )
 
 #lowest powershell version this script will support
@@ -55,7 +58,7 @@ function web-call{
 	$jsonData = $data | ConvertTo-Json -Compress
 	$output = @{}
 	try{
-		$output = Invoke-WebRequest -Method 'Post' -Uri ($apiUrl + $endpoint) -Body $jsonData -ContentType "application/json" -UseBasicParsing | ConvertFrom-Json
+		$output = Invoke-WebRequest -Method 'Post' -Uri ($apiUrl + $endpoint) -Body $jsonData -ContentType "application/json" -Headers @{"x-auth-key"="$ApiAuthKey"} -UseBasicParsing | ConvertFrom-Json
 	}
 	catch{
 		Continue
@@ -80,10 +83,16 @@ function web-log{
 	}
 	
 	$output = web-call -Endpoint "/add_log" -Data @{date = "$now"; logger = "$logger"; level = "$level"; message = "$message"}
+    return $output
 }
 
 #startup the script
-web-log -Message "Starting inventory collection"
+$logSuccess = web-log -Message "Starting inventory collection"
+
+if($logSuccess.type -eq 'error'){
+    Write-Host $logSuccess.message
+    exit 2
+}
 
 #get the settings
 $settingsObj = web-call -Endpoint "/settings" -Data @{}
@@ -100,11 +109,11 @@ $computerInfo.ComputerName = $ComputerName
 
 #check the powershell version
 if($PSVersionTable.PSVersion.major -lt $minPowerShellVersion){
-	web-log -Message "$ComputerName powershell version not compatible" -Level "ERROR"
+	web-log -Message "$ComputerName powershell version not compatible" -Level "ERROR" | out-null
 	exit 2
 }
 
-web-log -Message "Gathering PC Information"
+web-log -Message "Gathering PC Information" | out-null
 
 #MEMORY
 $computerInfo.Memory = [math]::round($win32Output.totalvisiblememorysize / 1024/1024, 3)
@@ -208,7 +217,7 @@ $output = web-call -Endpoint "/inventory/exists" -Data @{computer = "$ComputerNa
 if($output."type" -eq "success")
 {
 	#get the computer id and update
-	web-log -Message "Updating Computer $ComputerName"
+	web-log -Message "Updating Computer $ComputerName" | out-null
 	$ComputerId = $output."result".id
 	$computerInfo.id = $output."result".id
 	
@@ -216,16 +225,16 @@ if($output."type" -eq "success")
 	
 	if($updateOutput."type" -eq "success")
 	{
-		web-log -Message "$ComputerName has been updated"
+		web-log -Message "$ComputerName has been updated" | out-null
 	}
 	else
 	{
-		web-log -Message "Error Updating $ComputerName" -level "ERROR"
+		web-log -Message "Error Updating $ComputerName" -level "ERROR" | out-null
 	}
 }
 else
 {
-	web-log -Message "$ComputerName not in inventory system" -level "WARNING"
+	web-log -Message "$ComputerName not in inventory system" -level "WARNING" | out-null
 	
 	if($settings.computer_ignore_list)
 	{
@@ -233,7 +242,7 @@ else
 		if($settings.computer_ignore_list.ToLower().Contains($ComputerName.ToLower()))
 		{
 			#don't send the data, end here
-			web-log -Message "$ComputerName on the ignore list, not sending add request" -level "ERROR"
+			web-log -Message "$ComputerName on the ignore list, not sending add request" -level "ERROR" | out-null
 			exit 0 
 		}
 	}
@@ -245,7 +254,7 @@ else
 		
 		if($defaultObj."type" -ne "success")
 		{
-			web-log -Message "Need default location to auto-add" -level "ERROR"
+			web-log -Message "Need default location to auto-add" -level "ERROR" | out-null
 			exit 0
 		}
 		
@@ -258,7 +267,7 @@ else
 			$ComputerId = $addOutput."result".id
 			$computerInfo.id = $ComputerId
 			
-			web-log -Message "Added $Computername with id: $ComputerId"
+			web-log -Message "Added $Computername with id: $ComputerId" | out-null
 			
 			#try and send the computer info again
 			$updateOutput = web-call -Endpoint "/inventory/update" -Data $computerInfo
@@ -275,13 +284,13 @@ else
 		}
 		else
 		{
-			web-log -Message "Error auto-adding $ComputerName" -level "ERROR"
+			web-log -Message "Error auto-adding $ComputerName" -level "ERROR" | out-null
 		}
 	}
 	else
 	{
 		#send an add request
-		web-log -Message "Sending add request for $ComputerName"
+		web-log -Message "Sending add request for $ComputerName" | out-null
 		$message = "Computer <b>$ComputerName</b> is requesting to be added to the inventory. Details are below: <br><br>" + 
 			"Model: $($computerInfo.Model)<br>" + 
 			"Serial Number: $($computerInfo.SerialNumber)<br>" + 
@@ -319,7 +328,7 @@ if(evalBool($CheckPrograms))
 	$allPrograms += $(Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion)
 	$allPrograms += $(Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion)
 	
-	web-log -Message "Found $($allPrograms.count) programs on $ComputerName" 
+	web-log -Message "Found $($allPrograms.count) programs on $ComputerName" | out-null
 	
 	#clear out the current programs list
 	$clearOutput = web-call -Endpoint "/programs/clear" -Data @{id = $ComputerId}
@@ -339,7 +348,7 @@ if(evalBool($CheckServices))
 {
 	$allServices = $(Get-WmiObject -Class Win32_Service | Select DisplayName, StartMode, State)
 	
-	web-log -Message "Found $($allServices.count) services on $ComputerName"
+	web-log -Message "Found $($allServices.count) services on $ComputerName" | out-null
 	
 	#clear out the current services list
 	$clearOutput = web-call -Endpoint "/services/clear" -Data @{id = $ComputerId}

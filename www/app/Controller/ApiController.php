@@ -7,7 +7,24 @@ class ApiController extends AppController {
 	var $json_data = null;
 	
 	function beforeFilter(){
-		$this->json_data = $this->request->input('json_decode');
+	    
+	    //check the auth value
+	    $auth_key = $this->request->header('X-Auth-Key');
+	    
+	    $auth_value = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'api_auth_key')));
+
+	    if($auth_key == $auth_value['Setting']['value'])
+	    {
+	       $this->json_data = $this->request->input('json_decode');
+	    }
+	    else
+	    {
+	        //show error message, stop all processing here
+	        $this->set('result',array('type'=>'error','message'=>'auth key value is invalid'));
+	        $this->render('api');
+	        $this->response->send();
+	        $this->_stop();
+	    }
 	}
 	
 	function index(){
