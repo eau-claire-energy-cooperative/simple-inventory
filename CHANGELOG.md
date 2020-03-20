@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## 1.2
 
+### Added
+
+- added support for the update script sending the ipv6 address found on the main connected interface. Can be togged on/off in the settings as with the other fields. 
+- added an API authentication key setting and support for it in the updater script and API controller flows. This stops random operations from being done on the API without some kind of authentication first. 
+
 ### Changed
 
 - updated the UI to use a new theme based on Bootstrap and JQuery. The menu system and overall look have been cleaned, updated, and made consistant overall.
