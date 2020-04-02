@@ -45,7 +45,7 @@
              <td><?php echo $post['Computer']['Memory']  ?> GB</td>
              <td><?php echo $post['Computer']['Model'] ?></td>
              <td><?php echo $this->Html->link( $post['Location']['location'], array('controller'=>'search','action' => 'search', 0,$post['Computer']['ComputerLocation'])); ?></td>
-             <td><?php echo $this->Time->format('m/d/Y',$post['Computer']['LastUpdated']) ?></td>   
+             <td data-sort="<?php echo $this->Time->fromstring($post['Computer']['LastUpdated']) ?>"><?php echo $this->Time->format('m/d/Y',$post['Computer']['LastUpdated']) ?></td>   
         </tr>
         
         <?php endforeach; ?>
