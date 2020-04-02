@@ -99,9 +99,7 @@
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Admin Tools:</h6>
-            <?php if(file_exists(WWW_ROOT . '/drivers/double_drivers.zip')): ?>
-            <?php echo $this->Html->link('Download Double Drivers', '/drivers/double_drivers.zip', array('class'=>'collapse-item')); ?>
-            <?php endif; ?>
+            <a class="collapse-item" href="<?php echo $this->Html->url('/admin/downloads') ?>">Downloads</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/admin/location') ?>">Edit Locations</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/admin/logs') ?>">Logs</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/admin/settings') ?>">Settings</a>
@@ -207,9 +205,7 @@
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <?php if(file_exists(WWW_ROOT . '/drivers/double_drivers.zip')): ?>
-            <a href="<?php $this->Html->url('/drivers/double_drivers.zip');  ?>" class="mr-3 h6"><i class="fas fa-file-download fa-2x"></i> Double Drivers </a>
-            <?php endif; ?>
+            <a href="<?php $this->Html->url('/admin/downloads');  ?>" class="mr-3 h6"><i class="fas fa-file-download fa-2x"></i> Downloads </a>
             <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory" class="h6"><i class="fab fa-github fa-2x"></i> View Source</a>
           </div>
         </div>

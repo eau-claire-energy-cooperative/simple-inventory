@@ -35,6 +35,10 @@ class AdminController extends AppController {
 		$this->set('title_for_layout','Admin');
 	}
 	
+	function downloads(){
+		$this->set('title_for_layout','Downloads');
+	}
+	
 	public function logs()
 	{
 	 	$this->set('title_for_layout','Logs');
