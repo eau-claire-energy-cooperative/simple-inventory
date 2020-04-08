@@ -14,6 +14,12 @@ if [ -e $DBFILE ]; then
 	mv $DBFILE ./
 fi
 
+BOOTSTRAPFILE="$COPYDIR/app/Config/bootstrap.php"
+if [ -e $BOOTSTRAPFILE ]; then
+	echo "Copy Boostrap File"
+	mv $BOOTSTRAPFILE ./
+fi
+
 #copy the contents of the www directory
 echo "Copy site files"
 rm -R $COPYDIR/*
@@ -28,6 +34,11 @@ chmod -R 777 $COPYDIR/app/tmp
 if [ -e "database.php" ]; then
 	echo "Restoring database file"
 	mv "./database.php" $DBFILE
+fi
+
+if [ -e "bootstrap.php" ]; then
+	echo "Restoring bootstrap file"
+	mv "./bootstrap.php" $BOOTSTRAPFILE
 fi
 
 #copy the current updater script
