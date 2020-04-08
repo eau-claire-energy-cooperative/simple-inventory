@@ -49,16 +49,25 @@ class AdminController extends AppController {
 	public function settings($action = null){
 		if($this->request->is('post'))
 		{
-			foreach(array_keys($this->data['Setting']) as $key)
-			{
-				//if setting is array, make it a string
-				$value = $this->data['Setting'][$key];
-				if(is_array($this->data['Setting'][$key]))
+			//get all the settings 
+			$db_settings = $this->Setting->find('all');
+			
+			foreach($db_settings as $aSetting){
+				$key = $aSetting['Setting']['key'];
+				
+				//check if we're updating
+				if(array_key_exists($key, $this->request->data['Setting']))
 				{
-					$value = implode(",",$this->data['Setting'][$key]);
+					$value = $this->request->data['Setting'][$key];
+					if(is_array($this->request->data['Setting'][$key]))
+					{
+						$value = implode(",",$this->data['Setting'][$key]);
+					}
+					
+					$aSetting['Setting']['value'] = $value;
+					
+					$this->Setting->save($aSetting);
 				}
-
-				$this->Setting->query(sprintf('update settings set settings.value = "%s" where settings.key = "%s"',$value,$key));
 			}
 			
 			$this->Flash->success('Settings Saved');

@@ -106,3 +106,6 @@ CakeLog::config('error', array(
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
 	'file' => 'error',
 ));
+
+//for settings value encryption - change this on new installs
+Configure::write('Settings.encryption_key','hH9MIT4Nj2dt5ujXiWJHElLQYvHO3cQ3');
