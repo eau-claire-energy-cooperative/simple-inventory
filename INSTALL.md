@@ -8,7 +8,7 @@ Install default from from Linux package manager, also install the following modu
 
 ```
 
-sudo apt-get install -y php7.0-ldap php7.0-mysql php7.0-xml
+sudo apt-get install -y php7.0-ldap php7.0-mcrypt php7.0-mysql php7.0-xml
 
 ```
 
@@ -48,6 +48,10 @@ Install the Net Module
 sudo pear install Pear/Net_Ping
 
 ```
+
+### Security 
+
+In the ```app/Config/bootstrap.php``` file set the Settings.encryption_key value to a different value. This is what encrypts settings values in the database. 
 
 ### Mysql
 
