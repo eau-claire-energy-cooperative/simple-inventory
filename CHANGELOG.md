@@ -9,6 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Added
 
 - encrypt all settings at rest in the database. Use the ```app/Config/bootstrap.php``` file to set the Settings.encryption_key value 
+- added link to documentation GitHub in the footer
+
+### Changed
+
+- refer to Computer Detail pages consistently, some places called it Computer Info
+- minor costmetic changes 
 
 ## 1.2
 
