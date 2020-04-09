@@ -206,6 +206,7 @@
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
             <a href="<?php $this->Html->url('/admin/downloads');  ?>" class="mr-3 h6"><i class="fas fa-file-download fa-2x"></i> Downloads </a>
+            <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki" target="_blank" class="mr-3 h6"><i class="fas fa-info-circle fa-2x"></i> Documentation</a>
             <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory" class="h6"><i class="fab fa-github fa-2x"></i> View Source</a>
           </div>
         </div>
