@@ -1,5 +1,5 @@
 
-<p>Use these tools to find computers that may need to be added or decomissioned.</p>
+<p>Use these tools to find computers that may need to be added or decommissioned.</p>
 <p class="mb-4">Searching AD Tree: <b><?php echo $baseDN ?></b></p>
 
 <div class="row">
@@ -38,7 +38,10 @@
       <div class="card-body">
         <p>Find computers that have not logged in to Active Directory in the given certain amount of days.</p>
         <?php if($currentAction == 'find_old'): ?>
-          <?php echo $this->Form->input('days_old',array('type' => 'select','onchange'=>'updateDays()','options' => array('30'=>'30 Days','60'=>'60 days','90'=>'90 days','120'=>'120 days'),'selected'=>$days_old,'label'=>false,'style'=>'float:right', 'class'=>'mb-2')); ?>
+        	<div class="row">
+          		<div class="col-md-10"></div>
+          		<div class="col-md-2"><?php echo $this->Form->input('days_old',array('type' => 'select','onchange'=>'updateDays()','options' => array('30'=>'30 Days','60'=>'60 days','90'=>'90 days','120'=>'120 days'),'selected'=>$days_old,'label'=>false,'style'=>'float:right', 'class'=>'custom-select custom-select-md mb-2')); ?></div>
+            </div>
         <?php endif; ?>
         <table class="table table-striped">
           <?php 
