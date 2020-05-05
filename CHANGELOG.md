@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## 1.4
+
+### Fixed
+
+- fixed error with /api/add_log function where the Security class wasn't found. Added import to main AppController class
+
 ## 1.3
 
 ### Added
