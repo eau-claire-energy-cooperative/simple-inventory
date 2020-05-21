@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## 1.5
+
+### Added
+
+- added the ability to set a license as "unassigned" to a specific computer. This way the key can be saved if deploying later. 
+
 ## 1.4
 
 ### Fixed
