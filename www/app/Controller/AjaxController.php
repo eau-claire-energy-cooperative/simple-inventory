@@ -58,6 +58,8 @@ class AjaxController extends AppController {
 	    
 	    //get a list of all computers
 	    $allComputers = $this->Computer->find('list',array('fields'=>array('Computer.id', 'Computer.ComputerName'), 'order'=>array('Computer.ComputerName asc')));
+	    $allComputers[0] = 'NO COMPUTER - UNASSIGNED';
+	    
 	    $this->set('computers', $allComputers);
 	    
 	}
@@ -70,6 +72,8 @@ class AjaxController extends AppController {
 	    
 	    //get a list of all computers
 	    $allComputers = $this->Computer->find('list',array('fields'=>array('Computer.id', 'Computer.ComputerName'), 'order'=>array('Computer.ComputerName asc')));
+	    $allComputers[0] = 'NO COMPUTER - UNASSIGNED';
+	    
 	    $this->set('computers', $allComputers);
 	    
 	}

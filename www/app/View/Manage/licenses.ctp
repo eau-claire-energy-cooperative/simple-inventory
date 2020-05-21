@@ -26,7 +26,12 @@
 <table class="table table-striped">
 	<?php foreach($licenses as $aLicense): ?>
 	<tr>
-		<td width="20%"><?php echo $this->Html->link($aLicense['Computer']['ComputerName'], '/inventory/moreInfo/' . $aLicense['License']['comp_id']) ?></td>
+		<td width="20%"><?php if($aLicense['License']['comp_id'] != 0): ?>
+		    <?php echo $this->Html->link($aLicense['Computer']['ComputerName'], '/inventory/moreInfo/' . $aLicense['License']['comp_id']) ?>
+		  <?php else: ?>
+        <span class="text-danger">UNASSIGNED</span>
+		  <?php endif; ?>
+		</td>
 		<td width="25%"><?php echo $aLicense['License']['ProgramName'] ?></td>
 		<td><?php echo $aLicense['License']['LicenseKey'] ?></td>
 		<td width="12%" align="right">

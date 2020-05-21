@@ -6,7 +6,7 @@
 </div>
 <div class="row mt-1">
   <div class="col-sm-4">License Assigned To: </div>
-  <div class="col-sm-8"><?php echo $this->Form->select('comp_id', $computers, array('label'=>false, 'empty'=>false, 'value'=>$current_comp, 'class'=>'custom-select')) ?></div>
+  <div class="col-sm-8"><?php echo $this->Form->select('comp_id', $computers, array('label'=>false, 'empty'=>false, 'value'=>0, 'class'=>'custom-select')) ?></div>
 </div>
 <div class="row mt-1">
   <div class="col-sm-4">License Key: </div>
