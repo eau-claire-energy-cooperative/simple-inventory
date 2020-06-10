@@ -10,6 +10,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - added the ability to set a license as "unassigned" to a specific computer. This way the key can be saved if deploying later. 
 
+### Changed
+
+- made the decommission date of a computer more prominent on the listing screen and the detail screen
+- updated the look of the decommission process screen, including the error message listing
+
 ## 1.4
 
 ### Fixed
