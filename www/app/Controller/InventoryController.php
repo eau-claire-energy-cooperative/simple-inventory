@@ -261,7 +261,6 @@ class InventoryController extends AppController {
         	{
         		$message = 'Computer ' . $this->request->data['Computer']['ComputerName'] . ' has been decommissioned';
         		$this->_saveLog($message);
-            	$this->Flash->success($message);
        			$this->transferDecom($currID);
         	} 
         	else 
@@ -307,7 +306,7 @@ class InventoryController extends AppController {
 	
 		if( $this->Decommissioned->save())
 		{
-			$this->Flash->success("Machine with id: " . $id . " has been moved to the decommission table");
+			$this->Flash->success("Computer with id: " . $id . " has been decommissioned");
 			$this->redirect(array("action" => 'computerInventory'));
 		}
 	}
