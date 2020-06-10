@@ -273,43 +273,43 @@ class InventoryController extends AppController {
 			
 		
 		
-		public function transferDecom($id = null)
-		{
-			//get the computer model needed
-			$comp = $this->Computer->find('first',array('conditions'=>array('Computer.id'=>$id)));	
+	public function transferDecom($id = null)
+	{
+		//get the computer model needed
+		$comp = $this->Computer->find('first',array('conditions'=>array('Computer.id'=>$id)));	
 
-			$this->Decommissioned->create();
-			$this->Decommissioned->set('ComputerName',$comp ['Computer']['ComputerName']);
-			$this->Decommissioned->set('SerialNumber',$comp ['Computer']['SerialNumber']);
-			$this->Decommissioned->set('AssetId',$comp ['Computer']['AssetId']);
-			$this->Decommissioned->set('CurrentUser',$comp ['Computer']['CurrentUser']);
-			$this->Decommissioned->set('Location',$comp ['Computer']['ComputerLocation']);
-			$this->Decommissioned->set('Model',$comp ['Computer']['Model']);
-			$this->Decommissioned->set('OS',$comp ['Computer']['OS']);
-			$this->Decommissioned->set('Memory',$comp ['Computer']['Memory']);
-			$this->Decommissioned->set('CPU',$comp ['Computer']['CPU']);
-			$this->Decommissioned->set('NumberOfMonitors',$comp ['Computer']['NumberOfMonitors']);
-			$this->Decommissioned->set('IPaddress',$comp ['Computer']['IPaddress']);
-			$this->Decommissioned->set('MACaddress',$comp ['Computer']['MACaddress']);
-			$this->Decommissioned->set('LastUpdated',$comp ['Computer']['LastUpdated']);
-			$this->Decommissioned->set('WipedHD',$comp ['Computer']['WipedHD']);
-			$this->Decommissioned->set('Recycled',$comp ['Computer']['Recycled']);
-			$this->Decommissioned->set('RedeployedAs',$comp ['Computer']['RedeployedAs']);
-			$this->Decommissioned->set('notes',$comp ['Computer']['notes']);
-			
-			$this->Computer->delete($id);
+		$this->Decommissioned->create();
+		$this->Decommissioned->set('ComputerName',$comp ['Computer']['ComputerName']);
+		$this->Decommissioned->set('SerialNumber',$comp ['Computer']['SerialNumber']);
+		$this->Decommissioned->set('AssetId',$comp ['Computer']['AssetId']);
+		$this->Decommissioned->set('CurrentUser',$comp ['Computer']['CurrentUser']);
+		$this->Decommissioned->set('Location',$comp ['Computer']['ComputerLocation']);
+		$this->Decommissioned->set('Model',$comp ['Computer']['Model']);
+		$this->Decommissioned->set('OS',$comp ['Computer']['OS']);
+		$this->Decommissioned->set('Memory',$comp ['Computer']['Memory']);
+		$this->Decommissioned->set('CPU',$comp ['Computer']['CPU']);
+		$this->Decommissioned->set('NumberOfMonitors',$comp ['Computer']['NumberOfMonitors']);
+		$this->Decommissioned->set('IPaddress',$comp ['Computer']['IPaddress']);
+		$this->Decommissioned->set('MACaddress',$comp ['Computer']['MACaddress']);
+		$this->Decommissioned->set('LastUpdated',$comp ['Computer']['LastUpdated']);
+		$this->Decommissioned->set('WipedHD',$comp ['Computer']['WipedHD']);
+		$this->Decommissioned->set('Recycled',$comp ['Computer']['Recycled']);
+		$this->Decommissioned->set('RedeployedAs',$comp ['Computer']['RedeployedAs']);
+		$this->Decommissioned->set('notes',$comp ['Computer']['notes']);
 		
-			//also delete programs and services 
-			$this->Programs->query('delete from programs where comp_id = ' . $id);
-			$this->Service->query('delete from services where comp_id = ' . $id);
-			$this->Disk->query('delete from disk where comp_id = ' . $id);
-		
-			if( $this->Decommissioned->save())
-			{
-				$this->Flash->success("Machine with id: " . $id . " has been moved to the decommission table");
-				$this->redirect(array("action" => 'computerInventory'));
-			}
+		$this->Computer->delete($id);
+	
+		//also delete programs and services 
+		$this->Programs->query('delete from programs where comp_id = ' . $id);
+		$this->Service->query('delete from services where comp_id = ' . $id);
+		$this->Disk->query('delete from disk where comp_id = ' . $id);
+	
+		if( $this->Decommissioned->save())
+		{
+			$this->Flash->success("Machine with id: " . $id . " has been moved to the decommission table");
+			$this->redirect(array("action" => 'computerInventory'));
 		}
+	}
 		
 	public function changeWipeStatus($id = null,$status)
 	{
