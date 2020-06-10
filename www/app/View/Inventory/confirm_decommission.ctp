@@ -1,5 +1,7 @@
 
-<?php echo $this->Html->link('Home', array('action' => 'home')); ?> 
+<div class="mb-4" align="right">
+  <a href="<?php echo $this->Html->url('/inventory/moreInfo/' . $computer_id) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-arrow-left fa-sm text-white-50"></i> Back </a>
+</div>
 				
 <?php 
 
@@ -11,8 +13,19 @@ $attributes=array('legend' => false,'separator'=>'<br>');
 
 ?> 	
 <?php if(isset($errors)): ?>
-	<p></p>
-	<h3><?php echo $errors ?></h3>
+
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card border-left-warning shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Warning</h6>
+        </div>
+        <div class="card-body">
+          <p><?php echo $errors ?></p>  
+        </div>
+    </div>
+  </div>
+</div>  
 <?php else: ?>
 
 

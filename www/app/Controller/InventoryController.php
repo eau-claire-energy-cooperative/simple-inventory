@@ -243,6 +243,7 @@ class InventoryController extends AppController {
 		$currID = $id; //variable to pass to transferDecom
 		$this->Computer->id = $id;
     	
+		$this->set('computer_id', $id);
 		if ($this->request->is('get')) {
         	$this->request->data = $this->Computer->read();
         	
