@@ -2,6 +2,12 @@
 <div align="right" class="mb-2">
 	<?php echo $this->Form->Submit('Update',array('class'=>'d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2')) ?>
 </div>
+
+<?php
+  //convert string to array
+  $homeAttributes = explode(',',$settings['home_attributes']);
+?>
+
 <div class="row">
   <div class="col-xl-12">
     <div class="card shadow mb-4">
@@ -26,6 +32,10 @@
               <div class="row mt-2">
                 <div class="col-sm-6">Enable Computer Auto Add</div>
                 <div class="col-sm-6"><?php echo $this->Form->select('computer_auto_add',array('true'=>'Yes','false'=>'No'),array('class'=>'custom-select','value'=>$settings['computer_auto_add'],'empty'=>false)) ?></div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-sm-6">Inventory List Fields To Display</div>
+                <div class="col-sm-6"><?php echo $this->Form->select('home_attributes',array("CurrentUser"=>"Current User", "OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","Model"=>"Model", "SerialNumber"=>"Serial Number","AssetId"=>"Asset ID","AppUpdates"=>"Application Updates","NumberOfMonitors"=>"Number of Monitors","IPAddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACAddress"=>"MAC Address", "Status"=>"Status"),array('class'=>'custom-select','multiple'=>true,'label'=>false,'value'=>$homeAttributes)) ?></div>
               </div>
             </div>
           </div>

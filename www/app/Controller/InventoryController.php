@@ -121,6 +121,16 @@ class InventoryController extends AppController {
     public function computerInventory() {
     	$this->set('title_for_layout','Computer Inventory');
         $this->set('computer', $this->Computer->find('all', array('order'=> array('ComputerName ASC'))));// gets all data
+        
+        # get the display settings
+        $displaySetting = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'home_attributes')));
+        $displayAttributes = explode(",",$displaySetting['Setting']['value']);
+        $this->set('displayAttributes', $displayAttributes);
+        
+        # set the attribute names
+        $columnNames = array("CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID", "Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors", "AppUpdates"=>"Application Updates", "IPAddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACAddress"=>"MAC Address");
+        $this->set('columnNames', $columnNames);
+
     }
 	
 	

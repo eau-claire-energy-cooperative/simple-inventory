@@ -26,10 +26,9 @@
     	<thead>
         <tr>
             <th>Computer Name</th>
-            <th>Current User</th>
-            <th>Operating System</th>	
-            <th>Memory</th>
-            <th>Model</th>
+            <?php foreach($displayAttributes as $attribute): ?>
+            <th><?php echo $columnNames[$attribute] ?></th>
+            <?php endforeach; ?>
             <th>Location</th>
             <th>Last Update</th>
         </tr>
@@ -40,14 +39,12 @@
         <?php foreach ($computer as $post): ?>
         <tr>
             <td> <?php echo $this->Html->link( $post['Computer']['ComputerName'] , array('action' => 'moreInfo', $post['Computer']['id'])); ?></td>
-             <td><?php echo $post['Computer']['CurrentUser']; ?></td>
-             <td><?php echo $post['Computer']['OS']; ?></td>
-             <td><?php echo $post['Computer']['Memory']  ?> GB</td>
-             <td><?php echo $post['Computer']['Model'] ?></td>
-             <td><?php echo $this->Html->link( $post['Location']['location'], array('controller'=>'search','action' => 'search', 0,$post['Computer']['ComputerLocation'])); ?></td>
-             <td data-sort="<?php echo $this->Time->fromstring($post['Computer']['LastUpdated']) ?>"><?php echo $this->Time->format($post['Computer']['LastUpdated'],'%m/%d/%Y') ?></td>   
+            <?php foreach($displayAttributes as $attribute): ?>
+            <td><?php echo $post['Computer'][$attribute] ?></td>
+            <?php endforeach; ?>
+            <td><?php echo $this->Html->link( $post['Location']['location'], array('controller'=>'search','action' => 'search', 0,$post['Computer']['ComputerLocation'])); ?></td>
+            <td data-sort="<?php echo $this->Time->fromstring($post['Computer']['LastUpdated']) ?>"><?php echo $this->Time->format($post['Computer']['LastUpdated'],'%m/%d/%Y') ?></td>   
         </tr>
-        
         <?php endforeach; ?>
     </tbody>
     </table>
