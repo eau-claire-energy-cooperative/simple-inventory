@@ -21,9 +21,11 @@
  * @since         CakePHP(tm) v 0.10.8.2117
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+App::uses('IniReader', 'Configure');
 
 // Setup a 'default' cache configuration for use in the application.
 Cache::config('default', array('engine' => 'File'));
+Configure::config('default', new IniReader());
 
 /**
  * The settings below can be used to set additional paths to models, views and controllers.
@@ -107,5 +109,8 @@ CakeLog::config('error', array(
 	'file' => 'error',
 ));
 
-//for settings value encryption - change this on new installs
-Configure::write('Settings.encryption_key','hH9MIT4Nj2dt5ujXiWJHElLQYvHO3cQ3');
+//the current program version
+Configure::write('Settings.version', '1.5');
+
+//load the custom.ini config
+Configure::load('custom');
