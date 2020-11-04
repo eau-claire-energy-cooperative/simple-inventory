@@ -209,6 +209,9 @@
             <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki" target="_blank" class="mr-3 h6"><i class="fas fa-info-circle fa-2x"></i> Documentation</a>
             <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory" class="h6"><i class="fab fa-github fa-2x"></i> View Source</a>
           </div>
+          <div class="text-center mt-1">
+            <p>Version <?php echo Configure::read('Settings.version') ?></p>
+          </div>
         </div>
       </footer>
       <!-- End of Footer -->
