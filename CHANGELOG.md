@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Added
 
 - added the ability to set a license as "unassigned" to a specific computer. This way the key can be saved if deploying later. 
+- added ```custom.ini.default``` file and moved the encryption_key setting to this file, loaded at runtime. Allows for custom setting of encryption key
+- added put current version number in footer
 
 ### Changed
 

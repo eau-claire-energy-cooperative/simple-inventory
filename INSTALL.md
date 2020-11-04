@@ -51,7 +51,7 @@ sudo pear install Pear/Net_Ping
 
 ### Security 
 
-In the ```app/Config/bootstrap.php``` file set the Settings.encryption_key value to a different value. This is what encrypts settings values in the database. 
+Copy the ```app/Config/custom.ini.default``` file to ```custom.ini```. In this file set the Settings.encryption_key value to a different value. This is what encrypts settings values in the database. 
 
 ### Mysql
 
