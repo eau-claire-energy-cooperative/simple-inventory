@@ -14,9 +14,9 @@ if [ -e $DBFILE ]; then
 	mv $DBFILE ./
 fi
 
-BOOTSTRAPFILE="$COPYDIR/app/Config/bootstrap.php"
+BOOTSTRAPFILE="$COPYDIR/app/Config/custom.ini"
 if [ -e $BOOTSTRAPFILE ]; then
-	echo "Copy Boostrap File"
+	echo "Copy custom.ini"
 	mv $BOOTSTRAPFILE ./
 fi
 
@@ -37,8 +37,8 @@ if [ -e "database.php" ]; then
 fi
 
 if [ -e "bootstrap.php" ]; then
-	echo "Restoring bootstrap file"
-	mv "./bootstrap.php" $BOOTSTRAPFILE
+	echo "Restoring custom.ini file"
+	mv "./custom.ini" $BOOTSTRAPFILE
 fi
 
 #copy the current updater script
