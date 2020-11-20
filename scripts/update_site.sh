@@ -36,7 +36,7 @@ if [ -e "database.php" ]; then
 	mv "./database.php" $DBFILE
 fi
 
-if [ -e "bootstrap.php" ]; then
+if [ -e "custom.ini" ]; then
 	echo "Restoring custom.ini file"
 	mv "./custom.ini" $BOOTSTRAPFILE
 fi
