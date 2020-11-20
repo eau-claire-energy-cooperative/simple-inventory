@@ -1,1 +1,5 @@
-Settings.encryption_key = putyourcustomkeyhere
+# SET THIS VALUE TO TRUE ONLY WHEN YOU HAVE THE SETTINGS PAGE LOADED OR YOU RISK MESSING UP YOUR SETTINGS - REFER TO THE INSTRUCTIONS: https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki/Encrypting-Settings
+Settings.encrypt = false
+
+# must be greater than 32 bytes or it won't work
+Settings.encryption_key = putyourcustomkeyhereputyourcustomkeyhere

@@ -3,6 +3,9 @@
 	<?php echo $this->Form->Submit('Update',array('class'=>'d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2')) ?>
 </div>
 
+<?php if(!Configure::read('Settings.encrypt')): ?>
+<div class="alert alert-warning">Settings values are currently <b>not</b> encrypted. Follow the instructions on the <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki/Encrypting-Settings" target="_blank">documentation wiki</a>. </div>
+<?php endif; ?>
 <?php
   //convert string to array
   $homeAttributes = explode(',',$settings['home_attributes']);
