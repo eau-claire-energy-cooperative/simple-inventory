@@ -110,7 +110,7 @@ CakeLog::config('error', array(
 ));
 
 //the current program version
-Configure::write('Settings.version', '1.5');
+Configure::write('Settings.version', '1.6');
 
 //load the custom.ini config
 Configure::load('custom');

@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## 1.6
+
+### Added
+
+- added ```Settings.encrypt``` value to the ```custom.ini``` file layout. This controls if settings encryption is used or not
+- added an error message when incorrect authentication type is set at login
+- added [AuthenticationReset](https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki/Recovering-Login) command line option to regain access on lost logins
+- added module and log level arguments to AppShell->dblog() function
+
+### Fixed
+
+- fixed issue with settings encryption. this can now be toggled via a true/false value. Also included better instructions on this
+- fixed warning where the AppShell->log() function conflicted with the CakePHP default. Renamed to dblog()
+
 ## 1.5
 
 ### Added
