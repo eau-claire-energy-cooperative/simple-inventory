@@ -30,7 +30,7 @@ class AppShell extends Shell {
 	var $uses = array('User','Setting','Logs');
 	
 	
-	public function log($message){
+	public function dblog($message){
 		$this->Logs->create();
 		$this->Logs->set('LOGGER','Scheduler');
 		$this->Logs->set('LEVEL','INFO');
@@ -64,7 +64,7 @@ class AppShell extends Shell {
 		
 		foreach($users as $aUser){
 			//log email
-			$this->log("Sending email to " . $aUser['User']['email']);
+			$this->dblog("Sending email to " . $aUser['User']['email']);
 			
 			$email->AddAddress($aUser['User']['email']);
 		}

@@ -14,7 +14,7 @@ class ShutdownComputerTask extends AppShell {
 		
 		//log
     	$this->out("Shutting Down " . $params['Computer Name']);
-    	$this->log("Shutting Down " . $params['Computer Name']);
+    	$this->dblog("Shutting Down " . $params['Computer Name']);
 		
 		$pingComp->shutdown_computer($params['Computer Name'],$params['Restart'], $settings);
     }

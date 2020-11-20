@@ -29,7 +29,7 @@ class RemoveOldProgramsTask extends AppShell {
     	
     	if(count($deleteList) > 0)
     	{
-        	$this->log('Deleting ' . count($deleteList) . ' unneeded program entries');
+        	$this->dblog('Deleting ' . count($deleteList) . ' unneeded program entries');
         	$this->out('Deleting ' . count($deleteList) . ' unneeded program entries');
     	}
     	

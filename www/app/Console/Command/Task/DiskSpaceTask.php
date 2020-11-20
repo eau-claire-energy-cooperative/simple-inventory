@@ -25,7 +25,7 @@ class DiskSpaceTask extends AppShell {
 				{
 					if(($aDisk['space_free']/$aDisk['total_space']) * 100 <= $params['Minimum Space Threshold'])
 					{
-						$this->log($computer['Computer']['ComputerName'] . ' Disk Space Warning');
+						$this->dblog($computer['Computer']['ComputerName'] . ' Disk Space Warning');
 						$this->Alarm->triggerAlarm($computer['Computer']['id'],'disk_space',$params['Minimum Space Threshold'] . "," . $aDisk['label']);
 					}
 				}

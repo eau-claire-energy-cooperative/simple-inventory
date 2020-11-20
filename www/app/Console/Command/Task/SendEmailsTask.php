@@ -9,7 +9,7 @@ class SendEmailsTask extends AppShell {
 		
 		if($messages)
 		{
-			$this->log('Found ' . count($messages) . " messages to send");
+			$this->dblog('Found ' . count($messages) . " messages to send");
 			
 			foreach($messages as $aMessage)
 			{

@@ -16,7 +16,7 @@ class WakeComputerTask extends AppShell {
     	{
     		//log
     		$this->out("Waking up " . $params['Computer Name']);
-    		$this->log("Waking up " . $params['Computer Name']);
+    		$this->dblog("Waking up " . $params['Computer Name']);
     	
     		//get the computer MAC
     		$computer = $this->Computer->find('first',array('conditions'=>array("Computer.ComputerName"=>$params['Computer Name'])));
