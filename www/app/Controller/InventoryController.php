@@ -104,6 +104,10 @@ class InventoryController extends AppController {
 					$this->Flash->error('Incorrect Username/Password');
 				}
 			}
+			else
+			{
+			    $this->Flash->error('Login Failed. An incorrect authentication type is set in the settings. ');
+			}
 		}
 	}
 	
