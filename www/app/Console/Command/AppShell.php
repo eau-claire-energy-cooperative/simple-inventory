@@ -30,10 +30,10 @@ class AppShell extends Shell {
 	var $uses = array('User','Setting','Logs');
 	
 	
-	public function dblog($message){
+	public function dblog($message, $module='Scheduler', $level='INFO'){
 		$this->Logs->create();
-		$this->Logs->set('LOGGER','Scheduler');
-		$this->Logs->set('LEVEL','INFO');
+		$this->Logs->set('LOGGER',$module);
+		$this->Logs->set('LEVEL',$level);
 		$this->Logs->set('MESSAGE',$message);
 		$this->Logs->set("DATED",date("Y-m-d H:i:s",time()));
 		$this->Logs->save();
