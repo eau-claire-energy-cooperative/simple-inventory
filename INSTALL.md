@@ -49,10 +49,6 @@ sudo pear install Pear/Net_Ping
 
 ```
 
-### Security 
-
-Copy the ```app/Config/custom.ini.default``` file to ```custom.ini```. In this file set the Settings.encryption_key value to a different value. This is what encrypts settings values in the database. 
-
 ### Mysql
 
 Install default from Linux Package Manager. Create a DB user and edit the app/Config.database.php file with the correct login information. 
@@ -100,3 +96,7 @@ At default the script takes 2 parameters; the URL of the inventory site and the 
 inventory_updater.ps1 -Url http://localhost/inventory -ApiAuthKey key
 
 ```
+
+## Additional Settings
+
+Check the [settings page of the wiki](https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki/Settings) for more information on customizing your setup and instructions for encrypting the settings values
