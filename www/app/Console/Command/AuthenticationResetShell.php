@@ -15,6 +15,7 @@ class AuthenticationResetShell extends AppShell {
 		$this->Setting->query('update users set password = "1a1dc91c907325c69271ddf0c944bc72"'); //default is hashed value of 'pass'
 		
 		$this->out('If you still have problems logging in set your settings encryption value back to false if set to true');
+		$this->dblog('Authentication Reset command run, reset all local user logins', 'CLI', 'WARNING');
 		
 	}
 	
