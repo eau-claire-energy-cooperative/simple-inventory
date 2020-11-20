@@ -25,6 +25,15 @@
             </div>
           </div>
         </div>
+        <div class="row mt-3 pb-3">
+          <div class="col-lg-12">
+            <div class="copyright text-center my-auto">
+              <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki" target="_blank" class="mr-3 h6"><i class="fas fa-info-circle"></i> Documentation</a>
+              <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory" class="h6"><i class="fab fa-github"></i> View Source</a><br>
+              Version <?php echo Configure::read('Settings.version') ?>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

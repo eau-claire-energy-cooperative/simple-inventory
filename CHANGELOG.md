@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - added an error message when incorrect authentication type is set at login
 - added [AuthenticationReset](https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki/Recovering-Login) command line option to regain access on lost logins
 - added module and log level arguments to AppShell->dblog() function
+- added documentation and code links to the login page
 
 ### Fixed
 
