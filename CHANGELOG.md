@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - fixed issue with settings encryption. this can now be toggled via a true/false value. Also included better instructions on this
 - fixed warning where the AppShell->log() function conflicted with the CakePHP default. Renamed to dblog()
+- fixed issue with deleting a computer, method was tied to a POST request even though button was issuing a GET request. 
 
 ## 1.5
 
