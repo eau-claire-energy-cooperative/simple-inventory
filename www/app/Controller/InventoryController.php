@@ -218,10 +218,7 @@ class InventoryController extends AppController {
 	}
 
 	public function delete($id) {
-	    if ($this->request->is('get')) {
-	        throw new MethodNotAllowedException();
-	    }
-	    
+
 	    //get the name of the computer for logging
 	    $this->Computer->id = $id;
 	    $computer = $this->Computer->read();
