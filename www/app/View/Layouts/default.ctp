@@ -12,7 +12,7 @@
   <title><?php echo $title_for_layout ?> | Computer Inventory Manager</title>
 
   <?php
-	
+
     echo $this->Html->css('/fontawesome/css/all.min');
     echo $this->Html->css('jquery.fancybox');
     echo $this->Html->css('sb-admin-2');
@@ -20,7 +20,7 @@
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
   ?>
-  
+
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
 </head>
@@ -100,6 +100,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Admin Tools:</h6>
             <a class="collapse-item" href="<?php echo $this->Html->url('/admin/downloads') ?>">Downloads</a>
+            <a class="collapse-item" href="<?php echo $this->Html->url('/admin/deviceTypes') ?>">Device Types</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/admin/location') ?>">Edit Locations</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/admin/logs') ?>">Logs</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/admin/settings') ?>">Settings</a>
@@ -141,7 +142,7 @@
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
-                
+
                 <span class="badge badge-danger badge-counter">3+</span>
               </a>
 
@@ -200,7 +201,7 @@
 
       </div>
       <!-- End of Main Content -->
- 
+
       <!-- Footer -->
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
@@ -235,7 +236,7 @@
     echo $this->Html->script("jquery.easing.min.js");
     echo $this->Html->script("sb-admin-2.min.js");
     echo $this->Html->script("jquery.fancybox.min.js",false);
-    
+
     echo $this->fetch('script');
 ?>
 

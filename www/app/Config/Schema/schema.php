@@ -30,6 +30,13 @@ class AppSchema extends CakeSchema {
 												  array('Location'=>array('location'=>'Operations','is_default'=>"false"))));
 
 						break;
+          case 'device_type':
+  						//when creating the location table, insert some default locations
+  						$dType = ClassRegistry::init('DeviceType');
+  						$dType->create();
+  						$dType->saveMany(array(array('DeviceType'=>array('id'=>1,'name'=>'computer','attributes'=>""))));
+
+  						break;
 					case 'users':
 						//create a default user for first time login
 						$user = ClassRegistry::init('User');
@@ -202,6 +209,16 @@ class AppSchema extends CakeSchema {
                 'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'unsigned' => true, 'key' => 'primary'),
                 'location' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'is_default' => array('type' => 'string', 'null' => false, 'default' => 'false', 'length' => 6, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+                'indexes' => array(
+                        'PRIMARY' => array('column' => 'id', 'unique' => 1)
+                ),
+                'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'MyISAM')
+        );
+
+        public $device_type = array(
+                'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'unsigned' => true, 'key' => 'primary'),
+                'name' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+                'attributes' => array('type' => 'text', 'null' => false, 'default' => 'false', 'length' => 6, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'indexes' => array(
                         'PRIMARY' => array('column' => 'id', 'unique' => 1)
                 ),
