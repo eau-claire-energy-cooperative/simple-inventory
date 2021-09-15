@@ -1,12 +1,12 @@
-<?php 
+<?php
     echo $this->Html->script("jquery-confirm.min.js",false);
     echo $this->Html->css('jquery-confirm.min', array('inline'=>false));
-    
+
     //script to load the datatable
     echo $this->Html->scriptBlock("$(document).ready(function() {
       checkRunning();
       setInterval(checkRunning,40 * 1000);
-  
+
         $('a.delete-computer').confirm({
           content: 'Are you sure you want to delete this computer?',
           buttons: {
@@ -14,11 +14,11 @@
                   location.href = this.\$target.attr('href');
               },
               cancel: function(){
-                
+
               }
           }
         });
-     });", array("inline"=>false)) 
+     });", array("inline"=>false))
 ?>
 
 <script type="text/javascript">
@@ -53,19 +53,19 @@ $.getJSON('<?php echo $this->webroot ?>ajax/checkRunning/<?php echo $computer['C
 }
 
 function expandTable(id){
-  
+
   $('#' + id).toggle();
-  
+
   toggleId = '#' + id + '-toggle';
-  
+
   $(toggleId).toggleClass('fa-chevron-circle-down');
   $(toggleId).toggleClass('fa-chevron-circle-up');
-  
+
   return false;
 }
 
 function shutdown(host,shouldRestart){
-  
+
   if(confirm('Shutdown or Restart this computer?'))
   {
     $.ajax('<?php echo $this->webroot ?>ajax/shutdown/' + host + '/' + shouldRestart);
@@ -78,24 +78,43 @@ function wol(mac){
 }
 </script>
 <div class="row">
-  <div class="col-xl-3 col-md-6 mb-4">
-    <?php if($displayStatus): ?>
-    <div class="card border-left-danger shadow h-500 py-1">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Current Status</div>
-            <div class="h6 mb-0 font-weight-bold text-gray-800"><p id="is_running" class="red">Not Running</p></div>
-          </div>
-          <div class="col-auto">
-            <i class="fas fa-info-circle fa-2x text-gray-300"></i>
+  <div class="col-xl-6 col-md-6 mb-4">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="card border-left-success shadow h-500 py-1">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Device Type</div>
+                <div class="h6 mb-0 font-weight-bold text-gray-800"><p><?php echo $computer['DeviceType']['name'] ?></p></div>
+              </div>
+              <div class="col-auto">
+                <i class="fas <?php echo $computer['DeviceType']['icon'] ?> fa-2x text-gray-300"></i>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      <div class="col-lg-6">
+        <?php if($displayStatus): ?>
+        <div class="card border-left-danger shadow h-500 py-1">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Current Status</div>
+                <div class="h6 mb-0 font-weight-bold text-gray-800"><p id="is_running" class="text-danger">Not Running</p></div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-info-circle fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <?php endif; ?>
+      </div>
     </div>
-    <?php endif; ?>
   </div>
-  <div class="col-xl-9 col-md-6 mb-4" align="right">
+  <div class="col-xl-6 col-md-6 mb-4" align="right">
     <a href="<?php echo $this->Html->url(array('action' => 'edit', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
     <a href="<?php echo $this->Html->url(array('action' => 'confirmDecommission', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mr-2"><i class="fas fa-ban fa-sm text-white-50"></i> Decommission</a>
     <a href="<?php echo $this->Html->url(array('action' => 'delete', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-computer"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
@@ -117,7 +136,7 @@ function wol(mac){
         <div class="card-body">
           <?php echo $this->AttributeDisplay->drawTable($tables['general'], $validAttributes, $computer); ?>
         </div>
-      </div>    
+      </div>
   </div>
 </div>
 <?php endif; ?>
@@ -133,7 +152,7 @@ function wol(mac){
         <div class="card-body">
           <?php echo $this->AttributeDisplay->drawTable($tables['hardware'], $validAttributes, $computer); ?>
         </div>
-      </div>    
+      </div>
   </div>
 </div>
 <?php endif; ?>
@@ -149,7 +168,7 @@ function wol(mac){
         <div class="card-body">
           <?php echo $this->AttributeDisplay->drawTable($tables['network'], $validAttributes, $computer); ?>
         </div>
-      </div>    
+      </div>
   </div>
 </div>
 <?php endif; ?>
@@ -187,7 +206,7 @@ function wol(mac){
   </div>
   <?php endif; ?>
 </div>
- 
+
 <?php if(count($programs) > 0): ?>
 <div class="row">
   <div class="col-xl-12">
@@ -199,9 +218,9 @@ function wol(mac){
         <table id="programs" class="table table-striped" style="display:none">
           <?php foreach ($programs as $post): ?>
           <tr>
-          <?php 
+          <?php
               $row_class = '';
-  
+
               if(key_exists($post['Programs']['program'],$restricted_programs))
               {
                 $row_class = 'restricted';
@@ -239,4 +258,3 @@ function wol(mac){
   </div>
  </div>
  <?php endif ?>
- 
