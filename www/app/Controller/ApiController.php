@@ -100,6 +100,7 @@ class ApiController extends AppController {
 				$this->Computer->create();
 				$this->Computer->set('ComputerName',trim($this->json_data->ComputerName));
 				$this->Computer->set('AssetId',1);
+        $this->Computer->set('DeviceType',1);
 				$this->Computer->set('ComputerLocation',$locations['Location']['id']);
 
 				$this->Computer->save();
