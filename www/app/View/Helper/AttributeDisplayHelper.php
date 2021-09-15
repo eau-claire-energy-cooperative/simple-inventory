@@ -2,11 +2,11 @@
 
 class AttributeDisplayHelper extends AppHelper {
 	var $helpers = array('Html','DiskSpace','Time');
-	
+
 	function drawTable($tableRows, $validAttributes, $computer){
 	    $result =  '<div class="row">';
 	    $result = $result . '<table class="table table-striped">';
-	    
+
 	    foreach($tableRows as $aTable)
 	    {
 	        $result = $result . "<tr>";
@@ -14,41 +14,41 @@ class AttributeDisplayHelper extends AppHelper {
 	        {
 	            $result = $result . '<th style="width: 250px;">' . $validAttributes[$attribute] . '</th>';
 	        }
-	        
+
 	        $tableCount = count($aTable);
 	        while($tableCount < 5)
 	        {
 	            $result = $result . '<th style="width: 250px;"></th>';
 	            $tableCount ++;
 	        }
-	        
+
 	        $result = $result . "</tr>";
 	        $result = $result . "<tr>";
-	        
+
 	        foreach($aTable as $attribute)
 	        {
 	            $result = $result . '<td>' . $this->displayAttribute($attribute,$computer) . '</td>';
 	        }
-	        
+
 	        $tableCount = count($aTable);
 	        while($tableCount < 5)
 	        {
 	            $result = $result . "<td></td>";
                 $tableCount ++;
 	        }
-	        
+
 	        $result = $result . "</tr>";
 	    }
 
 	    $result = $result . '</table>';
 	    $result = $result . '</div>';
-	    
+
 	    return $result;
 	}
-	
+
 	function displayAttribute($attribute,$computer){
 		$result = '';
-		
+
 		if($attribute == 'ComputerName')
 		{
 			$result = $computer['Computer']['ComputerName'];
@@ -59,7 +59,7 @@ class AttributeDisplayHelper extends AppHelper {
 		}
 		else if($attribute == 'CurrentUser')
 		{
-			$result = $this->Html->link($computer['Computer']['CurrentUser'],array('controller'=>'inventory','action'=>'loginHistory',$computer['Computer']['id']));	
+			$result = $this->Html->link($computer['Computer']['CurrentUser'],array('controller'=>'inventory','action'=>'loginHistory',$computer['Computer']['id']));
 		}
 		else if ($attribute == 'SerialNumber')
 		{
@@ -73,6 +73,10 @@ class AttributeDisplayHelper extends AppHelper {
 		{
 			$result = $computer['Computer']['ApplicationUpdates'];
 		}
+    else if($attribute == 'Manufacturer')
+    {
+      $result = $computer['Computer']['Manufacturer'];
+    }
 		else if ($attribute == 'Model')
 		{
 			$result = $this->Html->link($computer['Computer']['Model'], array('controller'=>'search','action' => 'search', 1, $computer['Computer']['Model']));
@@ -87,7 +91,7 @@ class AttributeDisplayHelper extends AppHelper {
 		}
 		else if ($attribute == 'Memory')
 		{
-			$result = $this->Html->link($computer['Computer']['Memory'] . " GB", array('controller'=>'search','action' => 'search', 3, $computer['Computer']['Memory'])); 
+			$result = $this->Html->link($computer['Computer']['Memory'] . " GB", array('controller'=>'search','action' => 'search', 3, $computer['Computer']['Memory']));
            	$result = $result . ' (' . $this->DiskSpace->compare($computer['Computer']['Memory'],$computer['Computer']['MemoryFree']) . "% free)";
 		}
 		else if ($attribute == 'NumberOfMonitors')
@@ -123,10 +127,9 @@ class AttributeDisplayHelper extends AppHelper {
 		{
 			$result = $this->Time->niceShort($computer['Computer']['LastUpdated']);
 		}
-		
+
 		return $result;
 	}
 }
 
 ?>
-	

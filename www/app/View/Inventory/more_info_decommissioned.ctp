@@ -80,19 +80,19 @@
                 <th style="width: 250px;">Location</th>
                 <th style="width: 250px;">Current User</th>
                 <th style="width: 250px;">Serial Number</th>
-                <th style="width: 250px;">Asset ID</th>            
-              </tr>         
+                <th style="width: 250px;">Asset ID</th>
+              </tr>
               <tr>
                   <td><?php echo $decommissioned['Decommissioned']['ComputerName']?></td>
                   <td><?php echo $decommissioned['Location']['location']; ?></td>
                   <td><?php echo $decommissioned['Decommissioned']['CurrentUser']?></td>
                   <td><?php echo $decommissioned['Decommissioned']['SerialNumber']?></td>
-                  <td><?php echo $decommissioned['Decommissioned']['AssetId']?> </td>        
-              </tr>          
+                  <td><?php echo $decommissioned['Decommissioned']['AssetId']?> </td>
+              </tr>
             </table>
           </div>
         </div>
-      </div>    
+      </div>
   </div>
 </div>
 
@@ -106,24 +106,29 @@
           <div class="row">
             <table class="table table-striped">
             <tr>
+                <th style="width: 200px;">Manufacturer</th>
                 <th style="width: 200px;">Model</th>
                 <th style="width: 250px;">Operating System</th>
                 <th style="width: 250px;">CPU</th>
                 <th style="width: 250px;">Memory</th>
-                <th style="width: 250px;">Number of Monitors</th>
-             
             </tr>
             <tr>
+                <td> <?php echo $decommissioned['Decommissioned']['Manufacturer']; ?></td>
                 <td> <?php echo $decommissioned['Decommissioned']['Model']; ?></td>
                 <td><?php echo $decommissioned['Decommissioned']['OS']; ?></td> <!--  $comparisonID,$columnID,$modelID,$nameID -->
                 <td><?php echo $decommissioned['Decommissioned']['CPU']?></td>
                 <td> <?php echo $decommissioned['Decommissioned']['Memory'] . " GB"; ?></td>
-                <td> <?php echo $decommissioned['Decommissioned']['NumberOfMonitors']; ?></td>
-               </tr>
+            </tr>
+            <tr>
+                <th style="width: 250px;">Number of Monitors</th>
+            </tr>
+            <tr>
+              <td> <?php echo $decommissioned['Decommissioned']['NumberOfMonitors']; ?></td>
+            </tr>
           </table>
           </div>
         </div>
-      </div>    
+      </div>
   </div>
 </div>
 
@@ -150,10 +155,10 @@
                   <td></td>
                   <td></td>
                </tr>
-            </table> 
+            </table>
           </div>
         </div>
-      </div>    
+      </div>
   </div>
 </div>
 
@@ -169,5 +174,3 @@
     </div>
   </div>
 </div>
-
- 
