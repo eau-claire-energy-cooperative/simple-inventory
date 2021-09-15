@@ -16,7 +16,7 @@ class AppSchema extends CakeSchema {
         }
 
         public function after($event = array()) {
-		
+
 			if(isset($event['create']))
 			{
 				switch ($event['create']){
@@ -27,8 +27,8 @@ class AppSchema extends CakeSchema {
 						$location->saveMany(array(array('Location'=>array('location'=>'IT','is_default'=>"false")),
 												  array('Location'=>array('location'=>'Human Resources','is_default'=>"false")),
 												  array('Location'=>array('location'=>'Office','is_default'=>"true")),
-												  array('Location'=>array('location'=>'Operations','is_default'=>"false"))));			
-						
+												  array('Location'=>array('location'=>'Operations','is_default'=>"false"))));
+
 						break;
 					case 'users':
 						//create a default user for first time login
@@ -36,7 +36,7 @@ class AppSchema extends CakeSchema {
 						$user->create();
 						$user->save(array('User'=>array('name'=>'Temp','username'=>'test','password'=>'1a1dc91c907325c69271ddf0c944bc72','email'=>'test@domain.com')));
 						break;
-					
+
 					case 'settings':
 						//create some default settings
 						$settings = ClassRegistry::init('Setting');
@@ -60,7 +60,7 @@ class AppSchema extends CakeSchema {
 						                          array('Setting'=>array('key'=>'search_domain','value'=>'domain.local')),
 						                          array('Setting'=>array('key'=>'api_auth_key','value'=>'pass')),
 												  array('Setting'=>array('key'=>'shutdown_message','value'=>'The Administrator has initiated a shutdown of your PC')),
-												  array('Setting'=>array('key'=>'display_attributes','value'=>'ComputerName,Location,CurrentUser,SerialNumber,AppUpdates,Model,OS,CPU,Memory,NumberOfMonitors,IPAddress,MACAddress,DriveSpace,Status')),
+												  array('Setting'=>array('key'=>'display_attributes','value'=>'ComputerName,Location,CurrentUser,SerialNumber,AppUpdates,Manufacturer,Model,OS,CPU,Memory,NumberOfMonitors,IPAddress,MACAddress,DriveSpace,Status')),
 						                          array('Setting'=>array('key'=>'home_attributes','value'=>'CurrentUser,Model,OS,Memory')),
 												  array('Setting'=>array('key'=>'computer_auto_add','value'=>'false'))));
 						break;
@@ -76,9 +76,9 @@ class AppSchema extends CakeSchema {
 												array('Command'=>array('name'=>'Check Disk space','parameters'=>'Minimum Space Threshold','description'=>'Check the disk space available on all computers. Any that do not contain the minimum amount of space (in percent) will generate an email to the system administrator.'))),
 						                        array('Command'=>array('name'=>'Remove Old Programs','parameters'=>'','description'=>'Removes Programs that no longer are installed on any computer from the database.')));
 						break;
-				}	
+				}
 			}
-			
+
 		}
 
         public $commands = array(
@@ -100,6 +100,7 @@ class AppSchema extends CakeSchema {
                 'AssetId' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'length' => 255, 'unsigned' => false),
                 'CurrentUser' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'ComputerLocation' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+                'Manufacturer' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'Model' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'OS' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'Memory' => array('type' => 'biginteger', 'null' => false, 'default' => '0', 'length' => 15, 'unsigned' => false),
@@ -144,6 +145,7 @@ class AppSchema extends CakeSchema {
                 'AssetId' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 255, 'unsigned' => false),
                 'CurrentUser' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'Location' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+                'Manufacturer' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'Model' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'CPU' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'NumberOfMonitors' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
@@ -184,7 +186,7 @@ class AppSchema extends CakeSchema {
                 ),
                 'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
         );
-        
+
         public $licenses = array(
             'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 6, 'unsigned' => true, 'key' => 'primary'),
             'comp_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 6, 'unsigned' => false),
