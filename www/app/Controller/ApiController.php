@@ -62,37 +62,49 @@ class ApiController extends AppController {
 			//get this computer first from the DB
 			$aComputer = $this->Computer->find('first',array('conditions'=>array('Computer.id'=>$this->json_data->id)));
 
+      //create in the attributes list from the device type
+      $allowedAttributes = explode(",",$aComputer['DeviceType']['attributes']);
+
 			$this->Computer->create();
 			$this->Computer->id = $this->json_data->id;
 
-			//add the fields
-			$aComputer['Computer']['SerialNumber'] = $this->json_data->SerialNumber;
-			$aComputer['Computer']['CurrentUser'] = $this->json_data->CurrentUser;
-      $aComputer['Computer']['Manufacturer'] = $this->json_data->Manufacturer;
-			$aComputer['Computer']['Model'] = $this->json_data->Model;
-			$aComputer['Computer']['OS'] = $this->json_data->OS . " " . $this->json_data->OS_Arch;
-			$aComputer['Computer']['Memory'] = $this->json_data->Memory;
-			$aComputer['Computer']['MemoryFree'] = $this->json_data->MemoryFree;
-			$aComputer['Computer']['CPU'] = $this->json_data->CPU;
-			$aComputer['Computer']['IPaddress'] = $this->json_data->IPaddress;
-			$aComputer['Computer']['IPv6address'] = $this->json_data->IPv6address;
-			$aComputer['Computer']['MACaddress'] = $this->json_data->MACaddress;
-			$aComputer['Computer']['NumberOfMonitors'] = $this->json_data->NumberOfMonitors;
-			$aComputer['Computer']['LastUpdated'] = $this->json_data->LastUpdated;
-			$aComputer['Computer']['LastBooted'] = $this->json_data->LastBootTime;
-			$aComputer['Computer']['ApplicationUpdates'] = $this->json_data->ApplicationUpdates;
+      // not required to send this field in, set it if missing
+      if(!isset($this->json_data->LastUpdated))
+      {
+        $aComputer['Computer']['LastUpdated'] = date('Y-m-d H:i:s');
+      }
 
-			$this->Computer->save($aComputer);
+			//set the fields based on the attribute types for this device
+      foreach($allowedAttributes as $a)
+      {
+        if(isset($this->json_data->$a))
+        {
+          $aComputer['Computer'][$a] = $this->json_data->$a;
+        }
+      }
 
-			//also add the computer login information
-			$this->ComputerLogin->create();
-			$this->ComputerLogin->set('Username',$this->json_data->CurrentUser);
-			$this->ComputerLogin->set('comp_id',$this->json_data->id);
-			$this->ComputerLogin->set('LoginDate',$this->json_data->LastUpdated);
-			$this->ComputerLogin->save();
+      //this could fail validation
+			if($this->Computer->save($aComputer))
+      {
+        //also add the computer login information, if that attribute exists
+        if(in_array("CurrentUser", $allowedAttributes))
+        {
+    			$this->ComputerLogin->create();
+    			$this->ComputerLogin->set('Username',$this->json_data->CurrentUser);
+    			$this->ComputerLogin->set('comp_id',$this->json_data->id);
+    			$this->ComputerLogin->set('LoginDate',$aComputer['Computer']['LastUpdated']);
+    			$this->ComputerLogin->save();
+        }
 
-			$result['type'] = 'success';
-			$result['message'] = 'computer ' . $this->json_data->ComputerName . ' has been updated';
+  			$result['type'] = 'success';
+  			$result['message'] = 'computer ' . $this->json_data->ComputerName . ' has been updated';
+      }
+      else
+      {
+        $result['type'] = 'error';
+  			$result['message'] = 'computer ' . $aComputer['Computer']['ComputerName'] . ' could not be updated';
+        $result['validation_errors'] = $this->Computer->validationErrors;
+      }
 		}
 		else if ($action == 'add')
 		{

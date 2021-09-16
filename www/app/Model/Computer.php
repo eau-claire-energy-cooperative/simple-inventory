@@ -16,24 +16,18 @@
         'ComputerName' => array(
             'rule' => 'notEmpty'
         ),
-        'SerialNumber' => array(
+        'DeviceType' => array(
             'rule' => 'notEmpty'
         ),
-		'AssetId' => array(
-            'rule' => 'notEmpty'
-        ),
-		'Location' => array(
-            'rule' => 'notEmpty'
-        ),
-		'Model' => array(
-            'rule' => 'notEmpty'
-             ),
-		'OS' => array(
-            'rule' => 'notEmpty'
-             ),
-		'ComputerLocation' => array(
-            'rule' => 'notEmpty'
-            ));
+  		'AssetId' => array(
+              'rule' => 'notEmpty'
+          ),
+  		'Location' => array(
+              'rule' => 'notEmpty'
+          ),
+  		'ComputerLocation' => array(
+              'rule' => 'notEmpty'
+    ));
 }
 
 ?>
