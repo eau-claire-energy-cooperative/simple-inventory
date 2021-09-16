@@ -191,6 +191,8 @@ class AdminController extends AppController {
     $this->set('allowedAttributes', array_merge($this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
 
     if ($this->request->is('post')) {
+        $this->request->data['DeviceType']['attributes'] = implode(",",$this->request->data['DeviceType']['attributes']);
+        
         if ($this->DeviceType->save($this->request->data)) {
             $this->Flash->success('Your Entry has been saved.');
             $this->redirect(array('action' => 'deviceTypes'));
