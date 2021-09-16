@@ -309,6 +309,7 @@ class InventoryController extends AppController {
 		$this->Decommissioned->set('AssetId',$comp ['Computer']['AssetId']);
 		$this->Decommissioned->set('CurrentUser',$comp ['Computer']['CurrentUser']);
 		$this->Decommissioned->set('Location',$comp ['Computer']['ComputerLocation']);
+    $this->Decommissioned->set('Manufacturer',$comp ['Computer']['Manufacturer']);
 		$this->Decommissioned->set('Model',$comp ['Computer']['Model']);
 		$this->Decommissioned->set('OS',$comp ['Computer']['OS']);
 		$this->Decommissioned->set('Memory',$comp ['Computer']['Memory']);

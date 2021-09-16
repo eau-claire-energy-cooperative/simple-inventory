@@ -45,7 +45,7 @@
         </div>
         <div class="card-body">
           <?php foreach(array_keys($hardwareAttributes) as $a): ?>
-          <?php if(in_array($a, $allowedAttributes)): ?>
+          <?php if(in_array($a, $allowedAttributes) && $a != 'DriveSpace'): ?>
           <div class="row mb-1">
             <div class="col-md-4"><?php echo $hardwareAttributes[$a] ?></div>
             <div class="col-md-8"><?php echo $this->Form->input($a, array('label'=>false,'class'=>'form-control'));?></div>
