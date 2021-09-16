@@ -47,6 +47,8 @@ class AdminController extends AppController {
 	}
 
 	public function settings($action = null){
+    $this->set('homeAttributes', array_merge($this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
+    $this->set('infoAttributes', array_merge($this->DEVICE_ATTRIBUTES['REQUIRED'], $this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
 		if($this->request->is('post'))
 		{
 			//get all the settings
@@ -186,15 +188,16 @@ class AdminController extends AppController {
 
   public function addDeviceType() {
     $this->set('title_for_layout','Add Device Type');
+    $this->set('allowedAttributes', array_merge($this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
 
-        if ($this->request->is('post')) {
-            if ($this->DeviceType->save($this->request->data)) {
-                $this->Flash->success('Your Entry has been saved.');
-                $this->redirect(array('action' => 'deviceTypes'));
-            } else {
-                $this->Flash->error('Unable to add your Entry.');
-            }
+    if ($this->request->is('post')) {
+        if ($this->DeviceType->save($this->request->data)) {
+            $this->Flash->success('Your Entry has been saved.');
+            $this->redirect(array('action' => 'deviceTypes'));
+        } else {
+            $this->Flash->error('Unable to add your Entry.');
         }
+    }
     }
 
     public function deleteDeviceType($id) {
@@ -207,26 +210,27 @@ class AdminController extends AppController {
 
   public function editDeviceType($id= null) {
 		$this->set('title_for_layout','Edit Device Type');
-    	$this->DeviceType->id = $id;
+    $this->DeviceType->id = $id;
+    $this->set('allowedAttributes', array_merge($this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
 
-    	if ($this->request->is('get')) {
-        	$this->request->data = $this->DeviceType->read();
-   		}
-   		else
-   		{
-          $this->request->data['DeviceType']['attributes'] = implode(",",$this->request->data['DeviceType']['attributes']);
-          
-        	if ($this->DeviceType->save($this->request->data)) {
-            	$this->Flash->success('Your entry has been updated.');
-            	$this->redirect(array('action' => 'deviceTypes'));
-        	}
-        	else
-        	{
-            	$this->Flash->error('Unable to update your entry.');
-        	}
+  	if ($this->request->is('get')) {
+      	$this->request->data = $this->DeviceType->read();
+ 		}
+ 		else
+ 		{
+        $this->request->data['DeviceType']['attributes'] = implode(",",$this->request->data['DeviceType']['attributes']);
 
-        	$this->redirect('/admin/deviceTypes');
-   		}
+      	if ($this->DeviceType->save($this->request->data)) {
+          	$this->Flash->success('Your entry has been updated.');
+          	$this->redirect(array('action' => 'deviceTypes'));
+      	}
+      	else
+      	{
+          	$this->Flash->error('Unable to update your entry.');
+      	}
+
+      	$this->redirect('/admin/deviceTypes');
+ 		}
 	}
 
 	public function users(){
