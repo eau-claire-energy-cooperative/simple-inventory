@@ -33,7 +33,7 @@
       <?php foreach ($device_types as $post): ?>
       <tr>
           <?php $attributes = explode(',', $post['DeviceType']['attributes']); ?>
-          <td><?php echo  $post['DeviceType']['name']; ?></td>
+          <td><?php echo  $post['DeviceType']['name']; ?> <i class="fas <?php echo $post['DeviceType']['icon']?> ml-2" ></i></td>
           <td><?php echo count($attributes) ?></td>
           <td><?php echo count($post['Computer']) ?></td>
             <td align="right">
