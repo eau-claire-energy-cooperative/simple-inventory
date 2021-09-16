@@ -163,8 +163,7 @@ if($ComputerName.ToUpper() + '$' -eq $win32_user)
 $computerInfo.CurrentUser = $win32_user
 
 #OPERATING SYSTEM 
-$computerInfo.OS = $win32Output.Caption
-$computerInfo.OS_Arch = $win32Output.OSArchitecture
+$computerInfo.OS = $win32Output.Caption + " " + $win32Output.OSArchitecture
 
 #MODEL INFORMATION
 $win32_bios = $(Get-WMIObject -class Win32_BIOS | select SerialNumber, Manufacturer)
@@ -259,7 +258,7 @@ else
 		}
 		
 		#add the computer
-		$addOutput = web-call -Endpoint "/inventory/add" -Data @{ComputerName = "$ComputerName" }
+		$addOutput = web-call -Endpoint "/inventory/add" -Data @{ComputerName = "$ComputerName"; DeviceType = "computer"}
 	
 		if($addOutput."type" -eq "success")
 		{
