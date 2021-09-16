@@ -45,6 +45,10 @@ class ApiController extends AppController {
 
 			if($computer){
 				$result['type'] = 'success';
+
+        //set device type as a string
+        $computer['Computer']['DeviceType'] = strtolower($computer['DeviceType']['name']);
+
 				$result['result'] = $computer['Computer'];
 			}
 			else
