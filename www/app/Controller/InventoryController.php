@@ -416,8 +416,9 @@ class InventoryController extends AppController {
 				}
 			}
 
-			//get the computer inventory
-			$inventory_computers = $this->Computer->find('list', array('fields'=>array('ComputerName'),'order'=> array('ComputerName ASC')));
+			//get the computer inventory - filter out AD excluded devices
+			$inventory_computers = $this->Computer->find('list', array('conditions'=>array("DeviceType.exclude_ad_sync" => 'false'), 'recursive'=>1,
+                             'fields'=>array('Computer.ComputerName'),'order'=> array('ComputerName ASC')));
 
 			//transform the names to uppercase
 			for($i = 0; $i < count($inventory_computers); $i ++)

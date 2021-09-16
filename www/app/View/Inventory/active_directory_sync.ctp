@@ -9,14 +9,14 @@
         <h6 class="m-0 font-weight-bold text-primary">Compare AD to Inventory</h6>
       </div>
       <div class="card-body">
-        <p>Compare the Simple Inventory list to what is in Active Directory.</p>
+        <p>Compare the active inventory list to what is in Active Directory.</p>
         <table class="table table-striped">
-          <?php 
+          <?php
             $keys = array_keys($compare_computers);
-  
+
             foreach($keys as $aComputer)
             {
-              
+
               echo "<tr>";
               echo "<td>" . $aComputer . "</td>";
               echo "<td>" . $compare_computers[$aComputer]['value'] . "</td>";
@@ -44,12 +44,12 @@
             </div>
         <?php endif; ?>
         <table class="table table-striped">
-          <?php 
+          <?php
             $keys = array_keys($old_computers);
-  
+
             foreach($keys as $aComputer)
             {
-              
+
               echo "<tr>";
               echo "<td>" . $aComputer . "</td>";
               echo "<td>" . $old_computers[$aComputer]['value'] . "</td>";
