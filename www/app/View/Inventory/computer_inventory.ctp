@@ -1,16 +1,16 @@
-<?php 
+<?php
     echo $this->Html->script("jquery.dataTables.min.js", false);
     echo $this->Html->script("dataTables.bootstrap4.min.js", false);
-    
+
     echo $this->Html->css('dataTables.bootstrap4.min', array('inline'=>false));
-    
+
     //script to load the datatable
     echo $this->Html->scriptBlock("$(document).ready(function() {
         $('#dataTable').DataTable({
-          paging: false, 
+          paging: false,
           dom: '<\"top\"ifp>rt'
           });
-     });", array("inline"=>false)) 
+     });", array("inline"=>false))
 ?>
 
 <div class="mb-4" align="right">
@@ -25,6 +25,7 @@
     <table class="table table-striped" id="dataTable">
     	<thead>
         <tr>
+            <th></th>
             <th>Computer Name</th>
             <?php foreach($displayAttributes as $attribute): ?>
             <th><?php echo $columnNames[$attribute] ?></th>
@@ -34,16 +35,17 @@
         </tr>
     	</thead>
     	<tbody>
-        
-    
+
+
         <?php foreach ($computer as $post): ?>
         <tr>
+            <td data-sort="<?php echo $post['DeviceType']['name'] ?>"><i class="fas <?php echo $post['DeviceType']['icon'] ?>"></i></td>
             <td> <?php echo $this->Html->link( $post['Computer']['ComputerName'] , array('action' => 'moreInfo', $post['Computer']['id'])); ?></td>
             <?php foreach($displayAttributes as $attribute): ?>
             <td><?php echo $post['Computer'][$attribute] ?></td>
             <?php endforeach; ?>
             <td><?php echo $this->Html->link( $post['Location']['location'], array('controller'=>'search','action' => 'search', 0,$post['Computer']['ComputerLocation'])); ?></td>
-            <td data-sort="<?php echo $this->Time->fromstring($post['Computer']['LastUpdated']) ?>"><?php echo $this->Time->format($post['Computer']['LastUpdated'],'%m/%d/%Y') ?></td>   
+            <td data-sort="<?php echo $this->Time->fromstring($post['Computer']['LastUpdated']) ?>"><?php echo $this->Time->format($post['Computer']['LastUpdated'],'%m/%d/%Y') ?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>
