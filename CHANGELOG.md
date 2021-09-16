@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## Unreleased 
+
+### Added
+
+- added Manufacturer as a computer attribute
+- added Device Types with computer being one of several possible
+- Device Types can set attributes that are allowed for that type
+- set attributes as viewable and editable based on device type
+- allow DeviceTypes to exclude themselves from AD comparisons
+- added 802.1x supplicant information to allowed device attributes
+
+### Changed
+
+- the ability to decommission or check the running status of a device is controlled by the Device Type
+- device type must be set when adding device via API
+- only allowed attribute types for a device are allowed when setting them via the API
+- Updated UI elements to read "device" instead of "computer" in most cases. Alternatively the actual device type name is used as well. 
+- updated the Powershell updater script to send a device type of "computer" - this is hardcoded for now
+
+### Fixed
+
+- merged attribute listings on various pages to pull from one variable
+- don't return associations for `/api/locations` api calls, these are unnessary
+
 ## 1.6
 
 ### Added
