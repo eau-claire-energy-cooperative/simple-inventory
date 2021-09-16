@@ -3,7 +3,7 @@
 class ApiController extends AppController {
 	var $layout = '';
 	var $helpers = array('Js');
-	var $uses = array('Computer','ComputerLogin','Disk','Setting','Command','Service','RestrictedProgram','Programs','Location','EmailMessage','Logs','User');
+	var $uses = array('Computer','ComputerLogin','DeviceType','Disk','Setting','Command','Service','RestrictedProgram','Programs','Location','EmailMessage','Logs','User');
 	var $json_data = null;
 
 	function beforeFilter(){
@@ -126,6 +126,34 @@ class ApiController extends AppController {
 		$this->render('api');
 	}
 
+  function device_type($action = 'get'){
+    $result = array();
+
+    if($action == 'get')
+    {
+      $types = $this->DeviceType->find('all',array('recursive'=>0,'order'=>array('DeviceType.name asc')));
+
+      if($types)
+      {
+        $result['type'] = "success";
+        $result['result'] = $types;
+      }
+      else
+      {
+        $result["type"] = 'error';
+        $result['message'] = 'error getting device types';
+      }
+    }
+    else
+    {
+      $result["type"] = 'error';
+      $result['message'] = 'must call an action';
+    }
+
+    $this->set('result',$result);
+    $this->render('api');
+  }
+
 	function send_email(){
 		$result = array();
 
@@ -224,7 +252,7 @@ class ApiController extends AppController {
 
 		if($action == 'get')
 		{
-			$locations = $this->Location->find('all',array('order'=>array('Location.location')));
+			$locations = $this->Location->find('all',array('recursive'=>0,'order'=>array('Location.location')));
 
 			if($locations)
 			{
