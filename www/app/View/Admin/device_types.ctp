@@ -35,7 +35,7 @@
           <?php $attributes = explode(',', $post['DeviceType']['attributes']); ?>
           <td><?php echo  $post['DeviceType']['name']; ?> <i class="fas <?php echo $post['DeviceType']['icon']?> ml-2" ></i></td>
           <td><?php echo count($attributes) ?></td>
-          <td><?php echo count($post['Computer']) ?></td>
+          <td><?php echo $this->Html->link(count($post['Computer']),'/search/search/5/' . $post['DeviceType']['name']) ?></td>
             <td align="right">
   				    <a href="<?php echo $this->Html->url(array('action' => 'editDeviceType', $post['DeviceType']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
   				    <a data-title="Delete Type" href="<?php echo $this->Html->url(array('action' => 'deleteDeviceType', $post['DeviceType']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-location"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
