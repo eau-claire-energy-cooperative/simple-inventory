@@ -30,6 +30,18 @@ If you can't find an icon you like consider using the basic <i>fa-desktop</i> ic
             These are attributes that are allowed to be recorded for this type. This does not affect if they are displayed.
             </div>
           </div>
+          <div class="row">
+            <div class="col-sm-4">Allow Decomissioning:</div>
+            <div class="col-sm-8"><?php echo $this->Form->select('allow_decom',array('true'=>'Yes','false'=>'No'),array('class'=>'custom-select','empty'=>false)) ?><br />
+            This controls if decomissioning is allowed for this device type.
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">Check Running Status:</div>
+            <div class="col-sm-8"><?php echo $this->Form->select('check_running',array('true'=>'Yes','false'=>'No'),array('class'=>'custom-select','empty'=>false)) ?><br />
+            On the device status page this will attempt to ping the device and allow other controls if enabled in the <?php echo $this->Html->link('settings', array('action'=>'settings')) ?>.
+            </div>
+          </div>
           <div class="row mt-2">
             <div class="col-sm-4"></div>
             <div class="col-sm-8"><?php echo $this->Form->Submit('Update',array('class'=>'btn btn-primary btn-block')) ?></div>

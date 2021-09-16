@@ -168,7 +168,7 @@ class InventoryController extends AppController {
 
 
 		$this->set('validAttributes',$this->DEVICE_ATTRIBUTES['REQUIRED'] + $this->DEVICE_ATTRIBUTES['GENERAL'] + $this->DEVICE_ATTRIBUTES['HARDWARE'] + $this->DEVICE_ATTRIBUTES['NETWORK']);
-		$this->set('displayStatus', in_array('Status', $displayAttributes));
+		$this->set('displayStatus', $computer['DeviceType']['check_running'] == 'true');
 		$this->set('tables',$tables);
   }
 
