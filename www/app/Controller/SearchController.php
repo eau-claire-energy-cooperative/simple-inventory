@@ -7,7 +7,8 @@ class SearchController extends AppController {
 						array('name'=>'Model','field'=>'Computer.Model'),
 						array('name'=>'OS','field'=>'Computer.OS'),
 						array('name'=>'Memory','field'=>'Computer.Memory'),
-						array('name'=>'Monitors','field'=>'Computer.NumberOfMonitors'));
+						array('name'=>'Monitors','field'=>'Computer.NumberOfMonitors'),
+            array('name'=>'Device Type', 'field'=>'DeviceType.name'));
 	var $components = array('RequestHandler','Session');
 
 	public function beforeFilter(){
@@ -31,7 +32,8 @@ class SearchController extends AppController {
 	}
 
 	function beforeRender(){
-	    parent::beforeRender();
+	  parent::beforeRender();
+    $this->set('allAttributes', array_merge($this->DEVICE_ATTRIBUTES['REQUIRED'], $this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
 		$this->set('locations',$this->Location->find('list',array('fields'=>array('Location.id','Location.location'))));
 	}
 
@@ -47,7 +49,7 @@ class SearchController extends AppController {
 
 	function listAll(){
 		$this->set('title_for_layout',"List All");
-    $this->set('allAttributes', array_merge($this->DEVICE_ATTRIBUTES['REQUIRED'], $this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
+
 		$this->set('q',"All");
 		$this->set("results",$this->Computer->find('all',array('order'=>array('Computer.ComputerName'))));
 

@@ -183,6 +183,10 @@ a:not([href]):not([tabindex]):focus {
   outline: 0;
 }
 
+a.icon-link  {
+  color: #858796;
+}
+
 pre,
 code,
 kbd,

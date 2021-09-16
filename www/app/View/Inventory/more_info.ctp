@@ -86,7 +86,9 @@ function wol(mac){
             <div class="row no-gutters align-items-center">
               <div class="col mr-2">
                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Device Type</div>
-                <div class="h6 mb-0 font-weight-bold text-gray-800"><p><?php echo $computer['DeviceType']['name'] ?></p></div>
+                <div class="h6 mb-0 font-weight-bold text-gray-800">
+                  <p><a href="<?php echo $this->Html->url('/search/search/5/' . $computer['DeviceType']['name']) ?>" class="text-gray-800"><?php echo $computer['DeviceType']['name'] ?></a></p>
+                </div>
               </div>
               <div class="col-auto">
                 <i class="fas <?php echo $computer['DeviceType']['icon'] ?> fa-2x text-gray-300"></i>

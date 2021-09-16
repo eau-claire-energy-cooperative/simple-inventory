@@ -39,7 +39,9 @@
 
         <?php foreach ($computer as $post): ?>
         <tr>
-            <td data-sort="<?php echo $post['DeviceType']['name'] ?>"><i class="fas <?php echo $post['DeviceType']['icon'] ?>"></i></td>
+            <td data-sort="<?php echo $post['DeviceType']['name'] ?>">
+              <a href="<?php echo $this->Html->url('/search/search/5/' . $post['DeviceType']['name']) ?>" class="icon-link"><i class="fas <?php echo $post['DeviceType']['icon'] ?>"></i></a>
+            </td>
             <td> <?php echo $this->Html->link( $post['Computer']['ComputerName'] , array('action' => 'moreInfo', $post['Computer']['id'])); ?></td>
             <?php foreach($displayAttributes as $attribute): ?>
             <td><?php echo $post['Computer'][$attribute] ?></td>
