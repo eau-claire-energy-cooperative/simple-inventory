@@ -25,13 +25,16 @@
  <table class="table table-striped">
     <thead>
       <th>Name</th>
+      <th>Attributes</th>
       <th>Assets Assigned</th>
       <th></th>
     </thead>
     <tbody>
       <?php foreach ($device_types as $post): ?>
       <tr>
+          <?php $attributes = explode(',', $post['DeviceType']['attributes']); ?>
           <td><?php echo  $post['DeviceType']['name']; ?></td>
+          <td><?php echo count($attributes) ?></td>
           <td><?php echo count($post['Computer']) ?></td>
             <td align="right">
   				    <a href="<?php echo $this->Html->url(array('action' => 'editDeviceType', $post['DeviceType']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
