@@ -1,27 +1,32 @@
 <?php
 Configure::write('debug',0);
 //header values
-$headers = array('Computer Name','Current User','Location','Serial Number','Asset ID','Manufacturer','Model','Operating System','CPU','Memory','Number of Monitors','IP Address','MAC Address','C: Drive Space','Last Updated');
+$headers = array_merge(array('Device Type'), array_values($allAttributes));
 $this->Csv->addRow($headers);
 
 foreach ($results as $post){
-    $valuesArray = array();
+    $valuesArray = array($post['DeviceType']['name']);
 
-    $valuesArray[] = $post['Computer']['ComputerName'];
-    $valuesArray[] = $post['Computer']['CurrentUser'];
-    $valuesArray[] = $locations[$post['Computer']['ComputerLocation']];
-    $valuesArray[] = $post['Computer']['SerialNumber'];
-	$valuesArray[] = $post['Computer']['AssetId'];
-  $valuesArray[] = $post['Computer']['Manufacturer'];
-	$valuesArray[] = $post['Computer']['Model'];
-	$valuesArray[] = $post['Computer']['OS'];
-	$valuesArray[] = $post['Computer']['CPU'];
-	$valuesArray[] = $post['Computer']['Memory'];
-	$valuesArray[] = $post['Computer']['NumberOfMonitors'];
-	$valuesArray[] = $post['Computer']['IPaddress'];
-	$valuesArray[] = $post['Computer']['MACaddress'];
-	$valuesArray[] = $this->DiskSpace->toString($post['Computer']['DiskSpace']);
-	$valuesArray[] = $this->Time->niceShort($post['Computer']['LastUpdated']);
+    foreach(array_keys($allAttributes) as $a){
+
+      //some attributes have special handling
+      if($a == 'Location')
+      {
+        $valuesArray[] = $locations[$post['Computer']['ComputerLocation']];
+      }
+      else if($a == 'DriveSpace')
+      {
+        //do nothing for drivespace as there are multiple entries here
+      }
+      else if($a == 'LastUpdated')
+      {
+        $valuesArray[] = $this->Time->niceShort($post['Computer']['LastUpdated']);
+      }
+      else
+      {
+        $valuesArray[] = $post['Computer'][$a];
+      }
+    }
 
   	$this->Csv->addRow($valuesArray);
 }

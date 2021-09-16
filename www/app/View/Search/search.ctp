@@ -1,16 +1,16 @@
-<?php 
+<?php
     echo $this->Html->script("jquery.dataTables.min.js", false);
     echo $this->Html->script("dataTables.bootstrap4.min.js", false);
-    
+
     echo $this->Html->css('dataTables.bootstrap4.min', array('inline'=>false));
-    
+
     //script to load the datatable
     echo $this->Html->scriptBlock("$(document).ready(function() {
         $('#dataTable').DataTable({
-          paging: false, 
+          paging: false,
           dom: '<\"top\"ifp>rt'
           });
-     });", array("inline"=>false)) 
+     });", array("inline"=>false))
 ?>
 
 <div class="mb-4" align="right">
@@ -27,21 +27,23 @@
           <table class="table table-striped" id="dataTable">
              <thead>
                 <tr>
+                    <th></th>
                     <th>Computer Name</th>
                     <th>Current User</th>
-                    <th>Computer Location</th> 
+                    <th>Computer Location</th>
                     <th>Model</th>
-                    <th>Operating System</th>
+                    <th>Last Updated</th>
                 </tr>
              </thead>
              <?php foreach ($results as $post): ?>
               <?php if(isset($post['Computer']['ComputerName'])): ?>
               <tr>
-                  <td width="20%"> <?php echo $this->Html->link( $post['Computer']['ComputerName'] , array('controller'=>'inventory','action' => 'moreInfo', $post['Computer']['id'])); ?></td>
-                  <td width="20%"> <?php echo $post['Computer']['CurrentUser']; ?></td>
-                  <td width="20%"> <?php echo $locations[$post['Computer']['ComputerLocation']] ?></td>
-                  <td width="20%"> <?php echo $post['Computer']['Model']; ?></td>
-                  <td> <?php echo $post['Computer']['OS']; ?></td>
+                  <td data-sort="<?php echo $post['DeviceType']['name'] ?>"><i class="fas <?php echo $post['DeviceType']['icon'] ?>"></i></td>
+                  <td> <?php echo $this->Html->link( $post['Computer']['ComputerName'] , array('controller'=>'inventory','action' => 'moreInfo', $post['Computer']['id'])); ?></td>
+                  <td> <?php echo $post['Computer']['CurrentUser']; ?></td>
+                  <td> <?php echo $locations[$post['Computer']['ComputerLocation']] ?></td>
+                  <td> <?php echo $post['Computer']['Model']; ?></td>
+                  <td> <?php echo $post['Computer']['LastUpdated']; ?></td>
               </tr>
                <?php endif ?>
               <?php endforeach; ?>
