@@ -34,7 +34,7 @@ App::uses('Security', 'Utility');
  */
 class AppController extends Controller {
     var $DEVICE_ATTRIBUTES = array("REQUIRED" => array("ComputerName"=>"Computer Name", "Location"=>"Location", "LastUpdated"=>"Last Updated"),
-                                  "GENERAL" => array("ComputerName"=>"Computer Name","Location"=>"Location","CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID","LastUpdated"=>"Last Updated"),
+                                  "GENERAL" => array("CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID"),
                                   "HARDWARE" => array("Manufacturer"=>"Manufacturer","Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors","DriveSpace"=>"Drive Space","ApplicationUpdates"=>"Application Updates"),
                                   "NETWORK" => array("IPaddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACaddress"=>"MAC Address"));
 

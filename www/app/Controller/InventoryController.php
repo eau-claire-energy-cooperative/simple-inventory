@@ -162,12 +162,12 @@ class InventoryController extends AppController {
     $displayAttributes = array_intersect($allowedAttributes, $displayAttributes);
 
     //build the tables
-		$tables['general'] = $this->_processDisplayTable($this->DEVICE_ATTRIBUTES['GENERAL'], $displayAttributes);
+		$tables['general'] = $this->_processDisplayTable(array_merge($this->DEVICE_ATTRIBUTES['REQUIRED'], $this->DEVICE_ATTRIBUTES['GENERAL']), $displayAttributes);
     $tables['hardware'] = $this->_processDisplayTable($this->DEVICE_ATTRIBUTES['HARDWARE'], $displayAttributes);
     $tables['network'] = $this->_processDisplayTable($this->DEVICE_ATTRIBUTES['NETWORK'], $displayAttributes);
 
 
-		$this->set('validAttributes',$this->DEVICE_ATTRIBUTES['GENERAL'] + $this->DEVICE_ATTRIBUTES['HARDWARE'] + $this->DEVICE_ATTRIBUTES['NETWORK']);
+		$this->set('validAttributes',$this->DEVICE_ATTRIBUTES['REQUIRED'] + $this->DEVICE_ATTRIBUTES['GENERAL'] + $this->DEVICE_ATTRIBUTES['HARDWARE'] + $this->DEVICE_ATTRIBUTES['NETWORK']);
 		$this->set('displayStatus', in_array('Status', $displayAttributes));
 		$this->set('tables',$tables);
   }
@@ -211,7 +211,7 @@ class InventoryController extends AppController {
 
           //set the attributes specific to this device type
           $this->set('allowedAttributes', explode(',', $computer['DeviceType']['attributes']));
-          $this->set('generalAttributes', $this->DEVICE_ATTRIBUTES['GENERAL']);
+          $this->set('generalAttributes', array_merge($this->DEVICE_ATTRIBUTES['REQUIRED'], $this->DEVICE_ATTRIBUTES['GENERAL']));
           $this->set('hardwareAttributes', $this->DEVICE_ATTRIBUTES['HARDWARE']);
           $this->set('networkAttributes', $this->DEVICE_ATTRIBUTES['NETWORK']);
 
