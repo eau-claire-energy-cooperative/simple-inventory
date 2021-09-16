@@ -47,7 +47,7 @@ class ApiController extends AppController {
 				$result['type'] = 'success';
 
         //set device type as a string
-        $computer['Computer']['DeviceType'] = strtolower($computer['DeviceType']['name']);
+        $computer['Computer']['DeviceType'] = $computer['DeviceType']['slug'];
 
 				$result['result'] = $computer['Computer'];
 			}
@@ -96,22 +96,32 @@ class ApiController extends AppController {
 		}
 		else if ($action == 'add')
 		{
-			//attempt to get the default location id
+			//attempt to get the default location id and device types list
 			$locations = $this->Location->find('first',array('conditions'=>array('Location.is_default'=>'true')));
+      $deviceType = $this->DeviceType->find('first', array('conditions' => array("DeviceType.slug"=>$this->json_data->DeviceType)));
 
 			if($locations)
 			{
-				$this->Computer->create();
-				$this->Computer->set('ComputerName',trim($this->json_data->ComputerName));
-				$this->Computer->set('AssetId',1);
-        $this->Computer->set('DeviceType',1);
-				$this->Computer->set('ComputerLocation',$locations['Location']['id']);
+        //check that device type exists
+        if($deviceType)
+        {
+  				$this->Computer->create();
+  				$this->Computer->set('ComputerName',trim($this->json_data->ComputerName));
+  				$this->Computer->set('AssetId',1);
+          $this->Computer->set('DeviceType',$deviceType['DeviceType']['id']);
+  				$this->Computer->set('ComputerLocation',$locations['Location']['id']);
 
-				$this->Computer->save();
+  				$this->Computer->save();
 
-				$result['type'] = 'success';
-				$result['message'] = 'computer ' . $this->json_data->ComputerName . ' added to database';
-				$result['result'] = array('id'=>$this->Computer->id);
+  				$result['type'] = 'success';
+  				$result['message'] = 'computer ' . $this->json_data->ComputerName . ' added to database';
+  				$result['result'] = array('id'=>$this->Computer->id);
+        }
+        else
+        {
+          $result['type'] = 'error';
+  				$result['message'] = 'error finding device type ' . $this->json_data->DeviceType;
+        }
 			}
 			else
 			{
