@@ -13,9 +13,15 @@ If you can't find an icon you like consider using the basic <i>fa-desktop</i> ic
             <div class="col-md-4">Device Type Name: </div>
             <div class="col-md-8"><?php echo $this->Form->input('name',array("label"=>false, 'div'=>false, 'class'=>'form-control')); ?></div>
           </div>
-          <div class="row">
+          <div class="row mb-2">
             <div class="col-md-4">Icon: </div>
-            <div class="col-md-8"><?php echo $this->Form->input('icon',array("label"=>false, 'div'=>false, 'class'=>'form-control')); ?></div>
+            <div class="col-md-8"><?php echo $this->Form->input('icon',array("label"=>false, 'div'=>false, 'class'=>'form-control', 'value'=>'fa-desktop')); ?></div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">Attributes Allowed:</div>
+            <div class="col-sm-8"><?php echo $this->Form->select('attributes',array("CurrentUser"=>"Current User", "OS"=>"Operating System","CPU"=>"CPU","Manufacturer"=>"Manufacturer","Memory"=>"Memory","Model"=>"Model", "SerialNumber"=>"Serial Number","AssetId"=>"Asset ID","AppUpdates"=>"Application Updates","NumberOfMonitors"=>"Number of Monitors","IPAddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACAddress"=>"MAC Address", "Status"=>"Status"),array('class'=>'custom-select','multiple'=>true,'label'=>false)) ?><br />
+            These are attributes that are allowed to be recorded for this type. This does not affect if they are displayed.
+            </div>
           </div>
           <div class="row mt-2">
             <div class="col-sm-4"></div>

@@ -33,6 +33,11 @@ App::uses('Security', 'Utility');
  * @link http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
+    var $DEVICE_ATTRIBUTES = array("REQUIRED" => array("ComputerName"=>"Computer Name", "Location"=>"Location", "LastUpdated"=>"Last Updated"),
+                                  "GENERAL" => array("ComputerName"=>"Computer Name","Location"=>"Location","CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID","LastUpdated"=>"Last Updated"),
+                                  "HARDWARE" => array("Manufacturer"=>"Manufacturer","Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors","DriveSpace"=>"Drive Space","AppUpdates"=>"Application Updates"),
+                                  "NETWORK" => array("IPAddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACAddress"=>"MAC Address"));
+
     public function beforeRender(){
         if(!isset($this->viewVars['active_menu']))
         {

@@ -3,7 +3,7 @@
 class InventoryController extends AppController {
     var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace','AttributeDisplay','Menu');
     var $components = array('Session','Ldap','FileUpload','Paginator','Flash');
-	public $uses = array('Computer','Disk','Location', 'Programs', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User','RestrictedProgram');
+	  public $uses = array('Computer','Disk','Location', 'Programs', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User','RestrictedProgram');
 
 	public function beforeFilter(){
 		//check if we are using a login method
@@ -144,38 +144,42 @@ class InventoryController extends AppController {
 		//get the info about this computer
 	 	$this->Computer->id = $id;
 		$this->Programs->id = $id;
-        $this->set('computer', $this->Computer->read());
+    $computer = $this->Computer->read();
+
+    //set variables for the view
+    $this->set('computer', $computer);
 		$this->set('programs', $this->Programs->find('all',array('conditions' => array('comp_id' => $id), 'order' => array('program ASC'))));
 		$this->set('services', $this->Service->find('all',array('conditions' => array('comp_id' => $id), 'order' => array('name ASC'))));
 		$this->set('restricted_programs',$this->RestrictedProgram->find('list',array('fields'=>array('RestrictedProgram.name','RestrictedProgram.id'))));
 
 		//figure out what attributes to display
-		$generalAttributes = array("ComputerName"=>"Computer Name","Location"=>"Location","CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID","LastUpdated"=>"Last Updated");
-		$hardwareAttributes = array("Manufacturer"=>"Manufacturer","Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors","DriveSpace"=>"Drive Space","AppUpdates"=>"Application Updates");
-		$networkAttributes = array("IPAddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACAddress"=>"MAC Address");
+    $allowedAttributes = array_merge(explode(",",$computer['DeviceType']['attributes']), array_keys($this->DEVICE_ATTRIBUTES['REQUIRED']));
 
 		$displaySetting = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'display_attributes')));
 		$displayAttributes = explode(",",$displaySetting['Setting']['value']);
 		$tables = array();
 
-        //build the tables
-		$tables['general'] = $this->_processDisplayTable($generalAttributes, $displayAttributes);
-        $tables['hardware'] = $this->_processDisplayTable($hardwareAttributes, $displayAttributes);
-        $tables['network'] = $this->_processDisplayTable($networkAttributes, $displayAttributes);
+    //allowed display attributes are an intersection of allowed attributes for this type and ones set to display
+    $displayAttributes = array_intersect($allowedAttributes, $displayAttributes);
+
+    //build the tables
+		$tables['general'] = $this->_processDisplayTable($this->DEVICE_ATTRIBUTES['GENERAL'], $displayAttributes);
+    $tables['hardware'] = $this->_processDisplayTable($this->DEVICE_ATTRIBUTES['HARDWARE'], $displayAttributes);
+    $tables['network'] = $this->_processDisplayTable($this->DEVICE_ATTRIBUTES['NETWORK'], $displayAttributes);
 
 
-		$this->set('validAttributes',$generalAttributes + $hardwareAttributes + $networkAttributes);
+		$this->set('validAttributes',$this->DEVICE_ATTRIBUTES['GENERAL'] + $this->DEVICE_ATTRIBUTES['HARDWARE'] + $this->DEVICE_ATTRIBUTES['NETWORK']);
 		$this->set('displayStatus', in_array('Status', $displayAttributes));
 		$this->set('tables',$tables);
-    }
+  }
 
-	 public function moreInfoDecommissioned( $id) {
-	    $this->set('active_menu', 'decommission');
+	public function moreInfoDecommissioned( $id) {
+	  $this->set('active_menu', 'decommission');
 	 	$this->set('title_for_layout','Decommissioned Computer Detail');
 	 	$this->Decommissioned->id = $id;
 
-        $this->set('decommissioned', $this->Decommissioned->read());
-    }
+    $this->set('decommissioned', $this->Decommissioned->read());
+  }
 
 	public function add() {
 		$this->set('title_for_layout','Add a New Computer');

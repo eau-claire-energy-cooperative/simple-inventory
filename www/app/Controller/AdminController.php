@@ -214,6 +214,8 @@ class AdminController extends AppController {
    		}
    		else
    		{
+          $this->request->data['DeviceType']['attributes'] = implode(",",$this->request->data['DeviceType']['attributes']);
+          
         	if ($this->DeviceType->save($this->request->data)) {
             	$this->Flash->success('Your entry has been updated.');
             	$this->redirect(array('action' => 'deviceTypes'));
