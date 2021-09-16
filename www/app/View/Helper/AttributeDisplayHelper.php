@@ -127,6 +127,19 @@ class AttributeDisplayHelper extends AppHelper {
 		{
 			$result = $this->Time->niceShort($computer['Computer']['LastUpdated']);
 		}
+    else if($attribute == 'SupplicantUsername'){
+      $result = $computer['Computer']['SupplicantUsername'];
+    }
+    else if($attribute == 'SupplicantPassword')
+    {
+      if(strlen($computer['Computer']['SupplicantPassword']) > 0)
+      {
+        $result = "*************"; // don't show this in the main UI
+      }
+      else {
+        $result = "";
+      }
+    }
 
 		return $result;
 	}

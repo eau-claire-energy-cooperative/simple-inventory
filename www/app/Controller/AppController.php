@@ -36,7 +36,7 @@ class AppController extends Controller {
     var $DEVICE_ATTRIBUTES = array("REQUIRED" => array("ComputerName"=>"Device Name", "Location"=>"Location", "LastUpdated"=>"Last Updated"),
                                   "GENERAL" => array("CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID"),
                                   "HARDWARE" => array("Manufacturer"=>"Manufacturer","Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors","DriveSpace"=>"Drive Space","ApplicationUpdates"=>"Application Updates"),
-                                  "NETWORK" => array("IPaddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACaddress"=>"MAC Address"));
+                                  "NETWORK" => array("IPaddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACaddress"=>"MAC Address", "SupplicantUsername"=>"802.1x Supplicant Username", "SupplicantPassword"=>"802.1x Supplicant Password"));
 
     public function beforeRender(){
         if(!isset($this->viewVars['active_menu']))
