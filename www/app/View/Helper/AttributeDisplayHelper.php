@@ -69,7 +69,7 @@ class AttributeDisplayHelper extends AppHelper {
 		{
 			$result = $computer['Computer']['AssetId'];
 		}
-		else if($attribute == 'AppUpdates')
+		else if($attribute == 'ApplicationUpdates')
 		{
 			$result = $computer['Computer']['ApplicationUpdates'];
 		}
@@ -98,7 +98,7 @@ class AttributeDisplayHelper extends AppHelper {
 		{
 			$result = $this->Html->link( $computer['Computer']['NumberOfMonitors'], array('controller'=>'search','action' => 'search', 4, $computer['Computer']['NumberOfMonitors']));
 		}
-		else if ($attribute == 'IPAddress')
+		else if ($attribute == 'IPaddress')
 		{
 			$result = $computer['Computer']['IPaddress'];
 		}
@@ -106,7 +106,7 @@ class AttributeDisplayHelper extends AppHelper {
 		{
 		    $result = $computer['Computer']['IPv6address'];
 		}
-		else if ($attribute == 'MACAddress')
+		else if ($attribute == 'MACaddress')
 		{
 			$result = $computer['Computer']['MACaddress'];
 		}

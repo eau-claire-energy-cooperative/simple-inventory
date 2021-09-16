@@ -26,7 +26,7 @@ If you can't find an icon you like consider using the basic <i>fa-desktop</i> ic
           </div>
           <div class="row">
             <div class="col-sm-4">Attributes Allowed:</div>
-            <div class="col-sm-8"><?php echo $this->Form->select('attributes',array("CurrentUser"=>"Current User", "OS"=>"Operating System","CPU"=>"CPU","Manufacturer"=>"Manufacturer","Memory"=>"Memory","Model"=>"Model", "SerialNumber"=>"Serial Number","AssetId"=>"Asset ID","AppUpdates"=>"Application Updates","NumberOfMonitors"=>"Number of Monitors","IPAddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACAddress"=>"MAC Address", "Status"=>"Status"),array('class'=>'custom-select','multiple'=>true,'label'=>false,'value'=>$assignedAttributes)) ?><br />
+            <div class="col-sm-8"><?php echo $this->Form->select('attributes',array("CurrentUser"=>"Current User", "OS"=>"Operating System","CPU"=>"CPU","Manufacturer"=>"Manufacturer","Memory"=>"Memory","Model"=>"Model", "SerialNumber"=>"Serial Number","AssetId"=>"Asset ID","ApplicationUpdates"=>"Application Updates","NumberOfMonitors"=>"Number of Monitors","IPaddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACaddress"=>"MAC Address", "Status"=>"Status"),array('class'=>'custom-select','multiple'=>true,'label'=>false,'value'=>$assignedAttributes)) ?><br />
             These are attributes that are allowed to be recorded for this type. This does not affect if they are displayed.
             </div>
           </div>
