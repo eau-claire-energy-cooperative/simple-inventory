@@ -1,6 +1,10 @@
 <p class="mb-2">Fill in the information below to manually add a new computer to the inventory system.</p>
 <?php echo $this->Form->create('Computer');?>
 <div class="form-group row">
+  <label class="col-md-2 col-form-label">Device Type: </label>
+  <div class="col-md-6"><?php echo $this->Form->input('DeviceType',array('class'=>'custom-select', 'type' => 'select', 'id' => 'device_id', 'options' => $device_types, 'div'=>false, 'label'=>false)); ?></div>
+</div>
+<div class="form-group row">
   <label class="col-md-2 col-form-label">Computer Name: </label>
   <div class="col-md-6"><?php echo $this->Form->input('ComputerName', array('div'=>false, 'label'=>false, 'class'=>'form-control')); ?></div>
 </div>

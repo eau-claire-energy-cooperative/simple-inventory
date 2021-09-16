@@ -3,7 +3,7 @@
 class InventoryController extends AppController {
     var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace','AttributeDisplay','Menu');
     var $components = array('Session','Ldap','FileUpload','Paginator','Flash');
-	  public $uses = array('Computer','Disk','Location', 'Programs', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User','RestrictedProgram');
+	  public $uses = array('Computer', 'DeviceType', 'Disk','Location', 'Programs', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User','RestrictedProgram');
 
 	public function beforeFilter(){
 		//check if we are using a login method
@@ -183,17 +183,19 @@ class InventoryController extends AppController {
 	public function add() {
 		$this->set('title_for_layout','Add a New Computer');
 
+    // set drop down list items
+    $this->set('deviceTypes', $this->DeviceType->find('list', array('fields' => array("DeviceType.name"), 'order'=>array('name asc'))));
 		$this->set('location', $this->Location->find('list', array('fields' => array("Location.Location"), 'order'=>array('is_default desc, location asc'))));
-        if ($this->request->is('post')) {
 
+    if ($this->request->is('post')) {
 			//trim computername
 			$this->request->data['Computer']['ComputerName'] = trim($this->data['Computer']['ComputerName']);
             if ($this->Computer->save($this->request->data)) {
             	//create log entry
             	$this->_saveLog("Computer " . $this->request->data['Computer']['ComputerName'] . " added to database");
 
-                $this->Flash->success('Your Entry has been saved.');
-                $this->redirect(array('action' => 'computerInventory'));
+              $this->Flash->success('Your Entry has been saved.');
+              $this->redirect(array('action' => 'moreInfo', $this->Computer->id));
             } else {
                 $this->Flash->error('Unable to add your Entry.');
             }
