@@ -2,6 +2,7 @@
    class DeviceType extends AppModel {
 
    	var $useTable = 'device_types';
+    var $virtualFields = array('slug'=>"LOWER(REPLACE(DeviceType.name,' ','_'))");
 
    	var $hasMany = array(
    	    'Computer' => array(
