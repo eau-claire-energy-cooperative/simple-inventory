@@ -122,23 +122,22 @@ class InventoryController extends AppController {
 		$this->redirect(array('action' => 'computerInventory'));
 	}
 
-    public function computerInventory() {
-    	$this->set('title_for_layout','Computer Inventory');
-        $this->set('computer', $this->Computer->find('all', array('order'=> array('ComputerName ASC'))));// gets all data
+  public function computerInventory() {
+  	$this->set('title_for_layout','Computer Inventory');
+      $this->set('computer', $this->Computer->find('all', array('order'=> array('ComputerName ASC'))));// gets all data
 
-        # get the display settings
-        $displaySetting = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'home_attributes')));
-        $displayAttributes = explode(",",$displaySetting['Setting']['value']);
-        $this->set('displayAttributes', $displayAttributes);
+      # get the display settings
+      $displaySetting = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'home_attributes')));
+      $displayAttributes = explode(",",$displaySetting['Setting']['value']);
+      $this->set('displayAttributes', $displayAttributes);
 
-        # set the attribute names
-        $columnNames = array("CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID", "Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors", "AppUpdates"=>"Application Updates", "IPAddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACAddress"=>"MAC Address");
-        $this->set('columnNames', $columnNames);
+      # set the attribute names
+      $columnNames = array("CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID", "Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors", "AppUpdates"=>"Application Updates", "IPAddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACAddress"=>"MAC Address");
+      $this->set('columnNames', $columnNames);
 
-    }
+  }
 
-
-	 public function moreInfo( $id) {
+	public function moreInfo( $id) {
 	 	$this->set('title_for_layout','Computer Detail');
 
 		//get the info about this computer
@@ -208,7 +207,16 @@ class InventoryController extends AppController {
 	    $this->Computer->id = $id;
 
 	    if ($this->request->is('get')) {
-	        $this->request->data = $this->Computer->read();
+          $computer = $this->Computer->read();
+
+          //set the attributes specific to this device type
+          $this->set('allowedAttributes', explode(',', $computer['DeviceType']['attributes']));
+          $this->set('generalAttributes', $this->DEVICE_ATTRIBUTES['GENERAL']);
+          $this->set('hardwareAttributes', $this->DEVICE_ATTRIBUTES['HARDWARE']);
+          $this->set('networkAttributes', $this->DEVICE_ATTRIBUTES['NETWORK']);
+
+          //set the data to make the fields editable
+	        $this->request->data = $computer;
 	    }
 	    else
 	    {
