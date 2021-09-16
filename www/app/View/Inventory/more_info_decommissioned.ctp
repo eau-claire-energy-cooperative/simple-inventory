@@ -76,7 +76,7 @@
           <div class="row">
             <table class="table table-striped">
               <tr>
-                <th style="width: 200px;">Computer Name</th>
+                <th style="width: 200px;">Device Name</th>
                 <th style="width: 250px;">Location</th>
                 <th style="width: 250px;">Current User</th>
                 <th style="width: 250px;">Serial Number</th>

@@ -123,7 +123,7 @@ class InventoryController extends AppController {
 	}
 
   public function computerInventory() {
-  	$this->set('title_for_layout','Computer Inventory');
+  	$this->set('title_for_layout','Current Inventory');
       $this->set('computer', $this->Computer->find('all', array('order'=> array('ComputerName ASC'))));// gets all data
 
       # get the display settings
@@ -138,12 +138,13 @@ class InventoryController extends AppController {
   }
 
 	public function moreInfo( $id) {
-	 	$this->set('title_for_layout','Computer Detail');
-
 		//get the info about this computer
 	 	$this->Computer->id = $id;
 		$this->Programs->id = $id;
     $computer = $this->Computer->read();
+
+    // set the page title based on the device type
+    $this->set('title_for_layout',$computer['DeviceType']['name'] . ' Detail');
 
     //set variables for the view
     $this->set('computer', $computer);
@@ -174,14 +175,14 @@ class InventoryController extends AppController {
 
 	public function moreInfoDecommissioned( $id) {
 	  $this->set('active_menu', 'decommission');
-	 	$this->set('title_for_layout','Decommissioned Computer Detail');
+	 	$this->set('title_for_layout','Decommissioned Device Detail');
 	 	$this->Decommissioned->id = $id;
 
     $this->set('decommissioned', $this->Decommissioned->read());
   }
 
 	public function add() {
-		$this->set('title_for_layout','Add a New Computer');
+		$this->set('title_for_layout','Add a New Device');
 
     // set drop down list items
     $this->set('deviceTypes', $this->DeviceType->find('list', array('fields' => array("DeviceType.name"), 'order'=>array('name asc'))));
@@ -204,12 +205,15 @@ class InventoryController extends AppController {
 
 
 	public function edit($id= null) {
-		$this->set('title_for_layout','Edit Computer Data');
+		$this->set('title_for_layout','Edit Device');
 		$this->set('location', $this->Location->find('list', array('fields' => array("Location.Location"),'order'=>'Location.is_default desc, Location.Location asc')));
-	    $this->Computer->id = $id;
+	  $this->Computer->id = $id;
 
 	    if ($this->request->is('get')) {
           $computer = $this->Computer->read();
+
+          //if device is found set page title based on device type
+          $this->set('title_for_layout','Edit ' . $computer['DeviceType']['name']);
 
           //set the attributes specific to this device type
           $this->set('allowedAttributes', explode(',', $computer['DeviceType']['attributes']));
@@ -243,7 +247,7 @@ class InventoryController extends AppController {
 	    	$this->Service->query('delete from services where comp_id = ' . $id);
 	    	$this->Disk->query('delete from disk where comp_id = ' . $id);
 
-	    	$message = 'Computer ' . $computer['Computer']['ComputerName'] . ' has been deleted';
+	    	$message = $computer['DeviceType']['name'] . ' ' . $computer['Computer']['ComputerName'] . ' has been deleted';
 
 	    	$this->_saveLog($message);
 	        $this->Flash->success($message);
@@ -257,16 +261,16 @@ class InventoryController extends AppController {
 
  	public function decommission() {
  	    $this->set('active_menu', 'decommission');
-  		$this->set('title_for_layout','Decommissioned Computers');
-        $this->set('decommission', $this->Decommissioned->find('all', array('order'=> array('LastUpdated ASC'))));// gets all data
-    }
+  		$this->set('title_for_layout','Decommissioned Devices');
+      $this->set('decommission', $this->Decommissioned->find('all', array('order'=> array('LastUpdated ASC'))));
+  }
 
 
 	public function confirmDecommission( $id = null)
 	{
 	    $this->set('active_menu', 'decommission');
-		$currID = $id; //variable to pass to transferDecom
-		$this->Computer->id = $id;
+		  $currID = $id; //variable to pass to transferDecom
+		  $this->Computer->id = $id;
 
 		$this->set('computer_id', $id);
 		if ($this->request->is('get')) {
@@ -284,7 +288,7 @@ class InventoryController extends AppController {
     	{
         	if ($this->Computer->save($this->request->data))
         	{
-        		$message = 'Computer ' . $this->request->data['Computer']['ComputerName'] . ' has been decommissioned';
+        		$message = $this->request->data['Computer']['ComputerName'] . ' has been decommissioned';
         		$this->_saveLog($message);
        			$this->transferDecom($currID);
         	}
@@ -303,6 +307,7 @@ class InventoryController extends AppController {
 		//get the computer model needed
 		$comp = $this->Computer->find('first',array('conditions'=>array('Computer.id'=>$id)));
 
+    //TODO - make this based on device type attributes
 		$this->Decommissioned->create();
 		$this->Decommissioned->set('ComputerName',$comp ['Computer']['ComputerName']);
 		$this->Decommissioned->set('SerialNumber',$comp ['Computer']['SerialNumber']);
@@ -332,7 +337,7 @@ class InventoryController extends AppController {
 
 		if( $this->Decommissioned->save())
 		{
-			$this->Flash->success("Computer with id: " . $id . " has been decommissioned");
+			$this->Flash->success("Device with id: " . $id . " has been decommissioned");
 			$this->redirect(array("action" => 'computerInventory'));
 		}
 	}

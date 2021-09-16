@@ -33,7 +33,7 @@ App::uses('Security', 'Utility');
  * @link http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-    var $DEVICE_ATTRIBUTES = array("REQUIRED" => array("ComputerName"=>"Computer Name", "Location"=>"Location", "LastUpdated"=>"Last Updated"),
+    var $DEVICE_ATTRIBUTES = array("REQUIRED" => array("ComputerName"=>"Device Name", "Location"=>"Location", "LastUpdated"=>"Last Updated"),
                                   "GENERAL" => array("CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID"),
                                   "HARDWARE" => array("Manufacturer"=>"Manufacturer","Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors","DriveSpace"=>"Drive Space","ApplicationUpdates"=>"Application Updates"),
                                   "NETWORK" => array("IPaddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACaddress"=>"MAC Address"));

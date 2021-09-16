@@ -14,7 +14,7 @@
 ?>
 
 <div class="mb-4" align="right">
-  <a href="<?php echo $this->Html->url('/inventory/add') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-plus fa-sm text-white-50"></i> Add Computer</a>
+  <a href="<?php echo $this->Html->url('/inventory/add') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-plus fa-sm text-white-50"></i> Add Device</a>
   <a href="<?php echo $this->Html->url('/search/listAll.csv') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Download CSV</a>
 </div>
 
@@ -26,7 +26,7 @@
     	<thead>
         <tr>
             <th></th>
-            <th>Computer Name</th>
+            <th>Device Name</th>
             <?php foreach($displayAttributes as $attribute): ?>
             <th><?php echo $columnNames[$attribute] ?></th>
             <?php endforeach; ?>

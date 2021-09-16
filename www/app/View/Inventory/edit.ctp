@@ -17,7 +17,7 @@
         </div>
         <div class="card-body">
           <div class="row mb-1">
-            <div class="col-md-4">Computer Name</div>
+            <div class="col-md-4">Device Name</div>
             <div class="col-md-8"><?php echo $this->Form->input('ComputerName', array('label'=>false,'class'=>'form-control'));?></div>
           </div>
           <div class="row mb-1">
