@@ -73,6 +73,10 @@ class ApiController extends AppController {
       {
         $aComputer['Computer']['LastUpdated'] = date('Y-m-d H:i:s');
       }
+      else
+      {
+        $aComputer['Computer']['LastUpdated'] = $this->json_data->LastUpdated;
+      }
 
 			//set the fields based on the attribute types for this device
       foreach($allowedAttributes as $a)
