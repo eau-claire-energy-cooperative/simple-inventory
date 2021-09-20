@@ -9,10 +9,6 @@
   <div class="col-md-6"><?php echo $this->Form->input('ComputerName', array('div'=>false, 'label'=>false, 'class'=>'form-control')); ?></div>
 </div>
 <div class="form-group row">
-  <label class="col-md-2 col-form-label">Asset ID: </label>
-  <div class="col-md-6"><?php echo $this->Form->input('AssetId', array('div'=>false, 'label'=>false, 'class'=>'form-control')); ?></div>
-</div>
-<div class="form-group row">
   <label class="col-md-2 col-form-label">Location: </label>
   <div class="col-md-6"><?php echo $this->Form->input('ComputerLocation',array('class'=>'custom-select', 'type' => 'select', 'id' => 'location_id', 'options' => $location, 'div'=>false, 'label'=>false)); ?></div>
 </div>

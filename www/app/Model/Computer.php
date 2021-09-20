@@ -14,19 +14,13 @@
 
 	  public $validate = array(
         'ComputerName' => array(
-            'rule' => 'notEmpty'
+            'rule' => 'notBlank'
         ),
         'DeviceType' => array(
-            'rule' => 'notEmpty'
+            'rule' => 'notBlank'
         ),
-  		'AssetId' => array(
-              'rule' => 'notEmpty'
-          ),
-  		'Location' => array(
-              'rule' => 'notEmpty'
-          ),
   		'ComputerLocation' => array(
-              'rule' => 'notEmpty'
+              'rule' => 'notBlank'
     ));
 }
 
