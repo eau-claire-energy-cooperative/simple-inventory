@@ -7,8 +7,9 @@
     //script to load the datatable
     echo $this->Html->scriptBlock("$(document).ready(function() {
         $('#dataTable').DataTable({
-          paging: false,
-          dom: '<\"top\"ifp>rt'
+          paging: true,
+          pageLength: 50,
+          dom: '<\"top\"ifp>rt<\"bottom\"p>'
           });
      });", array("inline"=>false))
 ?>
@@ -19,8 +20,6 @@
 </div>
 
 <div class="card shadow mb-4">
-  <div class="card-header py-3">
-  </div>
   <div class="card-body">
     <table class="table table-striped" id="dataTable">
     	<thead>
@@ -35,8 +34,6 @@
         </tr>
     	</thead>
     	<tbody>
-
-
         <?php foreach ($computer as $post): ?>
         <tr>
             <td data-sort="<?php echo $post['DeviceType']['name'] ?>">
