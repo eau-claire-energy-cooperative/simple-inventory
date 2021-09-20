@@ -12,9 +12,6 @@ If you can't find an icon you like consider using the basic <i>fa-desktop</i> ic
 <div class="row">
   <div class="col-xl-12">
     <div class="card shadow mb-4">
-        <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary"></h6>
-        </div>
         <div class="card-body">
           <div class="row mb-2">
             <div class="col-md-4">Device Type Name: </div>
