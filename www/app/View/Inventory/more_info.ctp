@@ -8,6 +8,7 @@
       setInterval(checkRunning,40 * 1000);
 
         $('a.delete-computer').confirm({
+          title: 'Delete Device',
           content: 'Are you sure you want to delete this device?',
           buttons: {
               yes: function(){
