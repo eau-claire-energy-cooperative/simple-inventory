@@ -66,6 +66,7 @@
             <?php if(isset($settings) && $settings['ldap_computers_basedn'] != ''): ?>
             <a class="collapse-item" href="<?php echo $this->Html->url('/inventory/active_directory_sync') ?>">Active Directory Sync</a>
             <?php endif; ?>
+            <a class="collapse-item" href="<?php echo $this->Html->url('/manage/deviceTypes') ?>">Device Types</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/manage/licenses') ?>">Licenses</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/manage/restricted_programs') ?>">Programs</a>
           </div>
@@ -100,7 +101,6 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Admin Tools:</h6>
             <a class="collapse-item" href="<?php echo $this->Html->url('/admin/downloads') ?>">Downloads</a>
-            <a class="collapse-item" href="<?php echo $this->Html->url('/admin/deviceTypes') ?>">Device Types</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/admin/location') ?>">Edit Locations</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/admin/logs') ?>">Logs</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/admin/settings') ?>">Settings</a>

@@ -1,7 +1,7 @@
 <?php
 
 class ManageController extends AppController {
-	var $uses = array('Computer','License','Logs','Location','Setting','User','Command','Schedule','Programs','RestrictedProgram');
+	var $uses = array('Computer','DeviceType','License','Logs','Location','Setting','User','Command','Schedule','Programs','RestrictedProgram');
 	var $helpers = array('Html','Session','Time','Form','LogParser');
 	var $paginate = array('limit'=>100, 'order'=>array('Logs.id'=>'desc'));
 
@@ -62,6 +62,60 @@ class ManageController extends AppController {
 	        $this->redirect(array('action' => 'licenses'));
 	    }
 	}
+
+  public function deviceTypes() {
+    $this->set('title_for_layout','Device Types');
+        $this->set('device_types', $this->DeviceType->find('all', array('order'=> array('name ASC'))));
+  }
+
+  public function addDeviceType() {
+    $this->set('title_for_layout','Add Device Type');
+    $this->set('allowedAttributes', array_merge($this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
+
+    if ($this->request->is('post')) {
+        $this->request->data['DeviceType']['attributes'] = implode(",",$this->request->data['DeviceType']['attributes']);
+
+        if ($this->DeviceType->save($this->request->data)) {
+            $this->Flash->success('Your Entry has been saved.');
+            $this->redirect(array('action' => 'deviceTypes'));
+        } else {
+            $this->Flash->error('Unable to add your Entry.');
+        }
+    }
+    }
+
+    public function deleteDeviceType($id) {
+
+      if ($this->DeviceType->delete($id)) {
+          $this->Flash->success('The entry with id: ' . $id . ' has been deleted.');
+          $this->redirect(array('action' => 'deviceTypes'));
+      }
+  }
+
+  public function editDeviceType($id= null) {
+    $this->set('title_for_layout','Edit Device Type');
+    $this->DeviceType->id = $id;
+    $this->set('allowedAttributes', array_merge($this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
+
+    if ($this->request->is('get')) {
+        $this->request->data = $this->DeviceType->read();
+    }
+    else
+    {
+        $this->request->data['DeviceType']['attributes'] = implode(",",$this->request->data['DeviceType']['attributes']);
+
+        if ($this->DeviceType->save($this->request->data)) {
+            $this->Flash->success('Your entry has been updated.');
+            $this->redirect(array('action' => 'deviceTypes'));
+        }
+        else
+        {
+            $this->Flash->error('Unable to update your entry.');
+        }
+
+        $this->redirect('/admin/deviceTypes');
+    }
+  }
 
 	function restricted_programs(){
 	    $this->set('title_for_layout','Programs');
