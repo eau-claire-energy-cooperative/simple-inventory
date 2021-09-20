@@ -14,6 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - set attributes as viewable and editable based on device type
 - allow DeviceTypes to exclude themselves from AD comparisons
 - added 802.1x supplicant information to allowed device attributes
+- main page now includes pagination (50 devices at a time)
+- Allow setting the device type as part of the powershell updater script, default is "computer". 
 
 ### Changed
 
@@ -22,11 +24,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - only allowed attribute types for a device are allowed when setting them via the API
 - Updated UI elements to read "device" instead of "computer" in most cases. Alternatively the actual device type name is used as well. 
 - updated the Powershell updater script to send a device type of "computer" - this is hardcoded for now
+- "search" is now "filter" in inventory listings, avoid confusion in terminology
+- Asset ID is no longer required for any device - the only required fields are defined in the `AppController`, they are the Name, Location, and Device Type.
 
 ### Fixed
 
 - merged attribute listings on various pages to pull from one variable
 - don't return associations for `/api/locations` api calls, these are unnessary
+- fixed confirmation dialog prompt Title attribute
+- minor PHP warning messages
+
+### Removed 
+
+- removed the Fields To Display setting from the settings area. This was no longer needed when each device type can specify it's own attributes. 
 
 ## 1.6
 
