@@ -13,6 +13,8 @@
     True/False value that defines if the services on the computer should be sent. Defaults to True
 .PARAMETER CheckChoco
     True/False value that defines if the chocolatey applications outdated check should be performed. Defaults to False
+.PARAMETER DeviceType
+    When using the auto add function what type of device is this adding. Default is "computer" and assumes a device type with this name is configured in the web portal.
 .EXAMPLE
     C:\PS>inventory_updater.ps1 -Url http://localhost/inventory -ApiAuthKey key -CheckPrograms False
 .NOTES
@@ -24,7 +26,8 @@ param(
 [Parameter(Mandatory=$false,Position=2)][ValidateSet("true","false")][string]$CheckPrograms = "True",
 [Parameter(Mandatory=$false,Position=3)][ValidateSet("true","false")][string]$CheckServices = "True",
 [Parameter(Mandatory=$false,Position=4)][ValidateSet("true","false")][string]$CheckChoco = "False",
-[Parameter(Mandatory=$false,Position=5)][boolean]$DebugLog = $False
+[Parameter(Mandatory=$false,Position=5)][string]$DeviceType = "computer",
+[Parameter(Mandatory=$false,Position=6)][boolean]$DebugLog = $False
 )
 
 #lowest powershell version this script will support
@@ -258,7 +261,7 @@ else
 		}
 		
 		#add the computer
-		$addOutput = web-call -Endpoint "/inventory/add" -Data @{ComputerName = "$ComputerName"; DeviceType = "computer"}
+		$addOutput = web-call -Endpoint "/inventory/add" -Data @{ComputerName = "$ComputerName"; DeviceType = $DeviceType}
 	
 		if($addOutput."type" -eq "success")
 		{
@@ -290,7 +293,7 @@ else
 	{
 		#send an add request
 		web-log -Message "Sending add request for $ComputerName" | out-null
-		$message = "Computer <b>$ComputerName</b> is requesting to be added to the inventory. Details are below: <br><br>" + 
+		$message = "<b>$ComputerName</b> is requesting to be added to the inventory. Details are below: <br><br>" + 
 			"Model: $($computerInfo.Model)<br>" + 
 			"Serial Number: $($computerInfo.SerialNumber)<br>" + 
 			"Current User: $($computerInfo.CurrentUser)"
