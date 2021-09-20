@@ -4,10 +4,10 @@ class DiskSpaceHelper extends AppHelper {
 	var $MegaByte = 1024;
 	var $GigaByte = 1048576;
 	var $TeraByte = 1073741824;
-	
-	function toString($kb){
+
+	function toString($kb=1){
 		$result = '';
-		
+
 		//convert size in KB to nearest size block
 		if($kb > $this->TeraByte)
 		{
@@ -25,10 +25,10 @@ class DiskSpaceHelper extends AppHelper {
 		{
 			$result = $kb + " KB";
 		}
-		
+
 		return $result;
 	}
-	
+
 	function compare($total,$used){
 		if($total != 0)
 		{
