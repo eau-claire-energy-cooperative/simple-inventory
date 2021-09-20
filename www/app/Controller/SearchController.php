@@ -33,6 +33,7 @@ class SearchController extends AppController {
 
 	function beforeRender(){
 	  parent::beforeRender();
+    $this->set('requiredAttributes', $this->DEVICE_ATTRIBUTES['REQUIRED']);
     $this->set('allAttributes', array_merge($this->DEVICE_ATTRIBUTES['REQUIRED'], $this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
 		$this->set('locations',$this->Location->find('list',array('fields'=>array('Location.id','Location.location'))));
 	}
