@@ -105,7 +105,7 @@ class AppSchema extends CakeSchema {
                 'EnableMonitoring' => array('type' => 'string', 'null' => false, 'default' => 'false', 'length' => 6, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'ComputerName' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'SerialNumber' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-                'AssetId' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'length' => 255, 'unsigned' => false),
+                'AssetId' => array('type' => 'biginteger', 'null' => false, 'default' => 1, 'length' => 255, 'unsigned' => false),
                 'CurrentUser' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'ComputerLocation' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
                 'Manufacturer' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
