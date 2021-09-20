@@ -1,30 +1,19 @@
-
-<table>
-    
-   <?php foreach ($results as $post): ?>
-    
-    <tr>
-    		
-    	 
-    </tr>
-  
-    <?php endforeach; ?>
-	
-</table>
- 
-<?php 
+<?php
     echo $this->Html->script("jquery.dataTables.min.js", false);
     echo $this->Html->script("dataTables.bootstrap4.min.js", false);
-    
+
     echo $this->Html->css('dataTables.bootstrap4.min', array('inline'=>false));
-    
+
     //script to load the datatable
     echo $this->Html->scriptBlock("$(document).ready(function() {
         $('#dataTable').DataTable({
-          paging: false, 
-          dom: '<\"top\"ifp>rt'
+          paging: false,
+          dom: '<\"top\"ifp>rt',
+          language: {
+            'search': 'Filter:'
+            }
           });
-     });", array("inline"=>false)) 
+     });", array("inline"=>false))
 ?>
 
 <div class="mb-4" align="right">
@@ -43,7 +32,7 @@
                 <tr>
                     <th>Computer Name</th>
                     <th>Current User</th>
-                    <th>Computer Location</th> 
+                    <th>Computer Location</th>
                     <th>Start Mode</th>
                     <th>Status</th>
                 </tr>

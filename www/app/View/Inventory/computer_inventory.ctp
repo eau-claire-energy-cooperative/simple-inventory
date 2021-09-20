@@ -9,7 +9,10 @@
         $('#dataTable').DataTable({
           paging: true,
           pageLength: 50,
-          dom: '<\"top\"ifp>rt<\"bottom\"p>'
+          dom: '<\"top\"ifp>rt<\"bottom\"p>',
+          language: {
+            'search': 'Filter:'
+            }
           });
      });", array("inline"=>false))
 ?>

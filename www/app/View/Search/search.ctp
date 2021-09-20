@@ -8,7 +8,10 @@
     echo $this->Html->scriptBlock("$(document).ready(function() {
         $('#dataTable').DataTable({
           paging: false,
-          dom: '<\"top\"ifp>rt'
+          dom: '<\"top\"ifp>rt',
+          language: {
+            'search': 'Filter:'
+            }
           });
      });", array("inline"=>false))
 ?>
