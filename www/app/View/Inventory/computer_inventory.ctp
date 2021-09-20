@@ -24,7 +24,7 @@
     <table class="table table-striped" id="dataTable">
     	<thead>
         <tr>
-            <th></th>
+            <th><i class="fas fa-hdd"></i></th>
             <th>Device Name</th>
             <?php foreach($displayAttributes as $attribute): ?>
             <th><?php echo $columnNames[$attribute] ?></th>

@@ -27,7 +27,7 @@
           <table class="table table-striped" id="dataTable">
              <thead>
                 <tr>
-                    <th></th>
+                    <th><i class="fas fa-hdd"></i></th>
                     <th>Computer Name</th>
                     <th>Current User</th>
                     <th>Computer Location</th>
