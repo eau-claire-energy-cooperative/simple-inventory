@@ -53,7 +53,7 @@ class AttributeDisplayHelper extends AppHelper {
 		{
 			$result = $computer['Computer']['ComputerName'];
 		}
-		else if($attribute == 'Location')
+		else if($attribute == 'ComputerLocation')
 		{
 			$result = $this->Html->link( $computer['Location']['location'], array('controller'=>'search','action' => 'search', 0, $computer['Computer']['ComputerLocation']));
 		}

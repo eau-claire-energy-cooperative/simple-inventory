@@ -10,7 +10,7 @@ foreach ($results as $post){
     foreach(array_keys($allAttributes) as $a){
 
       //some attributes have special handling
-      if($a == 'Location')
+      if($a == 'ComputerLocation')
       {
         $valuesArray[] = $locations[$post['Computer']['ComputerLocation']];
       }
