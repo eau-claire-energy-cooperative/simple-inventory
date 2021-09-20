@@ -27,6 +27,11 @@ class ApiController extends AppController {
 	    }
 	}
 
+  function beforeRender(){
+    // set response to json
+    $this->response->type('application/json');
+  }
+
 	function index(){
 		$this->layout = 'default';
 
