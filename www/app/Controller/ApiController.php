@@ -46,6 +46,17 @@ class ApiController extends AppController {
 			if($computer){
 				$result['type'] = 'success';
 
+        //create in the attributes list from the device type
+        $allowedAttributes = array_merge(explode(",",$computer['DeviceType']['attributes']), array_keys($this->DEVICE_ATTRIBUTES['REQUIRED']), array("id", "DeviceType", "notes"));
+
+        // get the difference from what is in the DB vs what we want to see
+        $extraAttributes = array_diff(array_keys($computer['Computer']), $allowedAttributes);
+
+        // remove unncessary attributes
+        foreach($extraAttributes as $e){
+          unset($computer['Computer'][$e]);
+        }
+
         //set device type as a string
         $computer['Computer']['DeviceType'] = $computer['DeviceType']['slug'];
 
