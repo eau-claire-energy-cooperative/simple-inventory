@@ -80,10 +80,6 @@
                 <div class="col-sm-6">Admin Password</div>
                 <div class="col-sm-6"><?php echo $this->Form->password('domain_password',array('class'=>'form-control','label'=>false,'value'=>$settings['domain_password'])) ?></div>
               </div>
-              <div class="row mt-2">
-                <div class="col-sm-6">Fields To Display</div>
-                <div class="col-sm-6"><?php echo $this->Form->select('display_attributes',$infoAttributes,array('class'=>'custom-select','multiple'=>true,'label'=>false,'value'=>$displayAttributes)) ?></div>
-              </div>
             </div>
           </div>
       </div>

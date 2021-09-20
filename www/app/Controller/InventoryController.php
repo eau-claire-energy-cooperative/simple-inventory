@@ -155,17 +155,12 @@ class InventoryController extends AppController {
 		//figure out what attributes to display
     $allowedAttributes = array_merge(explode(",",$computer['DeviceType']['attributes']), array_keys($this->DEVICE_ATTRIBUTES['REQUIRED']));
 
-		$displaySetting = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'display_attributes')));
-		$displayAttributes = explode(",",$displaySetting['Setting']['value']);
 		$tables = array();
 
-    //allowed display attributes are an intersection of allowed attributes for this type and ones set to display
-    $displayAttributes = array_intersect($allowedAttributes, $displayAttributes);
-
     //build the tables
-		$tables['general'] = $this->_processDisplayTable(array_merge($this->DEVICE_ATTRIBUTES['REQUIRED'], $this->DEVICE_ATTRIBUTES['GENERAL']), $displayAttributes);
-    $tables['hardware'] = $this->_processDisplayTable($this->DEVICE_ATTRIBUTES['HARDWARE'], $displayAttributes);
-    $tables['network'] = $this->_processDisplayTable($this->DEVICE_ATTRIBUTES['NETWORK'], $displayAttributes);
+		$tables['general'] = $this->_processDisplayTable(array_merge($this->DEVICE_ATTRIBUTES['REQUIRED'], $this->DEVICE_ATTRIBUTES['GENERAL']), $allowedAttributes);
+    $tables['hardware'] = $this->_processDisplayTable($this->DEVICE_ATTRIBUTES['HARDWARE'], $allowedAttributes);
+    $tables['network'] = $this->_processDisplayTable($this->DEVICE_ATTRIBUTES['NETWORK'], $allowedAttributes);
 
 
 		$this->set('validAttributes',$this->DEVICE_ATTRIBUTES['REQUIRED'] + $this->DEVICE_ATTRIBUTES['GENERAL'] + $this->DEVICE_ATTRIBUTES['HARDWARE'] + $this->DEVICE_ATTRIBUTES['NETWORK']);
