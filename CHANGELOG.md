@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - added 802.1x supplicant information to allowed device attributes
 - main page now includes pagination (50 devices at a time)
 - Allow setting the device type as part of the powershell updater script, default is "computer". 
+- Main inventory listing page now remembers filtering between page refreshes
 
 ### Changed
 
@@ -33,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - don't return associations for `/api/locations` api calls, these are unnessary
 - fixed confirmation dialog prompt Title attribute
 - minor PHP warning messages
+- made sure to set header to `application/json` to API responses
 
 ### Removed 
 

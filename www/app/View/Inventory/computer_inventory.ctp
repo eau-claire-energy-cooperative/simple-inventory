@@ -9,6 +9,7 @@
         $('#dataTable').DataTable({
           paging: true,
           pageLength: 50,
+          stateSave: true,
           dom: '<\"top\"ifp>rt<\"bottom\"p>',
           language: {
             'search': 'Filter:'
