@@ -24,7 +24,7 @@
 
 <script type="text/javascript">
 function checkRunning(){
-$.getJSON('<?php echo $this->webroot ?>ajax/checkRunning/<?php echo $computer['Computer']['ComputerName'] ?>',function(data){
+$.getJSON('<?php echo $this->webroot ?>ajax/checkRunning/<?php echo $computer['Computer']['id'] ?>',function(data){
   if(data.received == data.transmitted)
   {
     if(<?php echo $settings['show_computer_commands']?>)

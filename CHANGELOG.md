@@ -27,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - updated the Powershell updater script to send a device type of "computer" - this is hardcoded for now
 - "search" is now "filter" in inventory listings, avoid confusion in terminology
 - Asset ID is no longer required for any device - the only required fields are defined in the `AppController`, they are the Name, Location, and Device Type.
+- Ping command uses IP address rather than hostname, more reliable as long as IP is current
 
 ### Fixed
 
