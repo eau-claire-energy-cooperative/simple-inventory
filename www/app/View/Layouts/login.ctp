@@ -9,10 +9,10 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title><?php echo $title_for_layout ?> | Computer Inventory Manager</title>
+  <title><?php echo $title_for_layout ?> | Simple Inventory Manager</title>
 
   <?php
-  
+
     echo $this->Html->script("jquery.min.js");
     echo $this->Html->script("bootstrap.min.js");
     echo $this->Html->script("bootstrap.bundle.min.js");
@@ -25,7 +25,7 @@
     echo $this->fetch('css');
     echo $this->fetch('script');
   ?>
-  
+
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
 </head>

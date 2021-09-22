@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title><?php echo $title_for_layout ?> | Computer Inventory Manager</title>
+  <title><?php echo $title_for_layout ?> | Simple Inventory Manager</title>
 
   <?php
 
