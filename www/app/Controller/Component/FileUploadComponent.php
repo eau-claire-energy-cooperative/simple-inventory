@@ -68,6 +68,9 @@ class FileUploadComponent extends Component{
     */
   var $uploadedFile = false;
 
+
+  var $ext = 'zip';
+
   /***************************************************
     * data and params are the controller data and params
     *
@@ -86,15 +89,6 @@ class FileUploadComponent extends Component{
     * @access public
     */
   var $finalFile = null;
-
-  /***************************************************
-    * success is set if we have a fileModel and there was a successful save
-    * or if we don't have a fileModel and there was a successful file uploaded.
-    *
-    * @var boolean
-    * @access public
-    */
-  var $success = false;
 
   /***************************************************
     * errors holds any errors that occur as string values.
@@ -117,19 +111,20 @@ class FileUploadComponent extends Component{
     $this->params = $controller->params;
   }
 
-  /***************************************************
-    * Main execution method.  Handles file upload automatically upon detection and verification.
-    *
-    * @param object $controller A reference to the instantiating controller object
-    * @return void
-    * @access public
-    */
-  function startup(Controller $controller){ 
+  /*
+    attempts to upload the file and return true/false
+  */
+  function upload(){
+    $result = false;
+
     $this->uploadDetected = ($this->_multiArrayKeyExists("tmp_name", $this->data) || $this->_multiArrayKeyExists("tmp_name",$this->data));
     $this->uploadedFile = $this->_uploadedFileArray();
+
     if($this->_checkFile() && $this->_checkType()){
-      $this->_processFile();
+      $result = $this->_processFile();
     }
+
+    return $result;
   }
 
   /*************************************************
@@ -178,16 +173,17 @@ class FileUploadComponent extends Component{
     * @access private
     */
   function _processFile(){
+    $result = false;
 	  App::import('Sanitize');
 
     $up_dir = WWW_ROOT . $this->uploadDir;
-    $target_path = $up_dir . DS . $this->data['File']['model'] . '.zip';
+    $target_path = $up_dir . DS . $this->data['File']['model'] . '.' . $this->ext;
     $temp_path = substr($target_path, 0, strlen($target_path) - strlen($this->_ext())); //temp path without the ext
 
     //make sure the file doesn't already exist, if it does, delete the old version
 
         if(file_exists($target_path)){
-            $this->removeFile($this->data['File']['model'] . '.zip');
+            $this->removeFile($this->data['File']['model'] . '.' . $this->ext);
         }
 
     $save_data = array();
@@ -195,12 +191,14 @@ class FileUploadComponent extends Component{
       //Final File Name
       $this->finalFile = basename($target_path);
 
-      $this->success = true;
+      $result = true;
 
     }
     else{
       $this->_error('FileUpload::processFile() - Unable to save temp file to file system.');
     }
+
+    return $result;
   }
 
   /***************************************************
