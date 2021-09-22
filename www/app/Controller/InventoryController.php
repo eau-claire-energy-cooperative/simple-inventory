@@ -176,6 +176,67 @@ class InventoryController extends AppController {
     $this->set('decommissioned', $this->Decommissioned->read());
   }
 
+  public function import(){
+    $this->set('title_for_layout', 'Import Devices');
+
+    if($this->request->is('post')){
+      $this->FileUpload->uploadDir = 'files';
+      $this->FileUpload->allowedTypes = array('text/plain', 'application/vnd.ms-excel');
+      $this->FileUpload->ext = 'csv';
+
+      if($this->FileUpload->upload()){
+        //load the CSV file
+        $csv = array_map('str_getcsv', file(WWW_ROOT . 'files/import_devices.csv'));
+
+        //attempt to get the default location id and device types list
+  			$locations = $this->Location->find('first',array('conditions'=>array('Location.is_default'=>'true')));
+        $deviceTypes = $this->DeviceType->find('list', array('fields' => array("DeviceType.slug", "DeviceType.id")));
+
+  			if($locations)
+  			{
+          //verify each entries device type
+          $passedCheck = true;
+          foreach($csv as $row){
+            if(!in_array(strtolower($row[0]), array_keys($deviceTypes)))
+            {
+              $this->Flash->error('Cannot import devices, "' . $row[0] . '" type does not exist');
+              $passedCheck = false;
+            }
+          }
+          $results = array();
+
+          //if no errors, add each to the DB
+          if($passedCheck)
+          {
+              foreach($csv as $row){
+                $this->Computer->create();
+        				$this->Computer->set('ComputerName',trim($row[1]));
+                $this->Computer->set('DeviceType',$deviceTypes[strtolower($row[0])]);
+        				$this->Computer->set('ComputerLocation',$locations['Location']['id']);
+
+        				$this->Computer->save();
+
+                array_push($results, array('id'=>$this->Computer->id, 'DeviceType'=> $deviceTypes[strtolower($row[0])], 'ComputerName'=>trim($row[1])));
+              }
+
+              $this->set('results', $results);
+
+              //upload each type of device
+              $this->Flash->success(count($csv) . ' devices created');
+          }
+        }
+        else
+        {
+          $this->Flash->error('Cannot import devices, no default location set');
+        }
+  		}
+  		else
+  		{
+  			$this->Flash->error('Error Uploading CSV');
+  		}
+    }
+  }
+
 	public function add() {
 		$this->set('title_for_layout','Add a New Device');
 
@@ -479,7 +540,7 @@ class InventoryController extends AppController {
 
 	function do_drivers_upload(){
 
-		if($this->FileUpload->success){
+		if($this->FileUpload->upload()){
 			$this->Flash->success('Drivers Uploaded');
 		}
 		else
