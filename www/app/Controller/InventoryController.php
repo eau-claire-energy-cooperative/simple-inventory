@@ -197,7 +197,13 @@ class InventoryController extends AppController {
           //verify each entries device type
           $passedCheck = true;
           foreach($csv as $row){
-            if(!in_array(strtolower($row[0]), array_keys($deviceTypes)))
+            //check if device with this name already exists
+            if($this->Computer->find('first', array('conditions'=>array('ComputerName'=>trim($row[1])))))
+            {
+              $this->Flash->error('Cannot import devices, duplicate device name ' . $row[1]);
+              $passedCheck = false;
+            }
+            else if(!in_array(strtolower($row[0]), array_keys($deviceTypes)))
             {
               $this->Flash->error('Cannot import devices, "' . $row[0] . '" type does not exist');
               $passedCheck = false;
@@ -247,17 +253,24 @@ class InventoryController extends AppController {
     if ($this->request->is('post')) {
 			//trim computername
 			$this->request->data['Computer']['ComputerName'] = trim($this->data['Computer']['ComputerName']);
-            if ($this->Computer->save($this->request->data)) {
-            	//create log entry
-            	$this->_saveLog("Computer " . $this->request->data['Computer']['ComputerName'] . " added to database");
 
-              $this->Flash->success('Your Entry has been saved.');
-              $this->redirect(array('action' => 'moreInfo', $this->Computer->id));
-            } else {
-                $this->Flash->error('Unable to add your Entry.');
-            }
+      if(!$this->Computer->find('first', array('conditions'=>array('ComputerName'=>$this->request->data['Computer']['ComputerName']))))
+      {
+        if ($this->Computer->save($this->request->data)) {
+        	//create log entry
+        	$this->_saveLog("Computer " . $this->request->data['Computer']['ComputerName'] . " added to database");
+
+          $this->Flash->success('Your Entry has been saved.');
+          $this->redirect(array('action' => 'moreInfo', $this->Computer->id));
+        } else {
+            $this->Flash->error('Unable to add your Entry.');
         }
+      }
+      else {
+        $this->Flash->error('Duplicate Device Name already exists');
+      }
     }
+  }
 
 
 	public function edit($id= null) {

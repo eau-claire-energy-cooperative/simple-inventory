@@ -128,38 +128,45 @@ class ApiController extends AppController {
 		}
 		else if ($action == 'add')
 		{
-			//attempt to get the default location id and device types list
-			$locations = $this->Location->find('first',array('conditions'=>array('Location.is_default'=>'true')));
-      $deviceType = $this->DeviceType->find('first', array('conditions' => array("DeviceType.slug"=>$this->json_data->DeviceType)));
 
-			if($locations)
-			{
-        //check that device type exists
-        if($deviceType)
-        {
-  				$this->Computer->create();
-  				$this->Computer->set('ComputerName',trim($this->json_data->ComputerName));
-          $this->Computer->set('DeviceType',$deviceType['DeviceType']['id']);
-  				$this->Computer->set('ComputerLocation',$locations['Location']['id']);
+      if(!$this->Computer->find('first', array('conditions'=>array('ComputerName'=>trim($this->json_data->ComputerName)))))
+      {
+  			//attempt to get the default location id and device types list
+  			$locations = $this->Location->find('first',array('conditions'=>array('Location.is_default'=>'true')));
+        $deviceType = $this->DeviceType->find('first', array('conditions' => array("DeviceType.slug"=>$this->json_data->DeviceType)));
 
-  				$this->Computer->save();
+  			if($locations)
+  			{
+          //check that device type exists
+          if($deviceType)
+          {
+    				$this->Computer->create();
+    				$this->Computer->set('ComputerName',trim($this->json_data->ComputerName));
+            $this->Computer->set('DeviceType',$deviceType['DeviceType']['id']);
+    				$this->Computer->set('ComputerLocation',$locations['Location']['id']);
 
-  				$result['type'] = 'success';
-  				$result['message'] = 'computer ' . $this->json_data->ComputerName . ' added to database';
-  				$result['result'] = array('id'=>$this->Computer->id);
-        }
-        else
-        {
-          $result['type'] = 'error';
-  				$result['message'] = 'error finding device type ' . $this->json_data->DeviceType;
-        }
-			}
-			else
-			{
-				$result['type'] = 'error';
-				$result['message'] = 'error finding default location';
-			}
+    				$this->Computer->save();
 
+    				$result['type'] = 'success';
+    				$result['message'] = 'computer ' . $this->json_data->ComputerName . ' added to database';
+    				$result['result'] = array('id'=>$this->Computer->id);
+          }
+          else
+          {
+            $result['type'] = 'error';
+    				$result['message'] = 'error finding device type ' . $this->json_data->DeviceType;
+          }
+  			}
+  			else
+  			{
+  				$result['type'] = 'error';
+  				$result['message'] = 'error finding default location';
+  			}
+      }
+      else {
+        $result['type'] = 'error';
+        $result['message'] = 'cannot add duplicate device name';
+      }
 		}
 		else
 		{
