@@ -64,22 +64,6 @@
                 <div class="col-md-6">Show Computer Commands</div>
                 <div class="col-md-6"><?php echo $this->Form->select('show_computer_commands',array('true'=>'Yes','false'=>'No'),array('class'=>'custom-select','value'=>$settings['show_computer_commands'],'empty'=>false)) ?></div>
               </div>
-              <div class="row mt-2">
-                <div class="col-sm-6">DNS Search Domain</div>
-                <div class="col-sm-6"><?php echo $this->Form->input('search_domain',array('class'=>'form-control','label'=>false,'value'=>$settings['search_domain'])) ?></div>
-              </div>
-              <div class="row mt-2">
-                <div class="col-sm-6">Shutdown Computer Message</div>
-                <div class="col-sm-6"><?php echo $this->Form->input('shutdown_message',array('class'=>'form-control','label'=>false,'value'=>$settings['shutdown_message'])) ?></div>
-              </div>
-              <div class="row mt-2">
-                <div class="col-sm-6">Admin Account (Domain account works best)</div>
-                <div class="col-sm-6"><?php echo $this->Form->input('domain_username',array('class'=>'form-control','label'=>false,'value'=>$settings['domain_username'])) ?></div>
-              </div>
-              <div class="row mt-2">
-                <div class="col-sm-6">Admin Password</div>
-                <div class="col-sm-6"><?php echo $this->Form->password('domain_password',array('class'=>'form-control','label'=>false,'value'=>$settings['domain_password'])) ?></div>
-              </div>
             </div>
           </div>
       </div>

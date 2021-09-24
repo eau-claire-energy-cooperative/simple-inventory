@@ -27,21 +27,14 @@ function checkRunning(){
 $.getJSON('<?php echo $this->webroot ?>ajax/checkRunning/<?php echo $computer['Computer']['id'] ?>',function(data){
   if(data.received == data.transmitted)
   {
-    if(<?php echo $settings['show_computer_commands']?>)
-    {
-      $('#is_running').html('<a href="#" onClick="shutdown(\'<?php echo $computer['Computer']['ComputerName'] ?>\',false)">Shutdown</a> <br> <a href="#" onClick="shutdown(\'<?php echo $computer['Computer']['ComputerName'] ?>\',true)">Restart</a>');
-    }
-    else
-    {
-      $('#is_running').html('Running');
-    }
+    $('#is_running').html('Running');
     $('#is_running').removeClass('text-danger');
   }
   else
   {
     if(<?php echo $settings['show_computer_commands']?>)
     {
-      $('#is_running').html('<a href="#" onClick="wol(\'<?php echo $computer['Computer']['MACaddress'] ?>\')">Turn On</a>');
+      $('#is_running').html('Not Running <br /> <a href="#" onClick="wol(\'<?php echo $computer['Computer']['MACaddress'] ?>\')">Turn On</a>');
       $('#is_running').removeClass('text-danger');
     }
     else
@@ -62,15 +55,6 @@ function expandTable(id){
   $(toggleId).toggleClass('fa-chevron-circle-down');
   $(toggleId).toggleClass('fa-chevron-circle-up');
 
-  return false;
-}
-
-function shutdown(host,shouldRestart){
-
-  if(confirm('Shutdown or Restart this computer?'))
-  {
-    $.ajax('<?php echo $this->webroot ?>ajax/shutdown/' + host + '/' + shouldRestart);
-  }
   return false;
 }
 

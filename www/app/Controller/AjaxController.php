@@ -39,13 +39,6 @@ class AjaxController extends AppController {
     $this->set('result',$isRunning);
 	}
 
-	function shutdown($computer,$restart = false){
-		//pull in the system settings
-		$settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
-
-		$this->Ping->shutdown_computer($computer,$restart, $settings);
-	}
-
 	function wol(){
 
 		$this->Ping->wol($_SERVER['SERVER_ADDR'],$this->params['url']['mac']);

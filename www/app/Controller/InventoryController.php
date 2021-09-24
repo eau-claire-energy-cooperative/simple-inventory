@@ -189,10 +189,10 @@ class InventoryController extends AppController {
         $csv = array_map('str_getcsv', file(WWW_ROOT . 'files/import_devices.csv'));
 
         //attempt to get the default location id and device types list
-  			$locations = $this->Location->find('first',array('conditions'=>array('Location.is_default'=>'true')));
+  			$defaultLocation = $this->Location->find('first',array('conditions'=>array('Location.is_default'=>'true')));
         $deviceTypes = $this->DeviceType->find('list', array('fields' => array("DeviceType.slug", "DeviceType.id")));
 
-  			if($locations)
+  			if($defaultLocation)
   			{
           //verify each entries device type
           $passedCheck = true;
@@ -212,7 +212,7 @@ class InventoryController extends AppController {
                 $this->Computer->create();
         				$this->Computer->set('ComputerName',trim($row[1]));
                 $this->Computer->set('DeviceType',$deviceTypes[strtolower($row[0])]);
-        				$this->Computer->set('ComputerLocation',$locations['Location']['id']);
+        				$this->Computer->set('ComputerLocation',$defaultLocation['Location']['id']);
 
         				$this->Computer->save();
 

@@ -41,6 +41,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Removed 
 
 - removed the Fields To Display setting from the settings area. This was no longer needed when each device type can specify it's own attributes. 
+- removed Shutdown/Restart commands. These required computer admin privledges and were just generally unuseful. Wake On Lan remains
 
 ## 1.6
 
