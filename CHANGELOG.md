@@ -37,6 +37,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - fixed confirmation dialog prompt Title attribute
 - minor PHP warning messages
 - made sure to set header to `application/json` to API responses
+- don't allow duplicate device (computer) names by adding constraints to the database and application checks. 
 
 ### Removed 
 
