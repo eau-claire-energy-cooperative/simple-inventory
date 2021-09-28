@@ -61,6 +61,13 @@ function expandTable(id){
 function wol(mac){
   $.ajax('<?php echo $this->webroot ?>ajax/wol?mac=' + mac);
 }
+
+function showOriginal(id, text){
+  $('#' + id).html(text);
+
+  return false;
+}
+
 </script>
 <div class="row">
   <div class="col-xl-6 col-md-6 mb-4">
