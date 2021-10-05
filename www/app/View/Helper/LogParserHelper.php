@@ -1,26 +1,25 @@
 <?php
 
 class LogParserHelper extends AppHelper {
-		
+
 	function parseMessage($inventory, $message){
 		App::uses('HtmlHelper', 'View/Helper');
-		
+
 		$htmlHelper = new HtmlHelper($this->_View);
-		
-		$messageArray = explode(" ", $message);
-		
-		for($i = 0; $i < count($messageArray); $i ++)
-		{
-			$aString = trim($messageArray[$i]);
-				
-			if(array_key_exists($aString, $inventory))
-			{
-				$messageArray[$i] = $htmlHelper->link($aString,'/inventory/moreInfo/' . $inventory[$aString]);
-			}
-		}
-		
-		return implode(" ",$messageArray);
+
+		//try and find a device name in this string
+    foreach(array_keys($inventory) as $aKey)
+    {
+      $pos = strpos($message, $aKey);
+
+      if($pos !== false)
+      {
+        $message = substr_replace($message, $htmlHelper->link($aKey,'/inventory/moreInfo/' . $inventory[$aKey]), $pos, strlen($aKey));
+      }
+
+    }
+
+		return $message;
 	}
 }
 ?>
-	
