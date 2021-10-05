@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - Allow setting the device type as part of the powershell updater script, default is "computer". 
 - Main inventory listing page now remembers filtering between page refreshes
 - can upload a CSV file to bulk import devices instead of manually adding one at a time
+- manually edited devices can also keep a user history
 
 ### Changed
 
@@ -38,6 +39,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - minor PHP warning messages
 - made sure to set header to `application/json` to API responses
 - don't allow duplicate device (computer) names by adding constraints to the database and application checks. 
+- modified Logs page so multi string Device Names link correctly
 
 ### Removed 
 
