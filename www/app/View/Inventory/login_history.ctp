@@ -3,7 +3,7 @@
   <div class="col-xl-12">
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">Computer: <?php echo $this->Html->link($computerName,array('controller'=>'inventory','action'=>'moreInfo',$id)) ?></h6>
+          <h6 class="m-0 font-weight-bold text-primary">Device: <?php echo $this->Html->link($computerName,array('controller'=>'inventory','action'=>'moreInfo',$id)) ?></h6>
         </div>
         <div class="card-body">
           <table class="table table-striped">

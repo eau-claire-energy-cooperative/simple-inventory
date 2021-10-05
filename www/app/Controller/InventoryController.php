@@ -295,9 +295,22 @@ class InventoryController extends AppController {
 	    }
 	    else
 	    {
+          //pull in the original device information
+          $originalData = $this->Computer->find('first', array('conditions'=>array("Computer.id" => $this->data['Computer']['id'])));
+
 	        if ($this->Computer->save($this->request->data)) {
 	            $this->Flash->success('Your entry has been updated.');
               $this->_saveLog($this->data['Computer']['ComputerName'] . " has been updated");
+
+              //check if the current user is part of the attributes
+              if(array_key_exists('CurrentUser', $this->data['Computer']) && $this->data['Computer']['CurrentUser'] != $originalData['Computer']['CurrentUser'])
+              {
+                $this->ComputerLogin->create();
+          			$this->ComputerLogin->set('Username',$this->data['Computer']['CurrentUser']);
+          			$this->ComputerLogin->set('comp_id',$this->data['Computer']['id']);
+          			$this->ComputerLogin->save();
+              }
+
 	            $this->redirect("/inventory/moreInfo/" . $this->data['Computer']['id']);
 	        } else {
 	            $this->Flash->error('Unable to update your entry.');
@@ -588,7 +601,7 @@ class InventoryController extends AppController {
 	}
 
 	function loginHistory($id){
-		$this->set('title_for_layout','Login History');
+		$this->set('title_for_layout','User History');
 
 		$this->Paginator->settings = array('limit'=>50, 'order'=>array('ComputerLogin.LoginDate'=>'desc'),'conditions' => array('ComputerLogin.comp_id'=>$id));
 		$history = $this->Paginator->paginate('ComputerLogin');
