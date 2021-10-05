@@ -258,7 +258,7 @@ class InventoryController extends AppController {
       {
         if ($this->Computer->save($this->request->data)) {
         	//create log entry
-        	$this->_saveLog("Computer " . $this->request->data['Computer']['ComputerName'] . " added to database");
+        	$this->_saveLog("Device " . $this->request->data['Computer']['ComputerName'] . " added to database");
 
           $this->Flash->success('Your Entry has been saved.');
           $this->redirect(array('action' => 'moreInfo', $this->Computer->id));
@@ -297,6 +297,7 @@ class InventoryController extends AppController {
 	    {
 	        if ($this->Computer->save($this->request->data)) {
 	            $this->Flash->success('Your entry has been updated.');
+              $this->_saveLog($this->data['Computer']['ComputerName'] . " has been updated");
 	            $this->redirect("/inventory/moreInfo/" . $this->data['Computer']['id']);
 	        } else {
 	            $this->Flash->error('Unable to update your entry.');
