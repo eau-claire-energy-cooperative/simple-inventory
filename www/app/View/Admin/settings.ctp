@@ -2,9 +2,9 @@
 <div align="right" class="mb-2">
 	<?php echo $this->Form->Submit('Update',array('class'=>'d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2', 'div'=>false)) ?>
   <?php if(Configure::read('Settings.encrypt')): ?>
-  <button class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2">Encrypted: Yes</button>
+  <p class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mt-3 mr-2">Encrypted: Yes</p>
   <?php else: ?>
-  <button class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2">Encrypted: No</button>
+  <p class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mt-3 mr-2">Encrypted: No</p>
   <?php endif; ?>
 </div>
 
