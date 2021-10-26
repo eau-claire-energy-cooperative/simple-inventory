@@ -26,6 +26,9 @@
 
 <div class="card shadow mb-4">
   <div class="card-body">
+    <?php if(count($licenses) == 0): ?>
+    <p align="center">Add license keys for programs that can be assigned to devices and also moved when needed. Click <b>Add License</b> above to get started.</p>
+    <?php endif; ?>
     <table class="table table-striped">
     	<?php foreach($licenses as $aLicense): ?>
     	<tr>

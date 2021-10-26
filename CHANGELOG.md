@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - Main inventory listing page now remembers filtering between page refreshes
 - can upload a CSV file to bulk import devices instead of manually adding one at a time
 - manually edited devices can also keep a user history
+- description on license page when empty
 
 ### Changed
 
