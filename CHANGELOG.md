@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - can upload a CSV file to bulk import devices instead of manually adding one at a time
 - manually edited devices can also keep a user history
 - description on license page when empty
+- added visual to settings page to see if settings are in fact encrypted or not
 
 ### Changed
 

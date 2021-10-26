@@ -1,6 +1,11 @@
 <?php echo $this->Form->create('Setting',array('url'=>'/admin/settings')) ?>
 <div align="right" class="mb-2">
-	<?php echo $this->Form->Submit('Update',array('class'=>'d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2')) ?>
+	<?php echo $this->Form->Submit('Update',array('class'=>'d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2', 'div'=>false)) ?>
+  <?php if(Configure::read('Settings.encrypt')): ?>
+  <button class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2">Encrypted: Yes</button>
+  <?php else: ?>
+  <button class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2">Encrypted: No</button>
+  <?php endif; ?>
 </div>
 
 <?php if(!Configure::read('Settings.encrypt')): ?>
