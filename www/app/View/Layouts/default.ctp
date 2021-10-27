@@ -13,7 +13,7 @@
 
   <?php
 
-    echo $this->Html->css('/fontawesome/css/all.min');
+    echo $this->Html->css('material-icons');
     echo $this->Html->css('jquery.fancybox');
     echo $this->Html->css('sb-admin-2');
 
