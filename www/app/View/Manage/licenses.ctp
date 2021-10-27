@@ -21,7 +21,7 @@
 ?>
 
 <div class="mb-4" align="right">
-  <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/new_license') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-plus fa-sm text-white-50"></i> Add License</a>
+  <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/new_license') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="material-icons mi-sm mi-inline text-white-50">add</i> Add License</a>
 </div>
 
 <div class="card shadow mb-4">
@@ -41,8 +41,8 @@
     		<td width="25%"><?php echo $aLicense['License']['ProgramName'] ?></td>
     		<td><?php echo $aLicense['License']['LicenseKey'] ?></td>
     		<td width="12%" align="right">
-    		  <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/move_license/' . $aLicense['License']['id'] . '/' . $aLicense['License']['comp_id']) ?>" title="Move License"><i class="fas fa-arrows-alt mr-1"></i></a>
-    		  <a href="<?php echo $this->Html->url(array('action' => 'deleteLicense', $aLicense['License']['id'])) ?>" class="text-danger delete-license" data-title="Confirm delete license"><i class="fas fa-trash mr-2" title="Delete License"></i></a>
+    		  <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/move_license/' . $aLicense['License']['id'] . '/' . $aLicense['License']['comp_id']) ?>" title="Move License"><i class="material-icons mi-inline mr-1">open_with</i></a>
+    		  <a href="<?php echo $this->Html->url(array('action' => 'deleteLicense', $aLicense['License']['id'])) ?>" class="text-danger delete-license" data-title="Confirm delete license"><i class="material-icons mi-inline mr-2" title="Delete License">delete</i></a>
     		</td>
     	</tr>
     	<?php endforeach ?>

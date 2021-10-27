@@ -17,7 +17,7 @@
 ?>
 
 <div class="mb-4" align="right">
-  <a href="<?php echo $this->here . ".csv" ?>" class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Download CSV</a>
+  <a href="<?php echo $this->here . ".csv" ?>" class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm"><i class="material-icons mi-sm mi-inline text-white-50">file_download</i> Download CSV</a>
 </div>
 
 <div class="row">

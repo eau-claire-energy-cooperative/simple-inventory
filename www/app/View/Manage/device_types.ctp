@@ -21,7 +21,7 @@
 ?>
 
 <div class="mb-4" align="right">
-  <a href="<?php echo $this->Html->url(array('controller' => 'Manage', 'action' => 'addDeviceType')) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-plus fa-sm text-white-50"></i> Add Type</a>
+  <a href="<?php echo $this->Html->url(array('controller' => 'Manage', 'action' => 'addDeviceType')) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="material-icons mi-sm mi-inline text-white-50">add</i> Add Type</a>
 </div>
 <div class="card shadow mb-4">
   <div class="card-body">
@@ -37,13 +37,13 @@
         <?php foreach ($device_types as $post): ?>
         <tr>
             <?php $attributes = explode(',', $post['DeviceType']['attributes']); ?>
-            <td><?php echo  $post['DeviceType']['name']; ?> <i class="fas <?php echo $post['DeviceType']['icon']?> ml-2" ></i></td>
+            <td><?php echo  $post['DeviceType']['name']; ?> <i class="material-icons mi-inline ml-2" ><?php echo $post['DeviceType']['icon']?></i></td>
             <td><?php echo $post['DeviceType']['slug'] ?></td>
             <td><?php echo count($attributes) ?></td>
             <td><?php echo $this->Html->link(count($post['Computer']),'/search/search/5/' . $post['DeviceType']['name']) ?></td>
               <td align="right">
-    				    <a href="<?php echo $this->Html->url(array('action' => 'editDeviceType', $post['DeviceType']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
-    				    <a data-title="Delete Type" href="<?php echo $this->Html->url(array('action' => 'deleteDeviceType', $post['DeviceType']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-location"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
+    				    <a href="<?php echo $this->Html->url(array('action' => 'editDeviceType', $post['DeviceType']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="material-icons mi-sm mi-inline text-white-50">edit</i> Edit</a>
+    				    <a data-title="Delete Type" href="<?php echo $this->Html->url(array('action' => 'deleteDeviceType', $post['DeviceType']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-location"><i class="material-icons mi-sm mi-inline text-white-50">delete</i> Delete</a>
             </td>
         </tr>
         <?php endforeach; ?>

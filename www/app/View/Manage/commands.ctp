@@ -1,10 +1,10 @@
-<?php 
+<?php
     echo $this->Html->script("jquery-confirm.min.js",false);
     echo $this->Html->css('jquery-confirm.min', array('inline'=>false));
-    
+
     //script to load the confirmation dialog
     echo $this->Html->scriptBlock("$(document).ready(function() {
-  
+
         $('a.delete-command').confirm({
           content: 'Are you sure you want to delete this task?',
           buttons: {
@@ -12,11 +12,11 @@
                   location.href = this.\$target.attr('href');
               },
               cancel: function(){
-                
+
               }
           }
         });
-     });", array("inline"=>false)) 
+     });", array("inline"=>false))
 ?>
 
 <div class="row">
@@ -29,15 +29,15 @@
         <?php foreach($all_schedules as $schedule): ?>
           <h1 class="h4 mb-1 text-gray-800"><?php echo $schedule['Command']['name']; ?></h1>
             <?php eval("\$schedule_params = " . $schedule['Schedule']['parameters'] . ";"); ?>
-        
-            <ul>  
-              <li>Schedule: <?php echo $schedule['Schedule']['schedule'] ?></li>  
+
+            <ul>
+              <li>Schedule: <?php echo $schedule['Schedule']['schedule'] ?></li>
               <?php foreach(array_keys($schedule_params) as $aKey): ?>
                 <li><?php echo $aKey . ": " . $schedule_params[$aKey] ?></li>
-              <?php endforeach; ?>  
+              <?php endforeach; ?>
             </ul>
             <p align="right" class="mr-2">
-              <a href="<?php echo $this->Html->url('/manage/schedule/' . $schedule['Schedule']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-command"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
+              <a href="<?php echo $this->Html->url('/manage/schedule/' . $schedule['Schedule']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-command"><i class="material-icons mi-sm mi-inline text-white-50">delete</i> Delete</a>
             </p>
           <?php endforeach; ?>
       </div>
@@ -53,7 +53,7 @@
           <div class="row mb-2">
             <div class="col-sm-8"><?php echo $command['Command']['name'] ?></div>
             <div class="col-sm-4">
-              <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/setup_command/' . $command['Command']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-plus fa-sm text-white-50"></i> Add</a>
+              <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/setup_command/' . $command['Command']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="material-icons mi-sm mi-inline text-white-50">add</i> Add</a>
             </div>
           </div>
         <?php endforeach ?>
@@ -70,7 +70,7 @@
       </div>
       <div class="card-body">
         <p>A <a href="http://en.wikipedia.org/wiki/Cron ">Cron expression</a> is made up for 5 parts (see below).
-        
+
         <p>.--------------- minute (0 - 59)<br>
         |   .------------ hour (0 - 23)<br>
             |   |   .--------- day of month (1 - 31)<br>
@@ -87,5 +87,3 @@
     </div>
   </div>
 </div>
-
-
