@@ -52,8 +52,13 @@ function expandTable(id){
 
   toggleId = '#' + id + '-toggle';
 
-  $(toggleId).toggleClass('fa-chevron-circle-down');
-  $(toggleId).toggleClass('fa-chevron-circle-up');
+  if($('#' + id).is(":visible"))
+  {
+    $(toggleId).html('arrow_drop_up');
+  }
+  else {
+    $(toggleId).html('arrow_drop_down');
+  }
 
   return false;
 }
@@ -83,7 +88,7 @@ function showOriginal(id, text){
                 </div>
               </div>
               <div class="col-auto">
-                <i class="fas <?php echo $computer['DeviceType']['icon'] ?> fa-2x text-gray-300"></i>
+                <i class="material-icons mi-2x text-gray-300"><?php echo $computer['DeviceType']['icon'] ?></i>
               </div>
             </div>
           </div>
@@ -99,7 +104,7 @@ function showOriginal(id, text){
                 <div class="h6 mb-0 font-weight-bold text-gray-800"><p id="is_running" class="text-danger">Not Running</p></div>
               </div>
               <div class="col-auto">
-                <i class="fas fa-info-circle fa-2x text-gray-300"></i>
+                <i class="material-icons mi-2x text-gray-300">info</i>
               </div>
             </div>
           </div>
@@ -109,15 +114,15 @@ function showOriginal(id, text){
     </div>
   </div>
   <div class="col-xl-6 col-md-6 mb-4" align="right">
-    <a href="<?php echo $this->Html->url(array('action' => 'edit', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
+    <a href="<?php echo $this->Html->url(array('action' => 'edit', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="material-icons mi-sm mi-inline text-white-50">edit</i> Edit</a>
     <?php if($computer['DeviceType']['allow_decom'] == 'true'): ?>
-    <a href="<?php echo $this->Html->url(array('action' => 'confirmDecommission', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mr-2"><i class="fas fa-ban fa-sm text-white-50"></i> Decommission</a>
+    <a href="<?php echo $this->Html->url(array('action' => 'confirmDecommission', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mr-2"><i class="material-icons mi-sm mi-inline text-white-50">block</i> Decommission</a>
   <?php endif; ?>
-    <a href="<?php echo $this->Html->url(array('action' => 'delete', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-computer"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
+    <a href="<?php echo $this->Html->url(array('action' => 'delete', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-computer"><i class="material-icons mi-sm mi-inline text-white-50">delete</i> Delete</a>
     <?php if(file_exists(WWW_ROOT . '/drivers/' . str_replace(' ','_',$computer['Computer']['Model']) . '.zip')): ?>
-      <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url("/drivers/" . str_replace(' ','_',$computer['Computer']['Model']) . ".zip") ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-download fa-sm text-white-50"></i> Download Drivers</a>
+      <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url("/drivers/" . str_replace(' ','_',$computer['Computer']['Model']) . ".zip") ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="material-icons mi-sm mi-inline text-white-50">file_download</i> Download Drivers</a>
     <?php else: ?>
-      <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/uploadDrivers/' . $computer['Computer']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2 popup fancybox.ajax"><i class="fas fa-upload fa-sm text-white-50"></i> Upload Drivers</a>
+      <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/uploadDrivers/' . $computer['Computer']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2 popup fancybox.ajax"><i class="material-icons mi-sm mi-inline text-white-50">file_upload</i> Upload Drivers</a>
     <?php endif; ?>
   </div>
 </div>
@@ -208,7 +213,7 @@ function showOriginal(id, text){
   <div class="col-xl-12">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary"><a href="#" onClick="return expandTable('programs')">Programs <i class="fas fa-chevron-circle-down align-middle" id="programs-toggle"></i></a></h6>
+        <h6 class="m-0 font-weight-bold text-primary"><a href="#" onClick="return expandTable('programs')">Programs <i class="material-icons align-middle" id="programs-toggle">arrow_drop_down</i></a></h6>
       </div>
       <div class="card-body">
         <table id="programs" class="table table-striped" style="display:none">
@@ -237,7 +242,7 @@ function showOriginal(id, text){
   <div class="col-xl-12">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary"><a href="#" onClick="return expandTable('services')">Services <i class="fas fa-chevron-circle-down align-middle" id="services-toggle"></i></a></h6>
+        <h6 class="m-0 font-weight-bold text-primary"><a href="#" onClick="return expandTable('services')">Services <i class="material-icons align-middle" id="services-toggle">arrow_drop_down</i></a></h6>
       </div>
       <div class="card-body">
         <table id="services" class="table table-striped" style="display:none">
