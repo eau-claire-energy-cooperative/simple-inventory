@@ -34,7 +34,7 @@ class AppSchema extends CakeSchema {
   						//when creating the location table, insert some default locations
   						$dType = ClassRegistry::init('DeviceType');
   						$dType->create();
-  						$dType->saveMany(array(array('DeviceType'=>array('id'=>1,'name'=>'computer', 'icon'=>'fa-desktop','attributes'=>"", "check_running"=>'true',
+  						$dType->saveMany(array(array('DeviceType'=>array('id'=>1,'name'=>'computer', 'icon'=>'desktop_windows','attributes'=>"", "check_running"=>'true',
                               "allow_decom"=>"true", "exclude_ad_sync"=>'false'))));
 
   						break;

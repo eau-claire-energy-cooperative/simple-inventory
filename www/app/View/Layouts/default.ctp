@@ -13,9 +13,9 @@
 
   <?php
 
-    echo $this->Html->css('/fontawesome/css/all.min');
     echo $this->Html->css('jquery.fancybox');
     echo $this->Html->css('sb-admin-2');
+    echo $this->Html->css('material-icons');
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
@@ -36,7 +36,7 @@
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo $this->Html->url('/') ?>">
         <div class="sidebar-brand-icon">
-          <i class="fas fa-desktop"></i>
+          <i class="material-icons">desktop_windows</i>
         </div>
         <div class="sidebar-brand-text mx-3">Simple Inventory</div>
       </a>
@@ -47,7 +47,7 @@
       <!-- Nav Item - Current Inventory -->
       <li class="nav-item <?php echo $this->Menu->getActiveMenu('inventory',$active_menu) ?>">
         <a class="nav-link" href="<?php echo $this->Html->url('/') ?>">
-          <i class="fas fa-fw fa-table"></i>
+          <i class="material-icons-outlined">table_chart</i>
           <span>Current Inventory</span></a>
       </li>
 
@@ -57,7 +57,7 @@
       <!-- Nav Item - Manage Collapse Menu -->
       <li class="nav-item <?php echo $this->Menu->getActiveMenu('manage',$active_menu) ?>">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="fas fa-fw fa-wrench"></i>
+          <i class="material-icons">build</i>
           <span>Manage</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -76,7 +76,7 @@
       <!-- Nav Item - decom -->
       <li class="nav-item <?php echo $this->Menu->getActiveMenu('decommission',$active_menu) ?>">
         <a class="nav-link" href="<?php echo $this->Html->url('/inventory/decommission') ?>">
-          <i class="fas fa-fw fa-ban"></i>
+          <i class="material-icons">block</i>
           <span>Decommissioned</span></a>
       </li>
 
@@ -87,14 +87,14 @@
       <!-- Nav Item Scheduled Tasks -->
       <li class="nav-item <?php echo $this->Menu->getActiveMenu('schedule',$active_menu) ?>">
         <a class="nav-link" href="<?php echo $this->Html->url('/manage/commands') ?>">
-          <i class="far fa-calendar-alt fa-fw"></i>
+          <i class="material-icons">event</i>
           <span>Scheduled Tasks</span></a>
       </li>
 
       <!-- Nav Item - Tools Collapse Menu -->
       <li class="nav-item <?php echo $this->Menu->getActiveMenu('admin',$active_menu) ?>">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-          <i class="fas fa-fw fa-cog"></i>
+          <i class="material-icons">settings</i>
           <span>Tools</span>
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
@@ -174,11 +174,11 @@
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                 <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/setProfileImage/') ?>" class="dropdown-item fancybox.ajax">
-                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                  <i class="material-icons mi-sm mi-inline mr-2 text-gray-400">person</i>
                   Set Gravatar
                 </a>
                 <a class="dropdown-item" href="<?php echo $this->Html->url('/inventory/logout') ?>">
-                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  <i class="material-icons mi-sm mi-inline mr-2 text-gray-400">logout</i>
                   Logout
                 </a>
               </div>
@@ -206,9 +206,9 @@
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <a href="<?php $this->Html->url('/admin/downloads');  ?>" class="mr-3 h6"><i class="fas fa-file-download fa-2x"></i> Downloads </a>
-            <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki" target="_blank" class="mr-3 h6"><i class="fas fa-info-circle fa-2x"></i> Documentation</a>
-            <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory" class="h6"><i class="fab fa-github fa-2x"></i> View Source</a>
+            <a href="<?php $this->Html->url('/admin/downloads');  ?>" class="mr-3 h6"><i class="material-icons-outlined mi-2x mi-inline">sim_card_download</i> Downloads </a>
+            <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki" target="_blank" class="mr-3 h6"><i class="material-icons-outlined mi-sm mi-inline mi-2x">info</i> Documentation</a>
+            <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory" class="h6"><i class="material-icons mi-sm mi-inline mi-2x">code</i> View Source</a>
           </div>
           <div class="text-center mt-1">
             <p>Version <?php echo Configure::read('Settings.version') ?></p>
@@ -225,7 +225,7 @@
 
   <!-- Scroll to Top Button-->
   <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
+    <i class="material-icons mi-inline">expand_less</i>
   </a>
 
 <?php

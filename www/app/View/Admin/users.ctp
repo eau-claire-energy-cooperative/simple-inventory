@@ -1,10 +1,10 @@
-<?php 
+<?php
     echo $this->Html->script("jquery-confirm.min.js",false);
     echo $this->Html->css('jquery-confirm.min', array('inline'=>false));
-    
+
     //script to load the confirmation dialog
     echo $this->Html->scriptBlock("$(document).ready(function() {
-  
+
         $('a.delete-user').confirm({
           content: 'Are you sure you want to delete this user?',
           buttons: {
@@ -12,15 +12,15 @@
                   location.href = this.\$target.attr('href');
               },
               cancel: function(){
-                
+
               }
           }
         });
-     });", array("inline"=>false)) 
+     });", array("inline"=>false))
 ?>
 
 <div class="mb-4" align="right">
-  <a href="<?php echo $this->Html->url('/admin/editUser') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-plus fa-sm text-white-50"></i> Add User</a>
+  <a href="<?php echo $this->Html->url('/admin/editUser') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="material-icons mi-sm mi-inline text-white-50">add</i> Add User</a>
 </div>
 <?php foreach ($users as $aUser): ?>
 <div class="row">
@@ -48,8 +48,8 @@
             <div class="col-md-4">
               <div class="row">
                 <div class="col-md-12">
-                  <a href="<?php echo $this->Html->url(array('action' => 'editUser', $aUser['User']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
-                  <a data-title="Delete User" href="<?php echo $this->Html->url("/admin/editUser/". $aUser['User']['id'] ."?action=delete") ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-user"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
+                  <a href="<?php echo $this->Html->url(array('action' => 'editUser', $aUser['User']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="material-icons mi-sm mi-inline text-white-50">edit</i> Edit</a>
+                  <a data-title="Delete User" href="<?php echo $this->Html->url("/admin/editUser/". $aUser['User']['id'] ."?action=delete") ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-user"><i class="material-icons mi-sm mi-inline text-white-50">delete</i> Delete</a>
                 </div>
               </div>
             </div>

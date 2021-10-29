@@ -17,7 +17,7 @@
 ?>
 
 <div class="mb-4" align="right">
-  <a href="<?php echo $this->here . ".csv" ?>" class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Download CSV</a>
+  <a href="<?php echo $this->here . ".csv" ?>" class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm"><i class="material-icons mi-sm mi-inline text-white-50">file_download</i> Download CSV</a>
 </div>
 
 <div class="row">
@@ -30,7 +30,7 @@
           <table class="table table-striped" id="dataTable">
              <thead>
                 <tr>
-                    <th><i class="fas fa-hdd"></i></th>
+                    <th><i class="material-icons">important_devices</i></th>
                     <th>Computer Name</th>
                     <th>Current User</th>
                     <th>Computer Location</th>
@@ -41,7 +41,7 @@
              <?php foreach ($results as $post): ?>
               <?php if(isset($post['Computer']['ComputerName'])): ?>
               <tr>
-                  <td data-sort="<?php echo $post['DeviceType']['name'] ?>"><i class="fas <?php echo $post['DeviceType']['icon'] ?>"></i></td>
+                  <td data-sort="<?php echo $post['DeviceType']['name'] ?>"><i class="material-icons"><?php echo $post['DeviceType']['icon'] ?></i></td>
                   <td> <?php echo $this->Html->link( $post['Computer']['ComputerName'] , array('controller'=>'inventory','action' => 'moreInfo', $post['Computer']['id'])); ?></td>
                   <td> <?php echo $post['Computer']['CurrentUser']; ?></td>
                   <td> <?php echo $locations[$post['Computer']['ComputerLocation']] ?></td>

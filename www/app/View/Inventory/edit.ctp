@@ -2,7 +2,7 @@
 <?php echo $this->Form->input('id', array('type' => 'hidden'));?>
 <div class="row">
   <div class="col-md-6">
-    <i class="fas <?php echo $this->request->data['DeviceType']['icon'] ?> fa-2x text-gray-400"> <?php echo $this->request->data['DeviceType']['name'] ?></i>
+    <h2 class="text-gray-400"><i class="material-icons mi-2x mi-inline"><?php echo $this->request->data['DeviceType']['icon'] ?></i> <?php echo $this->request->data['DeviceType']['name'] ?></h2>
   </div>
   <div class="col-md-6 mb-4" align="right">
     <?php echo $this->Form->Submit('Update',array('class'=>'d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2')) ?>

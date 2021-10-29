@@ -8,7 +8,7 @@
             <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $decommissioned['Decommissioned']['WipedHD']?></div>
           </div>
           <div class="col-auto">
-            <i class="fas fa-eraser fa-2x text-gray-300"></i>
+            <i class="material-icons mi-2x mi-inline text-gray-300">delete_forever</i>
           </div>
         </div>
       </div>
@@ -25,7 +25,7 @@
             <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $decommissioned['Decommissioned']['Recycled']?></div>
           </div>
           <div class="col-auto">
-            <i class="fas fa-recycle fa-2x text-gray-300"></i>
+            <i class="material-icons mi-2x mi-inline text-gray-300">recycling</i>
           </div>
         </div>
       </div>
@@ -42,7 +42,7 @@
             <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $decommissioned['Decommissioned']['RedeployedAs'];?></div>
           </div>
           <div class="col-auto">
-            <i class="fas fa-desktop fa-2x text-gray-300"></i>
+            <i class="material-icons mi-2x mi-inline text-gray-300">desktop_windows</i>
           </div>
         </div>
       </div>
@@ -58,7 +58,7 @@
             <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $this->Time->format($decommissioned['Decommissioned']['LastUpdated'], '%m/%d/%Y');?></div>
           </div>
           <div class="col-auto">
-            <i class="fas fa-calendar-day fa-2x text-gray-300"></i>
+            <i class="material-icons mi-2x mi-inline text-gray-300">event</i>
           </div>
         </div>
       </div>
