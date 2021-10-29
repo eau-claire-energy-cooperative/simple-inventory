@@ -3,14 +3,14 @@
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url(/files/material_icons/Material-Icons.woff2) format('woff2');
+  src: url(../files/material_icons/Material-Icons.woff2) format('woff2');
 }
 /* fallback */
 @font-face {
   font-family: 'Material Icons Outlined';
   font-style: normal;
   font-weight: 400;
-  src: url(/files/material_icons/Material-Icons-Outlined.woff2) format('woff2');
+  src: url(../files/material_icons/Material-Icons-Outlined.woff2) format('woff2');
 }
 
 .material-icons {
