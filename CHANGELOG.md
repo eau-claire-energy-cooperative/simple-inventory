@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## 2.1
+
+### Added
+
+- added Material Icon CSS and font files
+- device type editing pages now include a realtime preview of the icon before saving
+
+### Changed
+
+- Updated all hardcoded icons on the site to use Material Icons instead.
+- Device type icons use Material Icon syntax as well
+
+### Removed
+
+- removed Font Awesome icon library 
+
 ## 2.0 
 
 ### Added
