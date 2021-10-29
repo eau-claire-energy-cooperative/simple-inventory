@@ -1,7 +1,11 @@
+<script type="text/javascript">
+function updateIcon(){
+  $('#device_icon_preview').html($('#DeviceTypeIcon').val());
+}
+</script>
 <?php echo $this->Form->create('DeviceType');?>
 
-<p>Device Types are used to assign attributes to specific types of device classes. Examples may be computers, phones, or printers. The icon class is the CSS class as indicated by the <a href="https://fontawesome.com/v5.15/icons?d=gallery&p=2">font awesome</a> library.
-If you can't find an icon you like consider using the basic <i>fa-desktop</i> icon.</p>
+<p>To find a device type icon you can search the <a href="https://fonts.google.com/icons" target="_blank">Matrial Icons</a> site.</p>
 <div class="row">
   <div class="col-xl-12">
     <div class="card shadow mb-4">
@@ -12,7 +16,8 @@ If you can't find an icon you like consider using the basic <i>fa-desktop</i> ic
           </div>
           <div class="row mb-2">
             <div class="col-md-4">Icon: </div>
-            <div class="col-md-8"><?php echo $this->Form->input('icon',array("label"=>false, 'div'=>false, 'class'=>'form-control', 'value'=>'fa-desktop')); ?></div>
+            <div class="col-md-7"><?php echo $this->Form->input('icon',array("label"=>false, 'div'=>false, 'class'=>'form-control', 'value'=>'devices', 'onkeyup'=>'updateIcon()')); ?></div>
+            <div class="col-md-1"><i class="material-icons mi-inline" style="top:10px;" id="device_icon_preview">devices</i></div>
           </div>
           <div class="row mb-2">
             <div class="col-sm-4">Attributes Allowed:</div>
