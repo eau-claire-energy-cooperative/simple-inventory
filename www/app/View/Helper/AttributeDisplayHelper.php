@@ -135,7 +135,7 @@ class AttributeDisplayHelper extends AppHelper {
       if(strlen($computer['Computer']['SupplicantPassword']) > 0)
       {
         $result = '<span id="supplicant_password">*************</span> ' .
-        '<a href="" onClick="return showOriginal(\'supplicant_password\',\'' . $computer['Computer']['SupplicantPassword'] . '\')" class="h6 text-decoration-none"><i class="far fa-eye"></i></a>'; // don't show this in the main UI
+        '<a href="" onClick="return showOriginal(\'supplicant_password\',\'' . $computer['Computer']['SupplicantPassword'] . '\')" class="h6 text-decoration-none"><i class="material-icons mi-sm mi-inline">visibility</i></a>'; // don't show this in the main UI
       }
       else {
         $result = "";
