@@ -22,7 +22,7 @@ class AppSchema extends CakeSchema {
                         array('Location'=>array('location'=>'Operations','is_default'=>"false"))));
 
           break;
-        case 'device_type':
+        case 'device_types':
             //when creating the location table, insert some default locations
             $dType = ClassRegistry::init('DeviceType');
             $dType->create();
@@ -70,11 +70,9 @@ class AppSchema extends CakeSchema {
           $command->create();
           $command->saveMany(array(array('Command'=>array('name'=>'Restricted Programs','parameters'=>'','description'=>'Alert system administrators of any programs currently installed that have been flagged as Restricted in the Programs area.')),
                       array('Command'=>array('name'=>'Wake Computer','parameters'=>'Computer Name','description'=>'Wake a specific computer via a WOL packet at a given time.')),
-                      array('Command'=>array('name'=>'Shutdown Computer','parameters'=>'Computer Name','description'=>'Shutdown a computer by computer name at a given time. Please note that computers that are sleeping or hibernating will be left alone.')),
                       array('Command'=>array('name'=>'Send Emails','parameters'=>'','description'=>'This command should be kept running at all times. It will clear the email queue by sending emails to system administrators.')),
-                      array('Command'=>array('name'=>'Restart Computer','parameters'=>'Computer Name','description'=>'Send a restart command to a given computer at a specific time.')),
                       array('Command'=>array('name'=>'Check Disk space','parameters'=>'Minimum Space Threshold','description'=>'Check the disk space available on all computers. Any that do not contain the minimum amount of space (in percent) will generate an email to the system administrator.'))),
-                                  array('Command'=>array('name'=>'Remove Old Programs','parameters'=>'','description'=>'Removes Programs that no longer are installed on any computer from the database.')));
+                      array('Command'=>array('name'=>'Remove Old Programs','parameters'=>'','description'=>'Removes Programs that no longer are installed on any computer from the database.')));
           break;
       }
     }
