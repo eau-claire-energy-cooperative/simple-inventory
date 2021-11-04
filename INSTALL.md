@@ -88,7 +88,7 @@ Log in to the site by going to the URL created (http://localhost/inventory if on
 
 ## Powershell 
 
-The update_inventory.ps1 script actually pulls the information from the computer and sends it to the inventory site via a REST API. The updater should run at login for each computer. This can be most easily accomplished via a Group Policy login script or just adding a call to the existing login script for users. The updater script needs to be somewhere on your network it can be called by all computers. 
+The update_inventory.ps1 script actually pulls the information from the computer and sends it to the inventory site via a REST API. The updater should run at login for each computer. This can be most easily accomplished via a [Group Policy login script](https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki/Updater-Script-via-Group-Policy) or just adding a call to the existing login script for users. The updater script needs to be somewhere on your network it can be called by all computers. 
 
 At default the script takes 2 parameters; the URL of the inventory site and the API authentication key. The authentication key is set on the settings pages and is "pass" by default (please change it!). There are other parameters to turn off various functions if you don't need them. See the script itself for more details. 
 

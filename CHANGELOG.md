@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - added Material Icon CSS and font files
 - device type editing pages now include a realtime preview of the icon before saving
 - show real auth key on downloads page when listing example command
+- added links to Wiki page on how to configure the GPO for the updater script
 
 ### Changed
 
