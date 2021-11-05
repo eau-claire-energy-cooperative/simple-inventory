@@ -3,7 +3,7 @@
 class ApiController extends AppController {
 	var $layout = '';
 	var $helpers = array('Js');
-	var $uses = array('Computer','ComputerLogin','DeviceType','Disk','Setting','Command','Service','RestrictedProgram','Programs','Location','EmailMessage','Logs','User');
+	var $uses = array('Computer','ComputerLogin','DeviceType','Disk','Setting','Command','Service','RestrictedProgram','Programs','Location','Logs','User');
 	var $json_data = null;
 
 	function beforeFilter(){
@@ -214,10 +214,7 @@ class ApiController extends AppController {
 
 		if(isset($subject) && isset($message))
 		{
-			$this->EmailMessage->create();
-			$this->EmailMessage->set('subject',$subject);
-			$this->EmailMessage->set('message',$message);
-			$this->EmailMessage->save();
+      $this->_send_email($subject, $message);
 
 			$result['type'] = 'success';
 			$result['message'] = 'sending email ' . $subject;

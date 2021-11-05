@@ -49,7 +49,8 @@ class AdminController extends AppController {
 	public function settings($action = null){
     $this->set('homeAttributes', array_merge($this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
     $this->set('infoAttributes', array_merge($this->DEVICE_ATTRIBUTES['REQUIRED'], $this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
-		if($this->request->is('post'))
+
+    if($this->request->is('post'))
 		{
 			//get all the settings
 			$db_settings = $this->Setting->find('all');

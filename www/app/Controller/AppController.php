@@ -44,4 +44,14 @@ class AppController extends Controller {
             $this->set('active_menu','');
         }
     }
+
+    protected function _send_email($subject, $message){
+      $this->loadModel('EmailMessage');
+
+      //create an email message and add it to the queue to be sent
+      $this->EmailMessage->create();
+			$this->EmailMessage->set('subject',$subject);
+			$this->EmailMessage->set('message',$message);
+			$this->EmailMessage->save();
+    }
 }
