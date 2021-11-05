@@ -38,7 +38,7 @@
                 <div class="col-sm-6"><?php echo $this->Form->input('computer_ignore_list',array('class'=>'form-control','label'=>false,'value'=>$settings['computer_ignore_list'])) ?></div>
               </div>
               <div class="row mt-2">
-                <div class="col-sm-6">Enable Device Auto Add</div>
+                <div class="col-sm-6">Allow Device Auto Add</div>
                 <div class="col-sm-6"><?php echo $this->Form->select('computer_auto_add',array('true'=>'Yes','false'=>'No'),array('class'=>'custom-select','value'=>$settings['computer_auto_add'],'empty'=>false)) ?></div>
               </div>
               <div class="row mt-2">
