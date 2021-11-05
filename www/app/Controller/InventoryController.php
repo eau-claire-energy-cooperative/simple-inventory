@@ -333,14 +333,32 @@ class InventoryController extends AppController {
 	    	$message = $computer['DeviceType']['name'] . ' ' . $computer['Computer']['ComputerName'] . ' has been deleted';
 
 	    	$this->_saveLog($message);
-	        $this->Flash->success($message);
-	        $this->redirect(array('action' => 'computerInventory'));
+	      $this->Flash->success($message);
+
 	    }
 
 		$this->redirect(array('action' => 'computerInventory'));
 	}
 
+  public function deleteDecom($id){
 
+      //get the name of the device for logging
+      $this->Decommissioned->id = $id;
+      $computer = $this->Decommissioned->read();
+
+      if($this->Decommissioned->delete($id))
+      {
+        $message = $computer['Decommissioned']['ComputerName'] . ' has been permanently deleted';
+        $this->_saveLog($message);
+        $this->Flash->success($message);
+      }
+      else
+      {
+        $this->Flash->error("Failed to delete device with id: " . $id);
+      }
+
+      $this->redirect(array('action'=>'decommission'));
+  }
 
  	public function decommission() {
  	    $this->set('active_menu', 'decommission');

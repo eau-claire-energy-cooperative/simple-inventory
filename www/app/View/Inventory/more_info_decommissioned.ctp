@@ -1,3 +1,26 @@
+<?php
+    echo $this->Html->script("jquery-confirm.min.js",false);
+    echo $this->Html->css('jquery-confirm.min', array('inline'=>false));
+
+    //script to load the datatable
+    echo $this->Html->scriptBlock("$(document).ready(function() {
+        $('a.delete-decom').confirm({
+          title: 'Permanently Delete Device',
+          content: 'This will delete this device and all history of it. Are you sure?',
+          buttons: {
+              yes: function(){
+                  location.href = this.\$target.attr('href');
+              },
+              cancel: function(){
+
+              }
+          }
+        });
+     });", array("inline"=>false))
+?>
+<div class="mb-2" align="right">
+  <a href="<?php echo $this->Html->url(array('action' => 'deleteDecom', $decommissioned['Decommissioned']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-decom"><i class="material-icons mi-sm mi-inline text-white-50">delete</i> Permanent Delete</a>
+</div>
 <div class="row">
   <div class="col-xl-3 col-md-6 mb-4">
     <div class="card border-left-danger shadow h-100 py-2">
@@ -15,7 +38,6 @@
     </div>
   </div>
 
-  <!-- Earnings (Monthly) Card Example -->
   <div class="col-xl-3 col-md-6 mb-4">
     <div class="card border-left-success shadow h-100 py-2">
       <div class="card-body">
