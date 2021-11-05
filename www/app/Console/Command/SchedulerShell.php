@@ -1,22 +1,22 @@
-<?php 
+<?php
 
 class SchedulerShell extends AppShell {
 	var $uses = array('Schedule');
-	var $tasks = array('RestrictedPrograms','WakeComputer','SendEmails','DiskSpace','ShutdownComputer','RemoveOldPrograms');
-	
+	var $tasks = array('RestrictedPrograms','WakeComputer','SendEmails','DiskSpace','RemoveOldPrograms','PurgeDecom');
+
 	public function main(){
 		App::import('Vendor','Cron/CronExpression');
-		
+
 		$this->out('Getting a list of all scheduled commands');
 		$this->out("");
-		
+
 		$all_schedules = $this->Schedule->find('all');
-		
+
 		//go through each and determine if it should run or not
 		foreach($all_schedules as $schedule)
 		{
-			$cron_exp = Cron\CronExpression::factory($schedule['Schedule']['schedule']);	
-			
+			$cron_exp = Cron\CronExpression::factory($schedule['Schedule']['schedule']);
+
 			if($cron_exp->isDue())
 			{
 				//run the command
@@ -48,6 +48,10 @@ class SchedulerShell extends AppShell {
 						break;
 					case 7:
 					    $this->RemoveOldPrograms->execute($schedule_params);
+              break;
+          case 8:
+            $this->PurgeDecom->execute($schedule_params);
+            break;
 				}
 
 			}
@@ -57,6 +61,6 @@ class SchedulerShell extends AppShell {
 			}
 		}
 	}
-	
+
 }
 ?>

@@ -16,7 +16,7 @@
   <div class="col-sm-8"><?php echo $this->Form->input('schedule',array('label'=>false,'div'=>false,'class'=>'form-control')) ?></div>
 </div>
 <?php
-    if(count($parameters) != 0): 
+    if(count($parameters) != 0):
       foreach($parameters as $param): ?>
 <div class="row">
   <div class="col-sm-4"><?php echo $param ?>:</div>
@@ -28,7 +28,7 @@
 
 <div class="row">
   <div class="col-sm-8"></div>
-  <div class="col-sm-4"><?php echo $this->Form->submit('Create',array('class'=>'btn btn-primary btn-user btn-block')) ?></div>
+  <div class="col-sm-4"><?php echo $this->Form->submit('Create',array('class'=>'btn btn-primary btn-user btn-block mt-2')) ?></div>
 </div>
 
 <?php echo $this->Form->end() ?>
