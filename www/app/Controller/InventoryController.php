@@ -411,6 +411,10 @@ class InventoryController extends AppController {
 		$this->Decommissioned->set('RedeployedAs',$comp ['Computer']['RedeployedAs']);
 		$this->Decommissioned->set('notes',$comp ['Computer']['notes']);
 
+    //send email
+    $this->_send_email($comp['Computer']['ComputerName'] . ' has been decommissioned',
+                      "A device has been decommissioned, the details are below. <br /><br />: Computer Name:" . $comp['Computer']['ComputerName'] . '<br /> Serial Number: ' . $comp['Computer']['SerialNumber']);
+
 		$this->Computer->delete($id);
 
 		//also delete programs and services
