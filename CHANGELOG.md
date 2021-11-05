@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## Unreleased
+
+### Added
+
+- emails can be added to the queue from any controller, these are sent to anyone with the "send email" flag set to true
+- emails sent when devices are decommissioned, useful if this information needs to be passed on to other systems
+- ability to delete from the decommissioned table to completely clear out old devices
+- new Scheduled Task to automatically purge decommmissioned devices after so many years
+- new Schedule Task to automatically purge logs after so many years
+
 ## 2.1
 
 ### Added
