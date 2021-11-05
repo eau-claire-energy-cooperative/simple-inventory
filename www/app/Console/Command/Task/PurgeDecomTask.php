@@ -14,7 +14,10 @@ class PurgeDecomTask extends AppShell {
 
       $this->out('Found ' . count($outdated) . ' devices');
       foreach($outdated as $computer){
+        //print and log the deletion
         $this->out($computer['Decommissioned']['ComputerName'] . " : " . $computer['Decommissioned']['LastUpdated']);
+        $this->dblog($computer['Decommissioned']['ComputerName'] . ' has been permanently deleted');
+
         $message = $message . $computer['Decommissioned']['ComputerName'] . ' was decommissioned on ' . $computer['Decommissioned']['LastUpdated'] . "<br />";
 
         //delete the computer
