@@ -41,8 +41,8 @@
                 <div class="col-sm-8"><?php echo $aUser['User']['email'] ?></div>
               </div>
               <div class="row mt-2">
-                <div class="col-sm-4">Send Admin Email: </div>
-                <div class="col-sm-8"><?php echo ucwords($aUser['User']['send_email']) ?></div>
+                <div class="col-sm-4">Send Emails: </div>
+                <div class="col-sm-8"><?php echo strtolower($aUser['User']['send_email']) == 'true' ? 'Yes' : 'No'; ?></div>
               </div>
             </div>
             <div class="col-md-4">

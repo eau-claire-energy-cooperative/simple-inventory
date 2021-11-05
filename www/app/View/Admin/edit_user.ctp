@@ -29,7 +29,7 @@
             <div class="col-md-8"><?php echo $this->Form->input('email',array('label'=>false, 'div'=>false, 'class'=>'form-control'));?></div>
           </div>
           <div class="row mb-1">
-            <div class="col-md-4">Send Email: </div>
+            <div class="col-md-4">Send Emails: </div>
             <div class="col-md-8"><?php echo $this->Form->input('send_email',array('div'=>false,'label'=>false,'type' => 'select','options' => array('true'=>'Yes','false'=>'No'),'class'=>'custom-select')); ?></div>
           </div>
           <div class="row mt-2">
@@ -43,7 +43,7 @@
 
 <?php echo $this->Form->input('id', array('type' => 'hidden'));?>
 <?php if(isset($this->data['User']['id'])) {
-  echo $this->Form->input('password_original',array('type'=>'hidden','value'=>$this->data['User']['password'],'div'=>true,'label'=>true));  
+  echo $this->Form->input('password_original',array('type'=>'hidden','value'=>$this->data['User']['password'],'div'=>true,'label'=>true));
 }
 ?>
 <?php echo $this->Form->end();?>
