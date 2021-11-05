@@ -2,7 +2,7 @@
 
 class SchedulerShell extends AppShell {
 	var $uses = array('Schedule');
-	var $tasks = array('RestrictedPrograms','WakeComputer','SendEmails','DiskSpace','RemoveOldPrograms','PurgeDecom');
+	var $tasks = array('RestrictedPrograms','WakeComputer','SendEmails','DiskSpace','RemoveOldPrograms','PurgeDecom','PurgeLogs');
 
 	public function main(){
 		App::import('Vendor','Cron/CronExpression');
@@ -51,6 +51,9 @@ class SchedulerShell extends AppShell {
               break;
           case 8:
             $this->PurgeDecom->execute($schedule_params);
+            break;
+          case 9:
+            $this->PurgeLogs->execute($schedule_params);
             break;
 				}
 
