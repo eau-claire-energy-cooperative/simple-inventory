@@ -14,6 +14,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - new Scheduled Task to automatically purge decommmissioned devices after so many years
 - new Schedule Task to automatically purge logs after so many years
 
+### Fixed
+
+- only show categories on the edit screen that exist in that device type
+
 ## 2.1
 
 ### Added

@@ -37,6 +37,7 @@
   </div>
 </div>
 
+<?php if(count(array_intersect(array_keys($hardwareAttributes), $allowedAttributes)) > 0): ?>
 <div class="row">
   <div class="col-xl-12">
     <div class="card border-left-warning shadow mb-4">
@@ -56,7 +57,9 @@
     </div>
   </div>
 </div>
+<?php endif; ?>
 
+<?php if(count(array_intersect(array_keys($networkAttributes), $allowedAttributes)) > 0): ?>
 <div class="row">
   <div class="col-xl-12">
     <div class="card border-left-info shadow mb-4">
@@ -76,6 +79,7 @@
     </div>
   </div>
 </div>
+<?php endif; ?>
 
 <div class="row">
   <div class="col-xl-8">
