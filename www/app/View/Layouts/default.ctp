@@ -12,11 +12,10 @@
   <title><?php echo $title_for_layout ?> | Simple Inventory Manager</title>
 
   <?php
-    echo $this->Html->script("iconify.2.1.0.min.js");
-
     echo $this->Html->css('jquery.fancybox');
     echo $this->Html->css('sb-admin-2');
-    echo $this->Html->css('iconify');
+    echo $this->Html->css('materialdesignicons.min');
+    echo $this->Html->css('icons');
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
