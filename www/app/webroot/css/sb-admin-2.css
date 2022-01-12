@@ -9909,8 +9909,8 @@ a:focus {
   vertical-align: 0;
   border: 0;
   font-weight: 900;
-  content: '\e4095';
-  font-family: 'Material Icons';
+  content: '\F0140';
+  font-family: 'Material Design Icons';
 }
 
 .sidebar .nav-item.dropdown.show .dropdown-toggle::after,
@@ -10179,8 +10179,8 @@ a:focus {
 
 .sidebar #sidebarToggle::after {
   font-weight: 900;
-  content: '\e408';
-  font-family: 'Material Icons';
+  content: '\F0141';
+  font-family: 'Material Design Icons';
   margin-right: 0.1rem;
 }
 
@@ -10198,8 +10198,8 @@ a:focus {
 }
 
 .sidebar.toggled #sidebarToggle::after {
-  content: '\e409';
-  font-family: 'Material Icons';
+  content: '\F0142';
+  font-family: 'Material Design Icons';
   margin-left: 0.25rem;
 }
 
@@ -10278,11 +10278,11 @@ a:focus {
     vertical-align: 0;
     border: 0;
     font-weight: 900;
-    content: '\e5cc';
-    font-family: 'Material Icons';
+    content: '\F0143';
+    font-family: 'Material Design Icons';
   }
   .sidebar .nav-item .nav-link[data-toggle="collapse"].collapsed::after {
-    content: '\e409';
+    content: '\F0140';
   }
   .sidebar .sidebar-brand .sidebar-brand-icon i {
     font-size: 2rem;
@@ -10536,8 +10536,8 @@ a:focus {
   padding-right: 1.725rem;
   line-height: 51px;
   font-weight: 900;
-  content: '\e5cf';
-  font-family: 'Material Icons';
+  content: '\F0140';
+  font-family: 'Material Design Icons';
   color: #d1d3e2;
 }
 
