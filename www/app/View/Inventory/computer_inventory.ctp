@@ -19,9 +19,9 @@
 ?>
 
 <div class="mb-4" align="right">
-  <a href="<?php echo $this->Html->url('/inventory/add') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="material-icons mi-sm mi-inline text-white-50">add</i> Add Device</a>
-  <a href="<?php echo $this->Html->url('/inventory/import') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="material-icons mi-sm mi-inline text-white-50">file_upload</i> Import Devices</a>
-  <a href="<?php echo $this->Html->url('/search/listAll.csv') ?>" class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm"><i class="material-icons mi-sm mi-inline text-white-50">file_download</i> Download CSV</a>
+  <a href="<?php echo $this->Html->url('/inventory/add') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i> Add Device</a>
+  <a href="<?php echo $this->Html->url('/inventory/import') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-upload icon-sm icon-inline text-white-50"></i> Import Devices</a>
+  <a href="<?php echo $this->Html->url('/search/listAll.csv') ?>" class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm"><i class="mdi mdi-download icon-sm icon-inline text-white-50"></i> Download CSV</a>
 </div>
 
 <div class="card shadow mb-4">
@@ -29,7 +29,7 @@
     <table class="table table-striped" id="dataTable">
     	<thead>
         <tr>
-            <th><i class="material-icons">important_devices</i></th>
+            <th><i class="mdi mdi-monitor-cellphone-star"></i></th>
             <th>Device Name</th>
             <?php foreach($displayAttributes as $attribute): ?>
             <th><?php echo $columnNames[$attribute] ?></th>
@@ -42,7 +42,7 @@
         <?php foreach ($computer as $post): ?>
         <tr>
             <td data-sort="<?php echo $post['DeviceType']['name'] ?>">
-              <a href="<?php echo $this->Html->url('/search/search/5/' . $post['DeviceType']['name']) ?>" class="icon-link"><i class="material-icons"><?php echo $post['DeviceType']['icon'] ?></i></a>
+              <a href="<?php echo $this->Html->url('/search/search/5/' . $post['DeviceType']['name']) ?>" class="icon-link"><i class="mdi mdi-<?php echo $post['DeviceType']['icon'] ?>"></i></a>
             </td>
             <td> <?php echo $this->Html->link( $post['Computer']['ComputerName'] , array('action' => 'moreInfo', $post['Computer']['id'])); ?></td>
             <?php foreach($displayAttributes as $attribute): ?>
