@@ -10,7 +10,7 @@
           <div class="col-lg-12">
             <div class="p-5">
               <div class="text-center">
-                <p><i class="material-icons mi-4x text-gray-900">desktop_windows</i></p>
+                <p><i class="iconify icon-4x text-gray-900" data-icon="mdi:desktop-windows"></i></p>
                 <h1 class="h4 text-gray-900 mb-4">Simple Inventory</h1>
               </div>
               <?php echo $this->Form->create('User',array('url'=>'/inventory/login')) ?>
@@ -28,8 +28,8 @@
         <div class="row mt-3 pb-3">
           <div class="col-lg-12">
             <div class="copyright text-center my-auto">
-              <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki" target="_blank" class="mr-3 h6"><i class="material-icons-outlined mi-sm mi-inline">info</i> Documentation</a>
-              <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory" class="h6"><i class="material-icons mi-sm mi-inline">code</i> View Source</a><br>
+              <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki" target="_blank" class="mr-3 h6"><i class="iconify icon-sm icon-inline" data-icon="mdi:information-outline"></i> Documentation</a>
+              <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory" class="h6"><i class="iconify icon-sm icon-inline" data-icon="mdi:github"></i> View Source</a><br>
               Version <?php echo Configure::read('Settings.version') ?>
             </div>
           </div>
