@@ -220,7 +220,7 @@ function showOriginal(id, text){
                 $row_class = 'restricted';
               }
           ?>
-          <td class="<?php echo $row_class ?>"> <?php echo $this->Html->link( $post['name'] . " v" . $post["version"], '/search/searchProgram/' . $post['id']); ?></td>
+          <td class="<?php echo $row_class ?>"> <?php echo $this->Html->link( $post['name'] . " v" . $post["version"], '/search/searchApplication/' . $post['id']); ?></td>
           <td width="20%" class="<?php echo $row_class ?>" align="right">
             <a href="<?php echo $this->Html->url('/applications/unassign_application/' . $post['id'] . '/' . $computer['Computer']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-location"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i></a>
           </td>
