@@ -1,10 +1,10 @@
 <?php
 
 class AjaxController extends AppController {
-    var $components = array('Session','Ping');
-    var $helpers = array('Js');
+  var $components = array('Session','Ping');
+  var $helpers = array('Js');
 	var $layout = '';
-	var $uses = array('Computer','Setting','Command','Programs','RestrictedProgram','User');
+	var $uses = array('Applications','Computer','Setting','Command','Programs','User');
 
 	public function beforeFilter(){
 	    //check if we are using a login method
@@ -77,18 +77,11 @@ class AjaxController extends AppController {
 
 	}
 
-	function toggle_restricted($delete,$program)
+	function toggle_application_monitor($app_id, $monitor)
 	{
-		if($delete == 'true')
-		{
-			$this->RestrictedProgram->query(sprintf('delete from restricted_programs where name ="%s"',$program));
-		}
-		else
-		{
-			$this->RestrictedProgram->create();
-			$this->RestrictedProgram->set('name',$program);
-			$this->RestrictedProgram->save();
-		}
+			$this->Applications->query(sprintf('update applications set monitoring = "%s" where id = "%d"', $monitor, $app_id));
+
+      $this->set('result', array('success'=>'true'));
 	}
 
   function assign_program($prog_version, $prog_name){

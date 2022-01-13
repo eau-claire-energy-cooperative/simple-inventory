@@ -54,6 +54,13 @@
       <!-- Divider -->
       <hr class="sidebar-divider">
 
+      <!-- Nav Item - Applications -->
+      <li class="nav-item <?php echo $this->Menu->getActiveMenu('applications',$active_menu) ?>">
+        <a class="nav-link" href="<?php echo $this->Html->url('/applications') ?>">
+          <i class="mdi mdi-application-cog-outline"></i>
+          <span>Applications</span></a>
+      </li>
+
       <!-- Nav Item - Manage Collapse Menu -->
       <li class="nav-item <?php echo $this->Menu->getActiveMenu('manage',$active_menu) ?>">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
