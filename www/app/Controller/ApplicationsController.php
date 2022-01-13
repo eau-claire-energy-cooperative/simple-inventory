@@ -35,7 +35,7 @@ class ApplicationsController extends AppController {
 
     if($this->request->is('post')){
       $this->Applications->save($this->request->data);
-      $this->Flash->success('Application saved successfully');
+      $this->Flash->success($this->request->data['Applications']['name'] . ' saved successfully');
     }
 
     $applications = $this->Applications->find('all', array('order'=>array('Applications.name','Applications.version')));
@@ -45,6 +45,18 @@ class ApplicationsController extends AppController {
 
   public function add_application(){
     $this->set('title_for_layout', 'Add Application');
+  }
+
+  public function assign_application(){
+    //update the join table
+    $joinInfo = $this->request->data['ApplicationInstall'];
+
+    $this->Applications->query(sprintf("insert into application_installs (application_id, comp_id) values (%d, %d)", $joinInfo['application_id'], $joinInfo['comp_id']));
+
+    $this->Flash->success('Saved');
+
+    $this->redirect('/applications/');
+
   }
 }
 ?>

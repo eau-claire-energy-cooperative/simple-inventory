@@ -28,6 +28,7 @@
       <thead>
         <th>Application Name</th>
         <th>Version</th>
+        <th>Devices</th>
         <th></th>
       </thead>
       <tbody>
@@ -48,6 +49,7 @@
 ?>
         	<td id="application_<?php echo $count ?>"><?php echo $this->Html->link($post['Applications']['name'], '/search/searchProgram/' . $post['Applications']['id']); ?></td>
           <td><?php echo $post['Applications']['version'] ?></td>
+          <td><?php echo count($post['Computer']) ?></td>
         	<td width="20%" align="right">
             <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/assign_application/' . $post['Applications']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i> Assign</a>
         	  <a id="icon_<?php echo $count ?>" href="#" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 <?php echo $start_class ?>" onClick="return toggleMonitor(<?php echo $count ?>, <?php echo $post['Applications']['id'] ?>)"><i class="mdi mdi-eye icon-sm icon-inline text-white-50"></i> <span><?php echo $start_text ?></span></a>

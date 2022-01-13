@@ -84,25 +84,16 @@ class AjaxController extends AppController {
       $this->set('result', array('success'=>'true'));
 	}
 
-  function assign_program($prog_version, $prog_name){
+  function assign_application($app_id){
     $this->layout = 'fancybox';
 
-    //get the program from the name
-    $program = $this->Programs->find('all', array('conditions'=>array('Programs.program'=>$prog_name, 'Programs.version'=>$prog_version)));
+    //get the application
+    $application = $this->Applications->find('first', array('conditions'=>array('Applications.id'=>$app_id)));
 
-    //get a list of already assigned devices
-    $assigned = array();
-    foreach($program as $aProg)
-    {
-      $assigned[] = $aProg['Computer']['id'];
-    }
-
-    $this->set('program', $program[0]['Programs']['program']);
-    $this->set('program_version', $program[0]['Programs']['version']);
+    $this->set('application', $application['Applications']);
 
     //filter out already assigned from this list
     $allComputers = $this->Computer->find('list',array('fields'=>array('Computer.id', 'Computer.ComputerName'),
-                                                       'conditions'=>array('NOT'=>array('Computer.id'=>$assigned)),
                                                        'order'=>array('Computer.ComputerName asc')));
     $this->set('computers', $allComputers);
   }
