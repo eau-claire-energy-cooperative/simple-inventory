@@ -54,39 +54,38 @@
       <!-- Divider -->
       <hr class="sidebar-divider">
 
-      <!-- Nav Item - Applications -->
-      <li class="nav-item <?php echo $this->Menu->getActiveMenu('applications',$active_menu) ?>">
-        <a class="nav-link" href="<?php echo $this->Html->url('/applications') ?>">
-          <i class="mdi mdi-application-cog-outline"></i>
-          <span>Applications</span></a>
-      </li>
-
       <!-- Nav Item - Manage Collapse Menu -->
       <li class="nav-item <?php echo $this->Menu->getActiveMenu('manage',$active_menu) ?>">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="mdi mdi-wrench"></i>
-          <span>Manage</span>
+          <i class="mdi mdi-devices"></i>
+          <span>Devices</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Manage Inventory</h6>
+            <h6 class="collapse-header">Manage Devices</h6>
             <?php if(isset($settings) && $settings['ldap_computers_basedn'] != ''): ?>
             <a class="collapse-item" href="<?php echo $this->Html->url('/inventory/active_directory_sync') ?>">Active Directory Sync</a>
             <?php endif; ?>
+            <a class="collapse-item" href="<?php echo $this->Html->url('/inventory/decommission') ?>">Decommissioned</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/manage/deviceTypes') ?>">Device Types</a>
-            <a class="collapse-item" href="<?php echo $this->Html->url('/manage/licenses') ?>">Licenses</a>
-            <a class="collapse-item" href="<?php echo $this->Html->url('/manage/restricted_programs') ?>">Programs</a>
           </div>
         </div>
       </li>
 
-      <!-- Nav Item - decom -->
-      <li class="nav-item <?php echo $this->Menu->getActiveMenu('decommission',$active_menu) ?>">
-        <a class="nav-link" href="<?php echo $this->Html->url('/inventory/decommission') ?>">
-          <i class="mdi mdi-cancel"></i>
-          <span>Decommissioned</span></a>
+      <!-- Nav Item - Applications -->
+      <li class="nav-item <?php echo $this->Menu->getActiveMenu('applications',$active_menu) ?>">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSoftware" aria-expanded="true" aria-controls="collapseSoftware">
+          <i class="mdi mdi-application-cog-outline"></i>
+          <span>Software</span>
+        </a>
+        <div id="collapseSoftware" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Manage Software</h6>
+            <a class="collapse-item" href="<?php echo $this->Html->url('/applications') ?>">Applications</a>
+            <a class="collapse-item" href="<?php echo $this->Html->url('/manage/licenses') ?>">Licenses</a>
+          </div>
+        </div>
       </li>
-
 
       <!-- Divider -->
       <hr class="sidebar-divider">

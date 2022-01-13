@@ -3,7 +3,7 @@
 class ApiController extends AppController {
 	var $layout = '';
 	var $helpers = array('Js');
-	var $uses = array('Computer','ComputerLogin','DeviceType','Disk','Setting','Command','Service','RestrictedProgram','Programs','Location','Logs','User');
+	var $uses = array('Applications','Computer','ComputerLogin','DeviceType','Disk','Setting','Command','Service','RestrictedProgram','Programs','Location','Logs','User');
 	var $json_data = null;
 
 	function beforeFilter(){
