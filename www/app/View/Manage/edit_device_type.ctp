@@ -6,7 +6,7 @@ function updateIcon(){
 <?php echo $this->Form->create('DeviceType', array('url' => '/manage/editDeviceType')); ?>
 <?php echo $this->Form->input('id', array('type' => 'hidden'));?>
 
-<p>To find a device type icon you can search the <a href="https://fonts.google.com/icons" target="_blank">Matrial Icons</a> site.</p>
+<p>To find a device type icon you can search the <a href="https://materialdesignicons.com/" target="_blank">Matrial Design Icons</a> site.</p>
 
 <?php
   //convert string to array
