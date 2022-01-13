@@ -4,7 +4,7 @@ class AjaxController extends AppController {
     var $components = array('Session','Ping');
     var $helpers = array('Js');
 	var $layout = '';
-	var $uses = array('Computer','Setting','Command','RestrictedProgram','User');
+	var $uses = array('Computer','Setting','Command','Programs','RestrictedProgram','User');
 
 	public function beforeFilter(){
 	    //check if we are using a login method
@@ -91,8 +91,31 @@ class AjaxController extends AppController {
 		}
 	}
 
+  function assign_program($prog_version, $prog_name){
+    $this->layout = 'fancybox';
+
+    //get the program from the name
+    $program = $this->Programs->find('all', array('conditions'=>array('Programs.program'=>$prog_name, 'Programs.version'=>$prog_version)));
+
+    //get a list of already assigned devices
+    $assigned = array();
+    foreach($program as $aProg)
+    {
+      $assigned[] = $aProg['Computer']['id'];
+    }
+
+    $this->set('program', $program[0]['Programs']['program']);
+    $this->set('program_version', $program[0]['Programs']['version']);
+
+    //filter out already assigned from this list
+    $allComputers = $this->Computer->find('list',array('fields'=>array('Computer.id', 'Computer.ComputerName'),
+                                                       'conditions'=>array('NOT'=>array('Computer.id'=>$assigned)),
+                                                       'order'=>array('Computer.ComputerName asc')));
+    $this->set('computers', $allComputers);
+  }
+
 	function uploadDrivers($id){
-	    $this->layout = 'fancybox';
+	  $this->layout = 'fancybox';
 		$computer = $this->Computer->find('first',array('conditions'=>array('Computer.id'=>$id)));
 
 		$this->set('computer',$computer['Computer']);

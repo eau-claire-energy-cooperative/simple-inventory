@@ -20,6 +20,7 @@
 <table id="dataTable" class="table table-striped">
   <thead>
     <th>Program Name</th>
+    <th>Version</th>
     <th></th>
   </thead>
   <tbody>
@@ -39,7 +40,9 @@
 
 ?>
     	<td id="program_<?php echo $count ?>"><?php echo $this->Html->link( $post['Programs']['program'] , '/search/searchProgram/' . $post['Programs']['program']); ?></td>
+      <td><?php echo $post['Programs']['version'] ?></td>
     	<td width="20%" align="right">
+        <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/assign_program/' . $post['Programs']['version'] . '/' . urlencode($post['Programs']['program'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i> Assign</a>
     	  <a id="icon_<?php echo $count ?>" href="#" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 <?php echo $start_class ?>" onClick="return toggleProgram(<?php echo $count ?>)"><i class="mdi mdi-cancel icon-sm icon-inline text-white-50"></i> <span><?php echo $start_text ?></span></a>
     	</td>
     </tr>

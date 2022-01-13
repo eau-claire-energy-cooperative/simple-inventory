@@ -221,6 +221,9 @@ function showOriginal(id, text){
               }
           ?>
           <td class="<?php echo $row_class ?>"> <?php echo $this->Html->link( $post['Programs']['program'] . " v" . $post["Programs"]["version"], '/search/searchProgram/' . $post['Programs']['program']); ?></td>
+          <td width="20%" class="<?php echo $row_class ?>" align="right">
+            <a href="<?php echo $this->Html->url('/manage/unassign_program/' . $post['Programs']['ID'] . '/' . $computer['Computer']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-location"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i></a>
+          </td>
         </tr>
         <?php endforeach; ?>
         </table>

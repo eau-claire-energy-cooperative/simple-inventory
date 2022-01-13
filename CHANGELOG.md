@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## 2.3
 
+### Added
+
+- added ability to manually assign or unassign programs from a device. This will get cleared during auto update so only use for devices that aren't getting pulled in via a script
+
 ### Changed
 
 - changed icon provider from Google Material Icons to Material Design Icons. Many more icons to choose from.

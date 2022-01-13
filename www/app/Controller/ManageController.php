@@ -120,13 +120,27 @@ class ManageController extends AppController {
 	function restricted_programs(){
 	    $this->set('title_for_layout','Programs');
 
+      if($this->request->is('post')){
+        $this->Programs->save($this->request->data);
+        $this->Flash->success('Program assigned successfully');
+      }
+
 	    //get a list of all programs on the system
-	    $all_programs = $this->Programs->find('all',array('fields'=>array('DISTINCT Programs.program'),'order'=>array('Programs.program')));
+	    $all_programs = $this->Programs->find('all',array('fields'=>array('DISTINCT Programs.program', 'Programs.version'), 'group'=>array('Programs.program', 'Programs.version'), 'order'=>array('Programs.program', 'Programs.version desc')));
 	    $this->set('all_programs',$all_programs);
 
 	    //get a list of currently restricted programs
 	    $this->set('restricted_programs',$this->RestrictedProgram->find('list',array('fields'=>array('RestrictedProgram.name','RestrictedProgram.id'))));
 	}
+
+  function unassign_program($program_id, $comp_id){
+    // delete this entry from the programs DB
+    $this->Programs->delete($program_id);
+
+    $this->Flash->success('Program removed');
+
+    $this->redirect('/inventory/moreInfo/' . $comp_id);
+  }
 
 	function commands(){
 	    $this->set('active_menu', 'schedule');
