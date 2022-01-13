@@ -201,28 +201,28 @@ function showOriginal(id, text){
   <?php endif; ?>
 </div>
 
-<?php if(count($programs) > 0): ?>
+<?php if(count($computer['Applications']) > 0): ?>
 <div class="row">
   <div class="col-xl-12">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary"><a href="#" onClick="return expandTable('programs')">Programs <i class="mdi mdi-chevron-down align-middle" id="programs-toggle"></i></a></h6>
+        <h6 class="m-0 font-weight-bold text-primary"><a href="#" onClick="return expandTable('applications')">Applications <i class="mdi mdi-chevron-down align-middle" id="applications-toggle"></i></a></h6>
       </div>
       <div class="card-body">
-        <table id="programs" class="table table-striped" style="display:none">
-          <?php foreach ($programs as $post): ?>
+        <table id="applications" class="table table-striped" style="display:none">
+          <?php foreach ($computer['Applications'] as $post): ?>
           <tr>
           <?php
               $row_class = '';
 
-              if(key_exists($post['Programs']['program'],$restricted_programs))
+              if($post['monitoring'] == 'true')
               {
                 $row_class = 'restricted';
               }
           ?>
-          <td class="<?php echo $row_class ?>"> <?php echo $this->Html->link( $post['Programs']['program'] . " v" . $post["Programs"]["version"], '/search/searchProgram/' . $post['Programs']['program']); ?></td>
+          <td class="<?php echo $row_class ?>"> <?php echo $this->Html->link( $post['name'] . " v" . $post["version"], '/search/searchProgram/' . $post['id']); ?></td>
           <td width="20%" class="<?php echo $row_class ?>" align="right">
-            <a href="<?php echo $this->Html->url('/manage/unassign_program/' . $post['Programs']['ID'] . '/' . $computer['Computer']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-location"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i></a>
+            <a href="<?php echo $this->Html->url('/applications/unassign_application/' . $post['id'] . '/' . $computer['Computer']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-location"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i></a>
           </td>
         </tr>
         <?php endforeach; ?>

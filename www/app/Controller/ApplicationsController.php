@@ -58,5 +58,13 @@ class ApplicationsController extends AppController {
     $this->redirect('/applications/');
 
   }
+
+  public function unassign_application($app_id, $comp_id){
+    $this->Applications->query(sprintf("delete from application_installs where application_id = %d and comp_id = %d", $app_id, $comp_id));
+
+    $this->Flash->success('Application removed');
+
+    $this->redirect('/inventory/moreInfo/' . $comp_id);
+  }
 }
 ?>

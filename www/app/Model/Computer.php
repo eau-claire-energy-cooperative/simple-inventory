@@ -15,7 +15,8 @@
                             'joinTable'=>'application_installs',
                             'foreignKey'=>'comp_id',
                             'associationForeignKey'=>'application_id',
-                            'unique'=>'keepExisting')
+                            'unique'=>'keepExisting',
+                            'order'=>array('Applications.name', 'Applications.version'))
   );
 
 
