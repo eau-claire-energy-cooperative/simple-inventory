@@ -90,10 +90,17 @@ class AjaxController extends AppController {
     //get the application
     $application = $this->Applications->find('first', array('conditions'=>array('Applications.id'=>$app_id)));
 
+    //get a list of computers already assigned
+    $assigned = array();
+    foreach($application['Computer'] as $comp){
+      $assigned[] = $comp['id'];
+    }
+
     $this->set('application', $application['Applications']);
 
     //filter out already assigned from this list
     $allComputers = $this->Computer->find('list',array('fields'=>array('Computer.id', 'Computer.ComputerName'),
+                                                       'conditions'=>array('NOT'=>array('Computer.id'=>$assigned)),
                                                        'order'=>array('Computer.ComputerName asc')));
     $this->set('computers', $allComputers);
   }
