@@ -19,7 +19,8 @@
     echo $this->Html->script("jquery.easing.min.js");
 
     echo $this->Html->css('sb-admin-2');
-    echo $this->Html->css('material-icons');
+    echo $this->Html->css('materialdesignicons.min');
+    echo $this->Html->css('icons');
 
     echo $this->fetch('meta');
     echo $this->fetch('css');

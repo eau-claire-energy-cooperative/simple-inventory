@@ -1,6 +1,6 @@
 
 <div class="mb-4" align="right">
-  <a href="<?php echo $this->Html->url('/inventory/moreInfo/' . $computer_id) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="material-icons mi-sm mi-inline text-white-50">navigate_before</i> Back </a>
+  <a href="<?php echo $this->Html->url('/inventory/moreInfo/' . $computer_id) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="mdi mdi-chevron-left icon-sm icon-inline text-white-50"></i> Back </a>
 </div>
 
 <?php

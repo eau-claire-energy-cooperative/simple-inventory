@@ -40,7 +40,7 @@
 ?>
     	<td id="program_<?php echo $count ?>"><?php echo $this->Html->link( $post['Programs']['program'] , '/search/searchProgram/' . $post['Programs']['program']); ?></td>
     	<td width="20%" align="right">
-    	  <a id="icon_<?php echo $count ?>" href="#" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 <?php echo $start_class ?>" onClick="return toggleProgram(<?php echo $count ?>)"><i class="material-icons mi-sm mi-inline text-white-50">block</i> <span><?php echo $start_text ?></span></a>
+    	  <a id="icon_<?php echo $count ?>" href="#" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 <?php echo $start_class ?>" onClick="return toggleProgram(<?php echo $count ?>)"><i class="mdi mdi-cancel icon-sm icon-inline text-white-50"></i> <span><?php echo $start_text ?></span></a>
     	</td>
     </tr>
 

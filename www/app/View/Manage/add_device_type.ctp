@@ -1,11 +1,11 @@
 <script type="text/javascript">
 function updateIcon(){
-  $('#device_icon_preview').html($('#DeviceTypeIcon').val());
+  $('#device_icon_preview').attr('class', 'mdi mdi-' + $('#DeviceTypeIcon').val());
 }
 </script>
 <?php echo $this->Form->create('DeviceType');?>
 
-<p>To find a device type icon you can search the <a href="https://fonts.google.com/icons" target="_blank">Matrial Icons</a> site.</p>
+<p>To find a device type icon you can search the <a href="https://materialdesignicons.com/" target="_blank">Matrial Design Icons</a> site.</p>
 <div class="row">
   <div class="col-xl-12">
     <div class="card shadow mb-4">
@@ -17,7 +17,7 @@ function updateIcon(){
           <div class="row mb-2">
             <div class="col-md-4">Icon: </div>
             <div class="col-md-7"><?php echo $this->Form->input('icon',array("label"=>false, 'div'=>false, 'class'=>'form-control', 'value'=>'devices', 'onkeyup'=>'updateIcon()')); ?></div>
-            <div class="col-md-1"><i class="material-icons mi-inline" style="top:10px;" id="device_icon_preview">devices</i></div>
+            <div class="col-md-1"><i class="mdi mdi-devices" style="font-size:24px" id="device_icon_preview"></i></div>
           </div>
           <div class="row mb-2">
             <div class="col-sm-4">Attributes Allowed:</div>

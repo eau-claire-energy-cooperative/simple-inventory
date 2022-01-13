@@ -37,7 +37,7 @@
               <?php endforeach; ?>
             </ul>
             <p align="right" class="mr-2">
-              <a href="<?php echo $this->Html->url('/manage/schedule/' . $schedule['Schedule']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-command"><i class="material-icons mi-sm mi-inline text-white-50">delete</i> Delete</a>
+              <a href="<?php echo $this->Html->url('/manage/schedule/' . $schedule['Schedule']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-command"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i> Delete</a>
             </p>
           <?php endforeach; ?>
       </div>
@@ -53,7 +53,7 @@
           <div class="row mb-2">
             <div class="col-sm-8"><?php echo $command['Command']['name'] ?></div>
             <div class="col-sm-4">
-              <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/setup_command/' . $command['Command']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="material-icons mi-sm mi-inline text-white-50">add</i> Add</a>
+              <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/setup_command/' . $command['Command']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i> Add</a>
             </div>
           </div>
         <?php endforeach ?>

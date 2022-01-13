@@ -45,4 +45,4 @@ Once you have that working take a look at the ```INSTALL.md``` file for more spe
 
 Framework: [CakePHP](https://cakephp.org/)
 Web Theme: [SB Admin 2](https://startbootstrap.com/themes/sb-admin-2/)
-Icons: [Material Icons](https://fonts.google.com/icons)
+Icons: [Material Design Icons](https://materialdesignicons.com/)
