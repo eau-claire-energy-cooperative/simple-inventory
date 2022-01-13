@@ -117,12 +117,19 @@ class ManageController extends AppController {
     }
   }
 
+  function add_program(){
+    $this->set('title_for_layout', 'Add Program');
+
+    $allComputers = $this->Computer->find('list',array('fields'=>array('Computer.id', 'Computer.ComputerName'), 'order'=>array('Computer.ComputerName asc')));
+    $this->set('computers', $allComputers);
+  }
+
 	function restricted_programs(){
 	    $this->set('title_for_layout','Programs');
 
       if($this->request->is('post')){
         $this->Programs->save($this->request->data);
-        $this->Flash->success('Program assigned successfully');
+        $this->Flash->success('Program saved successfully');
       }
 
 	    //get a list of all programs on the system
