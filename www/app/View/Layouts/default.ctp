@@ -206,7 +206,7 @@
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <a href="<?php $this->Html->url('/admin/downloads');  ?>" class="mr-3 h6"><i class="mdi mdi-download-circle-outline icon-2x icon-inline"></i> Downloads </a>
+            <a href="<?php echo $this->Html->url('/admin/downloads');  ?>" class="mr-3 h6"><i class="mdi mdi-download-circle-outline icon-2x icon-inline"></i> Downloads </a>
             <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki" target="_blank" class="mr-3 h6"><i class="mdi mdi-information-outline icon-inline icon-2x"></i> Documentation</a>
             <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory" class="h6"><i class="mdi mdi-github icon-inline icon-2x"></i> View Source</a>
           </div>
