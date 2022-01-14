@@ -412,8 +412,15 @@ class ApiController extends AppController {
         $appId = $application['Applications']['id'];
       }
 
-      $this->Applications->query(sprintf("insert into application_installs (application_id, comp_id) values (%d, %d)",
+      $compCheck = $this->Applications->query(sprintf("select id from application_installs where application_id = %d and comp_id = %d",
+                                                       $appId, $this->json_data->id));
+      
+      //only add if this device isn't already set with this application
+      if(count($compCheck) == 0)
+      {
+        $this->Applications->query(sprintf("insert into application_installs (application_id, comp_id) values (%d, %d)",
                                          $appId, $this->json_data->id));
+      }
 
 			$result['type'] = 'success';
 			$result['result'] = "Application added for computer id " . $this->json_data->id;
