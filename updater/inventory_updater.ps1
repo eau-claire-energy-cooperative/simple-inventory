@@ -330,7 +330,7 @@ if(evalBool($CheckApplications))
 	$allPrograms += $(Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion)
 	$allPrograms += $(Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion)
 	
-	web-log -Message "Found $($allPrograms.count) programs on $ComputerName" | out-null
+	web-log -Message "Found $($allPrograms.count) applications on $ComputerName" | out-null
 	
 	#clear out the current programs list
 	$clearOutput = web-call -Endpoint "/applications/clear" -Data @{id = $ComputerId}
