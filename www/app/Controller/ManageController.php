@@ -32,7 +32,7 @@ class ManageController extends AppController {
 	}
 
 	function licenses(){
-	    $this->set('title_for_layout', 'Program Licenses');
+	    $this->set('title_for_layout', 'Licenses');
       $this->set('active_menu', 'applications');
 
 	    if($this->request->is('post')){
