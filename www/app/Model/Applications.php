@@ -10,5 +10,12 @@
                               'associationForeignKey'=>'comp_id',
                               'unique'=>'keepExisting')
     );
+
+    public $validate = array(
+      "name" => array(
+        "rule" => array('isUnique', array('name', 'version'), false),
+        "message" => 'This application name and version already exist'
+      )
+    );
 }
 ?>

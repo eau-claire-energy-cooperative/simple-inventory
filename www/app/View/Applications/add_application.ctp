@@ -15,7 +15,7 @@
           </div>
           <div class="row mb-2">
             <div class="col-sm-4">Monitor: </div>
-            <div class="col-sm-8"><?php echo $this->Form->select('monitoring',array('true'=>'Yes','false'=>'No'),array('class'=>'custom-select','empty'=>false)) ?><br />
+            <div class="col-sm-8"><?php echo $this->Form->select('monitoring',array('true'=>'Yes','false'=>'No'),array('class'=>'custom-select','empty'=>false, 'value'=>'false')) ?><br />
               Selecting Yes makes this application show up on reports when detected on a device.
             </div>
           </div>
