@@ -1,6 +1,6 @@
 <?php
 class PurgeLogsTask extends AppShell {
-    public $uses = array('Logs');
+    public $uses = array('Logs', 'ComputerLogin');
 
     public function execute($params) {
 
@@ -13,6 +13,15 @@ class PurgeLogsTask extends AppShell {
       $this->out('Found ' . count($oldLogs) . ' logs that need to be deleted');
       foreach($oldLogs as $aLog){
         $this->Logs->delete($aLog['Logs']['id']);
+      }
+
+      //delete computer login logs as well
+      $oldLogins = $this->ComputerLogin->find('all', array('conditions'=>array('ComputerLogin.LoginDate <=' => date('Y-m-d', strtotime('-' . $params['Years'] . ' years'))),
+                                                     'order'=>array('ComputerLogin.LoginDate')));
+
+      $this->out('Found ' . count($oldLogins) . ' login records that need to be deleted');
+      foreach($oldLogins as $aLog){
+       $this->ComputerLogin->delete($aLog['ComputerLogin']['id']);
       }
 
       //send an email with the details
