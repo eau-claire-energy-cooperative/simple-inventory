@@ -73,5 +73,23 @@ class ApplicationsController extends AppController {
 
     $this->redirect('/inventory/moreInfo/' . $comp_id);
   }
+
+  public function delete_application($app_id){
+    //check if this application has computers assigned
+    $application = $this->Applications->find('first', array('conditions'=>array('Applications.id'=>$app_id)));
+
+    if(count($application['Computer']) > 0)
+    {
+      $this->Flash->success($application['Applications']['name'] . ' cannot be deleted, it has computers assigned');
+    }
+    else
+    {
+      $this->Applications->delete($app_id);
+      $this->Flash->error($application['Applications']['name'] . ' successfully deleted');
+    }
+
+
+    $this->redirect('/applications/');
+  }
 }
 ?>
