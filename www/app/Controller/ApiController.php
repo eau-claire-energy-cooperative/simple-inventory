@@ -3,7 +3,7 @@
 class ApiController extends AppController {
 	var $layout = '';
 	var $helpers = array('Js');
-	var $uses = array('Applications','Computer','ComputerLogin','DeviceType','Disk','Setting','Command','Service','RestrictedProgram','Programs','Location','Logs','User');
+	var $uses = array('Applications','Computer','ComputerLogin','DeviceType','Disk','Setting','Command','Service','Location','Logs','User');
 	var $json_data = null;
 
 	function beforeFilter(){
@@ -349,25 +349,25 @@ class ApiController extends AppController {
 		$this->render('api');
 	}
 
-	function programs($action){
+	function applications($action){
 		$result = array();
 
 		if($action == 'get')
 		{
 			$computerId = $this->json_data->id;
 
-			//set recursive to one so that joined tables aren't pulled
-			$programs = $this->Programs->find('all',array('conditions' => array('comp_id' => $computerId), 'order' => array('program ASC'),'recursive'=>-1));
+			//pull in computer, apps will follow
+      $computer = $this->Computer->find('first', array('conditions'=>array('Computer.id'=>$computerId)));
 
-			if($programs)
+			if($computer['Applications'])
 			{
 				$result['type'] = "success";
-				$result['result'] = $programs;
+				$result['result'] = $computer['Applications'];
 			}
 			else
 			{
 				$result["type"] = 'error';
-				$result['message'] = 'cannot find programs for computer id ' . $computerId;
+				$result['message'] = 'cannot find applications for computer id ' . $computerId;
 			}
 		}
 		else if($action == 'clear')
@@ -376,28 +376,47 @@ class ApiController extends AppController {
 
 			if(isset($computerId))
 			{
-				$this->Programs->query("delete from programs where comp_id = " . $computerId);
+				$this->Applications->query("delete from application_installs where comp_id = " . $computerId);
 
 				$result['type'] = 'success';
-				$result['result'] = "Programs deleted for computer id " . $computerId;
+				$result['result'] = "Applications deleted for computer id " . $computerId;
 			}
 			else
 			{
 				$result["type"] = 'error';
-				$result['message'] = 'cannot delete programs computer id needed';
+				$result['message'] = 'cannot delete applications computer id needed';
 
 			}
 		}
 		else if($action == 'add')
 		{
-			$this->Programs->create();
-			$this->Programs->set('program',$this->json_data->program);
-			$this->Programs->set('version',$this->json_data->version);
-			$this->Programs->set('comp_id',$this->json_data->id);
-			$this->Programs->save();
+
+      //lookup this application
+      $application = $this->Applications->find('first', array('conditions'=>array('Applications.name'=>$this->json_data->application,
+                                                                                  'Applications.version'=>$this->json_data->version)));
+
+      $appId = "";
+      if(!$application)
+      {
+        //add this application to the database
+        $this->Applications->create();
+        $this->Applications->set('name', $this->json_data->application);
+        $this->Applications->set('version', $this->json_data->version);
+        $this->Applications->save();
+
+        //set the id
+        $appId = $this->Applications->id;
+      }
+      else {
+        //set the id
+        $appId = $application['Applications']['id'];
+      }
+
+      $this->Applications->query(sprintf("insert into application_installs (application_id, comp_id) values (%d, %d)",
+                                         $appId, $this->json_data->id));
 
 			$result['type'] = 'success';
-			$result['result'] = "Programs added for computer id " . $this->json_data->id;
+			$result['result'] = "Application added for computer id " . $this->json_data->id;
 		}
 		else
 		{
