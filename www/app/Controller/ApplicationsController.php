@@ -34,8 +34,18 @@ class ApplicationsController extends AppController {
     $this->set('title_for_layout', 'Applications');
 
     if($this->request->is('post')){
-      $this->Applications->save($this->request->data);
-      $this->Flash->success($this->request->data['Applications']['name'] . ' saved successfully');
+
+      $checkApp = $this->Applications->find('first', array('conditions'=>array('Applications.name'=>$this->request->data['Applications']['name'],
+                                                                               'Applications.version'=>$this->request->data['Applications']['version'])));
+      if(!$checkApp)
+      {
+        $this->Applications->save($this->request->data);
+        $this->Flash->success($this->request->data['Applications']['name'] . ' saved successfully');
+      }
+      else
+      {
+        $this->Flash->error('Application ' . $this->request->data['Applications']['name'] . ' already exists');
+      }
     }
 
     $applications = $this->Applications->find('all', array('order'=>array('Applications.name','Applications.version')));
