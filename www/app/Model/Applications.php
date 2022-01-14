@@ -2,7 +2,7 @@
    class Applications extends AppModel {
 
    	var $useTable = 'applications';
-    var $virtualFields = array('full_name'=>"CONCAT(Applications.name,' ',Applications.version)");
+    var $virtualFields = array('full_name'=>"CONCAT(Applications.name,' v',Applications.version)");
 
     var $hasAndBelongsToMany = array(
       "Computer" => array('className'=>"Computer",
