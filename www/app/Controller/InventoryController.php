@@ -167,7 +167,7 @@ class InventoryController extends AppController {
   }
 
 	public function moreInfoDecommissioned( $id) {
-	  $this->set('active_menu', 'decommission');
+	  $this->set('active_menu', 'manage');
 	 	$this->set('title_for_layout','Decommissioned Device Detail');
 	 	$this->Decommissioned->id = $id;
 
@@ -359,7 +359,7 @@ class InventoryController extends AppController {
   }
 
  	public function decommission() {
- 	    $this->set('active_menu', 'decommission');
+ 	    $this->set('active_menu', 'manage');
   		$this->set('title_for_layout','Decommissioned Devices');
       $this->set('decommission', $this->Decommissioned->find('all', array('order'=> array('LastUpdated ASC'))));
   }
@@ -367,7 +367,7 @@ class InventoryController extends AppController {
 
 	public function confirmDecommission( $id = null)
 	{
-	    $this->set('active_menu', 'decommission');
+	    $this->set('active_menu', 'manage');
 		  $currID = $id; //variable to pass to transferDecom
 		  $this->Computer->id = $id;
 
