@@ -3,7 +3,7 @@
 class InventoryController extends AppController {
     var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace','AttributeDisplay','Menu');
     var $components = array('Session','Ldap','FileUpload','Paginator','Flash');
-	  public $uses = array('Computer', 'DeviceType', 'Disk','Location', 'Programs', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User','RestrictedProgram');
+	  public $uses = array('Computer', 'DeviceType', 'Disk','Location', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User');
 
 	public function beforeFilter(){
 		//check if we are using a login method
@@ -140,7 +140,6 @@ class InventoryController extends AppController {
 	public function moreInfo( $id) {
 		//get the info about this computer
 	 	$this->Computer->id = $id;
-		$this->Programs->id = $id;
     $computer = $this->Computer->read();
 
     // set the page title based on the device type
@@ -324,7 +323,7 @@ class InventoryController extends AppController {
 
 	    if ($this->Computer->delete($id)) {
 	    	//also delete programs and services
-	    	$this->Programs->query('delete from programs where comp_id = ' . $id);
+	    	$this->Applications->query('delete from application_installs where comp_id = ' . $id);
 	    	$this->Service->query('delete from services where comp_id = ' . $id);
 	    	$this->Disk->query('delete from disk where comp_id = ' . $id);
 
@@ -434,7 +433,7 @@ class InventoryController extends AppController {
 		$this->Computer->delete($id);
 
 		//also delete programs and services
-		$this->Programs->query('delete from programs where comp_id = ' . $id);
+		$this->Applications->query('delete from application_installs where comp_id = ' . $id);
 		$this->Service->query('delete from services where comp_id = ' . $id);
 		$this->Disk->query('delete from disk where comp_id = ' . $id);
 

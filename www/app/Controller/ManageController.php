@@ -1,7 +1,7 @@
 <?php
 
 class ManageController extends AppController {
-	var $uses = array('Computer','DeviceType','License','Logs','Location','Setting','User','Command','Schedule','Programs','RestrictedProgram');
+	var $uses = array('Computer','DeviceType','License','Logs','Location','Setting','User','Command','Schedule');
 	var $helpers = array('Html','Session','Time','Form','LogParser');
 	var $paginate = array('limit'=>100, 'order'=>array('Logs.id'=>'desc'));
 
@@ -116,38 +116,6 @@ class ManageController extends AppController {
 
         $this->redirect('/admin/deviceTypes');
     }
-  }
-
-  function add_program(){
-    $this->set('title_for_layout', 'Add Program');
-
-    $allComputers = $this->Computer->find('list',array('fields'=>array('Computer.id', 'Computer.ComputerName'), 'order'=>array('Computer.ComputerName asc')));
-    $this->set('computers', $allComputers);
-  }
-
-	function restricted_programs(){
-	    $this->set('title_for_layout','Programs');
-
-      if($this->request->is('post')){
-        $this->Programs->save($this->request->data);
-        $this->Flash->success('Program saved successfully');
-      }
-
-	    //get a list of all programs on the system
-	    $all_programs = $this->Programs->find('all',array('fields'=>array('DISTINCT Programs.program', 'Programs.version'), 'group'=>array('Programs.program', 'Programs.version'), 'order'=>array('Programs.program', 'Programs.version desc')));
-	    $this->set('all_programs',$all_programs);
-
-	    //get a list of currently restricted programs
-	    $this->set('restricted_programs',$this->RestrictedProgram->find('list',array('fields'=>array('RestrictedProgram.name','RestrictedProgram.id'))));
-	}
-
-  function unassign_program($program_id, $comp_id){
-    // delete this entry from the programs DB
-    $this->Programs->delete($program_id);
-
-    $this->Flash->success('Program removed');
-
-    $this->redirect('/inventory/moreInfo/' . $comp_id);
   }
 
 	function commands(){

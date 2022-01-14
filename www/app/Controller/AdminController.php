@@ -1,7 +1,7 @@
 <?php
 
 class AdminController extends AppController {
-	var $uses = array('Computer','License','Logs','Location','Setting','User','Command','Schedule','Programs','RestrictedProgram');
+	var $uses = array('Computer','License','Logs','Location','Setting','User','Command','Schedule');
 	var $helpers = array('Html','Session','Time','Form','LogParser');
 	var $paginate = array('limit'=>100, 'order'=>array('Logs.id'=>'desc'));
 
