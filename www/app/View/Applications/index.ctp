@@ -37,11 +37,9 @@
 <?php
 
 	$start_class = 'btn-primary';
-  $start_text = 'Watch';
 	if($post['Applications']['monitoring'] == 'true')
 	{
 		$start_class = 'btn-danger';
-    $start_text = 'Stop';
 	}
 
   $count ++;
@@ -51,8 +49,8 @@
           <td><?php echo $post['Applications']['version'] ?></td>
           <td><?php echo $this->Html->link(count($post['Computer']), '/search/searchApplication/' . $post['Applications']['id']) ?></td>
         	<td width="20%" align="right">
-            <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/assign_application/' . $post['Applications']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i> Assign</a>
-        	  <a id="icon_<?php echo $count ?>" href="#" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 <?php echo $start_class ?>" onClick="return toggleMonitor(<?php echo $count ?>, <?php echo $post['Applications']['id'] ?>)"><i class="mdi mdi-eye icon-sm icon-inline text-white-50"></i> <span><?php echo $start_text ?></span></a>
+        	  <a id="icon_<?php echo $count ?>" href="#" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 <?php echo $start_class ?>" onClick="return toggleMonitor(<?php echo $count ?>, <?php echo $post['Applications']['id'] ?>)"><i class="mdi mdi-eye icon-sm icon-inline text-white-50"></i></a>
+            <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/assign_application/' . $post['Applications']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i></a>
         	</td>
         </tr>
 
@@ -68,13 +66,11 @@
 		if(!$('#icon_' + id).hasClass('btn-primary'))
 		{
 			//turn off
-      $('#icon_' + id + " span").text('Watch');
 			$.ajax('<?php echo $this->webroot ?>ajax/toggle_application_monitor/' + app_id + "/false");
 		}
 		else
 		{
 			//turn on
-			$('#icon_' + id + " span").text('Stop');
 			$.ajax('<?php echo $this->webroot ?>ajax/toggle_application_monitor/' + app_id + "/true");
 		}
 
