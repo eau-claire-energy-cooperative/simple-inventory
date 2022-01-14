@@ -68,11 +68,11 @@ class AppSchema extends CakeSchema {
           //create some of the default commands
           $command = ClassRegistry::init('Command');
           $command->create();
-          $command->saveMany(array(array('Command'=>array('name'=>'Restricted Programs','parameters'=>'','description'=>'Alert system administrators of any programs currently installed that have been flagged as Restricted in the Programs area.')),
+          $command->saveMany(array(array('Command'=>array('name'=>'Monitored Applications','parameters'=>'','description'=>'Generate a report of any applications installed that have been flagged for monitoring in the Applications area.')),
                       array('Command'=>array('name'=>'Wake Computer','parameters'=>'Computer Name','description'=>'Wake a specific computer via a WOL packet at a given time.')),
                       array('Command'=>array('name'=>'Send Emails','parameters'=>'','description'=>'This command should be kept running at all times. It will clear the email queue by sending emails to system administrators.')),
                       array('Command'=>array('name'=>'Check Disk space','parameters'=>'Minimum Space Threshold','description'=>'Check the disk space available on all computers. Any that do not contain the minimum amount of space (in percent) will generate an email to the system administrator.')),
-                      array('Command'=>array('name'=>'Remove Old Programs','parameters'=>'','description'=>'Removes Programs that no longer are installed on any computer from the database.')),
+                      array('Command'=>array('name'=>'Remove Old Applications','parameters'=>'','description'=>'Removes Applications that no longer are installed on any computer from the database.')),
                       array('Command'=>array('name'=>'Purge Decommissioned Devices','parameters'=>'Years','description'=>'Removes devices that have been decommissioned when the decommission date is greater than the given number of years.')),
                       array('Command'=>array('name'=>'Purge Logs','parameters'=>'Years','description'=>'Automatically removes logs from the system older than the given number of years.')));
           break;

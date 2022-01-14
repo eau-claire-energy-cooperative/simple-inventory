@@ -37,7 +37,9 @@
               <?php endforeach; ?>
             </ul>
             <p align="right" class="mr-2">
-              <a href="<?php echo $this->Html->url('/manage/schedule/' . $schedule['Schedule']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-command"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i> Delete</a>
+              <a href="<?php echo $this->Html->url('/manage/schedule/' . $schedule['Schedule']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-command" data-title="Confirm delete">
+                <i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i> Delete
+              </a>
             </p>
           <?php endforeach; ?>
       </div>
