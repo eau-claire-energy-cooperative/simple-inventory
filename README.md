@@ -36,7 +36,7 @@ Once you have that working take a look at the ```INSTALL.md``` file for more spe
 * Decommission feature to remove computers but keep information
 * Can sync with Active Directory to find missing computers
 * Non-PC devices can be created and managed as well
-* Optionally can collect programs listed in Windows programs area
+* Optionally can collect applications listed in Windows programs area
 * Optionally can list services and their running state
 * Optionally can integrate with [Chocolatey](https://chocolatey.org/) to find outdated packages
 
