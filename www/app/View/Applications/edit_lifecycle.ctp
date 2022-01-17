@@ -27,7 +27,7 @@ function load_today(){
         <div class="card-body">
           <div class="row mb-2">
             <div class="col-md-4">Application: </div>
-            <div class="col-md-8"><?php echo $this->Form->select('application_id',$applications,array('class'=>'custom-select','empty'=>false, value=>$lifecycle['Lifecycle']['id'])) ?></div>
+            <div class="col-md-8"><?php echo $this->Form->select('application_id',$applications,array('class'=>'custom-select','empty'=>false, value=>$lifecycle['Lifecycle']['application_id'])) ?></div>
           </div>
           <div class="row mb-2">
             <div class="col-md-4">Update Frequency: </div>
