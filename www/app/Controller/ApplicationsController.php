@@ -74,6 +74,31 @@ class ApplicationsController extends AppController {
     $this->redirect('/inventory/moreInfo/' . $comp_id);
   }
 
+  public function upgrade_application(){
+    //load the lifecycle from the ID
+    $lifecycle = $this->Lifecycle->find('first', array('conditions'=>array('Lifecycle.id'=>$this->request->data['Lifecycle']['id'])));
+    $new_version = $this->request->data['Lifecycle']['version'];
+
+    //check if we can upgrade this application
+    if(!$this->Applications->find('first',array('conditions'=>array('Applications.name'=>$lifecycle['Applications']['name'], 'Applications.version'=>$new_version))))
+    {
+      //upgrade the version number
+      $lifecycle['Applications']['version'] = $new_version;
+      $this->Applications->save($lifecycle['Applications']);
+
+      //reset the lifecycle date
+      $this->Lifecycle->query(sprintf("update lifecycles set last_check = now() where id=%d", $lifecycle['Lifecycle']['id']));
+
+      $this->Flash->success($lifecycle['Applications']['name'] . ' upgraded to ' . $new_version);
+    }
+    else
+    {
+      $this->Flash->error($lifecycle['Applications']['name'] . " version " . $new_version . " already exists");
+    }
+
+    $this->redirect('/applications/lifecycle');
+  }
+
   public function delete_application($app_id){
     //check if this application has computers assigned
     $application = $this->Applications->find('first', array('conditions'=>array('Applications.id'=>$app_id)));

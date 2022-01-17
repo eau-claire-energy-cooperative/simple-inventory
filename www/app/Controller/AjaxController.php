@@ -2,7 +2,7 @@
 
 class AjaxController extends AppController {
   var $components = array('Session','Ping');
-  var $helpers = array('Js', "Lifecycle", "Time");
+  var $helpers = array('Form', 'Js', "Lifecycle", "Time");
 	var $layout = '';
 	var $uses = array('Applications','Computer','Setting','Command','User');
 

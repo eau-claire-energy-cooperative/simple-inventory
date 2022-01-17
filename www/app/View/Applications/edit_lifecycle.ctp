@@ -20,7 +20,7 @@ function load_today(){
 </div>
 <?php echo $this->Form->create('Lifecycle', array('url'=>'/applications/lifecycle'));?>
 <?php echo $this->Form->hidden('id', array('value'=>$lifecycle['Lifecycle']['id'])) ?>
-<p>Define a lifecycle to be added to the system. Once assigned the application assigned to this lifecycle cannot be deleted.</p>
+<p>Define a lifecycle to be added to the system. Once assigned the application assigned to this lifecycle cannot be deleted. If changing the application keep in mind that individual devices will still point to the original application version.</p>
 <div class="row">
   <div class="col-xl-12">
     <div class="card shadow mb-4">
