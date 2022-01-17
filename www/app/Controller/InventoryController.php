@@ -3,7 +3,7 @@
 class InventoryController extends AppController {
     var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace','AttributeDisplay','Menu');
     var $components = array('Session','Ldap','FileUpload','Paginator','Flash');
-	  public $uses = array('Computer', 'DeviceType', 'Disk','Location', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User');
+	  public $uses = array('Computer', 'DeviceType', 'Disk', 'Lifecycle', 'Location', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User');
 
 	public function beforeFilter(){
 		//check if we are using a login method
@@ -147,6 +147,7 @@ class InventoryController extends AppController {
 
     //set variables for the view
     $this->set('computer', $computer);
+    $this->set('lifecycles', $this->Lifecycle->find('list', array('fields'=>array('Lifecycle.application_id', 'Lifecycle.id'))));
 		$this->set('services', $this->Service->find('all',array('conditions' => array('comp_id' => $id), 'order' => array('name ASC'))));
 
 		//figure out what attributes to display

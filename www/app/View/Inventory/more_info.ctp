@@ -220,9 +220,14 @@ function showOriginal(id, text){
                 $row_class = 'restricted';
               }
           ?>
-          <td class="<?php echo $row_class ?>"> <?php echo $this->Html->link( $post['full_name'], '/search/searchApplication/' . $post['id']); ?></td>
+          <td class="<?php echo $row_class ?>">
+            <?php echo $this->Html->link( $post['full_name'], '/search/searchApplication/' . $post['id']); ?>
+          </td>
           <td width="20%" class="<?php echo $row_class ?>" align="right">
-            <a href="<?php echo $this->Html->url('/applications/unassign_application/' . $post['id'] . '/' . $computer['Computer']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-location"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i></a>
+            <?php if(key_exists($post['id'], $lifecycles)): ?>
+            <a href="<?php echo $this->Html->url('/applications/lifecycle') ?>" title="Has Lifecycle" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2"><i class="mdi mdi-update icon-sm icon-inline text-white-50"></i></a>
+            <?php endif; ?>
+            <a href="<?php echo $this->Html->url('/applications/unassign_application/' . $post['id'] . '/' . $computer['Computer']['id']) ?>" title="Delete" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-location"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i></a>
           </td>
         </tr>
         <?php endforeach; ?>
