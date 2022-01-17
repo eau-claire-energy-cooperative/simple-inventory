@@ -20,7 +20,8 @@
           </div>
           <div class="row mb-2">
             <div class="col-sm-4">Notes: </div>
-            <div class="col-sm-8"><?php echo $this->Form->input('notes',array("label"=>false, 'div'=>false, 'class'=>'form-control')); ?></div>
+            <div class="col-sm-8"><a href="https://www.markdownguide.org/basic-syntax/">Markdown syntax</a> can be used to create links and other text within the notes.<br />
+              <?php echo $this->Form->input('notes',array("label"=>false, 'div'=>false, 'class'=>'form-control')); ?></div>
           </div>
           <div class="row">
             <div class="col-sm-4"></div>

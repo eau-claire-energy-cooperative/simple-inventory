@@ -19,7 +19,7 @@
       </div>
       <?php echo $this->Form->end() ?>
       <h3>Notes: </h3>
-      <?php echo $application['Lifecycle']['notes'] ?>
+      <?php echo $this->Markdown->transform($application['Lifecycle']['notes']); ?>
     </div>
     <div class="col-md-4">
       <div class="card border-left-primary shadow h-500 py-1 mb-2">
