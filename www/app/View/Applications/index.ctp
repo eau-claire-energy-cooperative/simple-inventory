@@ -25,6 +25,9 @@
         paging: true,
         pageLength: 100,
         dom: '<\"top\"ifp>rt',
+        search: {
+          search: '" . $this->params['url']['q'] . "'
+        },
         columnDefs: [
           {'searchable': false, 'targets': [-1]}
         ]
