@@ -2,7 +2,7 @@
 
 class AjaxController extends AppController {
   var $components = array('Session','Ping');
-  var $helpers = array('Js');
+  var $helpers = array('Js', "Lifecycle", "Time");
 	var $layout = '';
 	var $uses = array('Applications','Computer','Setting','Command','User');
 
@@ -103,6 +103,16 @@ class AjaxController extends AppController {
                                                        'conditions'=>array('NOT'=>array('Computer.id'=>$assigned)),
                                                        'order'=>array('Computer.ComputerName asc')));
     $this->set('computers', $allComputers);
+  }
+
+  function view_lifecycle($app_id){
+    //load this application (lifecycle will follow)
+    $application = $this->Applications->find('first', array('conditions'=>array('Applications.id'=>$app_id)));
+    $this->set('application', $application);
+
+    //get any other version of this application
+    $totalVersions = $this->Applications->find('count', array('conditions'=>array('Applications.name'=>$application['Applications']['name'])));
+    $this->set('total_versions', $totalVersions);
   }
 
 	function uploadDrivers($id){

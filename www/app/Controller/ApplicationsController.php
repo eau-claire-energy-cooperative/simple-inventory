@@ -1,8 +1,8 @@
 <?php
 
 class ApplicationsController extends AppController {
-	var $uses = array('Applications', 'Computer', 'Setting');
-	var $helpers = array('Html','Session','Time','Form', 'Menu');
+	var $uses = array('Applications', 'Computer', 'Lifecycle', 'Setting');
+	var $helpers = array('Html','Session','Time','Form', 'Menu', "Lifecycle");
 
 	public function beforeFilter(){
 	    //check if we are using a login method
@@ -90,6 +90,37 @@ class ApplicationsController extends AppController {
 
 
     $this->redirect('/applications/');
+  }
+
+  public function lifecycle(){
+    $this->set('title_for_layout', 'Software Lifecycles');
+
+    if($this->request->is('post')){
+      $this->Lifecycle->save($this->request->data);
+      $this->Flash->success("Lifecycle saved");
+    }
+
+    $lifecycles = $this->Lifecycle->find('all');
+    $this->set('lifecycles', $lifecycles);
+
+  }
+
+  public function add_lifecycle(){
+    $this->set('title_for_layout', 'Create Software Lifecycle');
+
+    $applications = $this->Applications->find('list', array('fields'=>array('Applications.id', 'Applications.full_name'),
+                                                            'order'=>array('Applications.full_name asc')));
+    $this->set('applications', $applications);
+  }
+
+  public function edit_lifecycle($id){
+    $this->set('title_for_layout', 'Edit Software Lifecycle');
+
+    $applications = $this->Applications->find('list', array('fields'=>array('Applications.id', 'Applications.full_name'),
+                                                            'order'=>array('Applications.full_name asc')));
+    $this->set('applications', $applications);
+
+    $this->set('lifecycle', $this->Lifecycle->find('first', array('conditions'=>array('Lifecycle.id'=>$id))));
   }
 }
 ?>
