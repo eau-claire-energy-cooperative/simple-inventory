@@ -151,5 +151,14 @@ class ApplicationsController extends AppController {
 
     $this->set('lifecycle', $this->Lifecycle->find('first', array('conditions'=>array('Lifecycle.id'=>$id))));
   }
+
+  public function check_lifecycle($id){
+    //helper function to reset the lifecycle last check date to today
+    $this->Lifecycle->query(sprintf("update lifecycles set last_check = now() where id=%d", $id));
+
+    $this->Flash->success("Last check date updated");
+
+    $this->redirect('/applications/lifecycle');
+  }
 }
 ?>
