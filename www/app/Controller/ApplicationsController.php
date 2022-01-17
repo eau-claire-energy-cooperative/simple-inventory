@@ -80,12 +80,16 @@ class ApplicationsController extends AppController {
 
     if(count($application['Computer']) > 0)
     {
-      $this->Flash->success($application['Applications']['name'] . ' cannot be deleted, it has computers assigned');
+      $this->Flash->error($application['Applications']['full_name'] . ' cannot be deleted, it has computers assigned');
+    }
+    else if($application['Lifecycle']['id'] != NULL)
+    {
+      $this->Flash->error($application['Applications']['full_name'] . ' cannot be deleted, it has a lifecycle assigned');
     }
     else
     {
       $this->Applications->delete($app_id);
-      $this->Flash->error($application['Applications']['name'] . ' successfully deleted');
+      $this->Flash->success($application['Applications']['full_name'] . ' successfully deleted');
     }
 
 
