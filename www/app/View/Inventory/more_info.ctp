@@ -227,7 +227,7 @@ function showOriginal(id, text){
             <?php if(key_exists($post['id'], $lifecycles)): ?>
             <a href="<?php echo $this->Html->url('/applications/lifecycle') ?>" title="Has Lifecycle" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2"><i class="mdi mdi-update icon-sm icon-inline text-white-50"></i></a>
             <?php endif; ?>
-            <a href="<?php echo $this->Html->url('/applications/unassign_application/' . $post['id'] . '/' . $computer['Computer']['id']) ?>" title="Unassign Application" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mr-2 delete-location"><i class="mdi mdi-close icon-sm icon-inline text-white-50"></i></a>
+            <a href="<?php echo $this->Html->url('/applications/unassign_application/' . $post['id'] . '/' . $computer['Computer']['id']) ?>" title="Unassign Application" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-location"><i class="mdi mdi-close icon-sm icon-inline text-white-50"></i></a>
           </td>
         </tr>
         <?php endforeach; ?>
