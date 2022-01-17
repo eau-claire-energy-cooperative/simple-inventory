@@ -160,5 +160,15 @@ class ApplicationsController extends AppController {
 
     $this->redirect('/applications/lifecycle');
   }
+
+  public function delete_lifecycle($id){
+    //no reason a lifecycle can't be deleted without any issues
+    $this->Lifecycle->delete($id);
+
+    $this->Flash->success('Lifecycle deleted successfully');
+
+    $this->redirect('/applications/lifecycle');
+  }
+
 }
 ?>

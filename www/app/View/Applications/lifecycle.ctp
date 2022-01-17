@@ -1,3 +1,23 @@
+<?php
+  echo $this->Html->script("jquery-confirm.min.js",false);
+
+  echo $this->Html->css('jquery-confirm.min', array('inline'=>false));
+
+  //script to load the confirm dialog
+  echo $this->Html->scriptBlock("$(document).ready(function() {
+    $('a.delete-lifecycle').confirm({
+        title: 'Delete Lifecycle',
+        content: 'Are you sure you want to delete this lifecycle?',
+        buttons: {
+            yes: function(){
+                location.href = this.\$target.attr('href');
+            },
+            cancel: function(){
+
+            }
+        }
+    })});", array("inline"=>false));
+?>
 <div class="mb-4" align="right">
   <a href="<?php echo $this->Html->url(array('controller' => 'applications', 'action' => 'add_lifecycle')) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i> Create Lifecycle</a>
 </div>
@@ -27,7 +47,7 @@
           <td align="right">
             <a href="<?php echo $this->Html->url('/applications/check_lifecycle/' . $post['Lifecycle']['id'])?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-success" title="Update Last Check Date"><i class="mdi mdi-calendar icon-sm icon-inlin text-white-50"></i></a>
             <a href="<?php echo $this->Html->url('/applications/edit_lifecycle/' . $post['Lifecycle']['id'])?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-primary" title="Edit Lifecycle"><i class="mdi mdi-square-edit-outline icon-sm icon-inline text-white-50"></i></a>
-            <a href="#" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-danger" title="Delete Lifecycle"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i></a>
+            <a href="<?php echo $this->Html->url('/applications/delete_lifecycle/' . $post['Lifecycle']['id'])?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-danger delete-lifecycle" title="Delete Lifecycle" data-title="Delete Lifecycle"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i></a>
           </td>
         </tr>
         <?php endforeach; ?>
