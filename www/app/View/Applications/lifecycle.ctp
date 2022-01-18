@@ -22,7 +22,6 @@
     })
 
     $('#dataTable').DataTable({
-      stateSave: true,
       dom: '<\"top\"f>rt',
       search: {
         search: '" . $this->params['url']['q'] . "'
