@@ -20,11 +20,11 @@ function load_today(){
 </div>
 <?php echo $this->Form->create('Lifecycle', array('url'=>'/applications/lifecycle'));?>
 <?php echo $this->Form->hidden('id', array('value'=>$lifecycle['Lifecycle']['id'])) ?>
-<p>Define a lifecycle to be added to the system. Once assigned the application assigned to this lifecycle cannot be deleted. If changing the application keep in mind that individual devices will still point to the original application version.</p>
 <div class="row">
   <div class="col-xl-12">
     <div class="card shadow mb-4">
         <div class="card-body">
+          <p>Define a lifecycle to be added to the system. Once assigned the application assigned to this lifecycle cannot be deleted. If changing the application keep in mind that individual devices will still point to the original application version.</p>
           <div class="row mb-2">
             <div class="col-md-4">Application: </div>
             <div class="col-md-8"><?php echo $this->Form->select('application_id',$applications,array('class'=>'custom-select','empty'=>false, value=>$lifecycle['Lifecycle']['application_id'])) ?></div>
@@ -32,7 +32,7 @@ function load_today(){
           <div class="row mb-2">
             <div class="col-md-4">Update Frequency: </div>
             <div class="col-md-8"><?php echo $this->Form->input('update_frequency',array("label"=>false, 'div'=>false, 'class'=>'form-control', 'value'=>$lifecycle['Lifecycle']['update_frequency'])) ?>
-            This should be defined in cron syntax, default is monthly (1st of every month).</div>
+            This should be defined in <?php echo $this->Html->link('cron syntax', '/manage/commands#cron') ?>, default is monthly (1st of every month).</div>
           </div>
           <div class="row mb-2">
             <div class="col-sm-4">Last Check: </div>

@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - new Applications area with a search ability and filter for devices that are attached to the application
 - Software Lifecycle management - add a lifecycle to an Application along with an update frequency and notes for updates
 - CSV downloads for both Application and Lifecycle tables
+- anchor to cron syntax explanation since used throughout views
 
 ### Changed
 
