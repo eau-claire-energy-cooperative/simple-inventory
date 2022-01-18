@@ -6,8 +6,6 @@ function updateIcon(){
 <?php echo $this->Form->create('DeviceType', array('url' => '/manage/editDeviceType')); ?>
 <?php echo $this->Form->input('id', array('type' => 'hidden'));?>
 
-<p>To find a device type icon you can search the <a href="https://materialdesignicons.com/" target="_blank">Matrial Design Icons</a> site.</p>
-
 <?php
   //convert string to array
   $assignedAttributes = explode(',',$this->request->data['DeviceType']['attributes']);
@@ -16,6 +14,7 @@ function updateIcon(){
   <div class="col-xl-12">
     <div class="card shadow mb-4">
         <div class="card-body">
+          <p>To find a device type icon you can search the <a href="https://materialdesignicons.com/" target="_blank">Matrial Design Icons</a> site.</p>
           <div class="row mb-2">
             <div class="col-md-4">Device Type Name: </div>
             <div class="col-md-8"><?php echo $this->Form->input('name',array('label'=>false, 'div'=>false, 'class'=>'form-control'));?></div>
