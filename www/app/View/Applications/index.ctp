@@ -24,7 +24,6 @@
       $('#dataTable').DataTable({
         paging: true,
         pageLength: 100,
-        stateSave: true,
         dom: '<\"top\"ifp>rt',
         search: {
           search: '" . $this->params['url']['q'] . "'
@@ -69,7 +68,7 @@
           <td><?php echo $this->Html->link(count($post['Computer']), '/search/searchApplication/' . $post['Applications']['id']) ?></td>
         	<td width="20%" align="right">
             <?php if($post['Lifecycle']['id'] != NULL): ?>
-            <a href="<?php echo $this->Html->url('/applications/lifecycle') ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2" title="Has Lifecycle"><i class="mdi mdi-update icon-sm icon-inline text-white-50"></i></a>
+            <a href="<?php echo $this->Html->url('/applications/lifecycle?q=' . $post['Applications']['name']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2" title="Has Lifecycle"><i class="mdi mdi-update icon-sm icon-inline text-white-50"></i></a>
             <?php endif; ?>
         	  <a id="icon_<?php echo $count ?>" href="#" title="Monitor Application" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 <?php echo $start_class ?>" onClick="return toggleMonitor(<?php echo $count ?>, <?php echo $post['Applications']['id'] ?>)"><i class="mdi mdi-eye icon-sm icon-inline text-white-50"></i></a>
             <a data-fancybox data-type="ajax" href="javascript:;" title="Assign Device" data-src="<?php echo $this->Html->url('/ajax/assign_application/' . $post['Applications']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i></a>

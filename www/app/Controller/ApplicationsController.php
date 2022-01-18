@@ -62,7 +62,7 @@ class ApplicationsController extends AppController {
 
     $this->Flash->success('Saved');
 
-    $this->redirect('/applications/');
+    $this->redirect('/applications?q=' . $joinInfo['application_name']);
 
   }
 
