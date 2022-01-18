@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## 3.0
+
+### Added 
+
+- added purge of old computer logins to the log purge Task
+- action buttons now have titles when hovering with the mouse
+- new Applications area with a search ability and filter for devices that are attached to the application
+- Software Lifecycle management - add a lifecycle to an Application along with an update frequency and notes for updates
+- CSV downloads for both Application and Lifecycle tables
+
+### Changed
+
+- reconfigured menus to split screens between Devices (Hardware) and Software
+- changed Programs to Applications - major DB shift. Applications now have their own table and are linked to devices with a linking table. 
+- Applications can now be assigned and unassigned directly from a device
+
+### Fixed
+
+- added default cron syntax for Task setup
+- minor formatting between different views for consistency
+
+### Removed
+
+- Removed RestrictedPrograms model - this is now done within the Application model with a monitoring field. 
+
 ## 2.3
 
 ### Added
