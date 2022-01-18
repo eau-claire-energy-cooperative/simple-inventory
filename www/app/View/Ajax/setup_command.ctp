@@ -13,7 +13,7 @@
 <?php echo $this->Form->hidden('parameter_list',array('value'=>$command['Command']['parameters'])); ?>
 <div class="row mb-2">
   <div class="col-sm-4">Schedule: </div>
-  <div class="col-sm-8"><?php echo $this->Form->input('schedule',array('label'=>false,'div'=>false,'class'=>'form-control')) ?></div>
+  <div class="col-sm-8"><?php echo $this->Form->input('schedule',array('label'=>false,'div'=>false,'class'=>'form-control','value'=>'0 0 1 * *')) ?></div>
 </div>
 <?php
     if(count($parameters) != 0):
