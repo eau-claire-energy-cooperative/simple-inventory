@@ -24,6 +24,7 @@
       $('#dataTable').DataTable({
         paging: true,
         pageLength: 100,
+        stateSave: true,
         dom: '<\"top\"ifp>rt',
         search: {
           search: '" . $this->params['url']['q'] . "'
