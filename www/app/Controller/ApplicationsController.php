@@ -2,7 +2,8 @@
 
 class ApplicationsController extends AppController {
 	var $uses = array('Applications', 'Computer', 'Lifecycle', 'Setting');
-	var $helpers = array('Html','Session','Time','Form', 'Menu', "Lifecycle");
+	var $helpers = array('Csv','Html','Session','Time','Form', 'Menu', "Lifecycle");
+  var $components = array('RequestHandler','Session');
 
 	public function beforeFilter(){
 	    //check if we are using a login method
@@ -129,7 +130,7 @@ class ApplicationsController extends AppController {
       $this->Flash->success("Lifecycle saved");
     }
 
-    $lifecycles = $this->Lifecycle->find('all');
+    $lifecycles = $this->Lifecycle->find('all', array('order'=>'Applications.name'));
     $this->set('lifecycles', $lifecycles);
 
   }

@@ -33,6 +33,7 @@
 ?>
 <div class="mb-4" align="right">
   <a href="<?php echo $this->Html->url(array('controller' => 'applications', 'action' => 'add_lifecycle')) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i> Create Lifecycle</a>
+  <a href="<?php echo $this->Html->url(array('controller' => 'applications', 'action' => 'lifecycle.csv')) ?>" class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm mr-2"><i class="mdi mdi-download icon-sm icon-inline text-white-50"></i> Download CSV</a>
 </div>
 
 <div class="card shadow mb-4">
