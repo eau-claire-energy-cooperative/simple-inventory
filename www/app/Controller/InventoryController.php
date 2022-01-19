@@ -632,6 +632,29 @@ class InventoryController extends AppController {
 		$this->set('history',$history);
 	}
 
+  function add_disk(){
+
+    if($this->Disk->save($this->request->data))
+    {
+      $this->Flash->success("Disk added");
+    }
+    else
+    {
+        $this->Flash->error("Error adding disk");
+    }
+
+    $this->redirect('/inventory/moreInfo/' . $this->request->data['Disk']['comp_id']);
+  }
+
+  function delete_disk($disk_id, $comp_id){
+
+    //delete the disk and redirect back to computer info page
+    $this->Disk->delete($disk_id);
+
+    $this->Flash->success('Disk deleted');
+    $this->redirect('/inventory/moreInfo/' . $comp_id);
+  }
+
 	function _saveLog($message){
 		$this->Logs->create();
 		$this->Logs->set('LOGGER','Website');

@@ -115,6 +115,10 @@ class AjaxController extends AppController {
     $this->set('total_versions', $totalVersions);
   }
 
+  function add_disk($comp_id){
+    $this->set('comp_id', $comp_id);
+  }
+
 	function uploadDrivers($id){
 	  $this->layout = 'fancybox';
 		$computer = $this->Computer->find('first',array('conditions'=>array('Computer.id'=>$id)));
