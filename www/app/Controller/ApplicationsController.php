@@ -38,6 +38,7 @@ class ApplicationsController extends AppController {
         //try and save this application, throw an error if already exists
         if($this->Applications->save($this->request->data))
         {
+          $this->request->query['q'] = $this->request->data['Applications']['name'];
           $this->Flash->success($this->request->data['Applications']['name'] . ' saved successfully');
         }
         else {
