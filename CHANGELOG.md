@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - Software Lifecycle management - add a lifecycle to an Application along with an update frequency and notes for updates
 - CSV downloads for both Application and Lifecycle tables
 - anchor to cron syntax explanation since used throughout views
+- ability to manually add/remove disks from devices through the edit screen
 
 ### Changed
 
@@ -25,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - added default cron syntax for Task setup
 - minor formatting between different views for consistency
+- disk ordering on device info page
 
 ### Removed
 
