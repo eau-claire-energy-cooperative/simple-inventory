@@ -177,7 +177,7 @@ function showOriginal(id, text){
       <div class="card-body">
         <?php foreach($computer['License'] as $aLicense): ?>
         <div class="row">
-          <div class="col-md-3"><?php echo $aLicense['ProgramName'] ?></div>
+          <div class="col-md-4"><?php echo $aLicense['ProgramName'] ?></div>
           <div class="col-md-8"><?php echo $aLicense['LicenseKey'] ?></div>
         </div>
         <?php endforeach ?>
