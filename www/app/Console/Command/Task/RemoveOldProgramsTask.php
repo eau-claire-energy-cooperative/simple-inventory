@@ -12,8 +12,8 @@ class RemoveOldProgramsTask extends AppShell {
       $total_deleted = 0;
       foreach($applications as $app)
       {
-        //delete if no devices are currently assigned and lifecycle does not exist
-        if(count($app['Computer']) == 0 && $app['Lifecycle']['id'] == NULL)
+        //delete if no devices are currently assigned, lifecycle does not exist, and no monitoring is configured
+        if(count($app['Computer']) == 0 && $app['Lifecycle']['id'] == NULL && $app['Applications']['monitoring'] != 'true')
         {
           $total_deleted ++;
           $this->out("No devices assigned to application: " . $app['Applications']['name']);
