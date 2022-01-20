@@ -119,6 +119,10 @@ class AjaxController extends AppController {
     $this->set('comp_id', $comp_id);
   }
 
+  function assign_os_eol($name){
+    $this->set('osName', $name);
+  }
+
 	function uploadDrivers($id){
 	  $this->layout = 'fancybox';
 		$computer = $this->Computer->find('first',array('conditions'=>array('Computer.id'=>$id)));

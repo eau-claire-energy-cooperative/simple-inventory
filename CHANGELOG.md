@@ -15,7 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - CSV downloads for both Application and Lifecycle tables
 - anchor to cron syntax explanation since used throughout views
 - ability to manually add/remove disks from devices through the edit screen
-- operating systems page under Software to view all assigned operating systems and device counts
+- operating systems page under Software to view all assigned operating systems, device counts, and end of life information
 
 ### Changed
 

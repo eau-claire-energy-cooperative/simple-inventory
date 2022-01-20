@@ -1,7 +1,7 @@
 <?php
 
 class ApplicationsController extends AppController {
-	var $uses = array('Applications', 'Computer', 'Lifecycle', 'Setting');
+	var $uses = array('Applications', 'Computer', 'Lifecycle', 'OperatingSystem', 'Setting');
 	var $helpers = array('Csv','Html','Session','Time','Form', 'Menu', "Lifecycle");
   var $components = array('RequestHandler','Session');
 
@@ -175,6 +175,16 @@ class ApplicationsController extends AppController {
   public function operating_systems(){
     $this->set('title_for_layout', 'Operating Systems');
 
+    if($this->request->is('post')){
+      if($this->OperatingSystem->save($this->request->data))
+      {
+        $this->Flash->success('Saved ' . $this->request->data['OperatingSystem']['name'] . ' end of life date');
+      }
+      else {
+        $this->Flash->error('Error saving end of life data for ' . $this->request->data['OperatingSystem']['name']);
+      }
+    }
+
     // operating systems are set values within devices
     // not a good way to do this natively so grab them all and sort below
     $computers = $this->Computer->find('all', array('conditions'=>array("Computer.OS != ''"), 'order'=>'Computer.OS'));
@@ -196,6 +206,18 @@ class ApplicationsController extends AppController {
     }
 
     $this->set('allOs', $systems);
+
+    //get any defined operating systems
+    $foundOs = $this->OperatingSystem->find('list', array('fields'=>array('OperatingSystem.name', 'OperatingSystem.eol_date')));
+    $this->set('definedOs', $foundOs);
+  }
+
+  public function delete_os_eol($name){
+    $this->OperatingSystem->query(sprintf("delete from operating_systems where name = '%s'", $name));
+
+    $this->Flash->success('Deleted End of life date for ' . $name);
+
+    $this->redirect('/applications/operating_systems');
   }
 }
 ?>
