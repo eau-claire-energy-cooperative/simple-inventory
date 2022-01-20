@@ -23,6 +23,7 @@
 
     $('#dataTable').DataTable({
       dom: '<\"top\"f>rt',
+      paging: false,
       search: {
         search: '" . $this->params['url']['q'] . "'
       },
