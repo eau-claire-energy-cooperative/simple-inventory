@@ -172,5 +172,30 @@ class ApplicationsController extends AppController {
     $this->redirect('/applications/lifecycle');
   }
 
+  public function operating_systems(){
+    $this->set('title_for_layout', 'Operating Systems');
+
+    // operating systems are set values within devices
+    // not a good way to do this natively so grab them all and sort below
+    $computers = $this->Computer->find('all', array('conditions'=>array("Computer.OS != ''"), 'order'=>'Computer.OS'));
+
+    //get a count of the different systems
+    $systems = array();
+
+    foreach($computers as $comp){
+      if(!array_key_exists($comp['Computer']['OS'], $systems))
+      {
+        //add to array with count of 1
+        $systems[$comp['Computer']['OS']] = 1;
+      }
+      else
+      {
+        //increase count by one
+        $systems[$comp['Computer']['OS']] = $systems[$comp['Computer']['OS']] + 1;
+      }
+    }
+
+    $this->set('allOs', $systems);
+  }
 }
 ?>

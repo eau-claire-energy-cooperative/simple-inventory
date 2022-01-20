@@ -84,6 +84,7 @@
             <a class="collapse-item" href="<?php echo $this->Html->url('/applications') ?>">Applications</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/applications/lifecycle')?>">Application Lifecycles</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/manage/licenses') ?>">Licenses</a>
+            <a class="collapse-item" href="<?php echo $this->Html->url('/applications/operating_systems') ?>">Operating Systems</a>
           </div>
         </div>
       </li>
