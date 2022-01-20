@@ -82,8 +82,8 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Manage Software</h6>
             <a class="collapse-item" href="<?php echo $this->Html->url('/applications') ?>">Applications</a>
+            <a class="collapse-item" href="<?php echo $this->Html->url('/applications/lifecycle')?>">Application Lifecycles</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/manage/licenses') ?>">Licenses</a>
-            <a class="collapse-item" href="<?php echo $this->Html->url('/applications/lifecycle')?>">Lifecycles</a>
           </div>
         </div>
       </li>

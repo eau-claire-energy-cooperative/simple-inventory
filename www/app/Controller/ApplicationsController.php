@@ -124,7 +124,7 @@ class ApplicationsController extends AppController {
   }
 
   public function lifecycle(){
-    $this->set('title_for_layout', 'Software Lifecycles');
+    $this->set('title_for_layout', 'Application Lifecycles');
 
     if($this->request->is('post')){
       $this->Lifecycle->save($this->request->data);
