@@ -44,7 +44,7 @@
     <table id="dataTable" class="table table-striped">
       <thead>
         <th>Application Name</th>
-        <th>Update Needed</th>
+        <th>Update Check Due</th>
         <th></th>
       </thead>
       <tbody>
