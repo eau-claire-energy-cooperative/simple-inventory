@@ -28,6 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - added default cron syntax for Task setup
 - minor formatting between different views for consistency
 - disk ordering on device info page
+- fixed visible icon on 802.1x supplicant password field
 
 ### Removed
 
