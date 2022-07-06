@@ -3,7 +3,7 @@
 class InventoryController extends AppController {
     var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace','AttributeDisplay','Menu');
     var $components = array('Session','Ldap','FileUpload','Paginator','Flash');
-	  public $uses = array('Computer', 'DeviceType', 'Disk', 'Lifecycle', 'Location', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User');
+	  public $uses = array('Applications','Computer', 'DeviceType', 'Disk', 'Lifecycle', 'Location', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User');
 
 	public function beforeFilter(){
 		//check if we are using a login method
@@ -245,7 +245,7 @@ class InventoryController extends AppController {
 		$this->set('title_for_layout','Add a New Device');
 
     // set drop down list items
-    $this->set('deviceTypes', $this->DeviceType->find('list', array('fields' => array("DeviceType.name"), 'order'=>array('name asc'))));
+    $this->set('device_types', $this->DeviceType->find('list', array('fields' => array("DeviceType.name"), 'order'=>array('name asc'))));
 		$this->set('location', $this->Location->find('list', array('fields' => array("Location.Location"), 'order'=>array('is_default desc, location asc'))));
 
     if ($this->request->is('post')) {
@@ -367,35 +367,36 @@ class InventoryController extends AppController {
 
 	public function confirmDecommission( $id = null)
 	{
-	    $this->set('active_menu', 'manage');
-		  $currID = $id; //variable to pass to transferDecom
-		  $this->Computer->id = $id;
+    $this->set('active_menu', 'manage');
+		$currID = $id; //variable to pass to transferDecom
+		$this->Computer->id = $id;
 
 		$this->set('computer_id', $id);
+    $this->request->data = $this->Computer->read();
+
 		if ($this->request->is('get')) {
-        	$this->request->data = $this->Computer->read();
 
-        	$this->set('title_for_layout',"Decomission Process for " . $this->request->data['Computer']['ComputerName']);
+    	$this->set('title_for_layout',"Decomission Process for " . $this->request->data['Computer']['ComputerName']);
 
-        	if(count($this->request->data['License']) > 0)
-        	{
-        	    $errors = 'This computer has ' . count($this->request->data['License']) . ' license(s) attached to it. You must delete or move these licenses before decomissioning.';
-        	    $this->set('errors', $errors);
-        	}
-    	}
-    	else
+    	if(count($this->request->data['License']) > 0)
     	{
-        	if ($this->Computer->save($this->request->data))
-        	{
-        		$message = $this->request->data['Computer']['ComputerName'] . ' has been decommissioned';
-        		$this->_saveLog($message);
-       			$this->transferDecom($currID);
-        	}
-        	else
-        	{
-            	$this->Flash->error('Unable to update your entry.');
-        	}
-   		}
+    	  $errors = 'This computer has ' . count($this->request->data['License']) . ' license(s) attached to it. You must delete or move these licenses before decomissioning.';
+    	  $this->set('errors', $errors);
+    	}
+  	}
+  	else
+  	{
+      	if ($this->Computer->save($this->request->data))
+      	{
+      		$message = $this->request->data['Computer']['ComputerName'] . ' has been decommissioned';
+      		$this->_saveLog($message);
+     			$this->transferDecom($currID);
+      	}
+      	else
+      	{
+          	$this->Flash->error('Unable to update your entry.');
+      	}
+ 		}
 	}
 
 
