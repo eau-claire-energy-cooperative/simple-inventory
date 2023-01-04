@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - device types variable error on add device page
 - decommission was failing due to missing Model import
+- fixed issue the ldap_bind where blank passwords treated as anonymous logins
 
 ## 3.0
 
