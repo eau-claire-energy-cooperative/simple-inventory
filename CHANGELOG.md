@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## 3.1
 
+### Added 
+
+- clicking license key codes will copy them to the clipboard
+
 ### Fixed 
 
 - device types variable error on add device page

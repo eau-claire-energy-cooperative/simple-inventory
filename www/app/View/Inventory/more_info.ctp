@@ -66,6 +66,20 @@ function showOriginal(id, text){
   return false;
 }
 
+function copyLicense(id){
+  // create fake input to select the text
+  var temp = $("<input>");
+  $("body").append(temp);
+
+  // copy text
+  var license = $('#license_' + id).html().trim();
+  temp.val(license).select();
+  var successful = document.execCommand('copy');
+
+  // remove fake input
+  temp.remove();
+}
+
 </script>
 <div class="row">
   <div class="col-xl-6 col-md-6 mb-4">
@@ -178,7 +192,11 @@ function showOriginal(id, text){
         <?php foreach($computer['License'] as $aLicense): ?>
         <div class="row">
           <div class="col-md-4"><?php echo $aLicense['ProgramName'] ?></div>
-          <div class="col-md-8"><?php echo $aLicense['LicenseKey'] ?></div>
+          <div class="col-md-8">
+            <a href="javascript:;" onclick="copyLicense('<?php echo $aLicense['id'] ?>')" id="license_<?php echo $aLicense['id'] ?>" style="cursor: copy">
+              <?php echo $aLicense['LicenseKey'] ?>
+            </a>
+          </div>
         </div>
         <?php endforeach ?>
       </div>
