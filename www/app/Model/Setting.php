@@ -1,19 +1,19 @@
 <?php
    class Setting extends AppModel {
-   			
+
    	var $useTable = 'settings';
-   	
+
 	//encrypt values before saving
 	public function beforeSave($options = array()){
-	    
+
 	    if(Configure::read('Settings.encrypt'))
 	    {
-            $this->data['Setting']['value'] = Security::rijndael($this->data['Setting']['value'], Configure::read('Settings.encryption_key'),'encrypt');
+            $this->data['Setting']['value'] = Security::encrypt($this->data['Setting']['value'], Configure::read('Settings.encryption_key'));
 	    }
-		
+
 		return true;
 	}
-	
+
 	//decrypt values after loading
 	public function afterFind($results, $primary = false){
 
@@ -24,14 +24,17 @@
     			if(isset($results[$i]['Setting']['value']))
     			{
     				$aValue = $results[$i]['Setting']['value'];
-    				$results[$i]['Setting']['value'] = Security::rijndael($aValue, Configure::read('Settings.encryption_key'),'decrypt');
+            if(!empty($aValue))
+            {
+    				      $results[$i]['Setting']['value'] = Security::decrypt($aValue, Configure::read('Settings.encryption_key'));
+            }
     			}
     		}
 	    }
-	    
+
 		return $results;
 	}
-	
-	
+
+
    }
 ?>

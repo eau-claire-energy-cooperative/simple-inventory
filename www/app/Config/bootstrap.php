@@ -109,6 +109,8 @@ CakeLog::config('error', array(
 	'file' => 'error',
 ));
 
+Configure::write('Security.useOpenSsl', true);
+
 //the current program version
 Configure::write('Settings.version', '3.0');
 
