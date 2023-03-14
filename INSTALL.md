@@ -8,7 +8,7 @@ Install default from from Linux package manager, also install the following modu
 
 ```
 
-sudo apt-get install -y php7.2-ldap php7.2-soap php7.2-mysql php7.2-xml php-dev libmcrypt-dev php-pear
+sudo apt-get install -y php7.2-ldap php7.2-soap php7.2-mysql php7.2-xml php-pear
 
 ```
 
@@ -29,16 +29,6 @@ Install with:
 ```
 
 sudo pecl channel-update pecl.php.net
-sudo pecl install mcrypt-1.0.1
-
-```
-
-Add the following to the apache2/php.ini file
-
-```
-
-include_path=".:/usr/share/pear"
-extension=mcrypt.so
 
 ```
 
