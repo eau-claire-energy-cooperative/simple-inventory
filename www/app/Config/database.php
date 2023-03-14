@@ -67,7 +67,7 @@ class DATABASE_CONFIG {
 		'password' => 'password',
 		'database' => 'computer_inventory',
 		'prefix' => '',
-		//'encoding' => 'utf8',
+		'encoding' => 'latin1',
 	);
 
 	/*public $default = array(
