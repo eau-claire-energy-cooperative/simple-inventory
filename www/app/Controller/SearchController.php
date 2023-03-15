@@ -1,7 +1,7 @@
 <?php
 
 class SearchController extends AppController {
-	var $uses = array("Programs","Computer","Location","Service");
+	var $uses = array("Applications","Computer","Location","Service");
 	var $helpers = array('Html','Csv','DiskSpace','Time');
 	var $search_types = array(array("name"=>"Tag","field"=>"Computer.ComputerLocation"),
 						array('name'=>'Model','field'=>'Computer.Model'),
@@ -57,12 +57,20 @@ class SearchController extends AppController {
 		$this->render('search');
 	}
 
-	function searchProgram($program){
+	function searchApplication($app_id){
 		$this->set("title_for_layout","Search Results");
 
 		//get all computers that match the program name
-		$this->set("q","For Program '" . $program . "'");
-		$this->set('results', $this->Programs->find('all',array('conditions' => array('Programs.program LIKE "' . $program . '%"') )));
+    $application = $this->Applications->find('first',array('conditions' => array('Applications.id'=>$app_id)));
+		$this->set("q","For Application '" . $application['Applications']['name'] . "'");
+
+    //need to put this in a format the view can handle
+    $result = array();
+    foreach($application['Computer'] as $comp){
+      $result[] = array('Computer'=>$comp);
+    }
+
+		$this->set('results', $result);
 
 		$this->render('search');
 	}

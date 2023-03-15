@@ -33,12 +33,14 @@ Once you have that working take a look at the ```INSTALL.md``` file for more spe
 * Easy to setup Powershell script for PC information collection 
 * Intuitive web interface that can filter devices quickly to find what you're looking for
 * Ability to generate emails on new computer additions
-* Decommission feature to remove computers but keep information
+* Decommission feature to remove devices but keep information
 * Can sync with Active Directory to find missing computers
 * Non-PC devices can be created and managed as well
-* Optionally can collect programs listed in Windows programs area
+* Optionally can collect applications via PowerShell or manually assign them to devices
+* Software lifecycles can be assigned to specific applications for reminders and update instruction documentation
 * Optionally can list services and their running state
 * Optionally can integrate with [Chocolatey](https://chocolatey.org/) to find outdated packages
+* Can export most information to a CSV for offline work
 
 
 # Attributions
@@ -46,3 +48,4 @@ Once you have that working take a look at the ```INSTALL.md``` file for more spe
 Framework: [CakePHP](https://cakephp.org/)
 Web Theme: [SB Admin 2](https://startbootstrap.com/themes/sb-admin-2/)
 Icons: [Material Design Icons](https://materialdesignicons.com/)
+Markdown Generator: [Parsedown](https://github.com/erusev/parsedown)

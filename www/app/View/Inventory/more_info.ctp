@@ -66,6 +66,20 @@ function showOriginal(id, text){
   return false;
 }
 
+function copyLicense(id){
+  // create fake input to select the text
+  var temp = $("<input>");
+  $("body").append(temp);
+
+  // copy text
+  var license = $('#license_' + id).html().trim();
+  temp.val(license).select();
+  var successful = document.execCommand('copy');
+
+  // remove fake input
+  temp.remove();
+}
+
 </script>
 <div class="row">
   <div class="col-xl-6 col-md-6 mb-4">
@@ -177,8 +191,12 @@ function showOriginal(id, text){
       <div class="card-body">
         <?php foreach($computer['License'] as $aLicense): ?>
         <div class="row">
-          <div class="col-md-3"><?php echo $aLicense['ProgramName'] ?></div>
-          <div class="col-md-8"><?php echo $aLicense['LicenseKey'] ?></div>
+          <div class="col-md-4"><?php echo $aLicense['ProgramName'] ?></div>
+          <div class="col-md-8">
+            <a href="javascript:;" onclick="copyLicense('<?php echo $aLicense['id'] ?>')" id="license_<?php echo $aLicense['id'] ?>" style="cursor: copy">
+              <?php echo $aLicense['LicenseKey'] ?>
+            </a>
+          </div>
         </div>
         <?php endforeach ?>
       </div>
@@ -201,28 +219,33 @@ function showOriginal(id, text){
   <?php endif; ?>
 </div>
 
-<?php if(count($programs) > 0): ?>
+<?php if(count($computer['Applications']) > 0): ?>
 <div class="row">
   <div class="col-xl-12">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary"><a href="#" onClick="return expandTable('programs')">Programs <i class="mdi mdi-chevron-down align-middle" id="programs-toggle"></i></a></h6>
+        <h6 class="m-0 font-weight-bold text-primary"><a href="#" onClick="return expandTable('applications')">Applications <i class="mdi mdi-chevron-down align-middle" id="applications-toggle"></i></a></h6>
       </div>
       <div class="card-body">
-        <table id="programs" class="table table-striped" style="display:none">
-          <?php foreach ($programs as $post): ?>
+        <table id="applications" class="table table-striped" style="display:none">
+          <?php foreach ($computer['Applications'] as $post): ?>
           <tr>
           <?php
               $row_class = '';
 
-              if(key_exists($post['Programs']['program'],$restricted_programs))
+              if($post['monitoring'] == 'true')
               {
                 $row_class = 'restricted';
               }
           ?>
-          <td class="<?php echo $row_class ?>"> <?php echo $this->Html->link( $post['Programs']['program'] . " v" . $post["Programs"]["version"], '/search/searchProgram/' . $post['Programs']['program']); ?></td>
+          <td class="<?php echo $row_class ?>">
+            <?php echo $this->Html->link( $post['full_name'], '/search/searchApplication/' . $post['id']); ?>
+          </td>
           <td width="20%" class="<?php echo $row_class ?>" align="right">
-            <a href="<?php echo $this->Html->url('/manage/unassign_program/' . $post['Programs']['ID'] . '/' . $computer['Computer']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-location"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i></a>
+            <?php if(key_exists($post['id'], $lifecycles)): ?>
+            <a href="<?php echo $this->Html->url('/applications/lifecycle?q=' . $post['name']) ?>" title="Has Lifecycle" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2"><i class="mdi mdi-update icon-sm icon-inline text-white-50"></i></a>
+            <?php endif; ?>
+            <a href="<?php echo $this->Html->url('/applications/unassign_application/' . $post['id'] . '/' . $computer['Computer']['id']) ?>" title="Unassign Application" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-location"><i class="mdi mdi-close icon-sm icon-inline text-white-50"></i></a>
           </td>
         </tr>
         <?php endforeach; ?>

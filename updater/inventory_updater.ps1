@@ -7,8 +7,8 @@
     Full path to the inventory website to be used for web calls, example http://localhost/inventory
 .PARAMETER ApiAuthKey
     The authentication key for the inventory API endpoint. This is set in the inventory manager. All calls will fail if it is not matching.
-.PARAMETER CheckPrograms
-    True/False value that defines if the programs on the computer should be sent. Defaults to True
+.PARAMETER CheckApplications
+    True/False value that defines if the installed applications on the computer should be sent. Defaults to True
 .PARAMETER CheckServices
     True/False value that defines if the services on the computer should be sent. Defaults to True
 .PARAMETER CheckChoco
@@ -16,14 +16,14 @@
 .PARAMETER DeviceType
     When using the auto add function what type of device is this adding. Default is "computer" and assumes a device type with this name is configured in the web portal.
 .EXAMPLE
-    C:\PS>inventory_updater.ps1 -Url http://localhost/inventory -ApiAuthKey key -CheckPrograms False
+    C:\PS>inventory_updater.ps1 -Url http://localhost/inventory -ApiAuthKey key -CheckApplications False
 .NOTES
     Author: Rob Weber   
 #>
 param(
 [Parameter(Mandatory=$true,Position=0)][ValidateNotNullOrEmpty()][string]$Url, 
 [Parameter(Mandatory=$true,Position=1)][ValidateNotNullOrEmpty()][string]$ApiAuthKey,
-[Parameter(Mandatory=$false,Position=2)][ValidateSet("true","false")][string]$CheckPrograms = "True",
+[Parameter(Mandatory=$false,Position=2)][ValidateSet("true","false")][string]$CheckApplications = "True",
 [Parameter(Mandatory=$false,Position=3)][ValidateSet("true","false")][string]$CheckServices = "True",
 [Parameter(Mandatory=$false,Position=4)][ValidateSet("true","false")][string]$CheckChoco = "False",
 [Parameter(Mandatory=$false,Position=5)][string]$DeviceType = "computer",
@@ -322,18 +322,18 @@ foreach ($disk in $disks.GetEnumerator()){
 	$diskOutput = web-call -Endpoint "/disk/update" -Data @{comp_id = $ComputerId; type = "Local"; label=$disk.DeviceId; total_space = $disk.Size/1025; space_free = $disk.FreeSpace/1024}
 }
 
-#PROGRAMS 
-if(evalBool($CheckPrograms))
+#APPLICATIONS
+if(evalBool($CheckApplications))
 {
 	#get all 32 and 64 bit applications
 	$allProgram = @()
 	$allPrograms += $(Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion)
 	$allPrograms += $(Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion)
 	
-	web-log -Message "Found $($allPrograms.count) programs on $ComputerName" | out-null
+	web-log -Message "Found $($allPrograms.count) applications on $ComputerName" | out-null
 	
 	#clear out the current programs list
-	$clearOutput = web-call -Endpoint "/programs/clear" -Data @{id = $ComputerId}
+	$clearOutput = web-call -Endpoint "/applications/clear" -Data @{id = $ComputerId}
 
 	foreach ($program in $allPrograms.GetEnumerator()){
 		if($program.DisplayVersion -eq $null -Or $program.DisplayVersion -eq "")
@@ -341,7 +341,7 @@ if(evalBool($CheckPrograms))
 			$program.DisplayVersion = "?"
 		}
 		
-		$programOutput = web-call -Endpoint "/programs/add" -Data @{id = $ComputerId; program = $program.DisplayName; version = $program.DisplayVersion}
+		$programOutput = web-call -Endpoint "/applications/add" -Data @{id = $ComputerId; application = $program.DisplayName; version = $program.DisplayVersion}
 	}
 }
 

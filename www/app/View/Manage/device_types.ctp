@@ -40,7 +40,7 @@
         <?php foreach ($device_types as $post): ?>
         <tr>
             <?php $attributes = explode(',', $post['DeviceType']['attributes']); ?>
-            <td><?php echo  $post['DeviceType']['name']; ?> <i class="mdi mdi-<?php echo $post['DeviceType']['icon']?> icon-inline ml-2" ></i></td>
+            <td><?php echo $post['DeviceType']['name']; ?> <i class="mdi mdi-<?php echo $post['DeviceType']['icon']?> icon-inline ml-2" ></i></td>
             <td><?php echo $post['DeviceType']['slug'] ?></td>
             <td><?php echo count($attributes) ?></td>
             <td><?php echo $this->Html->link(count($post['Computer']),'/search/search/5/' . $post['DeviceType']['name']) ?></td>

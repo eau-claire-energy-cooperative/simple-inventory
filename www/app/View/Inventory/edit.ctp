@@ -53,6 +53,19 @@
           </div>
           <?php endif ?>
           <?php endforeach; ?>
+          <?php if(in_array('DriveSpace', $allowedAttributes)): ?>
+          <div class="row mb-1">
+            <div class="col-md-4"><?php echo $hardwareAttributes['DriveSpace'] ?></div>
+            <div class="col-md-8">
+              <div align="right">
+                <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/add_disk/' . $this->request->data['Computer']['id']) ?>" class="btn btn-primary btn-sm mt-1"><i class="mdi mdi-plus icon-sm icon-inline"></i> Add Drive</a>
+              </div>
+              <div class="ml-3">
+                <?php echo $this->AttributeDisplay->displayAttribute('DriveSpace', $this->request->data, true) ?>
+              </div>
+            </div>
+          </div>
+          <?php endif; ?>
         </div>
     </div>
   </div>

@@ -1,7 +1,7 @@
 <?php
 class AppSchema extends CakeSchema {
 
-	public function before($event = array()) {
+  public function before($event = array()) {
     $db = ConnectionManager::getDataSource($this->connection);
     $db->cacheSources = false;
 
@@ -68,17 +68,38 @@ class AppSchema extends CakeSchema {
           //create some of the default commands
           $command = ClassRegistry::init('Command');
           $command->create();
-          $command->saveMany(array(array('Command'=>array('name'=>'Restricted Programs','parameters'=>'','description'=>'Alert system administrators of any programs currently installed that have been flagged as Restricted in the Programs area.')),
+          $command->saveMany(array(array('Command'=>array('name'=>'Monitored Applications','parameters'=>'','description'=>'Generate a report of any applications installed that have been flagged for monitoring in the Applications area.')),
                       array('Command'=>array('name'=>'Wake Computer','parameters'=>'Computer Name','description'=>'Wake a specific computer via a WOL packet at a given time.')),
                       array('Command'=>array('name'=>'Send Emails','parameters'=>'','description'=>'This command should be kept running at all times. It will clear the email queue by sending emails to system administrators.')),
                       array('Command'=>array('name'=>'Check Disk space','parameters'=>'Minimum Space Threshold','description'=>'Check the disk space available on all computers. Any that do not contain the minimum amount of space (in percent) will generate an email to the system administrator.')),
-                      array('Command'=>array('name'=>'Remove Old Programs','parameters'=>'','description'=>'Removes Programs that no longer are installed on any computer from the database.')),
+                      array('Command'=>array('name'=>'Remove Old Applications','parameters'=>'','description'=>'Removes Applications that no longer are installed on any computer from the database.')),
                       array('Command'=>array('name'=>'Purge Decommissioned Devices','parameters'=>'Years','description'=>'Removes devices that have been decommissioned when the decommission date is greater than the given number of years.')),
                       array('Command'=>array('name'=>'Purge Logs','parameters'=>'Years','description'=>'Automatically removes logs from the system older than the given number of years.')));
           break;
       }
     }
 	}
+
+	public $application_installs = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
+		'application_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+		'comp_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+		'indexes' => array(
+			'PRIMARY' => array('column' => 'id', 'unique' => 1)
+		),
+		'tableParameters' => array('charset' => 'utf8mb3', 'collate' => 'utf8mb3_general_ci', 'engine' => 'InnoDB')
+	);
+
+	public $applications = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
+		'name' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'version' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'monitoring' => array('type' => 'string', 'null' => true, 'default' => 'false', 'length' => 12, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'indexes' => array(
+			'PRIMARY' => array('column' => 'id', 'unique' => 1)
+		),
+		'tableParameters' => array('charset' => 'utf8mb3', 'collate' => 'utf8mb3_general_ci', 'engine' => 'InnoDB')
+	);
 
 	public $commands = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
@@ -92,42 +113,42 @@ class AppSchema extends CakeSchema {
 	);
 
 	public $computer = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'unsigned' => true, 'key' => 'primary'),
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
 		'DeviceType' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
-		'EnableMonitoring' => array('type' => 'string', 'null' => false, 'default' => 'false', 'length' => 6, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'ComputerName' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'key' => 'unique', 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'SerialNumber' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'AssetId' => array('type' => 'biginteger', 'null' => false, 'default' => '0', 'length' => 255, 'unsigned' => false),
-		'CurrentUser' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'ComputerLocation' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'Manufacturer' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'Model' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'OS' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'Memory' => array('type' => 'biginteger', 'null' => false, 'default' => '0', 'length' => 15, 'unsigned' => false),
+		'EnableMonitoring' => array('type' => 'string', 'null' => false, 'default' => 'false', 'length' => 6, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'ComputerName' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'key' => 'unique', 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'SerialNumber' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'AssetId' => array('type' => 'biginteger', 'null' => false, 'default' => '0', 'unsigned' => false),
+		'CurrentUser' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'ComputerLocation' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'Manufacturer' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'Model' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'OS' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'Memory' => array('type' => 'biginteger', 'null' => false, 'default' => '0', 'unsigned' => false),
 		'MemoryFree' => array('type' => 'float', 'null' => false, 'default' => '0', 'unsigned' => false),
-		'CPU' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'CPU' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
 		'NumberOfMonitors' => array('type' => 'integer', 'null' => false, 'default' => '0', 'unsigned' => false),
-		'IPaddress' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'IPv6address' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'MACaddress' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'DiskSpace' => array('type' => 'biginteger', 'null' => false, 'default' => '0', 'length' => 255, 'unsigned' => false),
+		'IPaddress' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'IPv6address' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'MACaddress' => array('type' => 'string', 'null' => false, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'DiskSpace' => array('type' => 'biginteger', 'null' => false, 'default' => '0', 'unsigned' => false),
 		'DiskSpaceFree' => array('type' => 'biginteger', 'null' => false, 'default' => '0', 'unsigned' => false),
 		'LastUpdated' => array('type' => 'timestamp', 'null' => false, 'default' => null),
 		'LastBooted' => array('type' => 'timestamp', 'null' => false, 'default' => '1979-12-31 18:00:00'),
-		'SupplicantUsername' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'SupplicantPassword' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'SupplicantUsername' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'SupplicantPassword' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
 		'ApplicationUpdates' => array('type' => 'integer', 'null' => false, 'default' => '0', 'unsigned' => false),
-		'WipedHD' => array('type' => 'string', 'null' => false, 'length' => 10, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'Recycled' => array('type' => 'string', 'null' => false, 'length' => 10, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'RedeployedAs' => array('type' => 'string', 'null' => false, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'notes' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'WipedHD' => array('type' => 'string', 'null' => false, 'length' => 10, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'Recycled' => array('type' => 'string', 'null' => false, 'length' => 10, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'RedeployedAs' => array('type' => 'string', 'null' => false, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'notes' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
 		'WindowsIndex' => array('type' => 'float', 'null' => false, 'default' => '0.00', 'length' => '10,2', 'unsigned' => false),
-		'IsAlive' => array('type' => 'string', 'null' => false, 'default' => 'true', 'length' => 6, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'IsAlive' => array('type' => 'string', 'null' => false, 'default' => 'true', 'length' => 6, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'ComputerName' => array('column' => 'ComputerName', 'unique' => 1)
 		),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'MyISAM')
+		'tableParameters' => array('charset' => 'utf8mb3', 'collate' => 'utf8mb3_general_ci', 'engine' => 'MyISAM')
 	);
 
 	public $computer_logins = array(
@@ -142,43 +163,43 @@ class AppSchema extends CakeSchema {
 	);
 
 	public $decommissioned = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'unsigned' => true, 'key' => 'primary'),
-		'ComputerName' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'SerialNumber' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'AssetId' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 255, 'unsigned' => false),
-		'CurrentUser' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'Location' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'Manufacturer' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'Model' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'CPU' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
+		'ComputerName' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'SerialNumber' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'AssetId' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+		'CurrentUser' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'Location' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'Manufacturer' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'Model' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'CPU' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
 		'NumberOfMonitors' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
-		'IPaddress' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'MACaddress' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'OS' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'Memory' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'length' => 255, 'unsigned' => false),
+		'IPaddress' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'MACaddress' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'OS' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'Memory' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => false),
 		'LastUpdated' => array('type' => 'timestamp', 'null' => false, 'default' => null),
-		'WipedHD' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 10, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'Recycled' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 10, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'RedeployedAs' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'notes' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'WipedHD' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 10, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'Recycled' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 10, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'RedeployedAs' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'notes' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'MyISAM')
+		'tableParameters' => array('charset' => 'utf8mb3', 'collate' => 'utf8mb3_general_ci', 'engine' => 'MyISAM')
 	);
 
 	public $device_types = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
-		'name' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'icon' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'attributes' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'check_running' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 10, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'allow_decom' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 10, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'exclude_ad_sync' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 10, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'name' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'icon' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'attributes' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'check_running' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 10, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'allow_decom' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 10, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'exclude_ad_sync' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 10, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
+		'tableParameters' => array('charset' => 'utf8mb3', 'collate' => 'utf8mb3_general_ci', 'engine' => 'InnoDB')
 	);
 
 	public $disk = array(
@@ -205,48 +226,70 @@ class AppSchema extends CakeSchema {
 	);
 
 	public $licenses = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 6, 'unsigned' => true, 'key' => 'primary'),
-		'comp_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 6, 'unsigned' => false),
-		'ProgramName' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'LicenseKey' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
+		'comp_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+		'ProgramName' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'LicenseKey' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
+		'tableParameters' => array('charset' => 'utf8mb3', 'collate' => 'utf8mb3_general_ci', 'engine' => 'InnoDB')
+	);
+
+	public $lifecycles = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
+		'application_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+		'update_frequency' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 15, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'last_check' => array('type' => 'timestamp', 'null' => false, 'default' => null),
+		'notes' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'indexes' => array(
+			'PRIMARY' => array('column' => 'id', 'unique' => 1)
+		),
+		'tableParameters' => array('charset' => 'utf8mb3', 'collate' => 'utf8mb3_general_ci', 'engine' => 'InnoDB')
 	);
 
 	public $location = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'unsigned' => true, 'key' => 'primary'),
-		'location' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'is_default' => array('type' => 'string', 'null' => false, 'default' => 'false', 'length' => 6, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
+		'location' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'is_default' => array('type' => 'string', 'null' => false, 'default' => 'false', 'length' => 6, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'MyISAM')
+		'tableParameters' => array('charset' => 'utf8mb3', 'collate' => 'utf8mb3_general_ci', 'engine' => 'MyISAM')
 	);
 
 	public $logs = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'DATED' => array('type' => 'timestamp', 'null' => false, 'default' => null),
-		'LOGGER' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 200, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'LEVEL' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 10, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'MESSAGE' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'LOGGER' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 200, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'LEVEL' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 10, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'MESSAGE' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'MyISAM')
+		'tableParameters' => array('charset' => 'utf8mb3', 'collate' => 'utf8mb3_general_ci', 'engine' => 'MyISAM')
+	);
+
+	public $operating_systems = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
+		'name' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'eol_date' => array('type' => 'date', 'null' => true, 'default' => null),
+		'indexes' => array(
+			'PRIMARY' => array('column' => 'id', 'unique' => 1)
+		),
+		'tableParameters' => array('charset' => 'utf8mb3', 'collate' => 'utf8mb3_general_ci', 'engine' => 'InnoDB')
 	);
 
 	public $programs = array(
 		'ID' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'comp_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'index'),
-		'program' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'version' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'program' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'version' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'ID', 'unique' => 1),
 			'comp_id' => array('column' => 'comp_id', 'unique' => 0)
 		),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'MyISAM')
+		'tableParameters' => array('charset' => 'utf8mb3', 'collate' => 'utf8mb3_general_ci', 'engine' => 'MyISAM')
 	);
 
 	public $restricted_programs = array(
@@ -283,12 +326,12 @@ class AppSchema extends CakeSchema {
 
 	public $settings = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
-		'key' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'value' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'key' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8mb4_unicode_ci', 'charset' => 'utf8mb4'),
+		'value' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8mb4_unicode_ci', 'charset' => 'utf8mb4'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'MyISAM')
+		'tableParameters' => array('charset' => 'utf8mb4', 'collate' => 'utf8mb4_unicode_ci', 'engine' => 'MyISAM')
 	);
 
 	public $users = array(

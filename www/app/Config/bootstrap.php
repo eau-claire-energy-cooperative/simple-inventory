@@ -109,8 +109,10 @@ CakeLog::config('error', array(
 	'file' => 'error',
 ));
 
+Configure::write('Security.useOpenSsl', true);
+
 //the current program version
-Configure::write('Settings.version', '2.3');
+Configure::write('Settings.version', '4.0');
 
 //load the custom.ini config
 Configure::load('custom');

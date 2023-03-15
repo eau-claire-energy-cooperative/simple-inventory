@@ -1,7 +1,10 @@
 <?php
     echo $this->Html->script("jquery-confirm.min.js",false);
+    echo $this->Html->script("jquery.dataTables.min.js", false);
+    echo $this->Html->script("dataTables.bootstrap4.min.js", false);
 
     echo $this->Html->css('jquery-confirm.min', array('inline'=>false));
+    echo $this->Html->css('dataTables.bootstrap4.min', false);
 
     //script to load the datatable
     echo $this->Html->scriptBlock("$(document).ready(function() {
@@ -17,6 +20,15 @@
                   }
               }
           });
+
+        $('#dataTable').DataTable({
+          paging: true,
+          pageLength: 100,
+          dom: '<\"top\"ifp>rt',
+          columnDefs: [
+            {'searchable': false, 'targets': [-1]}
+          ]
+       });
      });", array("inline"=>false))
 ?>
 
@@ -29,7 +41,13 @@
     <?php if(count($licenses) == 0): ?>
     <p align="center">Add license keys for programs that can be assigned to devices and also moved when needed. Click <b>Add License</b> above to get started.</p>
     <?php endif; ?>
-    <table class="table table-striped">
+    <table id="dataTable" class="table table-striped">
+      <thead>
+        <th>Assigned Device</th>
+        <th>Application</th>
+        <th>Key</th>
+        <th></th>
+      </thead>
     	<?php foreach($licenses as $aLicense): ?>
     	<tr>
     		<td width="20%"><?php if($aLicense['License']['comp_id'] != 0): ?>

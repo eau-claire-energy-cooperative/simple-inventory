@@ -1,10 +1,10 @@
 <?php
 
 class AjaxController extends AppController {
-    var $components = array('Session','Ping');
-    var $helpers = array('Js');
+  var $components = array('Session','Ping');
+  var $helpers = array('Form', 'Js', "Lifecycle", "Markdown", "Time");
 	var $layout = '';
-	var $uses = array('Computer','Setting','Command','Programs','RestrictedProgram','User');
+	var $uses = array('Applications','Computer','Setting','Command','User');
 
 	public function beforeFilter(){
 	    //check if we are using a login method
@@ -77,41 +77,50 @@ class AjaxController extends AppController {
 
 	}
 
-	function toggle_restricted($delete,$program)
+	function toggle_application_monitor($app_id, $monitor)
 	{
-		if($delete == 'true')
-		{
-			$this->RestrictedProgram->query(sprintf('delete from restricted_programs where name ="%s"',$program));
-		}
-		else
-		{
-			$this->RestrictedProgram->create();
-			$this->RestrictedProgram->set('name',$program);
-			$this->RestrictedProgram->save();
-		}
+			$this->Applications->query(sprintf('update applications set monitoring = "%s" where id = "%d"', $monitor, $app_id));
+
+      $this->set('result', array('success'=>'true'));
 	}
 
-  function assign_program($prog_version, $prog_name){
+  function assign_application($app_id){
     $this->layout = 'fancybox';
 
-    //get the program from the name
-    $program = $this->Programs->find('all', array('conditions'=>array('Programs.program'=>$prog_name, 'Programs.version'=>$prog_version)));
+    //get the application
+    $application = $this->Applications->find('first', array('conditions'=>array('Applications.id'=>$app_id)));
 
-    //get a list of already assigned devices
+    //get a list of computers already assigned
     $assigned = array();
-    foreach($program as $aProg)
-    {
-      $assigned[] = $aProg['Computer']['id'];
+    foreach($application['Computer'] as $comp){
+      $assigned[] = $comp['id'];
     }
 
-    $this->set('program', $program[0]['Programs']['program']);
-    $this->set('program_version', $program[0]['Programs']['version']);
+    $this->set('application', $application['Applications']);
 
     //filter out already assigned from this list
     $allComputers = $this->Computer->find('list',array('fields'=>array('Computer.id', 'Computer.ComputerName'),
                                                        'conditions'=>array('NOT'=>array('Computer.id'=>$assigned)),
                                                        'order'=>array('Computer.ComputerName asc')));
     $this->set('computers', $allComputers);
+  }
+
+  function view_lifecycle($app_id){
+    //load this application (lifecycle will follow)
+    $application = $this->Applications->find('first', array('conditions'=>array('Applications.id'=>$app_id)));
+    $this->set('application', $application);
+
+    //get any other version of this application
+    $totalVersions = $this->Applications->find('count', array('conditions'=>array('Applications.name'=>$application['Applications']['name'])));
+    $this->set('total_versions', $totalVersions);
+  }
+
+  function add_disk($comp_id){
+    $this->set('comp_id', $comp_id);
+  }
+
+  function assign_os_eol($name){
+    $this->set('osName', $name);
   }
 
 	function uploadDrivers($id){

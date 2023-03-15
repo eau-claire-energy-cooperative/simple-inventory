@@ -46,7 +46,7 @@ class AttributeDisplayHelper extends AppHelper {
 	    return $result;
 	}
 
-	function displayAttribute($attribute,$computer){
+	function displayAttribute($attribute,$computer,$edit=false){
 		$result = '';
 
 		if($attribute == 'ComputerName')
@@ -115,12 +115,18 @@ class AttributeDisplayHelper extends AppHelper {
 			foreach($computer['Disk'] as $aDisk){
 				if($aDisk['type'] == 'Local')
 				{
-					$result = $result . $aDisk['label'] . " - " . $this->DiskSpace->toString($aDisk['total_space']) . '(' . $this->DiskSpace->compare($aDisk['total_space'],$aDisk['space_free']). '% free)<br>';
+					$result = $result . $aDisk['label'] . " - " . $this->DiskSpace->toString($aDisk['total_space']) . '(' . $this->DiskSpace->compare($aDisk['total_space'],$aDisk['space_free']). '% free)';
 				}
 				else
 				{
-					$result = $result . $aDisk['label'] . " - " . $aDisk['type'] . '<br>';
+					$result = $result . $aDisk['label'] . " - " . $aDisk['type'];
 				}
+
+        if($edit){
+          $result = $result . '<a href="' . $this->Html->url('/inventory/delete_disk/' . $aDisk['id'] . '/' . $computer['Computer']['id']) . '" class="ml-1 text-danger" title="Delete Disk"><i class="mdi mdi-delete icon-inline icon-sm"></i></a>';
+        }
+
+        $result = $result . "<br />";
 			}
 		}
 		else if ($attribute == 'LastUpdated')
@@ -135,7 +141,7 @@ class AttributeDisplayHelper extends AppHelper {
       if(strlen($computer['Computer']['SupplicantPassword']) > 0)
       {
         $result = '<span id="supplicant_password">*************</span> ' .
-        '<a href="" onClick="return showOriginal(\'supplicant_password\',\'' . $computer['Computer']['SupplicantPassword'] . '\')" class="h6 text-decoration-none"><i class="material-icons mi-sm mi-inline">visibility</i></a>'; // don't show this in the main UI
+        '<a href="" onClick="return showOriginal(\'supplicant_password\',\'' . $computer['Computer']['SupplicantPassword'] . '\')" class="h6 text-decoration-none"><i class="mdi mdi-eye mdi-inline icon-sm"></i></a>'; // don't show this in the main UI
       }
       else {
         $result = "";

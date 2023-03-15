@@ -3,7 +3,7 @@
 class InventoryController extends AppController {
     var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace','AttributeDisplay','Menu');
     var $components = array('Session','Ldap','FileUpload','Paginator','Flash');
-	  public $uses = array('Computer', 'DeviceType', 'Disk','Location', 'Programs', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User','RestrictedProgram');
+	  public $uses = array('Applications','Computer', 'DeviceType', 'Disk', 'Lifecycle', 'Location', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User');
 
 	public function beforeFilter(){
 		//check if we are using a login method
@@ -140,7 +140,6 @@ class InventoryController extends AppController {
 	public function moreInfo( $id) {
 		//get the info about this computer
 	 	$this->Computer->id = $id;
-		$this->Programs->id = $id;
     $computer = $this->Computer->read();
 
     // set the page title based on the device type
@@ -148,9 +147,8 @@ class InventoryController extends AppController {
 
     //set variables for the view
     $this->set('computer', $computer);
-		$this->set('programs', $this->Programs->find('all',array('conditions' => array('comp_id' => $id), 'order' => array('program ASC'))));
+    $this->set('lifecycles', $this->Lifecycle->find('list', array('fields'=>array('Lifecycle.application_id', 'Lifecycle.id'))));
 		$this->set('services', $this->Service->find('all',array('conditions' => array('comp_id' => $id), 'order' => array('name ASC'))));
-		$this->set('restricted_programs',$this->RestrictedProgram->find('list',array('fields'=>array('RestrictedProgram.name','RestrictedProgram.id'))));
 
 		//figure out what attributes to display
     $allowedAttributes = array_merge(explode(",",$computer['DeviceType']['attributes']), array_keys($this->DEVICE_ATTRIBUTES['REQUIRED']));
@@ -169,7 +167,7 @@ class InventoryController extends AppController {
   }
 
 	public function moreInfoDecommissioned( $id) {
-	  $this->set('active_menu', 'decommission');
+	  $this->set('active_menu', 'manage');
 	 	$this->set('title_for_layout','Decommissioned Device Detail');
 	 	$this->Decommissioned->id = $id;
 
@@ -247,7 +245,7 @@ class InventoryController extends AppController {
 		$this->set('title_for_layout','Add a New Device');
 
     // set drop down list items
-    $this->set('deviceTypes', $this->DeviceType->find('list', array('fields' => array("DeviceType.name"), 'order'=>array('name asc'))));
+    $this->set('device_types', $this->DeviceType->find('list', array('fields' => array("DeviceType.name"), 'order'=>array('name asc'))));
 		$this->set('location', $this->Location->find('list', array('fields' => array("Location.Location"), 'order'=>array('is_default desc, location asc'))));
 
     if ($this->request->is('post')) {
@@ -326,7 +324,7 @@ class InventoryController extends AppController {
 
 	    if ($this->Computer->delete($id)) {
 	    	//also delete programs and services
-	    	$this->Programs->query('delete from programs where comp_id = ' . $id);
+	    	$this->Applications->query('delete from application_installs where comp_id = ' . $id);
 	    	$this->Service->query('delete from services where comp_id = ' . $id);
 	    	$this->Disk->query('delete from disk where comp_id = ' . $id);
 
@@ -361,7 +359,7 @@ class InventoryController extends AppController {
   }
 
  	public function decommission() {
- 	    $this->set('active_menu', 'decommission');
+ 	    $this->set('active_menu', 'manage');
   		$this->set('title_for_layout','Decommissioned Devices');
       $this->set('decommission', $this->Decommissioned->find('all', array('order'=> array('LastUpdated ASC'))));
   }
@@ -369,35 +367,36 @@ class InventoryController extends AppController {
 
 	public function confirmDecommission( $id = null)
 	{
-	    $this->set('active_menu', 'decommission');
-		  $currID = $id; //variable to pass to transferDecom
-		  $this->Computer->id = $id;
+    $this->set('active_menu', 'manage');
+		$currID = $id; //variable to pass to transferDecom
+		$this->Computer->id = $id;
 
 		$this->set('computer_id', $id);
+    $this->request->data = $this->Computer->read();
+
 		if ($this->request->is('get')) {
-        	$this->request->data = $this->Computer->read();
 
-        	$this->set('title_for_layout',"Decomission Process for " . $this->request->data['Computer']['ComputerName']);
+    	$this->set('title_for_layout',"Decomission Process for " . $this->request->data['Computer']['ComputerName']);
 
-        	if(count($this->request->data['License']) > 0)
-        	{
-        	    $errors = 'This computer has ' . count($this->request->data['License']) . ' license(s) attached to it. You must delete or move these licenses before decomissioning.';
-        	    $this->set('errors', $errors);
-        	}
-    	}
-    	else
+    	if(count($this->request->data['License']) > 0)
     	{
-        	if ($this->Computer->save($this->request->data))
-        	{
-        		$message = $this->request->data['Computer']['ComputerName'] . ' has been decommissioned';
-        		$this->_saveLog($message);
-       			$this->transferDecom($currID);
-        	}
-        	else
-        	{
-            	$this->Flash->error('Unable to update your entry.');
-        	}
-   		}
+    	  $errors = 'This computer has ' . count($this->request->data['License']) . ' license(s) attached to it. You must delete or move these licenses before decomissioning.';
+    	  $this->set('errors', $errors);
+    	}
+  	}
+  	else
+  	{
+      	if ($this->Computer->save($this->request->data))
+      	{
+      		$message = $this->request->data['Computer']['ComputerName'] . ' has been decommissioned';
+      		$this->_saveLog($message);
+     			$this->transferDecom($currID);
+      	}
+      	else
+      	{
+          	$this->Flash->error('Unable to update your entry.');
+      	}
+ 		}
 	}
 
 
@@ -436,7 +435,7 @@ class InventoryController extends AppController {
 		$this->Computer->delete($id);
 
 		//also delete programs and services
-		$this->Programs->query('delete from programs where comp_id = ' . $id);
+		$this->Applications->query('delete from application_installs where comp_id = ' . $id);
 		$this->Service->query('delete from services where comp_id = ' . $id);
 		$this->Disk->query('delete from disk where comp_id = ' . $id);
 
@@ -633,6 +632,29 @@ class InventoryController extends AppController {
 		$this->set('computerName',$computer['Computer']['ComputerName']);
 		$this->set('history',$history);
 	}
+
+  function add_disk(){
+
+    if($this->Disk->save($this->request->data))
+    {
+      $this->Flash->success("Disk added");
+    }
+    else
+    {
+        $this->Flash->error("Error adding disk");
+    }
+
+    $this->redirect('/inventory/moreInfo/' . $this->request->data['Disk']['comp_id']);
+  }
+
+  function delete_disk($disk_id, $comp_id){
+
+    //delete the disk and redirect back to computer info page
+    $this->Disk->delete($disk_id);
+
+    $this->Flash->success('Disk deleted');
+    $this->redirect('/inventory/moreInfo/' . $comp_id);
+  }
 
 	function _saveLog($message){
 		$this->Logs->create();
