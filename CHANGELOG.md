@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## 4.1
+
+### Fixed
+
+- fixed issue with updater script not copying powershell files
+- made sure third party vendor files were being included
+
 ## 4.0
 
 ### Added
