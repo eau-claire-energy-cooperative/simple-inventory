@@ -56,6 +56,14 @@ class ManageController extends AppController {
 
 	}
 
+  function reset_license($license_id, $computer_id){
+
+    // set the license to "no computer"
+    $this->License->query('update licenses set comp_id = 0 where id=' . $license_id);
+    $this->Flash->success("License Removed");
+    $this->redirect('/inventory/moreInfo/' . $computer_id);
+  }
+
 	function deleteLicense($id){
 
 	    if ($this->License->delete($id)) {

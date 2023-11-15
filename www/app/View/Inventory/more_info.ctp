@@ -192,9 +192,14 @@ function copyLicense(id){
         <?php foreach($computer['License'] as $aLicense): ?>
         <div class="row">
           <div class="col-md-4"><?php echo $aLicense['ProgramName'] ?></div>
-          <div class="col-md-8">
+          <div class="col-md-6">
             <a href="javascript:;" onclick="copyLicense('<?php echo $aLicense['id'] ?>')" id="license_<?php echo $aLicense['id'] ?>" style="cursor: copy">
               <?php echo $aLicense['LicenseKey'] ?>
+            </a>
+          </div>
+          <div class="col-md-2">
+            <a href="<?php echo $this->Html->url('/manage/reset_license/' . $aLicense['id'] . '/' . $computer['Computer']['id']) ?>" class="text-danger">
+              <i class="mdi mdi-delete icon-sm"></i>
             </a>
           </div>
         </div>
