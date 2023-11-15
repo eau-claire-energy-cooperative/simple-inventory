@@ -51,7 +51,9 @@
         <?php foreach ($lifecycles as $post): ?>
         <?php $isDue = $this->Lifecycle->isDue(date('Y-m-d', strtotime($post['Lifecycle']['last_check'])), $post['Lifecycle']['update_frequency']) ?>
         <tr>
-          <td><a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/view_lifecycle/' . $post['Applications']['id']) ?>"><?php echo $post['Applications']['full_name'] ?></a>
+          <td>
+            <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/view_lifecycle/' . $post['Applications']['id']) ?>"><?php echo $post['Applications']['full_name'] ?></a>
+          </td>
           <td data-sort="<?php echo ($isDue) ? "true" : "false" ?>">
             <?php if($isDue): ?>
             <p class="btn btn-sm btn-danger">Yes</p>
@@ -60,7 +62,7 @@
             <?php endif; ?>
           </td>
           <td align="right">
-            <a href="<?php echo $this->Html->url('/applications/check_lifecycle/' . $post['Lifecycle']['id'])?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-success" title="Update Last Check Date"><i class="mdi mdi-calendar icon-sm icon-inlin text-white-50"></i></a>
+            <a href="<?php echo $this->Html->url('/applications/check_lifecycle/' . $post['Lifecycle']['id'])?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-success" title="Update Last Check Date"><i class="mdi mdi-calendar icon-sm icon-inline text-white-50"></i></a>
             <a href="<?php echo $this->Html->url('/applications/edit_lifecycle/' . $post['Lifecycle']['id'])?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-primary" title="Edit Lifecycle"><i class="mdi mdi-square-edit-outline icon-sm icon-inline text-white-50"></i></a>
             <a href="<?php echo $this->Html->url('/applications/delete_lifecycle/' . $post['Lifecycle']['id'])?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-danger delete-lifecycle" title="Delete Lifecycle" data-title="Delete Lifecycle"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i></a>
           </td>
