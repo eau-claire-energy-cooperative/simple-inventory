@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased
 
+### Fixed
+
+- minor UI formatting
+
 ### Added
 
 - licenses can be removed from a device on the moreInfo screen instead of having to go back into Licenses
