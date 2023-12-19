@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
-## Unreleased
+## 4.2
 
 ### Fixed
 
@@ -13,6 +13,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Added
 
 - licenses can be removed from a device on the moreInfo screen instead of having to go back into Licenses
+
+### Changed
+
+- minor readability improvements to PingComponent
 
 ## 4.1
 
