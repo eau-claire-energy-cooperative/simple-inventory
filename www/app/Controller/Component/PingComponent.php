@@ -53,7 +53,7 @@ class PingComponent extends Component {
 		$sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
 		if ($sock)
 		{
-			$options = socket_set_option($sock, 1, 6, true);
+			$options = socket_set_option($sock, SOL_SOCKET, SO_BROADCAST, true);
 
 			if ($options >=0)
 			{
