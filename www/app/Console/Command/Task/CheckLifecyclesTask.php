@@ -42,5 +42,44 @@ class CheckLifecyclesTask extends AppShell {
 
   		return $cron_exp->getNextRunDate($last_date)->format('U') <= time();
   	}
+
+    function versionCompare($v1, $v2){
+      // break the string on version notation
+      $array1 = explode(".", $v1);
+      $array2 = explode(".", $v2);
+      $len1 = count($array1);
+      $len2 = count($array2);
+
+      // pad each to make the same array length
+      if($len1 > $len2)
+      {
+        for($i = $len2; $i < $len1; $i ++)
+        {
+          $array2[] = "0";
+        }
+      }
+      else if ($len2 > $len1)
+      {
+        for($i = $len1; $i < $len2; $i ++)
+        {
+          $array1[] = "0";
+        }
+      }
+
+      // go through and find the highest value
+      for($i = 0; $i < count($array1); $i++)
+      {
+        if((int)$array1[$i] > (int)$array2[$i])
+        {
+          return 1;
+        }
+        else if((int)$array2[$i] > (int)$array1[$i])
+        {
+          return -1;
+        }
+      }
+
+      return 0;
+    }
 }
 ?>
