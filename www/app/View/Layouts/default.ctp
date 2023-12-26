@@ -237,9 +237,8 @@
   </a>
 
 <?php
-    //put the scripts at the bottomg
+    //put the scripts at the bottom
     echo $this->Html->script("jquery.min.js");
-    echo $this->Html->script("bootstrap.min.js");
     echo $this->Html->script("bootstrap.bundle.min.js");
     echo $this->Html->script("jquery.easing.min.js");
     echo $this->Html->script("sb-admin-2.min.js");
