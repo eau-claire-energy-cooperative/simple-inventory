@@ -32,6 +32,12 @@
           </div>
           <?php endif ?>
           <?php endforeach; ?>
+          <?php if($settings['enable_device_checkout'] == 'true'): ?>
+          <div class="row mb-1">
+              <div class="col-md-4">Available For Checkout</div>
+              <div class="col-md-8"><?php echo $this->Form->input('CanCheckout',array('class'=>'custom-select','label'=>false,'type' => 'select', 'options' => array('true'=>'Yes', 'false'=>'No'))); ?></div>
+          </div>
+          <?php endif ?>
         </div>
     </div>
   </div>
