@@ -3,7 +3,7 @@
 class CheckoutController extends AppController {
   var $components = array('Session');
   var $helpers = array('Html', 'Form', 'Session');
-  var $uses = array("Setting", "CheckoutDeviceType", "CheckoutRequest");
+  var $uses = array("Setting", "CheckoutRequest", "DeviceType");
   var $layout = 'login';
 
   public function beforeFilter(){
@@ -58,8 +58,21 @@ class CheckoutController extends AppController {
       }
     }
 
+    //modify join to only pull in devices that can be checked out
+    $this->DeviceType->unbindModel(
+        array('hasMany' => array('Computer'))
+    );
+    $this->DeviceType->bindModel(array(
+      'hasMany'=>array(
+        'Computer' => array(
+            'foreignKey' => 'DeviceType',
+            'conditions' => array('CanCheckout'=>'true')
+        )
+      )
+    ));
+
     // get list of available devices by type
-    $devices = $this->CheckoutDeviceType->find('all', array('order'=>'CheckoutDeviceType.name asc'));
+    $devices = $this->DeviceType->find('all', array('order'=>'DeviceType.name asc'));
 
     // only list types that have devices available
     $available = array();
@@ -67,7 +80,7 @@ class CheckoutController extends AppController {
     {
       if(count($d['Computer']) > 0)
       {
-        $available[$d['CheckoutDeviceType']['id']] = $d['CheckoutDeviceType']['name'] . " - " . count($d['Computer']) . " available";
+        $available[$d['DeviceType']['id']] = $d['DeviceType']['name'] . " - " . count($d['Computer']) . " available";
       }
     }
 
@@ -93,12 +106,27 @@ class CheckoutController extends AppController {
 
     //check if this reservation is already approved
     $req = $this->CheckoutRequest->find('first', array('conditions'=>array('CheckoutRequest.id'=>$id)));
+
     if(count($req['Computer']) == 0)
     {
+
+      //modify join to only pull in devices that can be checked out
+      $this->DeviceType->unbindModel(
+          array('hasMany' => array('Computer'))
+      );
+      $this->DeviceType->bindModel(array(
+        'hasMany'=>array(
+          'Computer' => array(
+              'foreignKey' => 'DeviceType',
+              'conditions' => array('CanCheckout'=>'true')
+          )
+        )
+      ));
+
       //find an available device
       $found_device = -1;
-      $devices = $this->CheckoutDeviceType->find('first', array('conditions'=>array('CheckoutDeviceType.id'=>$req['CheckoutRequest']['device_type']),
-                                                                'recursive'=>2));
+      $devices = $this->DeviceType->find('first', array('conditions'=>array('DeviceType.id'=>$req['CheckoutRequest']['device_type']),
+                                                        'recursive'=>2));
 
       foreach($devices['Computer'] as $d)
       {
