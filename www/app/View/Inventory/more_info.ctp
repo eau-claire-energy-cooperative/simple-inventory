@@ -137,7 +137,7 @@ function copyLicense(id){
     <?php if($settings['enable_device_checkout'] == 'true'): ?>
       <?php if($computer['Computer']['CanCheckout'] == 'true'): ?>
       <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2">
-        <i class="mdi mdi-calendar-check-outline icon-sm text-white-50"></i> Available
+        <i class="mdi mdi-cart-outline icon-sm text-white-50"></i> Available
       </button>
       <?php endif; ?>
     <?php endif ?>
