@@ -7,7 +7,7 @@
 	var $belongsTo = array('Location' => array('foreignKey' => 'ComputerLocation'),
                          "DeviceType" => array("foreignKey" => "DeviceType") );
 	var $hasMany = array('Disk'=>array('foreignKey'=>"comp_id", 'order'=>'Disk.label'),
-	    'ComputerLogin'=>array('foreignKey'=>'comp_id','order'=>'ComputerLogin.LoginDate desc'),
+	    'ComputerLogin'=>array('foreignKey'=>'comp_id', 'limit'=>50, 'order'=>'ComputerLogin.LoginDate desc'),
 	    'License'=>array('foreignKey'=>'comp_id', 'order'=>'License.ProgramName asc'));
 
   var $hasAndBelongsToMany = array(
