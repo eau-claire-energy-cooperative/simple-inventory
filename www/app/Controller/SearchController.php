@@ -8,7 +8,8 @@ class SearchController extends AppController {
 						array('name'=>'OS','field'=>'Computer.OS'),
 						array('name'=>'Memory','field'=>'Computer.Memory'),
 						array('name'=>'Monitors','field'=>'Computer.NumberOfMonitors'),
-            array('name'=>'Device Type', 'field'=>'DeviceType.name'));
+            array('name'=>'Device Type', 'field'=>'DeviceType.name'),
+            array('name'=>'Checkout Enabled', 'field'=>'Computer.CanCheckout', 'active_menu'=>'checkout'));
 	var $components = array('RequestHandler','Session');
 
 	public function beforeFilter(){
@@ -36,6 +37,9 @@ class SearchController extends AppController {
     $this->set('requiredAttributes', $this->DEVICE_ATTRIBUTES['REQUIRED']);
     $this->set('allAttributes', array_merge($this->DEVICE_ATTRIBUTES['REQUIRED'], $this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
 		$this->set('locations',$this->Location->find('list',array('fields'=>array('Location.id','Location.location'))));
+
+    $settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
+    $this->set('settings',$settings);
 	}
 
 	function search($type,$q){
@@ -44,6 +48,11 @@ class SearchController extends AppController {
 
 		//get the type
 		$type = $this->search_types[$type];
+
+    if(isset($type['active_menu']))
+    {
+      $this->set('active_menu', $type['active_menu']);
+    }
 
 		$this->set("q",$type['name']);
 		$this->set("results", $this->Computer->find('all',array('conditions' => array($type['field'] => $q),'order'=>'Computer.ComputerName')));
@@ -62,7 +71,7 @@ class SearchController extends AppController {
 	function searchApplication($app_id){
 		$this->set("title_for_layout","Search Results");
     $this->_getDisplaySettings();
-    
+
 		//get all computers that match the program name
     $application = $this->Applications->find('first',array('conditions' => array('Applications.id'=>$app_id)));
 		$this->set("q","For Application '" . $application['Applications']['name'] . "'");
