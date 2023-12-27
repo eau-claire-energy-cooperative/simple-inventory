@@ -31,11 +31,12 @@
              <thead>
                 <tr>
                     <th><i class="mdi mdi-monitor-cellphone-star"></i></th>
-                    <th>Computer Name</th>
-                    <th>Current User</th>
-                    <th>Computer Location</th>
-                    <th>Model</th>
-                    <th>Last Updated</th>
+                    <th>Device Name</th>
+                    <?php foreach($displayAttributes as $attribute): ?>
+                    <th><?php echo $columnNames[$attribute] ?></th>
+                    <?php endforeach; ?>
+                    <th>Location</th>
+                    <th>Last Update</th>
                 </tr>
              </thead>
              <?php foreach ($results as $post): ?>
@@ -43,9 +44,10 @@
               <tr>
                   <td data-sort="<?php echo $post['DeviceType']['name'] ?>"><i class="mdi mdi-<?php echo $post['DeviceType']['icon'] ?>"></i></td>
                   <td> <?php echo $this->Html->link( $post['Computer']['ComputerName'] , array('controller'=>'inventory','action' => 'moreInfo', $post['Computer']['id'])); ?></td>
-                  <td> <?php echo $post['Computer']['CurrentUser']; ?></td>
+                  <?php foreach($displayAttributes as $attribute): ?>
+                  <td><?php echo $post['Computer'][$attribute] ?></td>
+                  <?php endforeach; ?>
                   <td> <?php echo $locations[$post['Computer']['ComputerLocation']] ?></td>
-                  <td> <?php echo $post['Computer']['Model']; ?></td>
                   <td> <?php echo $post['Computer']['LastUpdated']; ?></td>
               </tr>
                <?php endif ?>
