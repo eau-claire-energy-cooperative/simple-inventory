@@ -48,7 +48,7 @@
               </div>
               <div class="row mb-2">
                 <div class="col-sm-4">Devices:</div>
-                <div class="col-sm-8"><?php echo $this->Form->select('devices',array("Computer", "Printer"),array('class'=>'custom-select','multiple'=>true,'label'=>false)) ?><br />
+                <div class="col-sm-8"><?php echo $this->Form->select('devices',$available,array('class'=>'custom-select','multiple'=>true,'label'=>false)) ?><br />
                 Hold down the CTL key to select multiple device types.
                 </div>
               </div>

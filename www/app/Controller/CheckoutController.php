@@ -3,7 +3,7 @@
 class CheckoutController extends AppController {
   var $components = array('Session');
   var $helpers = array('Html', 'Form', 'Session');
-  var $uses = array("Setting");
+  var $uses = array("Setting", "CheckoutDeviceType");
   var $layout = 'login';
 
   public function beforeFilter(){
@@ -22,6 +22,21 @@ class CheckoutController extends AppController {
 
   function index(){
     $this->set('title_for_layout','Equipment Checkout Request');
+
+    // get list of available devices by type
+    $devices = $this->CheckoutDeviceType->find('all', array('order'=>'CheckoutDeviceType.name asc'));
+
+    // only list types that have devices available
+    $available = array();
+    foreach($devices as $d)
+    {
+      if(count($d['Computer']) > 0)
+      {
+        $available[$d['CheckoutDeviceType']['id']] = $d['CheckoutDeviceType']['name'] . " - " . count($d['Computer']) . " available";
+      }
+    }
+
+    $this->set('available', $available);
   }
 
   function disabled(){
