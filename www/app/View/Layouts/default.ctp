@@ -82,7 +82,7 @@
         <div id="collapseCheck" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Checkout Management</h6>
-            <a class="collapse-item" href="">Checkout Requests</a>
+            <a class="collapse-item" href="<?php echo $this->Html->url("/checkout/requests") ?>">Checkout Requests</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/search/search/6/true') ?>">Enabled Devices</a>
           </div>
         </div>

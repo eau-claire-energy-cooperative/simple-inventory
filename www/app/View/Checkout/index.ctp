@@ -15,7 +15,7 @@
           </div>
         </div>
         <div class="row">
-          <?php echo $this->Form->create('Checkout', array('url'=>'/checkout/submit'));?>
+          <?php echo $this->Form->create('CheckoutRequest', array('url'=>'/checkout/'));?>
           <div class="col-lg-12">
             <div class="container">
               <div class="row">
@@ -37,13 +37,13 @@
               <div class="row mb-2">
                 <div class="col-sm-4">Check Out Date:</div>
                 <div class="col-sm-8">
-                  <?php echo $this->Form->input('checkout_date',array("label"=>false, 'div'=>false, 'class'=>'form-control', 'style'=>'width:30%; display:inline;', 'type'=>'date', 'dateFormat'=>'M-D-Y')); ?>
+                  <?php echo $this->Form->input('check_out_date',array("label"=>false, 'div'=>false, 'class'=>'form-control', 'style'=>'width:30%; display:inline;', 'type'=>'date', 'dateFormat'=>'M-D-Y')); ?>
                 </div>
               </div>
               <div class="row mb-2">
                 <div class="col-sm-4">Check In Date:</div>
                 <div class="col-sm-8">
-                  <?php echo $this->Form->input('checkin_date',array("label"=>false, 'div'=>false, 'class'=>'form-control', 'style'=>'width:30%; display:inline;', 'type'=>'date', 'dateFormat'=>'M-D-Y')); ?>
+                  <?php echo $this->Form->input('check_in_date',array("label"=>false, 'div'=>false, 'class'=>'form-control', 'style'=>'width:30%; display:inline;', 'type'=>'date', 'dateFormat'=>'M-D-Y')); ?>
                 </div>
               </div>
               <div class="row mb-2">

@@ -16,7 +16,13 @@
                             'foreignKey'=>'comp_id',
                             'associationForeignKey'=>'application_id',
                             'unique'=>'keepExisting',
-                            'order'=>array('Applications.name', 'Applications.version'))
+                            'order'=>array('Applications.name', 'Applications.version')),
+    "CheckoutRequest" => array('className'=>'CheckoutRequest',
+                            'joinTable'=>'checkout_reservation',
+                            'foreignKey'=>'device_id',
+                            'associationForeignKey'=>'request_id',
+                            'unique'=>true,
+                            'order'=>array('CheckoutRequest.check_out_date'))
   );
 
 
