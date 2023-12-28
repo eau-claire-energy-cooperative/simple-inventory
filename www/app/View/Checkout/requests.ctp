@@ -11,11 +11,16 @@
     $('#dataTable').DataTable({
       paging: true,
       pageLength: 50,
-      stateSave: true,
+      search: {
+        search: '" . $this->params['url']['q'] . "'
+      },
       dom: '<\"top\"ifp>rt<\"bottom\"p>',
       language: {
         'search': 'Filter:'
-        }
+      },
+      columnDefs: [
+        {'searchable': false, 'targets': [-1]}
+      ]
     })});", array("inline"=>false));
 ?>
 <div class="card shadow mb-4">
@@ -26,7 +31,7 @@
         <th>Employee Name</th>
         <th>Check Out Date</th>
         <th>Check In Date</th>
-        <th>Device Type</th>
+        <th>Device</th>
         <th></th>
       </thead>
       <tbody>
@@ -34,7 +39,7 @@
         <tr>
           <td>
             <?php if(count($post['Computer']) > 0): ?>
-              <?php echo $this->Html->link('Yes', '/inventory/moreInfo/' . $post['Computer'][0]['id'])?>
+              Yes
             <?php else: ?>
               No
             <?php endif ?>
@@ -42,10 +47,22 @@
           <td><?php echo $post['CheckoutRequest']['employee_name']?></td>
           <td><?php echo $this->Time->format($post['CheckoutRequest']['check_out_date'], '%m/%d/%Y') ?></td>
           <td><?php echo $this->Time->format($post['CheckoutRequest']['check_in_date'], '%m/%d/%Y') ?></td>
-          <td><?php echo $post['DeviceType']['name'] ?></td>
+          <td>
+            <?php if(count($post['Computer']) > 0): ?>
+              <a href="<?php echo $this->Html->url('/inventory/moreInfo/' . $post['Computer'][0]['id'])?>">
+                <i class="mdi mdi-<?php echo $post['DeviceType']['icon'] ?> icon-sm icon-inline"></i> <?php echo $post['Computer'][0]['ComputerName'] ?>
+              </a>
+            <?php else: ?>
+              <?php echo $post['DeviceType']['name'] ?>
+            <?php endif ?>
+          </td>
           <td align="right">
             <?php if(count($post['Computer']) == 0): ?>
             <a href="<?php echo $this->Html->url('/checkout/approve/' . $post['CheckoutRequest']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-success" title="Approve"><i class="mdi mdi-thumb-up icon-sm icon-inline text-white-50"></i></a>
+            <?php else : ?>
+            <a href="" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-primary">
+              <i class="mdi mdi-cart-check icon-sm icon-inline text-white-50"></i>
+            </a>
             <?php endif ?>
             <a href="<?php echo $this->Html->url('/checkout/deny/' . $post['CheckoutRequest']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-danger" title="Deny"><i class="mdi mdi-thumb-down icon-sm icon-inline text-white-50"></i></a>
           </td>
