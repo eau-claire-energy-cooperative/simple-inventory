@@ -31,9 +31,19 @@ class CheckoutController extends AppController {
 
     if($this->request->is('post'))
     {
+      $checkOut = $this->data['CheckoutRequest']['check_out_date'];
+      $checkIn = $this->data['CheckoutRequest']['check_in_date'];
+
       if(empty($this->data['CheckoutRequest']['employee_name']) || empty($this->data['CheckoutRequest']['employee_email']))
       {
         $this->Flash->error('Name and email are required');
+      }
+      else if(strtotime(sprintf("%s-%s-%s", $checkOut['year'], $checkOut['month'],$checkOut['day'])) < time()){
+        $this->Flash->error("Check Out Date has passed");
+      }
+      else if(strtotime(sprintf("%s-%s-%s", $checkIn['year'], $checkIn['month'],$checkIn['day'])) < strtotime(sprintf("%s-%s-%s", $checkOut['year'], $checkOut['month'],$checkOut['day'])))
+      {
+        $this->Flash->error("Check In Date is before Check Out Date");
       }
       else if(empty($this->data['CheckoutRequest']['devices']))
       {
