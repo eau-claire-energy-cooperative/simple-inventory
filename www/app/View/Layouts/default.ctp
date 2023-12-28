@@ -84,6 +84,7 @@
             <h6 class="collapse-header">Checkout Management</h6>
             <a class="collapse-item" href="<?php echo $this->Html->url("/checkout/requests") ?>">Checkout Requests</a>
             <a class="collapse-item" href="<?php echo $this->Html->url('/search/search/6/true') ?>">Enabled Devices</a>
+            <a class="collapse-item" href="<?php echo $this->Html->url('/checkout') ?>">New Request</a>
           </div>
         </div>
       </li>

@@ -4,7 +4,7 @@ class CheckoutController extends AppController {
   var $components = array('Session');
   var $helpers = array('Html', 'Form', 'Session');
   var $uses = array("Setting", "CheckoutRequest", "DeviceType");
-  var $layout = 'login';
+  var $layout = 'default';
 
   public function beforeFilter(){
 
@@ -56,6 +56,12 @@ class CheckoutController extends AppController {
 
         $this->Flash->success('Request Submitted');
       }
+    }
+
+    //don't show menu if not logged in
+    if(!$this->Session->check('authenticated'))
+    {
+      $this->layout = 'login';
     }
 
     //modify join to only pull in devices that can be checked out
