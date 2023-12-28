@@ -3,7 +3,7 @@
 class CheckoutController extends AppController {
   var $components = array('Session');
   var $helpers = array('Html', 'Form', 'Session');
-  var $uses = array("Setting", "CheckoutRequest", "DeviceType");
+  var $uses = array("Setting", "Computer", "CheckoutRequest", "DeviceType");
   var $layout = 'default';
 
   public function beforeFilter(){
@@ -185,6 +185,55 @@ class CheckoutController extends AppController {
     }
 
     $this->Flash->success("Request Denied");
+    $this->redirect('/checkout/requests');
+  }
+
+  function device($action, $id){
+    $this->_check_authenticated();
+
+    $device = $this->Computer->find('first',array('conditions'=>array('Computer.id'=>$id)));
+    if($device['Computer']['CanCheckout'] == 'true')
+    {
+      if($action == 'out')
+      {
+
+        if($device['Computer']['IsCheckedOut'] == 'false')
+        {
+
+          $device['Computer']['IsCheckedOut'] = 'true';
+          $this->Computer->save($device);
+
+          $this->Flash->success($device['Computer']['ComputerName'] . ' checked out');
+        }
+        else
+        {
+          $this->Flash->error($device['Computer']['ComputerName'] . " is checked out already");
+        }
+
+      }
+      else
+      {
+        //check in this device
+        if($device['Computer']['IsCheckedOut'] == 'true')
+        {
+
+          $device['Computer']['IsCheckedOut'] = 'false';
+          $this->Computer->save($device);
+
+          $this->Flash->success($device['Computer']['ComputerName'] . ' is checked in');
+        }
+        else
+        {
+          $this->Flash->error($device['Computer']['ComputerName'] . " is not checked out");
+        }
+
+      }
+    }
+    else
+    {
+      $this->Flash->error($device['Computer']['ComputerName'] . ' is not available to check in or out');
+    }
+
     $this->redirect('/checkout/requests');
   }
 

@@ -136,9 +136,15 @@ function copyLicense(id){
     </div>
     <?php if($settings['enable_device_checkout'] == 'true'): ?>
       <?php if($computer['Computer']['CanCheckout'] == 'true'): ?>
-      <a href="<?php echo $this->Html->url("/checkout/requests?q=" . $computer['Computer']['ComputerName']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2">
-        <i class="mdi mdi-cart-outline icon-sm text-white-50"></i> Available
+        <?php if($computer['Computer']['IsCheckedOut'] == 'true'): ?>
+      <a href="<?php echo $this->Html->url("/checkout/requests?q=" . $computer['Computer']['ComputerName']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2">
+        <i class="mdi mdi-cart-outline icon-sm text-white-50"></i> Checked Out
       </a>
+        <?php else: ?>
+      <a href="<?php echo $this->Html->url("/checkout/requests?q=" . $computer['Computer']['ComputerName']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2">
+        <i class="mdi mdi-cart-remove icon-sm text-white-50"></i> Available
+      </a>
+        <?php endif; ?>
       <?php endif; ?>
     <?php endif ?>
     <?php if(file_exists(WWW_ROOT . '/drivers/' . str_replace(' ','_',$computer['Computer']['Model']) . '.zip')): ?>

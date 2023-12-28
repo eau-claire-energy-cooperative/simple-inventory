@@ -63,11 +63,19 @@
             <?php if(count($post['Computer']) == 0): ?>
             <a href="<?php echo $this->Html->url('/checkout/approve/' . $post['CheckoutRequest']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-success" title="Approve"><i class="mdi mdi-thumb-up icon-sm icon-inline text-white-50"></i></a>
             <?php else : ?>
-            <a href="" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-primary">
+              <?php if($post['Computer'][0]['IsCheckedOut'] == 'true'): ?>
+            <a href="<?php echo $this->Html->url('/checkout/device/in/' . $post['Computer'][0]['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-warning" title="Check In Device">
+              <i class="mdi mdi-cart-remove icon-sm icon-inline text-white-50"></i>
+            </a>
+              <?php else: ?>
+            <a href="<?php echo $this->Html->url('/checkout/device/out/' . $post['Computer'][0]['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-primary" title="Check Out Device">
               <i class="mdi mdi-cart-check icon-sm icon-inline text-white-50"></i>
             </a>
+              <?php endif; ?>
             <?php endif ?>
+            <?php if(count($post['Computer']) == 0 || $post['Computer'][0]['IsCheckedOut'] == 'false'): ?>
             <a href="<?php echo $this->Html->url('/checkout/deny/' . $post['CheckoutRequest']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-danger" title="Deny"><i class="mdi mdi-thumb-down icon-sm icon-inline text-white-50"></i></a>
+            <?php endif; ?>
           </td>
         </tr>
         <?php endforeach; ?>
