@@ -146,9 +146,9 @@ class CheckoutController extends AppController {
 
       foreach($devices['Computer'] as $d)
       {
-        if(count($d['CheckoutRequest']) == 0)
+        //check if this device will be available
+        if($this->_checkAvailable($req['CheckoutRequest']['check_out_unix'], $req['CheckoutRequest']['check_in_unix'], $d['CheckoutRequest']))
         {
-          // break the loop here if we find one
           $found_device = $d['id'];
           break;
         }
@@ -172,6 +172,7 @@ class CheckoutController extends AppController {
 
 
     $this->redirect('/checkout/requests');
+    //$this->render('requests');
   }
 
   function deny($id){
@@ -186,5 +187,21 @@ class CheckoutController extends AppController {
     $this->Flash->success("Request Denied");
     $this->redirect('/checkout/requests');
   }
+
+  function _checkAvailable($checkOut, $checkIn, $reservations){
+    $result = true;  //assume there won't be any overlaps
+
+    // see if any reservations overlap with the existing dates
+    foreach($reservations as $r)
+    {
+      if($r['check_out_unix'] < $checkIn && $r['check_in_unix'] >= $checkOut)
+      {
+        $result = false;
+      }
+    }
+
+    return $result;
+  }
+
 }
 ?>
