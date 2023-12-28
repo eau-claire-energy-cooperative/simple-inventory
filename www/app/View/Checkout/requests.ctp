@@ -18,6 +18,9 @@
       language: {
         'search': 'Filter:'
       },
+      order:[
+        [2, 'asc']
+      ],
       columnDefs: [
         {'searchable': false, 'targets': [-1]}
       ]
@@ -45,8 +48,8 @@
             <?php endif ?>
           </td>
           <td><?php echo $post['CheckoutRequest']['employee_name']?></td>
-          <td><?php echo $this->Time->format($post['CheckoutRequest']['check_out_date'], '%m/%d/%Y') ?></td>
-          <td><?php echo $this->Time->format($post['CheckoutRequest']['check_in_date'], '%m/%d/%Y') ?></td>
+          <td data-sort="<?php echo $post['CheckoutRequest']['check_out_unix'] ?>"><?php echo $this->Time->format($post['CheckoutRequest']['check_out_date'], '%m/%d/%Y') ?></td>
+          <td data-sort="<?php echo $post['CheckoutRequest']['check_in_unix'] ?>"><?php echo $this->Time->format($post['CheckoutRequest']['check_in_date'], '%m/%d/%Y') ?></td>
           <td>
             <?php if(count($post['Computer']) > 0): ?>
               <a href="<?php echo $this->Html->url('/inventory/moreInfo/' . $post['Computer'][0]['id'])?>">
