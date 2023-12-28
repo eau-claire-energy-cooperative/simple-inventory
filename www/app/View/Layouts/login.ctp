@@ -14,7 +14,6 @@
   <?php
 
     echo $this->Html->script("jquery.min.js");
-    echo $this->Html->script("bootstrap.min.js");
     echo $this->Html->script("bootstrap.bundle.min.js");
     echo $this->Html->script("jquery.easing.min.js");
 
@@ -33,18 +32,36 @@
 
 <body class="bg-gradient-primary">
 
-  <div class="container">
+<div class="container">
 
   <!-- Main Content -->
   <?php echo $this->Session->flash(); ?>
-  <?php echo $this->fetch('content'); ?>
+  <!-- Outer Row -->
+  <div class="row justify-content-center">
 
+    <div class="col-xl-10 col-lg-12 col-md-9">
+      <div class="card o-hidden border-0 shadow-lg my-2">
+        <div class="card-body p-0">
+          <?php echo $this->fetch('content'); ?>
+          <div class="row mt-4 pb-3">
+            <div class="col-lg-12">
+              <div class="copyright text-center my-auto">
+                <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki" target="_blank" class="mr-3 h6"><i class="mdi mdi-information-outline icon-sm"> Documentation</i></a>
+                <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory" class="h6"><i class="mdi mdi-github icon-sm"> View Source</i></a><br>
+                Version <?php echo Configure::read('Settings.version') ?>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
 
-  <?php
-    //put this at the bottom so it loads right
-    echo $this->Html->script("sb-admin-2.min.js");
-  ?>
+<?php
+  //put this at the bottom so it loads right
+  echo $this->Html->script("sb-admin-2.min.js");
+?>
 
 </body>
 
