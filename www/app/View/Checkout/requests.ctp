@@ -30,7 +30,6 @@
 <div class="mb-4" align="right">
   <a href="<?php echo $this->Html->url('/checkout/index') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i> New Checkout Request</a>
 </div>
-
 <div class="card shadow mb-4">
   <div class="card-body">
     <table id="dataTable" class="table table-striped">

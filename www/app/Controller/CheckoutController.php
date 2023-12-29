@@ -224,18 +224,25 @@ class CheckoutController extends AppController {
     $device = $request['Computer'][0];
 
     //make sure request is approved and the device is not checked out
-    if($request['CheckoutRequest']['status'] == 'approved' && $device['CanCheckout'] == 'true')
+    if($request['CheckoutRequest']['status'] != 'denied' && $device['CanCheckout'] == 'true')
     {
       if($action == 'out')
       {
+        $settings = $this->Setting->find('first', array('conditions'=>array('Setting.key'=>'device_checkout_location')));
+
         if($device['IsCheckedOut'] == 'false')
         {
           //set the request to active
           $request['CheckoutRequest']['status'] = 'active';
           $this->CheckoutRequest->save($request);
 
+          // save the old device location
+          $this->CheckoutRequest->query(sprintf('update checkout_reservation set saved_device_location = %d where id = %d',
+                                                $device['ComputerLocation'], $device['CheckoutReservation']['id']));
+
           // update the device
           $device['IsCheckedOut'] = 'true';
+          $device['ComputerLocation'] = $settings['Setting']['value'];
           $this->Computer->save($device);
 
           $this->Flash->success($device['ComputerName'] . ' checked out');
@@ -258,6 +265,7 @@ class CheckoutController extends AppController {
 
           // update the device
           $device['IsCheckedOut'] = 'false';
+          $device['ComputerLocation'] = $device['CheckoutReservation']['saved_device_location'];
           $this->Computer->save($device);
 
           $this->Flash->success($device['ComputerName'] . ' is checked in');
