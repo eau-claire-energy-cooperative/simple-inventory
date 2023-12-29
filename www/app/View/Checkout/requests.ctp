@@ -39,13 +39,9 @@
       </thead>
       <tbody>
         <?php foreach ($checkout as $post): ?>
-        <tr class="<?php echo ($post['CheckoutRequest']['active'] == 'true') ? "table-success" : "" ?>">
+        <tr class="<?php echo ($post['CheckoutRequest']['status'] == 'active') ? "table-success" : "" ?>">
           <td>
-            <?php if(count($post['Computer']) > 0): ?>
-              Yes
-            <?php else: ?>
-              No
-            <?php endif ?>
+            <?php echo ucwords($post['CheckoutRequest']['status']) ?>
           </td>
           <td><?php echo $post['CheckoutRequest']['employee_name']?></td>
           <td data-sort="<?php echo $post['CheckoutRequest']['check_out_unix'] ?>"><?php echo $this->Time->format($post['CheckoutRequest']['check_out_date'], '%m/%d/%Y') ?></td>
@@ -63,7 +59,7 @@
             <?php if(count($post['Computer']) == 0): ?>
             <a href="<?php echo $this->Html->url('/checkout/approve/' . $post['CheckoutRequest']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-success" title="Approve"><i class="mdi mdi-thumb-up icon-sm icon-inline text-white-50"></i></a>
             <?php else : ?>
-              <?php if($post['Computer'][0]['IsCheckedOut'] == 'true' && $post['CheckoutRequest']['active'] == 'true'): ?>
+              <?php if($post['Computer'][0]['IsCheckedOut'] == 'true' && $post['CheckoutRequest']['status'] == 'active'): ?>
             <a href="<?php echo $this->Html->url('/checkout/device/in/' . $post['CheckoutRequest']['id'] . '/' . $post['Computer'][0]['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-3 pl-4 pr-4 btn-secondary" title="Check In Device">
               <i class="mdi mdi-cart-remove icon-sm icon-inline text-white-50"></i>
             </a>

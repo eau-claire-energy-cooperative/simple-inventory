@@ -202,7 +202,7 @@ class CheckoutController extends AppController {
         if($device['IsCheckedOut'] == 'false')
         {
           //set the request to active
-          $request['CheckoutRequest']['active'] = 'true';
+          $request['CheckoutRequest']['status'] = 'active';
           $this->CheckoutRequest->save($request);
 
           // update the device
@@ -220,11 +220,11 @@ class CheckoutController extends AppController {
       else
       {
         //make sure this is the right request and the device is checked out
-        if($request['CheckoutRequest']['active'] == 'true' && $device['IsCheckedOut'] == 'true')
+        if($request['CheckoutRequest']['status'] == 'active' && $device['IsCheckedOut'] == 'true')
         {
 
           //deactivate request
-          $request['CheckoutRequest']['active'] = 'false';
+          $request['CheckoutRequest']['status'] = 'approved';
           $this->CheckoutRequest->save($request);
 
           // update the device

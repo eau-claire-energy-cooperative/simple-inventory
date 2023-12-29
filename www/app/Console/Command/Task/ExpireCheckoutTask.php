@@ -17,7 +17,7 @@ class ExpireCheckoutTask extends AppShell {
         if($r['CheckoutRequest']['check_out_unix'] < $today && $r['CheckoutRequest']['check_in_unix'] < $today)
         {
           //make sure request is not active
-          if($r['CheckoutRequest']['active'] == 'false')
+          if($r['CheckoutRequest']['status'] != 'active')
           {
             $count ++;
             $this->out("Checkout Request ID " . $r['CheckoutRequest']['id'] . " is expired");
