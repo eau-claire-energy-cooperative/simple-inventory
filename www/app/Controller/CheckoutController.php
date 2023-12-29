@@ -123,7 +123,7 @@ class CheckoutController extends AppController {
     //check if this reservation is already approved
     $req = $this->CheckoutRequest->find('first', array('conditions'=>array('CheckoutRequest.id'=>$id)));
 
-    if(count($req['Computer']) == 0)
+    if($req['CheckoutRequest']['status'] != 'approved')
     {
 
       //modify join to only pull in devices that can be checked out
@@ -156,6 +156,11 @@ class CheckoutController extends AppController {
 
       if($found_device > 0)
       {
+
+        //approve the request
+        $req['CheckoutRequest']['status'] = 'approved';
+        $this->CheckoutRequest->save($req);
+
         $this->CheckoutRequest->query("insert into checkout_reservation (request_id, device_id) values (" . $id . ", " . $found_device . ")");
         $this->Flash->success("Request Approved");
       }
@@ -180,6 +185,10 @@ class CheckoutController extends AppController {
 
     $req = $this->CheckoutRequest->find('first', array('conditions'=>array('CheckoutRequest.id'=>$id)));
 
+    //deny the request
+    $req['CheckoutRequest']['status'] = 'denied';
+    $this->CheckoutRequest->save($req);
+
     if(count($req['Computer']) > 0){
       $this->CheckoutRequest->query("delete from checkout_reservation where request_id = " . $id . " and device_id = " . $req['Computer'][0]['id']);
     }
@@ -194,11 +203,11 @@ class CheckoutController extends AppController {
     $request = $this->CheckoutRequest->find('first', array('conditions'=>array('CheckoutRequest.id'=>$request_id)));
     $device = $request['Computer'][0];
 
-    if($device['CanCheckout'] == 'true')
+    //make sure request is approved and the device is not checked out
+    if($request['CheckoutRequest']['status'] == 'approved' && $device['CanCheckout'] == 'true')
     {
       if($action == 'out')
       {
-
         if($device['IsCheckedOut'] == 'false')
         {
           //set the request to active
