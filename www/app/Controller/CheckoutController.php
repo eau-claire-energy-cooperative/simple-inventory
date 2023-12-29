@@ -188,50 +188,61 @@ class CheckoutController extends AppController {
     $this->redirect('/checkout/requests');
   }
 
-  function device($action, $id){
+  function device($action, $request_id, $device_id){
     $this->_check_authenticated();
 
-    $device = $this->Computer->find('first',array('conditions'=>array('Computer.id'=>$id)));
-    if($device['Computer']['CanCheckout'] == 'true')
+    $request = $this->CheckoutRequest->find('first', array('conditions'=>array('CheckoutRequest.id'=>$request_id)));
+    $device = $request['Computer'][0];
+
+    if($device['CanCheckout'] == 'true')
     {
       if($action == 'out')
       {
 
-        if($device['Computer']['IsCheckedOut'] == 'false')
+        if($device['IsCheckedOut'] == 'false')
         {
+          //set the request to active
+          $request['CheckoutRequest']['active'] = 'true';
+          $this->CheckoutRequest->save($request);
 
-          $device['Computer']['IsCheckedOut'] = 'true';
+          // update the device
+          $device['IsCheckedOut'] = 'true';
           $this->Computer->save($device);
 
-          $this->Flash->success($device['Computer']['ComputerName'] . ' checked out');
+          $this->Flash->success($device['ComputerName'] . ' checked out');
         }
         else
         {
-          $this->Flash->error($device['Computer']['ComputerName'] . " is checked out already");
+          $this->Flash->error($device['ComputerName'] . " is checked out already");
         }
 
       }
       else
       {
-        //check in this device
-        if($device['Computer']['IsCheckedOut'] == 'true')
+        //make sure this is the right request and the device is checked out
+        if($request['CheckoutRequest']['active'] == 'true' && $device['IsCheckedOut'] == 'true')
         {
 
-          $device['Computer']['IsCheckedOut'] = 'false';
+          //deactivate request
+          $request['CheckoutRequest']['active'] = 'false';
+          $this->CheckoutRequest->save($request);
+
+          // update the device
+          $device['IsCheckedOut'] = 'false';
           $this->Computer->save($device);
 
-          $this->Flash->success($device['Computer']['ComputerName'] . ' is checked in');
+          $this->Flash->success($device['ComputerName'] . ' is checked in');
         }
         else
         {
-          $this->Flash->error($device['Computer']['ComputerName'] . " is not checked out");
+          $this->Flash->error($device['ComputerName'] . " is not checked out");
         }
 
       }
     }
     else
     {
-      $this->Flash->error($device['Computer']['ComputerName'] . ' is not available to check in or out');
+      $this->Flash->error($device['ComputerName'] . ' is not available to check in or out');
     }
 
     $this->redirect('/checkout/requests');

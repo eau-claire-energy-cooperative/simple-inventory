@@ -39,7 +39,7 @@
       </thead>
       <tbody>
         <?php foreach ($checkout as $post): ?>
-        <tr>
+        <tr class="<?php echo ($post['CheckoutRequest']['active'] == 'true') ? "table-success" : "" ?>">
           <td>
             <?php if(count($post['Computer']) > 0): ?>
               Yes
@@ -63,12 +63,12 @@
             <?php if(count($post['Computer']) == 0): ?>
             <a href="<?php echo $this->Html->url('/checkout/approve/' . $post['CheckoutRequest']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-success" title="Approve"><i class="mdi mdi-thumb-up icon-sm icon-inline text-white-50"></i></a>
             <?php else : ?>
-              <?php if($post['Computer'][0]['IsCheckedOut'] == 'true'): ?>
-            <a href="<?php echo $this->Html->url('/checkout/device/in/' . $post['Computer'][0]['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-warning" title="Check In Device">
+              <?php if($post['Computer'][0]['IsCheckedOut'] == 'true' && $post['CheckoutRequest']['active'] == 'true'): ?>
+            <a href="<?php echo $this->Html->url('/checkout/device/in/' . $post['CheckoutRequest']['id'] . '/' . $post['Computer'][0]['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-3 pl-4 pr-4 btn-secondary" title="Check In Device">
               <i class="mdi mdi-cart-remove icon-sm icon-inline text-white-50"></i>
             </a>
-              <?php else: ?>
-            <a href="<?php echo $this->Html->url('/checkout/device/out/' . $post['Computer'][0]['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-primary" title="Check Out Device">
+              <?php elseif ($post['Computer'][0]['IsCheckedOut'] == 'false'): ?>
+            <a href="<?php echo $this->Html->url('/checkout/device/out/' . $post['CheckoutRequest']['id'] . '/' . $post['Computer'][0]['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-primary" title="Check Out Device">
               <i class="mdi mdi-cart-check icon-sm icon-inline text-white-50"></i>
             </a>
               <?php endif; ?>
