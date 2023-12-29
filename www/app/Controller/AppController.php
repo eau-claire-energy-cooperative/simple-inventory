@@ -45,13 +45,14 @@ class AppController extends Controller {
         }
     }
 
-    protected function _send_email($subject, $message){
+    protected function _send_email($subject, $message, $recipient = ""){
       $this->loadModel('EmailMessage');
 
       //create an email message and add it to the queue to be sent
       $this->EmailMessage->create();
 			$this->EmailMessage->set('subject',$subject);
 			$this->EmailMessage->set('message',$message);
+      $this->EmailMessage->set('recipient',$recipient);
 			$this->EmailMessage->save();
     }
 
