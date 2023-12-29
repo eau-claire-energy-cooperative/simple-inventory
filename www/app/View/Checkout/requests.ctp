@@ -57,7 +57,7 @@
                 <i class="mdi mdi-<?php echo $post['DeviceType']['icon'] ?> icon-sm icon-inline"></i> <?php echo $post['Computer'][0]['ComputerName'] ?>
               </a>
             <?php else: ?>
-              <?php echo $post['DeviceType']['name'] ?>
+              <i class="mdi mdi-<?php echo $post['DeviceType']['icon'] ?> icon-sm icon-inline"></i> <?php echo $post['DeviceType']['name'] ?>
             <?php endif ?>
           </td>
           <td align="right">
