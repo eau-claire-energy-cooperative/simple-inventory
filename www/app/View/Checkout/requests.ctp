@@ -1,4 +1,5 @@
 <?php
+  $statusSort = array("new"=>0, "approved"=>1, "denied"=>1, "active"=>1);
   echo $this->Html->script("jquery-confirm.min.js",false);
   echo $this->Html->script("jquery.dataTables.min.js", false);
   echo $this->Html->script("dataTables.bootstrap4.min.js", false);
@@ -19,7 +20,7 @@
         'search': 'Filter:'
       },
       order:[
-        [2, 'asc']
+        [0, 'asc'], [2, 'asc']
       ],
       columnDefs: [
         {'searchable': false, 'targets': [-1]}
@@ -30,7 +31,7 @@
   <div class="card-body">
     <table id="dataTable" class="table table-striped">
       <thead>
-        <th>Approved</th>
+        <th>Status</th>
         <th>Employee Name</th>
         <th>Check Out Date</th>
         <th>Check In Date</th>
@@ -40,7 +41,7 @@
       <tbody>
         <?php foreach ($checkout as $post): ?>
         <tr class="<?php echo ($post['CheckoutRequest']['status'] == 'active') ? "table-success" : "" ?>">
-          <td>
+          <td data-sort="<?php echo $statusSort[$post['CheckoutRequest']['status']] ?>">
             <?php echo ucwords($post['CheckoutRequest']['status']) ?>
           </td>
           <td><?php echo $post['CheckoutRequest']['employee_name']?></td>
