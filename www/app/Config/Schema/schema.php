@@ -76,6 +76,7 @@ class AppSchema extends CakeSchema {
                       array('Command'=>array('name'=>'Check Disk space','parameters'=>'Minimum Space Threshold','description'=>'Check the disk space available on all computers. Any that do not contain the minimum amount of space (in percent) will generate an email to the system administrator.')),
                       array('Command'=>array('name'=>'Remove Old Applications','parameters'=>'','description'=>'Removes Applications that no longer are installed on any computer from the database.')),
                       array('Command'=>array('name'=>'Purge Decommissioned Devices','parameters'=>'Years','description'=>'Removes devices that have been decommissioned when the decommission date is greater than the given number of years.')),
+                      array('Command'=>array('name'=>'Purge Checkout Requests','parameters'=>'','description'=>'Removes inactive checkout requests (approved or unapproved) where the checkout window has expired.')),
                       array('Command'=>array('name'=>'Purge Logs','parameters'=>'Years','description'=>'Automatically removes logs from the system older than the given number of years.')));
           break;
       }
@@ -97,6 +98,31 @@ class AppSchema extends CakeSchema {
 		'name' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
 		'version' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
 		'monitoring' => array('type' => 'string', 'null' => true, 'default' => 'false', 'length' => 12, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'indexes' => array(
+			'PRIMARY' => array('column' => 'id', 'unique' => 1)
+		),
+		'tableParameters' => array('charset' => 'utf8mb3', 'collate' => 'utf8mb3_general_ci', 'engine' => 'InnoDB')
+	);
+
+  public $checkout_request = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
+    'employee_name' => array('type' => 'string', 'null' => false, 'length'=>50, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+    'employee_email' => array('type' => 'string', 'null' => false, 'length'=>200, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+    'check_out_date' => array('type' => 'timestamp', 'null' => false, 'default' => null),
+    'check_in_date' => array('type' => 'timestamp', 'null' => false, 'default' => null),
+		'device_type' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+    'status' => array('type' => 'string', 'null' => false, 'length'=>200, 'default' => 'new', 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'indexes' => array(
+			'PRIMARY' => array('column' => 'id', 'unique' => 1)
+		),
+		'tableParameters' => array('charset' => 'utf8mb3', 'collate' => 'utf8mb3_general_ci', 'engine' => 'InnoDB')
+	);
+
+  public $checkout_reservation = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
+		'request_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+    'device_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+    'saved_device_location' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
@@ -146,6 +172,8 @@ class AppSchema extends CakeSchema {
 		'notes' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
 		'WindowsIndex' => array('type' => 'float', 'null' => false, 'default' => '0.00', 'length' => '10,2', 'unsigned' => false),
 		'IsAlive' => array('type' => 'string', 'null' => false, 'default' => 'true', 'length' => 6, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+    'CanCheckout' => array('type' => 'string', 'null' => false, 'default' => 'false', 'length' => 6, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+    'IsCheckedOut' => array('type' => 'string', 'null' => false, 'default' => 'false', 'length' => 6, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'ComputerName' => array('column' => 'ComputerName', 'unique' => 1)
@@ -221,6 +249,7 @@ class AppSchema extends CakeSchema {
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'subject' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 45, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'message' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+    'recipient' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 200, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
