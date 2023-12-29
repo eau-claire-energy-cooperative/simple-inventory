@@ -97,7 +97,7 @@ class CheckoutController extends AppController {
     {
       if(count($d['Computer']) > 0)
       {
-        $available[$d['DeviceType']['id']] = $d['DeviceType']['name'] . " - " . count($d['Computer']) . " available";
+        $available[$d['DeviceType']['id']] = $d['DeviceType']['name'];
       }
     }
 
