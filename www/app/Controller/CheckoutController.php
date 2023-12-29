@@ -1,5 +1,6 @@
 <?php
 
+App::uses('CakeTime', 'Utility');
 class CheckoutController extends AppController {
   var $components = array('Session');
   var $helpers = array('Html', 'Form', 'Session');
@@ -156,12 +157,20 @@ class CheckoutController extends AppController {
 
       if($found_device > 0)
       {
+        $checkOutDate = CakeTime::format($req['CheckoutRequest']['check_out_date'], '%m/%d/%Y');
+        $checkInDate = CakeTime::format($req['CheckoutRequest']['check_in_date'], '%m/%d/%Y');
 
         //approve the request
         $req['CheckoutRequest']['status'] = 'approved';
         $this->CheckoutRequest->save($req);
 
         $this->CheckoutRequest->query("insert into checkout_reservation (request_id, device_id) values (" . $id . ", " . $found_device . ")");
+
+        // send email to user
+        $this->_send_email("Equipment Checkout Approved",
+                           sprintf("Your equipment checkout request from %s to %s has been approved.", $checkOutDate, $checkInDate),
+                           $req['CheckoutRequest']['employee_email']);
+
         $this->Flash->success("Request Approved");
       }
       else
@@ -177,7 +186,6 @@ class CheckoutController extends AppController {
 
 
     $this->redirect('/checkout/requests');
-    //$this->render('requests');
   }
 
   function deny($id){
@@ -185,15 +193,27 @@ class CheckoutController extends AppController {
 
     $req = $this->CheckoutRequest->find('first', array('conditions'=>array('CheckoutRequest.id'=>$id)));
 
-    //deny the request
-    $req['CheckoutRequest']['status'] = 'denied';
-    $this->CheckoutRequest->save($req);
+    if($req['CheckoutRequest']['status'] != 'active')
+    {
+      $checkOutDate = CakeTime::format($req['CheckoutRequest']['check_out_date'], '%m/%d/%Y');
+      $checkInDate = CakeTime::format($req['CheckoutRequest']['check_in_date'], '%m/%d/%Y');
 
-    if(count($req['Computer']) > 0){
-      $this->CheckoutRequest->query("delete from checkout_reservation where request_id = " . $id . " and device_id = " . $req['Computer'][0]['id']);
+      //deny the request
+      $req['CheckoutRequest']['status'] = 'denied';
+      $this->CheckoutRequest->save($req);
+
+      if(count($req['Computer']) > 0){
+        $this->CheckoutRequest->query("delete from checkout_reservation where request_id = " . $id . " and device_id = " . $req['Computer'][0]['id']);
+      }
+
+      //notify the user
+      $this->_send_email("Equipment Checkout Denied",
+                         sprintf("Your equipment checkout request from %s to %s has been approved. The most common reason for this is that the requested equipment is not available.", $checkOutDate, $checkInDate),
+                         $req['CheckoutRequest']['employee_email']);
+
+      $this->Flash->success("Request Denied");
     }
 
-    $this->Flash->success("Request Denied");
     $this->redirect('/checkout/requests');
   }
 
