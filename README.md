@@ -38,6 +38,7 @@ Once you have that working take a look at the ```INSTALL.md``` file for more spe
 * Non-PC devices can be created and managed as well
 * Optionally can collect applications via PowerShell or manually assign them to devices
 * Software lifecycles can be assigned to specific applications for reminders and update instruction documentation
+* Equipment check out feature can be enabled to track devices that are checked out for special purposes
 * Optionally can list services and their running state
 * Optionally can integrate with [Chocolatey](https://chocolatey.org/) to find outdated packages
 * Can export most information to a CSV for offline work
