@@ -28,7 +28,7 @@ class CheckoutController extends AppController {
 	}
 
   function index(){
-    $this->set('title_for_layout','Equipment Checkout Request');
+    $this->set('title_for_layout','Device Checkout Request');
 
     if($this->request->is('post'))
     {
@@ -108,7 +108,7 @@ class CheckoutController extends AppController {
   }
 
   function disabled(){
-    $this->set('title_for_layout','Equipment Checkout Request');
+    $this->set('title_for_layout','Device Checkout Request');
   }
 
   function requests(){
@@ -170,7 +170,7 @@ class CheckoutController extends AppController {
         $this->CheckoutRequest->query("insert into checkout_reservation (request_id, device_id) values (" . $id . ", " . $found_device . ")");
 
         // send email to user
-        $this->_send_email("Equipment Checkout Approved",
+        $this->_send_email("Device Checkout Approved",
                            sprintf("Your equipment checkout request from %s to %s has been approved.", $checkOutDate, $checkInDate),
                            $req['CheckoutRequest']['employee_email']);
 
@@ -210,8 +210,8 @@ class CheckoutController extends AppController {
       }
 
       //notify the user
-      $this->_send_email("Equipment Checkout Denied",
-                         sprintf("Your equipment checkout request from %s to %s has been approved. The most common reason for this is that the requested equipment is not available.", $checkOutDate, $checkInDate),
+      $this->_send_email("Device Checkout Denied",
+                         sprintf("Your device checkout request from %s to %s has been denied. The most common reason for this is that the requested device is not available.", $checkOutDate, $checkInDate),
                          $req['CheckoutRequest']['employee_email']);
 
       $this->Flash->success("Request Denied");
