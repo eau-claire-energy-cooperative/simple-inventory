@@ -67,7 +67,7 @@
               </div>
               <div class="row mt-2">
                 <div class="col-md-6">Checkout Location</div>
-                <div class="col-md-6"><?php echo $this->Form->select('device_checkout_location',$locations,array('class'=>'custom-select','value'=>$settings['device_checkout_location'],'empty'=>true)) ?></div>
+                <div class="col-md-6"><?php echo $this->Form->select('device_checkout_location',$locations,array('class'=>'custom-select','value'=>$settings['device_checkout_location'],'empty'=>false)) ?></div>
               </div>
             </div>
           </div>
