@@ -3,7 +3,7 @@
   <div class="col-lg-8">
     <h1>
       <i class="mdi mdi-monitor icon-3x text-gray-900"></i>
-      <span class="h4 text-gray-900 mb-4">Equipment Checkout Request</span>
+      <span class="h4 text-gray-900 mb-4">Device Checkout Request</span>
     </h1>
   </div>
 </div>
@@ -40,7 +40,9 @@
       <div class="row mb-2">
         <div class="col-sm-4">Check In Date:</div>
         <div class="col-sm-8">
-          <?php echo $this->Form->input('check_in_date',array("label"=>false, 'div'=>false, 'class'=>'form-control', 'style'=>'width:30%; display:inline;', 'type'=>'date', 'dateFormat'=>'M-D-Y')); ?>
+          <!-- two weeks from today -->
+          <?php $next_date = date_add(date_create(), date_interval_create_from_date_string("2 weeks")); ?>
+          <?php echo $this->Form->input('check_in_date',array("label"=>false, 'div'=>false, 'class'=>'form-control', 'style'=>'width:30%; display:inline;', 'type'=>'date', 'dateFormat'=>'M-D-Y', 'value'=>date_format($next_date, "Y-m-d HH:MM"))); ?>
         </div>
       </div>
       <div class="row mb-2">
