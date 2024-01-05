@@ -39,7 +39,7 @@ class CheckoutController extends AppController {
       {
         $this->Flash->error('Name and email are required');
       }
-      else if(strtotime(sprintf("%s-%s-%s", $checkOut['year'], $checkOut['month'],$checkOut['day'])) < time()){
+      else if(strtotime(sprintf("%s-%s-%s 23:59:00", $checkOut['year'], $checkOut['month'],$checkOut['day'])) < time()){
         $this->Flash->error("Check Out Date has passed");
       }
       else if(strtotime(sprintf("%s-%s-%s", $checkIn['year'], $checkIn['month'],$checkIn['day'])) < strtotime(sprintf("%s-%s-%s", $checkOut['year'], $checkOut['month'],$checkOut['day'])))
