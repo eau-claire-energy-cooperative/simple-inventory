@@ -65,6 +65,9 @@ class CheckoutController extends AppController {
           $this->CheckoutRequest->save();
         }
 
+        // email an admin
+        $this->_send_email("Device Checkout Request", sprintf("%s has submitted an equipment checkout request. Please review the request to approve or deny.", $this->data['CheckoutRequest']['employee_name']));
+
         $this->Flash->success('Request Submitted');
       }
     }
