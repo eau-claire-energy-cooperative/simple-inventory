@@ -14,7 +14,7 @@ class ExpireCheckoutTask extends AppShell {
       foreach($requests as $r)
       {
         //check if request is expired
-        if($r['CheckoutRequest']['check_out_unix'] < $today && $r['CheckoutRequest']['check_in_unix'] < $today)
+        if($r['CheckoutRequest']['check_out_unix'] < $today && $r['CheckoutRequest']['check_in_unix'] + 86400 < $today)
         {
           //make sure request is not active
           if($r['CheckoutRequest']['status'] != 'active')
@@ -28,6 +28,8 @@ class ExpireCheckoutTask extends AppShell {
           else
           {
             $this->out("Checkout Request ID " . $r['CheckoutRequest']['id'] . " is expired but still active");
+            $this->sendMail('Device Check In Missed',
+                            "Checkout Request #" . $r['CheckoutRequest']['id'] . ' is past check-in but device <b>' . $r['Computer'][0]['ComputerName'] . '</b> is still checked out.');
           }
 
         }
