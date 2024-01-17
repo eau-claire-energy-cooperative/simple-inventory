@@ -1,5 +1,5 @@
 <?php
-  $statusSort = array("new"=>0, "approved"=>1, "denied"=>1, "active"=>1);
+  $statusSort = array("new"=>0, "active"=>1, "approved"=>2, "denied"=>3);
   echo $this->Html->script("jquery-confirm.min.js",false);
   echo $this->Html->script("jquery.dataTables.min.js", false);
   echo $this->Html->script("dataTables.bootstrap4.min.js", false);
