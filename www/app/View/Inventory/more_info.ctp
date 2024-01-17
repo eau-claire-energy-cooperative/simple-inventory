@@ -121,15 +121,36 @@ function copyLicense(id){
     </div>
   </div>
   <div class="col-xl-6 col-md-6 mb-4" align="right">
-    <a href="<?php echo $this->Html->url(array('action' => 'edit', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-square-edit-outline icon-sm icon-inline text-white-50"></i> Edit</a>
-    <?php if($computer['DeviceType']['allow_decom'] == 'true'): ?>
-    <a href="<?php echo $this->Html->url(array('action' => 'confirmDecommission', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mr-2"><i class="mdi mdi-cancel icon-sm icon-inline text-white-50"></i> Decommission</a>
-  <?php endif; ?>
-    <a href="<?php echo $this->Html->url(array('action' => 'delete', $computer['Computer']['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-computer"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i> Delete</a>
+    <div class="btn-group">
+      <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="mdi mdi-cog-outline icon-sm text-white-50"></i> Actions
+      </button>
+      <div class="dropdown-menu">
+        <a href="<?php echo $this->Html->url(array('action' => 'edit', $computer['Computer']['id'])) ?>" class="dropdown-item"><i class="mdi mdi-square-edit-outline icon-sm icon-inline"></i> Edit</a>
+        <div class="dropdown-divider"></div>
+        <?php if($computer['DeviceType']['allow_decom'] == 'true'): ?>
+        <a href="<?php echo $this->Html->url(array('action' => 'confirmDecommission', $computer['Computer']['id'])) ?>" class="dropdown-item"><i class="mdi mdi-cancel icon-sm icon-inline"></i> Decommission</a>
+        <?php endif; ?>
+        <a href="<?php echo $this->Html->url(array('action' => 'delete', $computer['Computer']['id'])) ?>" class="dropdown-item delete-computer"><i class="mdi mdi-delete icon-sm icon-inline"></i> Delete</a>
+      </div>
+    </div>
+    <?php if($settings['enable_device_checkout'] == 'true'): ?>
+      <?php if($computer['Computer']['CanCheckout'] == 'true'): ?>
+        <?php if($computer['Computer']['IsCheckedOut'] == 'true'): ?>
+      <a href="<?php echo $this->Html->url("/checkout/requests?q=" . $computer['Computer']['ComputerName']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2">
+        <i class="mdi mdi-cart-outline icon-sm text-white-50"></i> Checked Out
+      </a>
+        <?php else: ?>
+      <a href="<?php echo $this->Html->url("/checkout/requests?q=" . $computer['Computer']['ComputerName']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2">
+        <i class="mdi mdi-cart-remove icon-sm text-white-50"></i> Available
+      </a>
+        <?php endif; ?>
+      <?php endif; ?>
+    <?php endif ?>
     <?php if(file_exists(WWW_ROOT . '/drivers/' . str_replace(' ','_',$computer['Computer']['Model']) . '.zip')): ?>
-      <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url("/drivers/" . str_replace(' ','_',$computer['Computer']['Model']) . ".zip") ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-download icon-sm text-white-50"></i> Download Drivers</a>
+      <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url("/drivers/" . str_replace(' ','_',$computer['Computer']['Model']) . ".zip") ?>" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm mr-2"><i class="mdi mdi-download icon-sm text-white-50"></i> Download Drivers</a>
     <?php else: ?>
-      <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/uploadDrivers/' . $computer['Computer']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2 popup fancybox.ajax"><i class="mdi mdi-upload icon-sm text-white-50"></i> Upload Drivers</a>
+      <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/uploadDrivers/' . $computer['Computer']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm mr-2 popup fancybox.ajax"><i class="mdi mdi-upload icon-sm text-white-50"></i> Upload Drivers</a>
     <?php endif; ?>
   </div>
 </div>

@@ -2,7 +2,8 @@
 
 class SchedulerShell extends AppShell {
 	var $uses = array('Schedule');
-	var $tasks = array('CheckLifecycles','RestrictedPrograms','WakeComputer','SendEmails','DiskSpace','RemoveOldPrograms','PurgeDecom','PurgeLogs');
+	var $tasks = array('CheckLifecycles','RestrictedPrograms','WakeComputer','SendEmails',
+                     'DiskSpace','RemoveOldPrograms','PurgeDecom','PurgeLogs','ExpireCheckout');
 
 	public function main(){
 		App::import('Vendor','Cron/CronExpression');
@@ -57,6 +58,9 @@ class SchedulerShell extends AppShell {
             break;
           case 10:
             $this->CheckLifecycles->execute($schedule_params);
+            break;
+          case 11:
+            $this->ExpireCheckout->execute($schedule_params);
             break;
 				}
 

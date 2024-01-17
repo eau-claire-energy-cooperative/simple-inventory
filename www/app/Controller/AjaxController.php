@@ -7,23 +7,7 @@ class AjaxController extends AppController {
 	var $uses = array('Applications','Computer','Setting','Command','User');
 
 	public function beforeFilter(){
-	    //check if we are using a login method
-	    if(!$this->Session->check('authenticated')){
-	        //check if we are using a login method
-	        $loginMethod = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'auth_type')));
-
-	        if(isset($loginMethod) && trim($loginMethod['Setting']['value']) == 'none')
-	        {
-	            //we aren't authenticating, just keep moving
-	            $this->Session->write('authenticated','true');
-	        }
-	        //check, we may already be trying to go to the login page
-	        else if($this->action != 'login')
-	        {
-	            //we need to forward to the login page
-	            $this->redirect(array('controller'=>'inventory','action'=>'login'));
-	        }
-	    }
+	   $this->_check_authenticated();
 	}
 
 	function checkRunning($id){

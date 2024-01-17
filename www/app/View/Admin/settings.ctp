@@ -52,6 +52,30 @@
   </div>
 </div>
 
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Device Checkout</h6>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-10">
+              <div class="row">
+                <div class="col-md-6">Enable Device Checkout</div>
+                <div class="col-md-6"><?php echo $this->Form->select('enable_device_checkout',array('true'=>'Yes','false'=>'No'),array('class'=>'custom-select','value'=>$settings['enable_device_checkout'],'empty'=>false)) ?></div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-md-6">Checkout Location</div>
+                <div class="col-md-6"><?php echo $this->Form->select('device_checkout_location',$locations,array('class'=>'custom-select','value'=>$settings['device_checkout_location'],'empty'=>false)) ?></div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <?php
   //convert string to array
   $displayAttributes = explode(',',$settings['display_attributes']);

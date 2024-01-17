@@ -28,8 +28,8 @@ App::uses('Shell', 'Console');
  */
 class AppShell extends Shell {
 	var $uses = array('User','Setting','Logs');
-	
-	
+
+
 	public function dblog($message, $module='Scheduler', $level='INFO'){
 		$this->Logs->create();
 		$this->Logs->set('LOGGER',$module);
@@ -38,13 +38,13 @@ class AppShell extends Shell {
 		$this->Logs->set("DATED",date("Y-m-d H:i:s",time()));
 		$this->Logs->save();
 	}
-	
-	public function sendMail($subject,$message){
+
+	public function sendMail($subject,$message, $recipient = ""){
 		App::import("Vendor",'PHPMailer',array('file'=>'PhpMailer/class.phpmailer.php'));
-		 
+
 		//get the settings
 		$settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
-		
+
 		//setup the mailer
 		$email = new PHPMailer();
 		$email->IsSMTP();
@@ -54,23 +54,31 @@ class AppShell extends Shell {
 		$email->Username = $settings['smtp_user'];
 		$email->Password = $settings['smtp_pass'];
 		$email->SetFrom($settings['outgoing_email']);
-		
+
 		//setup the subject/message
 		$email->Subject = $subject;
 		$email->Body = $message;
-		
-		//get the addresses to send to
-		$users = $this->User->find('all',array('conditions'=>array('User.send_email'=>'true')));
-		
-		foreach($users as $aUser){
-			//log email
-			$this->dblog("Sending email to " . $aUser['User']['email']);
-			
-			$email->AddAddress($aUser['User']['email']);
-		}
-		 
+
+    if(empty($recipient))
+    {
+  		//send to admin users
+  		$users = $this->User->find('all',array('conditions'=>array('User.send_email'=>'true')));
+
+  		foreach($users as $aUser){
+  			//log email
+  			$this->dblog("Sending email to " . $aUser['User']['email']);
+
+  			$email->AddAddress($aUser['User']['email']);
+  		}
+    }
+    else
+    {
+      //recipient is already set
+      $email->AddAddress($recipient);
+    }
+
 		//send the message
 		$email->Send();
-		 
+
 	}
 }

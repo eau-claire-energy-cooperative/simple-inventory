@@ -59,8 +59,8 @@
     		<td width="25%"><?php echo $aLicense['License']['ProgramName'] ?></td>
     		<td><?php echo $aLicense['License']['LicenseKey'] ?></td>
     		<td width="12%" align="right">
-    		  <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/move_license/' . $aLicense['License']['id'] . '/' . $aLicense['License']['comp_id']) ?>" title="Move License"><i class="mdi mdi-arrow-all icon-inline mr-1"></i></a>
-    		  <a href="<?php echo $this->Html->url(array('action' => 'deleteLicense', $aLicense['License']['id'])) ?>" class="text-danger delete-license" data-title="Confirm delete license"><i class="mdi mdi-delete icon-inline mr-2" title="Delete License"></i></a>
+    		  <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/move_license/' . $aLicense['License']['id'] . '/' . $aLicense['License']['comp_id']) ?>" title="Move License" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-primary"><i class="mdi mdi-arrow-all icon-sm icon-inline"></i></a>
+    		  <a href="<?php echo $this->Html->url(array('action' => 'deleteLicense', $aLicense['License']['id'])) ?>" class="delete-license d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-danger" data-title="Confirm delete license"><i class="mdi mdi-delete icon-sm icon-inline" title="Delete License"></i></a>
     		</td>
     	</tr>
     	<?php endforeach ?>

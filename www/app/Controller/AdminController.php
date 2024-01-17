@@ -6,23 +6,7 @@ class AdminController extends AppController {
 	var $paginate = array('limit'=>100, 'order'=>array('Logs.id'=>'desc'));
 
 	public function beforeFilter(){
-		//check if we are using a login method
-		if(!$this->Session->check('authenticated')){
-			//check if we are using a login method
-			$loginMethod = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'auth_type')));
-
-			if(isset($loginMethod) && trim($loginMethod['Setting']['value']) == 'none')
-			{
-				//we aren't authenticating, just keep moving
-				$this->Session->write('authenticated','true');
-			}
-			//check, we may already be trying to go to the login page
-			else if($this->action != 'login')
-			{
-				//we need to forward to the login page
-				$this->redirect(array('controller'=>'inventory','action'=>'login'));
-			}
-		}
+		$this->_check_authenticated();
 	}
 
 	function beforeRender(){
@@ -49,6 +33,9 @@ class AdminController extends AppController {
 	public function settings($action = null){
     $this->set('homeAttributes', array_merge($this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
     $this->set('infoAttributes', array_merge($this->DEVICE_ATTRIBUTES['REQUIRED'], $this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
+
+    // load locations
+    $this->set('locations', $this->Location->find('list', array('fields' => array("Location.Location"),'order'=>'Location.is_default desc, Location.Location asc')));
 
     if($this->request->is('post'))
 		{

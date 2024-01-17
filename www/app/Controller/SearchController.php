@@ -1,34 +1,19 @@
 <?php
 
 class SearchController extends AppController {
-	var $uses = array("Applications","Computer","Location","Service");
+	var $uses = array("Applications","Computer","Location","Service","Setting");
 	var $helpers = array('Html','Csv','DiskSpace','Time');
 	var $search_types = array(array("name"=>"Tag","field"=>"Computer.ComputerLocation"),
 						array('name'=>'Model','field'=>'Computer.Model'),
 						array('name'=>'OS','field'=>'Computer.OS'),
 						array('name'=>'Memory','field'=>'Computer.Memory'),
 						array('name'=>'Monitors','field'=>'Computer.NumberOfMonitors'),
-            array('name'=>'Device Type', 'field'=>'DeviceType.name'));
+            array('name'=>'Device Type', 'field'=>'DeviceType.name'),
+            array('name'=>'Checkout Enabled', 'field'=>'Computer.CanCheckout', 'active_menu'=>'checkout'));
 	var $components = array('RequestHandler','Session');
 
 	public function beforeFilter(){
-		//check if we are using a login method
-		if(!$this->Session->check('authenticated')){
-			//check if we are using a login method
-			$loginMethod = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'auth_type')));
-
-			if(isset($loginMethod) && trim($loginMethod['Setting']['value']) == 'none')
-			{
-				//we aren't authenticating, just keep moving
-				$this->Session->write('authenticated','true');
-			}
-			//check, we may already be trying to go to the login page
-			else if($this->action != 'login')
-			{
-				//we need to forward to the login page
-				$this->redirect(array('controller'=>'inventory','action'=>'login'));
-			}
-		}
+	  $this->_check_authenticated();
 	}
 
 	function beforeRender(){
@@ -36,13 +21,22 @@ class SearchController extends AppController {
     $this->set('requiredAttributes', $this->DEVICE_ATTRIBUTES['REQUIRED']);
     $this->set('allAttributes', array_merge($this->DEVICE_ATTRIBUTES['REQUIRED'], $this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
 		$this->set('locations',$this->Location->find('list',array('fields'=>array('Location.id','Location.location'))));
+
+    $settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
+    $this->set('settings',$settings);
 	}
 
 	function search($type,$q){
 		$this->set("title_for_layout","Search Results");
+    $this->_getDisplaySettings();
 
 		//get the type
 		$type = $this->search_types[$type];
+
+    if(isset($type['active_menu']))
+    {
+      $this->set('active_menu', $type['active_menu']);
+    }
 
 		$this->set("q",$type['name']);
 		$this->set("results", $this->Computer->find('all',array('conditions' => array($type['field'] => $q),'order'=>'Computer.ComputerName')));
@@ -50,6 +44,7 @@ class SearchController extends AppController {
 
 	function listAll(){
 		$this->set('title_for_layout',"List All");
+    $this->_getDisplaySettings();
 
 		$this->set('q',"All");
 		$this->set("results",$this->Computer->find('all',array('order'=>array('Computer.ComputerName'))));
@@ -59,6 +54,7 @@ class SearchController extends AppController {
 
 	function searchApplication($app_id){
 		$this->set("title_for_layout","Search Results");
+    $this->_getDisplaySettings();
 
 		//get all computers that match the program name
     $application = $this->Applications->find('first',array('conditions' => array('Applications.id'=>$app_id)));
@@ -82,5 +78,16 @@ class SearchController extends AppController {
 		$this->set("q","For Service '" . $service . "'");
 		$this->set('results', $this->Service->find('all',array('conditions' => array('Service.name LIKE "' . $service . '%"') )));
 	}
+
+  function _getDisplaySettings(){
+    # get the display settings
+    $displaySetting = $this->Setting->find('first',array('conditions'=>array('Setting.key'=>'home_attributes')));
+    $displayAttributes = explode(",",$displaySetting['Setting']['value']);
+    $this->set('displayAttributes', $displayAttributes);
+
+    # set the attribute names
+    $columnNames = array("CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID", "Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors", "AppUpdates"=>"Application Updates", "IPAddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACAddress"=>"MAC Address");
+    $this->set('columnNames', $columnNames);
+  }
 }
 ?>

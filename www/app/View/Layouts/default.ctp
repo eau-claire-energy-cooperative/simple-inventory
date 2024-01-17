@@ -72,6 +72,24 @@
         </div>
       </li>
 
+      <!-- Nav Item - Checkout -->
+      <?php if($settings['enable_device_checkout'] == 'true'): ?>
+      <li class="nav-item <?php echo $this->Menu->getActiveMenu('checkout',$active_menu) ?>">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCheck" aria-expanded="true" aria-controls="collapseCheck">
+          <i class="mdi mdi-cart-check"></i>
+          <span>Device Checkout</span>
+        </a>
+        <div id="collapseCheck" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Checkout Management</h6>
+            <a class="collapse-item" href="<?php echo $this->Html->url("/checkout/requests") ?>">Checkout Requests</a>
+            <a class="collapse-item" href="<?php echo $this->Html->url('/search/search/6/true') ?>">Enabled Devices</a>
+            <a class="collapse-item" href="<?php echo $this->Html->url('/checkout') ?>">New Request</a>
+          </div>
+        </div>
+      </li>
+      <?php endif ?>
+
       <!-- Nav Item - Applications -->
       <li class="nav-item <?php echo $this->Menu->getActiveMenu('applications',$active_menu) ?>">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSoftware" aria-expanded="true" aria-controls="collapseSoftware">
@@ -237,9 +255,8 @@
   </a>
 
 <?php
-    //put the scripts at the bottomg
+    //put the scripts at the bottom
     echo $this->Html->script("jquery.min.js");
-    echo $this->Html->script("bootstrap.min.js");
     echo $this->Html->script("bootstrap.bundle.min.js");
     echo $this->Html->script("jquery.easing.min.js");
     echo $this->Html->script("sb-admin-2.min.js");
