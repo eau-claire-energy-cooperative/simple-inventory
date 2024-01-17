@@ -42,8 +42,24 @@
         <th></th>
       </thead>
       <tbody>
+        <?php $now = time() ?>
         <?php foreach ($checkout as $post): ?>
-        <tr class="<?php echo ($post['CheckoutRequest']['status'] == 'active') ? "table-success" : "" ?>">
+        <?php
+          // determine if the check in date has passed
+          $highlight = "";
+          if($post['CheckoutRequest']['status'] == 'active')
+          {
+            if($post['CheckoutRequest']['check_in_unix'] + 86400 < $now)
+            {
+              $highlight = "table-danger";
+            }
+            else
+            {
+              $highlight = "table-success";
+            }
+          }
+        ?>
+        <tr class="<?php echo $highlight ?>">
           <td data-sort="<?php echo $statusSort[$post['CheckoutRequest']['status']] ?>">
             <?php echo ucwords($post['CheckoutRequest']['status']) ?>
           </td>
