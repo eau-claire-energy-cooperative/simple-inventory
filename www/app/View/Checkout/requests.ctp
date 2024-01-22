@@ -26,6 +26,28 @@
         {'searchable': false, 'targets': [-1]}
       ]
     })});", array("inline"=>false));
+
+    //script to load the confirmation dialog
+    echo $this->Html->scriptBlock("$(document).ready(function() {
+
+        $('a.delete-request').confirm({
+          title: 'Delete Request',
+          content: 'Are you sure you want to delete this request?',
+          buttons: {
+              yes: function(){
+                  location.href = this.\$target.attr('href');
+              },
+              cancel: function(){
+
+              }
+          }
+        });
+     });", array("inline"=>false))
+?>
+<?php
+
+
+
 ?>
 <div class="mb-4" align="right">
   <a href="<?php echo $this->Html->url('/checkout/index') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i> New Checkout Request</a>
@@ -89,8 +111,11 @@
             </a>
               <?php endif; ?>
             <?php endif ?>
-            <?php if(count($post['Computer']) == 0 || $post['Computer'][0]['IsCheckedOut'] == 'false'): ?>
+            <?php if($post['CheckoutRequest']['status'] != 'denied' && (count($post['Computer']) == 0 || $post['Computer'][0]['IsCheckedOut'] == 'false')): ?>
             <a href="<?php echo $this->Html->url('/checkout/deny/' . $post['CheckoutRequest']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-danger" title="Deny"><i class="mdi mdi-thumb-down icon-sm icon-inline text-white-50"></i></a>
+            <?php endif; ?>
+            <?php if($post['CheckoutRequest']['status'] == 'denied'): ?>
+            <a href="<?php echo $this->Html->url('/checkout/delete/' . $post['CheckoutRequest']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-danger delete-request" title="Delete"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i></a>
             <?php endif; ?>
           </td>
         </tr>

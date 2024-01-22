@@ -75,6 +75,7 @@ class AppShell extends Shell {
     {
       //recipient is already set
       $email->AddAddress($recipient);
+      $this->dblog("Sending email to " . $recipient);
     }
 
 		//send the message
