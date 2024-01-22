@@ -220,6 +220,24 @@ class CheckoutController extends AppController {
     $this->redirect('/checkout/requests');
   }
 
+  function delete($id){
+    $this->_check_authenticated();
+
+    $req = $this->CheckoutRequest->find('first', array('conditions'=>array('CheckoutRequest.id'=>$id)));
+
+    if($req['CheckoutRequest']['status'] == 'denied')
+    {
+      $this->CheckoutRequest->delete($id);
+      $this->Flash->success("Request Deleted");
+    }
+    else
+    {
+      $this->Flash->error("Request must be denied first");
+    }
+
+    $this->redirect('/checkout/requests');
+  }
+
   function device($action, $request_id, $device_id){
     $this->_check_authenticated();
 
