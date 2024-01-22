@@ -4,15 +4,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## Unreleased
+
+### Added
+
+- log external email addresses when sending
+
+### Fixed
+
+- need to pass in external recipient in SendEmailsTask
+
 ## 5.0
 
-## Added
+### Added
 
 - (Equipment Device Checkout)[https://github.com/eau-claire-energy-cooperative/simple-inventory/issues/20] brand new feature that allows users to request equipment for checkout. Admins can flag available equipment and manage checkout requests via an approve/deny process. Equipment shows it's current checkout status and can be moved to a temporary location when currently checked out. 
 - Scheduled task to purge expired checkout requests. Works for requests where the time window has expired and the equipment is not checked out.
 - reconfigured search result pages to use the selected attributes like the main inventory page does
 
-## Changed
+### Changed
 
 - device info page now has an action menu drop down to collapse functions related to editing, decommissioning and deletion
 - consolidated "isAuthenticated" logic to controller parent class instead of having in each child controller
