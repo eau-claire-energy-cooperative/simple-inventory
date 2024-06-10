@@ -95,8 +95,16 @@ class AjaxController extends AppController {
     $this->set('application', $application);
 
     //get any other version of this application
-    $totalVersions = $this->Applications->find('count', array('conditions'=>array('Applications.name'=>$application['Applications']['name'])));
-    $this->set('total_versions', $totalVersions);
+    $allVersions = $this->Applications->find('list', array('fields'=>array('Applications.version'), 'conditions'=>array('Applications.name'=>$application['Applications']['name'])));
+
+    //sort to see if newer is available
+    $totalVersions = array();
+    foreach(array_values($allVersions) as $v){
+      $totalVersions[] = $v;
+    }
+    usort($totalVersions, 'version_compare');
+    $this->set('total_versions', count($totalVersions));
+    $this->set('highest_version', end($totalVersions));
   }
 
   function add_disk($comp_id){
