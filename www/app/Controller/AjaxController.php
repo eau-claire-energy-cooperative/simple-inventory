@@ -95,16 +95,29 @@ class AjaxController extends AppController {
     $this->set('application', $application);
 
     //get any other version of this application
-    $allVersions = $this->Applications->find('list', array('fields'=>array('Applications.version'), 'conditions'=>array('Applications.name'=>$application['Applications']['name'])));
+    $allVersions = $this->Applications->find('all', array('conditions'=>array('Applications.name'=>$application['Applications']['name'])));
 
-    //sort to see if newer is available
+    // get version and total assigned info
     $totalVersions = array();
+    $olderInstalls = 0;
+    $newerInstalls = 0;
     foreach(array_values($allVersions) as $v){
-      $totalVersions[] = $v;
+      $totalVersions[] = $v['Applications']['version'];
+
+      // if lower, count how many computers on this version
+      if(version_compare($v['Applications']['version'], $application['Applications']['version']) == -1)
+      {
+        $olderInstalls = $olderInstalls + count($v['Computer']);
+      }
+      elseif (version_compare($v['Applications']['version'], $application['Applications']['version']) == 1) {
+        $newerInstalls = $newerInstalls + count($v['Computer']);
+      }
     }
     usort($totalVersions, 'version_compare');
     $this->set('total_versions', count($totalVersions));
     $this->set('highest_version', end($totalVersions));
+    $this->set('older_installs', $olderInstalls);
+    $this->set('newer_installs', $newerInstalls);
   }
 
   function add_disk($comp_id){

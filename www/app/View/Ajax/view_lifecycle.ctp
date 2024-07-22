@@ -51,9 +51,16 @@
             <div class="col mr-2">
               <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Application Info</div>
               <div class="h6 mb-0 font-weight-bold text-gray-800">
-                <p>Total Versions: <?php echo $this->Html->link($total_versions,'/applications?q=' . $application['Applications']['name']) ?>
-                  <?php if($highest_version != $application['Applications']['version']): ?> <span class="badge badge-warning">Newer Available</span><?php endif ?><br />
-                Computers Assigned: <?php echo $this->Html->link(count($application['Computer']), '/search/searchApplication/' . $application['Applications']['id']) ?><br />
+                <p><?php echo $this->Html->link("Total Versions",'/applications?q=' . $application['Applications']['name']) ?>: <?php echo $total_versions ?>
+                <?php if($highest_version != $application['Applications']['version']): ?> <span class="badge badge-warning">Newer Available</span><?php endif ?><br />
+                Install Counts:
+                <ul>
+                  <li>Older Versions: <?php echo $older_installs ?></li>
+                  <li>Current Version: <?php echo count($application['Computer']) ?></li>
+                  <?php if($highest_version != $application['Applications']['version']): ?>
+                  <li>Newer Version: <?php echo $newer_installs ?></li>
+                  <?php endif ?>
+                </ul>
                 Monitoring: <?php echo ($application['Applications']['monitoring'] == 'true') ? "Yes" : "No" ?></p>
               </div>
             </div>
