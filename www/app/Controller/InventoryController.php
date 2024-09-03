@@ -1,7 +1,7 @@
 <?php
 
 class InventoryController extends AppController {
-    var $helpers = array('Html', 'Form', 'Session','Time','DiskSpace','AttributeDisplay','Menu');
+    var $helpers = array('Html', 'Form', 'Markdown', 'Session','Time','DiskSpace','AttributeDisplay','Menu');
     var $components = array('Session','Ldap','FileUpload','Paginator','Flash');
 	  public $uses = array('Applications','Computer', 'DeviceType', 'Disk', 'Lifecycle', 'Location', 'Logs','Service','Decommissioned','ComputerLogin','Setting','User');
 

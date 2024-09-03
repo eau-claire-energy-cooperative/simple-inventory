@@ -237,7 +237,7 @@ function copyLicense(id){
       </div>
       <div class="card-body">
         <?php if($computer['Computer']['notes'] != ''): ?>
-          <?php echo $computer['Computer']['notes']?></td>
+          <?php echo $this->Markdown->transform($computer['Computer']['notes']); ?>
         <?php endif; ?>
       </div>
     </div>

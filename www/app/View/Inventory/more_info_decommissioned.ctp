@@ -191,7 +191,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Notes</h6>
       </div>
       <div class="card-body">
-        <?php echo $decommissioned['Decommissioned']['notes'];?>
+        <?php echo $this->Markdown->transform($decommissioned['Decommissioned']['notes']); ?>
       </div>
     </div>
   </div>

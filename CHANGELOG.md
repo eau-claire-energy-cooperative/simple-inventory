@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - allow manually deleting denied checkout requests
 - "New Available" badge in Lifecycle views if newer version exists in DB
 - modified Lifecycle information to display number of installs on previous, current, and newer versions than the one being tracked
+- Notes fields now render Markdown
 
 ### Fixed
 
