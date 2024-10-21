@@ -102,8 +102,11 @@
             <a href="<?php echo $this->Html->url('/checkout/approve/' . $post['CheckoutRequest']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-success" title="Approve"><i class="mdi mdi-thumb-up icon-sm icon-inline text-white-50"></i></a>
             <?php else : ?>
               <?php if($post['Computer'][0]['IsCheckedOut'] == 'true' && $post['CheckoutRequest']['status'] == 'active'): ?>
-            <a href="<?php echo $this->Html->url('/checkout/device/in/' . $post['CheckoutRequest']['id'] . '/' . $post['Computer'][0]['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-3 pl-4 pr-4 btn-secondary" title="Check In Device">
+            <a href="<?php echo $this->Html->url('/checkout/device/in/' . $post['CheckoutRequest']['id'] . '/' . $post['Computer'][0]['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-secondary" title="Check In Device">
               <i class="mdi mdi-cart-remove icon-sm icon-inline text-white-50"></i>
+            </a>
+            <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/extend_checkout/' . $post['CheckoutRequest']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-primary" title="Extend Check Out">
+              <i class="mdi mdi-calendar-expand-horizontal icon-sm icon-inline text-white-50"></i>
             </a>
               <?php elseif ($post['Computer'][0]['IsCheckedOut'] == 'false'): ?>
             <a href="<?php echo $this->Html->url('/checkout/device/out/' . $post['CheckoutRequest']['id'] . '/' . $post['Computer'][0]['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-primary" title="Check Out Device">

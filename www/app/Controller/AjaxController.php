@@ -4,7 +4,7 @@ class AjaxController extends AppController {
   var $components = array('Session','Ping');
   var $helpers = array('Form', 'Js', "Lifecycle", "Markdown", "Time");
 	var $layout = '';
-	var $uses = array('Applications','Computer','Setting','Command','User');
+	var $uses = array('Applications','Computer', 'CheckoutRequest', 'Setting','Command','User');
 
 	public function beforeFilter(){
 	   $this->_check_authenticated();
@@ -144,5 +144,13 @@ class AjaxController extends AppController {
 
 	    $this->set('username', $aUser['User']['gravatar']);
 	}
+
+  function extend_checkout($id){
+    $this->layout = 'fancybox';
+
+    $req = $this->CheckoutRequest->find('first', array('conditions'=>array('CheckoutRequest.id'=>$id)));
+
+    $this->set('req', $req);
+  }
 }
 ?>

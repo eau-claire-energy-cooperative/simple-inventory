@@ -151,7 +151,7 @@ class CheckoutController extends AppController {
       foreach($devices['Computer'] as $d)
       {
         //check if this device will be available
-        if($this->_checkAvailable($req['CheckoutRequest']['check_out_unix'], $req['CheckoutRequest']['check_in_unix'], $d['CheckoutRequest']))
+        if($this->_checkAvailable($req, $d['CheckoutRequest']))
         {
           $found_device = $d['id'];
           break;
@@ -187,6 +187,36 @@ class CheckoutController extends AppController {
     }
 
 
+
+    $this->redirect('/checkout/requests');
+  }
+
+  function extend(){
+    $this->_check_authenticated();
+
+    if ($this->request->is('post'))
+    {
+      //pull in requests for this device ID
+      $upcoming_requests = $this->Computer->find('first', array('conditions'=>array('Computer.id'=>$this->data['CheckoutRequest']['device_id'])));
+
+      // create the new check in date
+      $check_in_unix = strtotime($this->data['CheckoutRequest']['check_in_date']['year'] . "-" . $this->data['CheckoutRequest']['check_in_date']['month'] . "-" . $this->data['CheckoutRequest']['check_in_date']['day']);
+
+      if($this->_checkAvailable(array('CheckoutRequest'=>array('id'=>$this->data['CheckoutRequest']['id'], 'check_out_unix'=>$this->data['CheckoutRequest']['check_out_unix'], 'check_in_unix'=>$check_in_unix)), $upcoming_requests['CheckoutRequest']))
+      {
+        if($this->CheckoutRequest->save($this->data['CheckoutRequest']))
+        {
+          $this->Flash->success("Check In Date extended");
+        }
+        else
+        {
+          $this->Flash->error("Error extending date");
+        }
+      }
+      else {
+        $this->Flash->error("Conflict - Check In Date cannot be extended");
+      }
+    }
 
     $this->redirect('/checkout/requests');
   }
@@ -306,15 +336,23 @@ class CheckoutController extends AppController {
     $this->redirect('/checkout/requests');
   }
 
-  function _checkAvailable($checkOut, $checkIn, $reservations){
+  function _checkAvailable($request, $reservations){
     $result = true;  //assume there won't be any overlaps
+
+    $checkOut = $request['CheckoutRequest']['check_out_unix'];
+    $checkIn = $request['CheckoutRequest']['check_in_unix'];
 
     // see if any reservations overlap with the existing dates
     foreach($reservations as $r)
     {
-      if($r['check_out_unix'] < $checkIn && $r['check_in_unix'] >= $checkOut)
+      // reservation must be active and not equal to the one being checked
+      if(!in_array($r['status'], array('denied', 'new')) && $r['id'] != $request['CheckoutRequest']['id'])
       {
-        $result = false;
+        echo $r['check_out_unix'] . ":" . $checkIn;
+        if($r['check_out_unix'] < $checkIn && $r['check_in_unix'] >= $checkOut)
+        {
+          $result = false;
+        }
       }
     }
 
