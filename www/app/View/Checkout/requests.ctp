@@ -114,7 +114,7 @@
             </a>
               <?php endif; ?>
             <?php endif ?>
-            <?php if($post['CheckoutRequest']['status'] != 'denied' && (count($post['Computer']) == 0 || $post['Computer'][0]['IsCheckedOut'] == 'false')): ?>
+            <?php if(in_array($post['CheckoutRequest']['status'], array('new', 'approved'))): ?>
             <a href="<?php echo $this->Html->url('/checkout/deny/' . $post['CheckoutRequest']['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-danger" title="Deny"><i class="mdi mdi-thumb-down icon-sm icon-inline text-white-50"></i></a>
             <?php endif; ?>
             <?php if($post['CheckoutRequest']['status'] == 'denied'): ?>

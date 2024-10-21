@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
-## Unreleased
+## 5.1
 
 ### Added
 
@@ -13,10 +13,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - "New Available" badge in Lifecycle views if newer version exists in DB
 - modified Lifecycle information to display number of installs on previous, current, and newer versions than the one being tracked
 - Notes fields now render Markdown
+- Ability to change check-in date for requests - checks downstream requests for conflicts
 
 ### Fixed
 
 - need to pass in external recipient in SendEmailsTask
+- showing deny button for approved requests when device is checked out elsewhere
 
 ## 5.0
 
