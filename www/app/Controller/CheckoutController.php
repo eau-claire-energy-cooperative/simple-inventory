@@ -171,7 +171,7 @@ class CheckoutController extends AppController {
 
         // send email to user
         $this->_send_email("Device Checkout Approved",
-                           sprintf("Your equipment checkout request from %s to %s has been approved.", $checkOutDate, $checkInDate),
+                           sprintf("Your equipment checkout request from %s to %s has been approved. See %s to pick up your equipment.", $checkOutDate, $checkInDate, $this->Session->read('User.name')),
                            $req['CheckoutRequest']['employee_email']);
 
         $this->Flash->success("Request Approved");

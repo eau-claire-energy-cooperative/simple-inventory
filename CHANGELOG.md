@@ -13,7 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - "New Available" badge in Lifecycle views if newer version exists in DB
 - modified Lifecycle information to display number of installs on previous, current, and newer versions than the one being tracked
 - Notes fields now render Markdown
-- Ability to change check-in date for requests - checks downstream requests for conflicts
+- Ability to change check-in date for requests - checks downstream requests for conflicts #24
+- added admin name to Checkout Request approval email #23
 
 ### Fixed
 
