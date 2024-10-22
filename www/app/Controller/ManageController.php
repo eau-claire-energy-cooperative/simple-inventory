@@ -23,7 +23,7 @@ class ManageController extends AppController {
 
 	        if(isset($this->data['MoveLicense']))
 	        {
-	            $this->License->query('update licenses set comp_id = ' . $this->data['MoveLicense']['computer'] . ' where id=' . $this->data['MoveLicense']['license_id']);
+	            $this->License->query('update license_keys set comp_id = ' . $this->data['MoveLicense']['computer'] . ' where id=' . $this->data['MoveLicense']['license_id']);
 
 	            $this->Flash->success('License Moved');
 	        }
@@ -43,7 +43,7 @@ class ManageController extends AppController {
   function reset_license($license_id, $computer_id){
 
     // set the license to "no computer"
-    $this->License->query('update licenses set comp_id = 0 where id=' . $license_id);
+    $this->License->query('update license_keys set comp_id = 0 where id=' . $license_id);
     $this->Flash->success("License Removed");
     $this->redirect('/inventory/moreInfo/' . $computer_id);
   }

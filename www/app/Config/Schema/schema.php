@@ -256,7 +256,7 @@ class AppSchema extends CakeSchema {
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
 
-	public $licenses = array(
+	public $license_keys = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
 		'comp_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
 		'ProgramName' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
