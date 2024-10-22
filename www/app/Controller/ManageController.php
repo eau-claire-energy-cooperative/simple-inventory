@@ -1,7 +1,7 @@
 <?php
 
 class ManageController extends AppController {
-	var $uses = array('Computer','DeviceType','License','Logs','Location','Setting','User','Command','Schedule');
+	var $uses = array('Computer','DeviceType','LicenseKey','Logs','Location','Setting','User','Command','Schedule');
 	var $helpers = array('Html','Session','Time','Form','LogParser');
 	var $paginate = array('limit'=>100, 'order'=>array('Logs.id'=>'desc'));
 
@@ -23,19 +23,19 @@ class ManageController extends AppController {
 
 	        if(isset($this->data['MoveLicense']))
 	        {
-	            $this->License->query('update license_keys set comp_id = ' . $this->data['MoveLicense']['computer'] . ' where id=' . $this->data['MoveLicense']['license_id']);
+	            $this->LicenseKey->query('update license_keys set comp_id = ' . $this->data['MoveLicense']['computer'] . ' where id=' . $this->data['MoveLicense']['license_id']);
 
 	            $this->Flash->success('License Moved');
 	        }
 	        else
 	        {
-	            $this->License->save($this->data['License']);
+	            $this->LicenseKey->save($this->data['LicenseKey']);
 	            $this->Flash->success('License Added');
 	        }
 	    }
 
 	    //get a list of all licenses
-	    $licenses = $this->License->find('all', array('order'=>array('Computer.ComputerName asc', 'License.ProgramName asc')));
+	    $licenses = $this->LicenseKey->find('all', array('order'=>array('Computer.ComputerName asc', 'LicenseKey.ProgramName asc')));
 	    $this->set('licenses', $licenses);
 
 	}
@@ -50,7 +50,7 @@ class ManageController extends AppController {
 
 	function deleteLicense($id){
 
-	    if ($this->License->delete($id)) {
+	    if ($this->LicenseKey->delete($id)) {
 	        $this->Flash->success('License Deleted');
 	        $this->redirect(array('action' => 'licenses'));
 	    }

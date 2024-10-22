@@ -359,9 +359,9 @@ class InventoryController extends AppController {
 
     	$this->set('title_for_layout',"Decomission Process for " . $this->request->data['Computer']['ComputerName']);
 
-    	if(count($this->request->data['License']) > 0)
+    	if(count($this->request->data['LicenseKey']) > 0)
     	{
-    	  $errors = 'This computer has ' . count($this->request->data['License']) . ' license(s) attached to it. You must delete or move these licenses before decomissioning.';
+    	  $errors = 'This computer has ' . count($this->request->data['LicenseKey']) . ' license(s) attached to it. You must delete or move these licenses before decomissioning.';
     	  $this->set('errors', $errors);
     	}
   	}

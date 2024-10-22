@@ -203,19 +203,19 @@ function copyLicense(id){
 <?php endif; ?>
 
 <div class="row">
-  <?php if(count($computer['License']) > 0): ?>
+  <?php if(count($computer['LicenseKey']) > 0): ?>
   <div class="col-xl-7">
     <div class="card border-left-dark shadow mb-4">
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Licenses</h6>
       </div>
       <div class="card-body">
-        <?php foreach($computer['License'] as $aLicense): ?>
+        <?php foreach($computer['LicenseKey'] as $aLicense): ?>
         <div class="row">
           <div class="col-md-4"><?php echo $aLicense['ProgramName'] ?></div>
           <div class="col-md-6">
             <a href="javascript:;" onclick="copyLicense('<?php echo $aLicense['id'] ?>')" id="license_<?php echo $aLicense['id'] ?>" style="cursor: copy">
-              <?php echo $aLicense['LicenseKey'] ?>
+              <?php echo $aLicense['Keycode'] ?>
             </a>
           </div>
           <div class="col-md-2">

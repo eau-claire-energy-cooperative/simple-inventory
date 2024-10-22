@@ -8,7 +8,7 @@
                          "DeviceType" => array("foreignKey" => "DeviceType") );
 	var $hasMany = array('Disk'=>array('foreignKey'=>"comp_id", 'order'=>'Disk.label'),
 	    'ComputerLogin'=>array('foreignKey'=>'comp_id', 'limit'=>50, 'order'=>'ComputerLogin.LoginDate desc'),
-	    'License'=>array('foreignKey'=>'comp_id', 'order'=>'License.ProgramName asc'));
+	    'LicenseKey'=>array('foreignKey'=>'comp_id', 'order'=>'LicenseKey.ProgramName asc'));
 
   var $hasAndBelongsToMany = array(
     "Applications" => array('className'=>'Applications',

@@ -1,5 +1,5 @@
 <h1 class="h3 mb-2 text-gray-800">New License</h1>
-<?php echo $this->Form->create('License',array('url'=>'/manage/licenses')) ?>
+<?php echo $this->Form->create('LicenseKey',array('url'=>'/manage/licenses')) ?>
 <div class="row">
 	<div class="col-sm-4">Program Name:</div>
 	<div class="col-sm-8"><?php echo $this->Form->input('ProgramName', array('div'=>false, 'label'=>false, 'class'=>'form-control')) ?></div>
@@ -10,7 +10,7 @@
 </div>
 <div class="row mt-1">
   <div class="col-sm-4">License Key: </div>
-  <div class="col-sm-8"><?php echo $this->Form->input('LicenseKey', array('div'=>false, 'label'=>false, 'class'=>'form-control')) ?></div>
+  <div class="col-sm-8"><?php echo $this->Form->textarea('Keycode', array('div'=>false, 'label'=>false, 'class'=>'form-control', 'rows'=>4)) ?></div>
 </div>
 <div class="row mt-2">
   <div class="col-sm-4"></div>
