@@ -1,8 +1,8 @@
 <?php
 
 class ManageController extends AppController {
-	var $uses = array('Computer','DeviceType','LicenseKey','Logs','Location','Setting','User','Command','Schedule');
-	var $helpers = array('Html','Session','Time','Form','LogParser');
+	var $uses = array('Computer','DeviceType','License','LicenseKey','Logs','Location','Setting','User','Command','Schedule');
+	var $helpers = array('Html','Markdown','Session','Time','Form','LogParser');
 	var $paginate = array('limit'=>100, 'order'=>array('Logs.id'=>'desc'));
 
 	public function beforeFilter(){
@@ -13,6 +13,72 @@ class ManageController extends AppController {
 	    parent::beforeRender();
 	    $settings = $this->Setting->find('list',array('fields'=>array('Setting.key','Setting.value')));
 	    $this->set('settings',$settings);
+	}
+
+  function parent_licenses(){
+      $this->set('title_for_layout', 'Licenses');
+      $this->set('active_menu', 'applications');
+
+      //get a list of all licenses
+      $licenses = $this->License->find('all', array('order'=>array('License.LicenseName asc')));
+      $this->set('licenses', $licenses);
+
+  }
+
+  function view_license($id){
+      $this->set('title_for_layout', 'License Detail');
+      $this->set('active_menu', 'applications');
+
+      //get the license to display
+      $license = $this->License->find('first', array('conditions'=>array('License.id' => $id)));
+
+      // determine date of next reminder
+      $reminder = !empty($license['License']['ExpirationDate']);
+
+      if($reminder)
+      {
+        $next_reminder = new DateTime($license['License']['ExpirationDate']);
+        $next_reminder->sub(new DateInterval('P' . $license['License']['StartReminder'] . 'M'));
+
+        // Getting the new date after addition
+        $this->set('next_reminder', $next_reminder->format('m/d/Y'));
+      }
+
+      $this->set('hasExpiration', $reminder);
+      $this->set('license', $license);
+
+  }
+
+  function edit_license($id=NULL){
+    $this->set('title_for_layout', 'Edit License');
+
+    $this->License->id = $id;
+
+    if($this->request->is('get'))
+    {
+        //attempt to read current license info
+        $this->request->data = $this->License->read();
+    }
+    else
+    {
+      //check if expiration is set
+      if($this->data['License']['NoExpiration'])
+      {
+        $this->request->data['License']['ExpirationDate'] = null;
+      }
+      //save the license
+      $this->License->save($this->request->data);
+      $this->Flash->success('License Saved');
+      $this->redirect("/manage/view_license/" . $this->License->id);
+    }
+  }
+
+  function delete_license($id){
+
+	    if ($this->License->delete($id)) {
+	        $this->Flash->success('License Deleted');
+	        $this->redirect(array('action' => 'parent_licenses'));
+	    }
 	}
 
 	function licenses(){
