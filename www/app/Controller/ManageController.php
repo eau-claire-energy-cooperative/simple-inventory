@@ -105,31 +105,6 @@ class ManageController extends AppController {
 
 	}
 
-	function licenses_legacy(){
-	    $this->set('title_for_layout', 'Licenses');
-      $this->set('active_menu', 'applications');
-
-	    if($this->request->is('post')){
-
-	        if(isset($this->data['MoveLicense']))
-	        {
-	            $this->LicenseKey->query('update license_keys set comp_id = ' . $this->data['MoveLicense']['computer'] . ' where id=' . $this->data['MoveLicense']['license_id']);
-
-	            $this->Flash->success('License Moved');
-	        }
-	        else
-	        {
-	            $this->LicenseKey->save($this->data['LicenseKey']);
-	            $this->Flash->success('License Added');
-	        }
-	    }
-
-	    //get a list of all licenses
-	    $licenses = $this->LicenseKey->find('all', array('order'=>array('Computer.ComputerName asc', 'LicenseKey.ProgramName asc')));
-	    $this->set('licenses', $licenses);
-
-	}
-
   function reset_license($link_id, $computer_id){
 
     // delete the link that joins the license to the device
