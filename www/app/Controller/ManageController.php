@@ -15,7 +15,7 @@ class ManageController extends AppController {
 	    $this->set('settings',$settings);
 	}
 
-  function parent_licenses(){
+  function licenses(){
       $this->set('title_for_layout', 'Licenses');
       $this->set('active_menu', 'applications');
 
@@ -29,8 +29,30 @@ class ManageController extends AppController {
       $this->set('title_for_layout', 'License Detail');
       $this->set('active_menu', 'applications');
 
+      if($this->request->is('post')){
+
+          if(isset($this->data['MoveLicense']))
+          {
+              $this->LicenseKey->query('insert into computer_license (device_id, license_id) values (' . $this->data['MoveLicense']['computer'] . ',' . $this->data['MoveLicense']['license_key_id'] . ')');
+
+              $this->Flash->success('License Assigned');
+          }
+          else
+	        {
+              if($this->data['LicenseKey']['Quantity'] > 0)
+              {
+	               $this->LicenseKey->save($this->data['LicenseKey']);
+	               $this->Flash->success('License Key Added');
+              }
+              else
+              {
+                $this->Flash->error('Quantity must be greater than 0');
+              }
+	        }
+      }
+
       //get the license to display
-      $license = $this->License->find('first', array('conditions'=>array('License.id' => $id)));
+      $license = $this->License->find('first', array('conditions'=>array('License.id' => $id), 'recursive'=>2));
 
       // determine date of next reminder
       $reminder = !empty($license['License']['ExpirationDate']);
@@ -74,14 +96,29 @@ class ManageController extends AppController {
   }
 
   function delete_license($id){
+      $license = $this->License->find('first', array('conditions'=>array('License.id'=>$id)));
 
-	    if ($this->License->delete($id)) {
-	        $this->Flash->success('License Deleted');
-	        $this->redirect(array('action' => 'parent_licenses'));
-	    }
+      // can't delete a license with active keys
+      if(count($license['LicenseKey']) == 0)
+      {
+        if ($this->License->delete($id)) {
+          $this->Flash->success('License Deleted');
+        }
+        else
+        {
+          $this->Flash->error('Error deleting license');
+        }
+        $this->redirect(array('action' => 'licenses'));
+      }
+      else
+      {
+        $this->Flash->error('Cannot delete a license with active keys');
+        $this->redirect('/manage/view_license/' . $id);
+      }
+
 	}
 
-	function licenses(){
+	function licenses_legacy(){
 	    $this->set('title_for_layout', 'Licenses');
       $this->set('active_menu', 'applications');
 
@@ -106,20 +143,36 @@ class ManageController extends AppController {
 
 	}
 
-  function reset_license($license_id, $computer_id){
+  function reset_license($link_id, $computer_id){
 
-    // set the license to "no computer"
-    $this->License->query('update license_keys set comp_id = 0 where id=' . $license_id);
+    // delete the link that joins the license to the device
+    $this->License->query('delete from computer_license where id=' . $link_id);
     $this->Flash->success("License Removed");
     $this->redirect('/inventory/moreInfo/' . $computer_id);
   }
 
-	function deleteLicense($id){
+	function delete_license_key($license_id, $license_key_id){
+    $license_key = $this->LicenseKey->find('first', array('conditions'=>array('LicenseKey.id'=>$license_key_id)));
+
+    // cannot delete key with devices assigned
+    if(count($license_key['Computer']) == 0)
+    {
 
 	    if ($this->LicenseKey->delete($id)) {
-	        $this->Flash->success('License Deleted');
-	        $this->redirect(array('action' => 'licenses'));
+	        $this->Flash->success('License Key Deleted');
 	    }
+      else
+      {
+        $this->Flash->error('Error deleting license key');
+      }
+
+    }
+    else
+    {
+      $this->Flash->error('Cannot delete key with assigned devices');
+    }
+
+    $this->redirect('/manage/view_license/' . $license_id);
 	}
 
   public function deviceTypes() {

@@ -119,9 +119,8 @@ class InventoryController extends AppController {
   }
 
 	public function moreInfo( $id) {
-		//get the info about this computer
-	 	$this->Computer->id = $id;
-    $computer = $this->Computer->read();
+		//get the info about this computer - recurse to level 2
+    $computer = $this->Computer->find('first', array('conditions'=>array('Computer.id'=>$id), 'recursive'=>2));
 
     // set the page title based on the device type
     $this->set('title_for_layout',$computer['DeviceType']['name'] . ' Detail');

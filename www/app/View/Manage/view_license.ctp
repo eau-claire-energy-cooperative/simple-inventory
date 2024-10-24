@@ -18,6 +18,19 @@
         }
     })
 
+    $('a.delete-license-key').confirm({
+        title: 'Delete License Key',
+        content: 'Are you sure you want to delete this license key?',
+        buttons: {
+            yes: function(){
+                location.href = this.\$target.attr('href');
+            },
+            cancel: function(){
+
+            }
+        }
+    })
+
     });", array("inline"=>false));
 ?>
 
@@ -76,4 +89,43 @@
     </div>
   </div>
   <?php endif; ?>
+
+  <div class="col-xl-12">
+    <div class="card border-left-warning shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">License Keys</h6>
+      </div>
+      <div class="card-body">
+        <div class="mb-3" align="right">
+          <a href="<?php echo $this->Html->url('/search/searchLicense/license/' . $license['License']['id']) ?>" class="d-none d-sm-inline-block btn btn-success btn-sm shadow-sm"><i class="mdi mdi-eye-outline icon-sm icon-inline text-white-50"></i> View All</a>
+          <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/new_license_key/' . $license['License']['id']) ?>" class="d-none d-sm-inline-block btn btn-primary btn-sm shadow-sm"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i> Add Key</a>
+        </div>
+        <?php if(count($license['LicenseKey']) > 0): ?>
+        <table class="table table-striped">
+          <tr>
+            <th>License Key</th>
+            <th>Assigned</th>
+            <th>Total</th>
+            <th></th>
+          </tr>
+          <?php foreach($license['LicenseKey'] as $key): ?>
+          <tr>
+            <td><?php echo $key['Keycode'] ?></td>
+            <td><?php echo $this->Html->link(count($key['Computer']), '/search/searchLicense/key/' . $key['id']) ?></td>
+            <td><?php echo $key['Quantity'] ?></td>
+            <td align="right">
+              <?php if (count($key['Computer']) < $key['Quantity']): ?>
+              <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/assign_license_key/' . $license['License']['id'] . '/' . $key['id']) ?>" title="Assign License Key" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-primary"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i></a>
+              <?php endif ?>
+              <?php if (count($key['Computer']) == 0): ?>
+              <a href="<?php echo $this->Html->url('/manage/delete_license_key/' . $license['License']['id'] . '/' . $key['id']) ?>" title="Delete License" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-danger delete-license-key"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i></a>
+              <?php endif; ?>
+            </td>
+          </tr>
+          <?php endforeach ?>
+        </table>
+        <?php endif; ?>
+      </div>
+    </div>
+  </div>
 </div>

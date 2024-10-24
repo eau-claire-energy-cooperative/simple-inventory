@@ -212,14 +212,14 @@ function copyLicense(id){
       <div class="card-body">
         <?php foreach($computer['LicenseKey'] as $aLicense): ?>
         <div class="row">
-          <div class="col-md-4"><?php echo $aLicense['ProgramName'] ?></div>
+          <div class="col-md-4"><?php echo $aLicense['License']['LicenseName'] ?></div>
           <div class="col-md-6">
             <a href="javascript:;" onclick="copyLicense('<?php echo $aLicense['id'] ?>')" id="license_<?php echo $aLicense['id'] ?>" style="cursor: copy">
               <?php echo $aLicense['Keycode'] ?>
             </a>
           </div>
           <div class="col-md-2">
-            <a href="<?php echo $this->Html->url('/manage/reset_license/' . $aLicense['id'] . '/' . $computer['Computer']['id']) ?>" class="text-danger">
+            <a href="<?php echo $this->Html->url('/manage/reset_license/' . $aLicense['ComputerLicense']['id'] . '/' . $computer['Computer']['id']) ?>" class="text-danger">
               <i class="mdi mdi-delete icon-sm"></i>
             </a>
           </div>

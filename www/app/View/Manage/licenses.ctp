@@ -1,26 +1,11 @@
 <?php
-    echo $this->Html->script("jquery-confirm.min.js",false);
     echo $this->Html->script("jquery.dataTables.min.js", false);
     echo $this->Html->script("dataTables.bootstrap4.min.js", false);
 
-    echo $this->Html->css('jquery-confirm.min', array('inline'=>false));
     echo $this->Html->css('dataTables.bootstrap4.min', false);
 
     //script to load the datatable
     echo $this->Html->scriptBlock("$(document).ready(function() {
-        $('a.delete-license').confirm({
-              title: 'Delete License',
-              content: 'Are you sure you want to delete this license?',
-              buttons: {
-                  yes: function(){
-                      location.href = this.\$target.attr('href');
-                  },
-                  cancel: function(){
-
-                  }
-              }
-          });
-
         $('#dataTable').DataTable({
           paging: true,
           pageLength: 100,
@@ -33,35 +18,28 @@
 ?>
 
 <div class="mb-4" align="right">
-  <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/new_license') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i> Add License</a>
+  <a href="<?php echo $this->Html->url('/manage/edit_license') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i> Add License</a>
 </div>
 
 <div class="card shadow mb-4">
   <div class="card-body">
     <?php if(count($licenses) == 0): ?>
-    <p align="center">Add license keys for programs that can be assigned to devices and also moved when needed. Click <b>Add License</b> above to get started.</p>
+    <p align="center">Add licenses for software you need to track. Click <b>Add License</b> above to get started.</p>
     <?php endif; ?>
     <table id="dataTable" class="table table-striped">
       <thead>
-        <th>Assigned Device</th>
-        <th>Application</th>
-        <th>Key</th>
-        <th></th>
+        <th>License Name</th>
+        <th>Vendor</th>
+        <th>Expiration</th>
       </thead>
     	<?php foreach($licenses as $aLicense): ?>
+      <?php $sort_date = ($aLicense['License']['ExpirationDate'] != '') ? $this->Time->fromstring($aLicense['License']['ExpirationDate']) : 0 ?>
     	<tr>
-    		<td width="20%"><?php if($aLicense['LicenseKey']['comp_id'] != 0): ?>
-    		    <?php echo $this->Html->link($aLicense['Computer']['ComputerName'], '/inventory/moreInfo/' . $aLicense['LicenseKey']['comp_id']) ?>
-    		  <?php else: ?>
-            <span class="text-danger">UNASSIGNED</span>
-    		  <?php endif; ?>
-    		</td>
-    		<td width="25%"><?php echo $aLicense['LicenseKey']['ProgramName'] ?></td>
-    		<td><?php echo $aLicense['LicenseKey']['Keycode'] ?></td>
-    		<td width="12%" align="right">
-    		  <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/move_license/' . $aLicense['LicenseKey']['id'] . '/' . $aLicense['LicenseKey']['comp_id']) ?>" title="Move License" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-primary"><i class="mdi mdi-arrow-all icon-sm icon-inline"></i></a>
-    		  <a href="<?php echo $this->Html->url(array('action' => 'deleteLicense', $aLicense['LicenseKey']['id'])) ?>" class="delete-license d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-danger" data-title="Confirm delete license"><i class="mdi mdi-delete icon-sm icon-inline" title="Delete License"></i></a>
-    		</td>
+    		<td><?php echo $this->Html->link($aLicense['License']['LicenseName'], '/manage/view_license/' . $aLicense['License']['id']) ?></td>
+    		<td><?php echo $aLicense['License']['Vendor'] ?></td>
+    		<td data-sort="<?php echo $sort_date ?>" class="<?php echo ($this->Time->isPast($aLicense['License']['ExpirationDate'])) ? 'text-danger': ''?>">
+          <?php echo $this->Time->format($aLicense['License']['ExpirationDate'], '%m/%d/%Y') ?>
+        </td>
     	</tr>
     	<?php endforeach ?>
     </table>
