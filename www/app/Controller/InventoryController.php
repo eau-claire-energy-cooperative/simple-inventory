@@ -302,20 +302,30 @@ class InventoryController extends AppController {
 	    $this->Computer->id = $id;
 	    $computer = $this->Computer->read();
 
-	    if ($this->Computer->delete($id)) {
-	    	//also delete programs and services
-	    	$this->Applications->query('delete from application_installs where comp_id = ' . $id);
-	    	$this->Service->query('delete from services where comp_id = ' . $id);
-	    	$this->Disk->query('delete from disk where comp_id = ' . $id);
+      if(count($computer['LicenseKey']) == 0)
+      {
+        if ($this->Computer->delete($id)) {
+  	    	//also delete programs and services
+  	    	$this->Applications->query('delete from application_installs where comp_id = ' . $id);
+  	    	$this->Service->query('delete from services where comp_id = ' . $id);
+  	    	$this->Disk->query('delete from disk where comp_id = ' . $id);
 
-	    	$message = $computer['DeviceType']['name'] . ' ' . $computer['Computer']['ComputerName'] . ' has been deleted';
+  	    	$message = $computer['DeviceType']['name'] . ' ' . $computer['Computer']['ComputerName'] . ' has been deleted';
 
-	    	$this->_saveLog($message);
-	      $this->Flash->success($message);
+  	    	$this->_saveLog($message);
+  	      $this->Flash->success($message);
 
-	    }
+  	    }
 
-		$this->redirect(array('action' => 'computerInventory'));
+        $this->redirect(array('action' => 'computerInventory'));
+      }
+      else
+      {
+        $this->Flash->error('Device has ' . count($computer['LicenseKey']) . ' license(s) attached to it, remove these first.');
+        $this->redirect('/inventory/moreInfo/' . $id);
+      }
+
+
 	}
 
   public function deleteDecom($id){
