@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased
 
+### Added
+
+- Added __parent license__ feature to replace existing license functionality. Licenses now include the name, vendor, and optional expiration dates
+- Old licenses renamed __license keys__. License keys are attached to a parent license and now include a quantity value. Individual key codes are attached to devices up to the quantity listed. 
+
 ### Changed
 
 - renamed `licenses` table to `license_keys`
