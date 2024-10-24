@@ -2,7 +2,7 @@
 
 class ManageController extends AppController {
 	var $uses = array('Computer','DeviceType','License','LicenseKey','Logs','Location','Setting','User','Command','Schedule');
-	var $helpers = array('Html','Markdown','Session','Time','Form','LogParser');
+	var $helpers = array('Html','Markdown','Session','Time','Form','License','LogParser');
 	var $paginate = array('limit'=>100, 'order'=>array('Logs.id'=>'desc'));
 
 	public function beforeFilter(){
@@ -54,19 +54,6 @@ class ManageController extends AppController {
       //get the license to display
       $license = $this->License->find('first', array('conditions'=>array('License.id' => $id), 'recursive'=>2));
 
-      // determine date of next reminder
-      $reminder = !empty($license['License']['ExpirationDate']);
-
-      if($reminder)
-      {
-        $next_reminder = new DateTime($license['License']['ExpirationDate']);
-        $next_reminder->sub(new DateInterval('P' . $license['License']['StartReminder'] . 'M'));
-
-        // Getting the new date after addition
-        $this->set('next_reminder', $next_reminder->format('m/d/Y'));
-      }
-
-      $this->set('hasExpiration', $reminder);
       $this->set('license', $license);
 
   }

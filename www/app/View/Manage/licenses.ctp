@@ -30,6 +30,7 @@
       <thead>
         <th>License Name</th>
         <th>Vendor</th>
+        <th>License Keys</th>
         <th>Expiration</th>
       </thead>
     	<?php foreach($licenses as $aLicense): ?>
@@ -37,7 +38,8 @@
     	<tr>
     		<td><?php echo $this->Html->link($aLicense['License']['LicenseName'], '/manage/view_license/' . $aLicense['License']['id']) ?></td>
     		<td><?php echo $aLicense['License']['Vendor'] ?></td>
-    		<td data-sort="<?php echo $sort_date ?>" class="<?php echo ($this->Time->isPast($aLicense['License']['ExpirationDate'])) ? 'text-danger': ''?>">
+        <td><?php echo count($aLicense['LicenseKey']) ?></td>
+        <td data-sort="<?php echo $sort_date ?>" class="<?php echo $this->License->expirationCSS($aLicense['License']['ExpirationDate'], $aLicense['License']['StartReminder']) ?>">
           <?php echo $this->Time->format($aLicense['License']['ExpirationDate'], '%m/%d/%Y') ?>
         </td>
     	</tr>

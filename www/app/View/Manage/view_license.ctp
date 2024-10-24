@@ -52,22 +52,22 @@
               <th>License Name</th>
               <th>Vendor</th>
               <th>Expiration Date</th>
-              <?php if($hasExpiration): ?>
-              <th>Next Reminder</th>
+              <?php if($this->License->hasExpiration($license)): ?>
+              <th>Start Reminders</th>
               <?php endif; ?>
             </tr>
             <tr>
               <td><?php echo $license['License']['LicenseName']?></td>
               <td><?php echo $license['License']['Vendor']?></td>
-              <td>
-                <?php if($hasExpiration): ?>
+              <td class="<?php echo $this->License->expirationCSS($license['License']['ExpirationDate'], $license['License']['StartReminder']) ?>">
+                <?php if($this->License->hasExpiration($license)): ?>
                 <?php echo $this->Time->format($license['License']['ExpirationDate'], '%m/%d/%Y') ?>
                 <?php else: ?>
                   None
                 <?php endif ?>
               </td>
-              <?php if($hasExpiration): ?>
-              <td><?php echo $next_reminder ?></td>
+              <?php if($this->License->hasExpiration($license)): ?>
+              <td><?php echo $this->License->calcReminder($license['License']['ExpirationDate'], $license['License']['StartReminder']) ?></td>
               <?php endif; ?>
             </tr>
           </table>
@@ -97,8 +97,8 @@
       </div>
       <div class="card-body">
         <div class="mb-3" align="right">
-          <a href="<?php echo $this->Html->url('/search/searchLicense/license/' . $license['License']['id']) ?>" class="d-none d-sm-inline-block btn btn-success btn-sm shadow-sm"><i class="mdi mdi-eye-outline icon-sm icon-inline text-white-50"></i> View All</a>
           <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?php echo $this->Html->url('/ajax/new_license_key/' . $license['License']['id']) ?>" class="d-none d-sm-inline-block btn btn-primary btn-sm shadow-sm"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i> Add Key</a>
+          <a href="<?php echo $this->Html->url('/search/searchLicense/license/' . $license['License']['id']) ?>" class="d-none d-sm-inline-block btn btn-success btn-sm shadow-sm"><i class="mdi mdi-eye-outline icon-sm icon-inline text-white-50"></i> View Assigned</a>
         </div>
         <?php if(count($license['LicenseKey']) > 0): ?>
         <table class="table table-striped">
