@@ -219,7 +219,7 @@ function copyLicense(id){
             </a>
           </div>
           <div class="col-md-2">
-            <a href="<?php echo $this->Html->url('/manage/reset_license/' . $aLicense['ComputerLicense']['id'] . '/' . $computer['Computer']['id']) ?>" class="text-danger">
+            <a href="<?php echo $this->Html->url('/manage/reset_license/' . $aLicense['ComputerLicense']['id']) ?>" class="text-danger">
               <i class="mdi mdi-delete icon-sm"></i>
             </a>
           </div>

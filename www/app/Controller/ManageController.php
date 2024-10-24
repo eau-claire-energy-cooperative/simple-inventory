@@ -105,12 +105,14 @@ class ManageController extends AppController {
 
 	}
 
-  function reset_license($link_id, $computer_id){
+  function reset_license($link_id){
 
     // delete the link that joins the license to the device
     $this->License->query('delete from computer_license where id=' . $link_id);
     $this->Flash->success("License Removed");
-    $this->redirect('/inventory/moreInfo/' . $computer_id);
+
+    // redirect back to the original URL
+    $this->redirect($this->request->referer(true));
   }
 
 	function delete_license_key($license_id, $license_key_id){

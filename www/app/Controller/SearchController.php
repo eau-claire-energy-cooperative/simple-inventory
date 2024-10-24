@@ -84,8 +84,9 @@ class SearchController extends AppController {
 
     if($type == 'license'){
       $results = $this->LicenseKey->find('all', array('conditions'=>array('License.id'=>$id), 'recursive'=>2));
-	    $this->set("q","Assigned Keys For '" . $results[0]['License']['LicenseName'] . "'");
 
+      $this->set('license_id', $id);
+	    $this->set("q","Assigned Keys For '" . $results[0]['License']['LicenseName'] . "'");
       $this->set('results', $results);
     }
     else
@@ -95,6 +96,7 @@ class SearchController extends AppController {
       // view expects results in this format
       $license_key['LicenseKey']['Computer'] = $license_key['Computer'];
 
+      $this->set('license_id', $license_key['License']['id']);
       $this->set("q","Assigned Devices for Key '" . $license_key['LicenseKey']['Keycode'] . "'");
       $this->set('results', array($license_key['LicenseKey']));
     }

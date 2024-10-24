@@ -17,6 +17,7 @@
 ?>
 
 <div class="mb-4" align="right">
+  <a href="<?php echo $this->Html->url('/manage/view_license/' . $license_id) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="mdi mdi-certificate icon-sm icon-inline text-white-50"></i> License Info</a>
   <a href="<?php echo $this->here . ".csv" ?>" class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm"><i class="mdi mdi-download icon-sm icon-inline text-white-50"></i> Download CSV</a>
 </div>
 
@@ -35,6 +36,7 @@
                     <th>License Key</th>
                     <th>Location</th>
                     <th>Last Update</th>
+                    <th></th>
                 </tr>
              </thead>
              <?php foreach ($results as $license): ?>
@@ -53,6 +55,11 @@
                   <td><?php echo $keycode ?></td>
                   <td> <?php echo $locations[$computer['ComputerLocation']] ?></td>
                   <td> <?php echo $computer['LastUpdated']; ?></td>
+                  <td>
+                    <a href="<?php echo $this->Html->url('/manage/reset_license/' . $computer['ComputerLicense']['id']) ?>" class="text-danger">
+                      <i class="mdi mdi-delete icon-sm"></i>
+                    </a>
+                  </td>
               </tr>
                   <?php endif ?>
                 <?php endforeach; ?>
