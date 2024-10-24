@@ -132,7 +132,7 @@ class ManageController extends AppController {
     if(count($license_key['Computer']) == 0)
     {
 
-	    if ($this->LicenseKey->delete($id)) {
+	    if ($this->LicenseKey->delete($license_key_id)) {
 	        $this->Flash->success('License Key Deleted');
 	    }
       else
