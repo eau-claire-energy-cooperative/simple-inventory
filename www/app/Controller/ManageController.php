@@ -33,9 +33,19 @@ class ManageController extends AppController {
 
           if(isset($this->data['MoveLicense']))
           {
-              $this->LicenseKey->query('insert into computer_license (device_id, license_id) values (' . $this->data['MoveLicense']['computer'] . ',' . $this->data['MoveLicense']['license_key_id'] . ')');
+              //compare quantity to make sure a license is available
+              $license_key = $this->LicenseKey->find('first', array('conditions'=>array('LicenseKey.id'=>$this->data['MoveLicense']['license_key_id'])));
 
-              $this->Flash->success('License Assigned');
+              if(count($license_key['Computer']) < $license_key['LicenseKey']['Quantity'])
+              {
+                $this->LicenseKey->query('insert into computer_license (device_id, license_id) values (' . $this->data['MoveLicense']['computer'] . ',' . $this->data['MoveLicense']['license_key_id'] . ')');
+
+                $this->Flash->success('License Assigned');
+              }
+              else
+              {
+                $this->Flash->error('No more keys available');
+              }
           }
           else
 	        {
