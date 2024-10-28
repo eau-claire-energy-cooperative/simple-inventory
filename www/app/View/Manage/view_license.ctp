@@ -1,5 +1,6 @@
 <?php
   echo $this->Html->script("jquery-confirm.min.js",false);
+  echo $this->Html->script("license-copy.js",false);
 
   echo $this->Html->css('jquery-confirm.min', array('inline'=>false));
 
@@ -41,7 +42,7 @@
 
 <div class="row">
   <div class="col-xl-12">
-    <div class="card border-left-primary shadow mb-4">
+    <div class="card border-left-warning shadow mb-4">
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">License Information</h6>
       </div>
@@ -110,7 +111,12 @@
           </tr>
           <?php foreach($license['LicenseKey'] as $key): ?>
           <tr>
-            <td><?php echo $key['Keycode'] ?></td>
+            <td>
+              <a href="javascript:;" onclick="copyLicense('<?php echo $key['id'] ?>')" id="license_<?php echo $key['id'] ?>" style="cursor: copy">
+                <?php echo $key['Keycode'] ?>
+              </a>
+              <div id="js-copy-alert-<?php echo $key['id'] ?>" class="text-success" style="display:none" role="alert"></div>
+            </td>
             <td><?php echo $this->Html->link(count($key['Computer']), '/search/searchLicense/key/' . $key['id']) ?></td>
             <td><?php echo $key['Quantity'] ?></td>
             <td align="right">

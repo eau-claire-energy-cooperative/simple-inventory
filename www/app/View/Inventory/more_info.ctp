@@ -1,5 +1,6 @@
 <?php
     echo $this->Html->script("jquery-confirm.min.js",false);
+    echo $this->Html->script("license-copy.js",false);
     echo $this->Html->css('jquery-confirm.min', array('inline'=>false));
 
     //script to load the datatable
@@ -64,20 +65,6 @@ function showOriginal(id, text){
   $('#' + id).html(text);
 
   return false;
-}
-
-function copyLicense(id){
-  // create fake input to select the text
-  var temp = $("<input>");
-  $("body").append(temp);
-
-  // copy text
-  var license = $('#license_' + id).html().trim();
-  temp.val(license).select();
-  var successful = document.execCommand('copy');
-
-  // remove fake input
-  temp.remove();
 }
 
 </script>
@@ -217,6 +204,7 @@ function copyLicense(id){
             <a href="javascript:;" onclick="copyLicense('<?php echo $aLicense['id'] ?>')" id="license_<?php echo $aLicense['id'] ?>" style="cursor: copy">
               <?php echo $aLicense['Keycode'] ?>
             </a>
+            <div id="js-copy-alert-<?php echo $aLicense['id'] ?>" class="text-success" style="display:none" role="alert"></div>
           </div>
           <div class="col-md-2">
             <a href="<?php echo $this->Html->url('/manage/reset_license/' . $aLicense['ComputerLicense']['id']) ?>" class="text-danger">
