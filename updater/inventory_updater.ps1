@@ -166,6 +166,7 @@ if($ComputerName.ToUpper() + '$' -eq $win32_user)
 $computerInfo.CurrentUser = $win32_user
 
 #OPERATING SYSTEM 
+$displayVersion = $((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion").DisplayVersion)
 $computerInfo.OS = $win32Output.Caption + " " + $win32Output.OSArchitecture
 
 #MODEL INFORMATION
