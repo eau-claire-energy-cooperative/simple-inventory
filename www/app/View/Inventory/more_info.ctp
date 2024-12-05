@@ -1,5 +1,6 @@
 <?php
     echo $this->Html->script("jquery-confirm.min.js",false);
+    echo $this->Html->script("license-copy.js",false);
     echo $this->Html->css('jquery-confirm.min', array('inline'=>false));
 
     //script to load the datatable
@@ -64,20 +65,6 @@ function showOriginal(id, text){
   $('#' + id).html(text);
 
   return false;
-}
-
-function copyLicense(id){
-  // create fake input to select the text
-  var temp = $("<input>");
-  $("body").append(temp);
-
-  // copy text
-  var license = $('#license_' + id).html().trim();
-  temp.val(license).select();
-  var successful = document.execCommand('copy');
-
-  // remove fake input
-  temp.remove();
 }
 
 </script>
@@ -203,23 +190,24 @@ function copyLicense(id){
 <?php endif; ?>
 
 <div class="row">
-  <?php if(count($computer['License']) > 0): ?>
+  <?php if(count($computer['LicenseKey']) > 0): ?>
   <div class="col-xl-7">
     <div class="card border-left-dark shadow mb-4">
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Licenses</h6>
       </div>
       <div class="card-body">
-        <?php foreach($computer['License'] as $aLicense): ?>
+        <?php foreach($computer['LicenseKey'] as $aLicense): ?>
         <div class="row">
-          <div class="col-md-4"><?php echo $aLicense['ProgramName'] ?></div>
+          <div class="col-md-4"><?php echo $aLicense['License']['LicenseName'] ?></div>
           <div class="col-md-6">
             <a href="javascript:;" onclick="copyLicense('<?php echo $aLicense['id'] ?>')" id="license_<?php echo $aLicense['id'] ?>" style="cursor: copy">
-              <?php echo $aLicense['LicenseKey'] ?>
+              <?php echo $aLicense['Keycode'] ?>
             </a>
+            <div id="js-copy-alert-<?php echo $aLicense['id'] ?>" class="text-success" style="display:none" role="alert"></div>
           </div>
           <div class="col-md-2">
-            <a href="<?php echo $this->Html->url('/manage/reset_license/' . $aLicense['id'] . '/' . $computer['Computer']['id']) ?>" class="text-danger">
+            <a href="<?php echo $this->Html->url('/manage/reset_license/' . $aLicense['ComputerLicense']['id']) ?>" class="text-danger">
               <i class="mdi mdi-delete icon-sm"></i>
             </a>
           </div>

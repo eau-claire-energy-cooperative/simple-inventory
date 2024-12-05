@@ -36,22 +36,18 @@ class AjaxController extends AppController {
 		$this->set('command',$command);
 	}
 
-	function new_license(){
-	    $this->layout = 'fancybox';
-
-	    //get a list of all computers
-	    $allComputers = $this->Computer->find('list',array('fields'=>array('Computer.id', 'Computer.ComputerName'), 'order'=>array('Computer.ComputerName asc')));
-	    $allComputers[0] = 'NO COMPUTER - UNASSIGNED';
-
-	    $this->set('computers', $allComputers);
-
-	}
-
-	function move_license($license_id, $current_comp){
+	function new_license_key($license_id){
 	    $this->layout = 'fancybox';
 
 	    $this->set('license_id', $license_id);
-	    $this->set('current_comp', $current_comp);
+
+	}
+
+	function assign_license_key($license_key, $license_key_id){
+	    $this->layout = 'fancybox';
+
+      $this->set('license_key', $license_key);
+	    $this->set('license_key_id', $license_key_id);
 
 	    //get a list of all computers
 	    $allComputers = $this->Computer->find('list',array('fields'=>array('Computer.id', 'Computer.ComputerName'), 'order'=>array('Computer.ComputerName asc')));

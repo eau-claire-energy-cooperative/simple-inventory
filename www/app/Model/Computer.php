@@ -7,8 +7,7 @@
 	var $belongsTo = array('Location' => array('foreignKey' => 'ComputerLocation'),
                          "DeviceType" => array("foreignKey" => "DeviceType") );
 	var $hasMany = array('Disk'=>array('foreignKey'=>"comp_id", 'order'=>'Disk.label'),
-	    'ComputerLogin'=>array('foreignKey'=>'comp_id', 'limit'=>50, 'order'=>'ComputerLogin.LoginDate desc'),
-	    'License'=>array('foreignKey'=>'comp_id', 'order'=>'License.ProgramName asc'));
+	    'ComputerLogin'=>array('foreignKey'=>'comp_id', 'limit'=>50, 'order'=>'ComputerLogin.LoginDate desc'));
 
   var $hasAndBelongsToMany = array(
     "Applications" => array('className'=>'Applications',
@@ -22,7 +21,12 @@
                             'foreignKey'=>'device_id',
                             'associationForeignKey'=>'request_id',
                             'unique'=>true,
-                            'order'=>array('CheckoutRequest.check_out_date'))
+                            'order'=>array('CheckoutRequest.check_out_date')),
+    "LicenseKey" => array('className'=>'LicenseKey',
+                          'joinTable'=>'computer_license',
+                          'foreignKey'=>'device_id',
+                          'associationForeignKey'=>'license_id',
+                          'unique'=>true)
   );
 
 

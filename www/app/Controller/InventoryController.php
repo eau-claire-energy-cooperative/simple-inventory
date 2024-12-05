@@ -119,9 +119,8 @@ class InventoryController extends AppController {
   }
 
 	public function moreInfo( $id) {
-		//get the info about this computer
-	 	$this->Computer->id = $id;
-    $computer = $this->Computer->read();
+		//get the info about this computer - recurse to level 2
+    $computer = $this->Computer->find('first', array('conditions'=>array('Computer.id'=>$id), 'recursive'=>2));
 
     // set the page title based on the device type
     $this->set('title_for_layout',$computer['DeviceType']['name'] . ' Detail');
@@ -303,20 +302,30 @@ class InventoryController extends AppController {
 	    $this->Computer->id = $id;
 	    $computer = $this->Computer->read();
 
-	    if ($this->Computer->delete($id)) {
-	    	//also delete programs and services
-	    	$this->Applications->query('delete from application_installs where comp_id = ' . $id);
-	    	$this->Service->query('delete from services where comp_id = ' . $id);
-	    	$this->Disk->query('delete from disk where comp_id = ' . $id);
+      if(count($computer['LicenseKey']) == 0)
+      {
+        if ($this->Computer->delete($id)) {
+  	    	//also delete programs and services
+  	    	$this->Applications->query('delete from application_installs where comp_id = ' . $id);
+  	    	$this->Service->query('delete from services where comp_id = ' . $id);
+  	    	$this->Disk->query('delete from disk where comp_id = ' . $id);
 
-	    	$message = $computer['DeviceType']['name'] . ' ' . $computer['Computer']['ComputerName'] . ' has been deleted';
+  	    	$message = $computer['DeviceType']['name'] . ' ' . $computer['Computer']['ComputerName'] . ' has been deleted';
 
-	    	$this->_saveLog($message);
-	      $this->Flash->success($message);
+  	    	$this->_saveLog($message);
+  	      $this->Flash->success($message);
 
-	    }
+  	    }
 
-		$this->redirect(array('action' => 'computerInventory'));
+        $this->redirect(array('action' => 'computerInventory'));
+      }
+      else
+      {
+        $this->Flash->error('Device has ' . count($computer['LicenseKey']) . ' license(s) attached to it, remove these first.');
+        $this->redirect('/inventory/moreInfo/' . $id);
+      }
+
+
 	}
 
   public function deleteDecom($id){
@@ -359,9 +368,9 @@ class InventoryController extends AppController {
 
     	$this->set('title_for_layout',"Decomission Process for " . $this->request->data['Computer']['ComputerName']);
 
-    	if(count($this->request->data['License']) > 0)
+    	if(count($this->request->data['LicenseKey']) > 0)
     	{
-    	  $errors = 'This computer has ' . count($this->request->data['License']) . ' license(s) attached to it. You must delete or move these licenses before decomissioning.';
+    	  $errors = 'This computer has ' . count($this->request->data['LicenseKey']) . ' license(s) attached to it. You must delete or move these licenses before decomissioning.';
     	  $this->set('errors', $errors);
     	}
   	}

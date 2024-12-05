@@ -117,8 +117,14 @@ class CheckoutController extends AppController {
     $this->set('title_for_layout','Checkout Requests');
     $this->layout = 'default';
 
-    $checkout = $this->CheckoutRequest->find('all', array('order'=>array('CheckoutRequest.check_out_date')));
-    $this->set('checkout', $checkout);
+    $active = $this->CheckoutRequest->find('all', array('conditions'=>array('CheckoutRequest.status'=>'active'), 'order'=>array('CheckoutRequest.check_out_date')));
+    $this->set('active', $active);
+
+    $new = $this->CheckoutRequest->find('all', array('conditions'=>array('CheckoutRequest.status'=>'new'), 'order'=>array('CheckoutRequest.check_out_date')));
+    $this->set('new', $new);
+
+    $upcoming = $this->CheckoutRequest->find('all', array('conditions'=>array("CheckoutRequest.status not in ('new', 'active')"), 'order'=>array('CheckoutRequest.status', 'CheckoutRequest.check_out_date')));
+    $this->set('upcoming', $upcoming);
   }
 
   function approve($id){

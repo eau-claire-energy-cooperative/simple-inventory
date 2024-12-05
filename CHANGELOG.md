@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## Unreleased
+
+### Added
+
+- Added __parent license__ feature to replace existing license functionality. Licenses now include the name, vendor, and optional expiration dates
+- Old licenses renamed __license keys__. License keys are attached to a parent license and now include a quantity value. Individual key codes are attached to devices up to the quantity listed. 
+- New command - __License Renewal Reminders__ can be setup to email renewal reminders based on license expirate date and the renewal threshold. 
+
+### Changed
+
+- previous license key functionality is moved to the new parent license and license key model. There is __no automated migration path__ to move existing licenses to the new model. 
+
+- modified layout of the Checkout Requests page. Requests are now split into separate areas (New, Active, and Upcoming). Each has their own functions and are moved when the status changes. Areas only appear when there are requests in them to cut down on clutter. 
+
 ## 5.1
 
 ### Added

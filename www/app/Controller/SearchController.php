@@ -1,7 +1,7 @@
 <?php
 
 class SearchController extends AppController {
-	var $uses = array("Applications","Computer","Location","Service","Setting");
+	var $uses = array("Applications","Computer","Location","License","LicenseKey","Service","Setting");
 	var $helpers = array('Html','Csv','DiskSpace','Time');
 	var $search_types = array(array("name"=>"Tag","field"=>"Computer.ComputerLocation"),
 						array('name'=>'Model','field'=>'Computer.Model'),
@@ -77,6 +77,29 @@ class SearchController extends AppController {
 		//get all computers that match the program name
 		$this->set("q","For Service '" . $service . "'");
 		$this->set('results', $this->Service->find('all',array('conditions' => array('Service.name LIKE "' . $service . '%"') )));
+	}
+
+  function searchLicense($type, $id){
+		$this->set("title_for_layout","Search Results");
+
+    if($type == 'license'){
+      $results = $this->LicenseKey->find('all', array('conditions'=>array('License.id'=>$id), 'recursive'=>2));
+
+      $this->set('license_id', $id);
+	    $this->set("q","Assigned Keys For '" . $results[0]['License']['LicenseName'] . "'");
+      $this->set('results', $results);
+    }
+    else
+    {
+      $license_key = $this->LicenseKey->find('first', array('conditions'=>array('LicenseKey.id'=>$id), 'recursive'=>2));
+
+      // view expects results in this format
+      $license_key['LicenseKey']['Computer'] = $license_key['Computer'];
+
+      $this->set('license_id', $license_key['License']['id']);
+      $this->set("q","Assigned Devices for Key '" . $license_key['LicenseKey']['Keycode'] . "'");
+      $this->set('results', array($license_key['LicenseKey']));
+    }
 	}
 
   function _getDisplaySettings(){

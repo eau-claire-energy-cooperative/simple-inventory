@@ -1,8 +1,9 @@
 <?php
    class License extends AppModel {
-   	
+
 	var $useTable = 'licenses';
-	var $belongsTo = array('Computer' => array('foreignKey' => 'comp_id') ); 
+
+  var $hasMany = array('LicenseKey'=>array('foreignKey'=>"license_id", 'order'=>'LicenseKey.Keycode'));
 }
-  
+
 ?>

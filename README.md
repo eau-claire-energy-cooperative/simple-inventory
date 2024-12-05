@@ -16,7 +16,7 @@ I know, other more comprehensive systems to do this already exist. The problem i
 
 ## How does it work? 
 
-The inventory system is two different pieces working together. The first is a PHP based administrative web site that allows you to define various device types that need to be kept track of. Identifying attributes such as notes, asset id tags, and locations can also be defined to allow an easy way to tie the device inventory back to users or accounting systems. Additional features like [tracking software](https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki/Software) or [device checkouts](https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki/Device-Checkout) is also available if needed. 
+The inventory system is two different pieces working together. The first is a PHP based administrative web site that allows you to define various device types that need to be kept track of. Identifying attributes such as notes, asset id tags, and locations can also be defined to allow an easy way to tie the device inventory back to users or accounting systems. Additional features like [tracking software](https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki/Software) or [device checkouts](https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki/Device-Checkout) are also available if needed. 
 
 The second piece is a Powershell program that is configured to be run as part of a user's login process on a Windows based machine. Using Active Directory, or some type of Group Policy, the script is run in the background when a user logs in. This script will collect information about the client PC and send it back to the common database via a REST API.
 
@@ -39,6 +39,7 @@ Once you have that working take a look at the ```INSTALL.md``` file for more spe
 * Optionally can collect applications via PowerShell or manually assign them to devices
 * Software lifecycles can be assigned to specific applications for reminders and update instruction documentation
 * Equipment check out feature can be enabled to track devices that are checked out for special purposes
+* Track licenses and license keys attached to devices. 
 * Optionally can list services and their running state
 * Optionally can integrate with [Chocolatey](https://chocolatey.org/) to find outdated packages
 * Can export most information to a CSV for offline work

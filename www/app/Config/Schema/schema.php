@@ -77,7 +77,8 @@ class AppSchema extends CakeSchema {
                       array('Command'=>array('name'=>'Remove Old Applications','parameters'=>'','description'=>'Removes Applications that no longer are installed on any computer from the database.')),
                       array('Command'=>array('name'=>'Purge Decommissioned Devices','parameters'=>'Years','description'=>'Removes devices that have been decommissioned when the decommission date is greater than the given number of years.')),
                       array('Command'=>array('name'=>'Purge Checkout Requests','parameters'=>'','description'=>'Removes inactive checkout requests (approved or unapproved) where the checkout window has expired.')),
-                      array('Command'=>array('name'=>'Purge Logs','parameters'=>'Years','description'=>'Automatically removes logs from the system older than the given number of years.')));
+                      array('Command'=>array('name'=>'Purge Logs','parameters'=>'Years','description'=>'Automatically removes logs from the system older than the given number of years.')),
+                      array('Command'=>array('name'=>'License Renewal Reminders','parameters'=>'','description'=>'Send email reminders for licenses close to expiration based on the Renewal Reminder time set prior to expiration.')));
           break;
       }
     }
@@ -181,6 +182,16 @@ class AppSchema extends CakeSchema {
 		'tableParameters' => array('charset' => 'utf8mb3', 'collate' => 'utf8mb3_general_ci', 'engine' => 'MyISAM')
 	);
 
+  public $computer_license = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
+		'license_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+    'device_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+		'indexes' => array(
+			'PRIMARY' => array('column' => 'id', 'unique' => 1)
+		),
+		'tableParameters' => array('charset' => 'utf8mb3', 'collate' => 'utf8mb3_general_ci', 'engine' => 'InnoDB')
+	);
+
 	public $computer_logins = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'comp_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
@@ -256,11 +267,23 @@ class AppSchema extends CakeSchema {
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
 
-	public $licenses = array(
+  public $licenses = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
-		'comp_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
-		'ProgramName' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
-		'LicenseKey' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'LicenseName' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'Vendor' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+    'ExpirationDate' => array('type' => 'timestamp', 'null' => true, 'default' => null),
+    'StartReminder' => array('type' => 'integer', 'null' => false, 'default' => 1, 'unsigned' => false),
+    'Notes' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
+		'indexes' => array(
+			'PRIMARY' => array('column' => 'id', 'unique' => 1)
+		),
+		'tableParameters' => array('charset' => 'utf8mb3', 'collate' => 'utf8mb3_general_ci', 'engine' => 'InnoDB')
+	);
+
+	public $license_keys = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
+    'license_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+		'KeyCode' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8mb3_general_ci', 'charset' => 'utf8mb3'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
