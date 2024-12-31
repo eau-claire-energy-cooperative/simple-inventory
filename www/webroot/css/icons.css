@@ -1,0 +1,28 @@
+.mdi {
+  font-size:24px;
+}
+
+.icon-sm {
+  font-size: 18px;
+}
+
+.icon-2x {
+  font-size: 48px;
+}
+
+.icon-3x {
+  font-size: 72px;
+}
+
+.icon-4x {
+  font-size: 96px;
+}
+
+.icon-5x {
+  font-size: 120px;
+}
+
+.icon-inline{
+  position:relative;
+  top: 2px;
+}
