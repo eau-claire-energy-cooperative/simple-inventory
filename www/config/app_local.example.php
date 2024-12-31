@@ -1,4 +1,6 @@
 <?php
+use Cake\Database\Connection;
+use Cake\Database\Driver\Mysql;
 /*
  * Local configuration file to provide any overrides to your app.php configuration.
  * Copy and save this file as app_local.php and make changes as required.
@@ -25,7 +27,7 @@ return [
      *   You should treat it as extremely sensitive data.
      */
     'Security' => [
-        'salt' => env('SECURITY_SALT', '__SALT__'),
+        'salt' => env('SECURITY_SALT', '2ef4d044a35fc99798f14a49ccfb28b2597ac9d2c9f7c083414448f333f03bdf'),
     ],
 
     /*
@@ -36,6 +38,8 @@ return [
      */
     'Datasources' => [
         'default' => [
+            'className' => Connection::class,
+            'driver' => Mysql::class,
             'host' => 'localhost',
             /*
              * CakePHP will use the default DB port based on the driver selected
@@ -48,6 +52,7 @@ return [
             'password' => 'secret',
 
             'database' => 'my_app',
+            'encoding' => 'latin1',
             /*
              * If not using the default 'public' schema with the PostgreSQL driver
              * set it here.
@@ -58,37 +63,6 @@ return [
              * You can use a DSN string to set the entire configuration
              */
             'url' => env('DATABASE_URL', null),
-        ],
-
-        /*
-         * The test connection is used during the test suite.
-         */
-        'test' => [
-            'host' => 'localhost',
-            //'port' => 'non_standard_port_number',
-            'username' => 'my_app',
-            'password' => 'secret',
-            'database' => 'test_myapp',
-            //'schema' => 'myapp',
-            'url' => env('DATABASE_TEST_URL', 'sqlite://127.0.0.1/tmp/tests.sqlite'),
-        ],
-    ],
-
-    /*
-     * Email configuration.
-     *
-     * Host and credential configuration in case you are using SmtpTransport
-     *
-     * See app.php for more configuration options.
-     */
-    'EmailTransport' => [
-        'default' => [
-            'host' => 'localhost',
-            'port' => 25,
-            'username' => null,
-            'password' => null,
-            'client' => null,
-            'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
         ],
     ],
 ];
