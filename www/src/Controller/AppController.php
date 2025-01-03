@@ -16,7 +16,9 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use Cake\Event\EventInterface;
 use Cake\Controller\Controller;
+use Cake\Core\Configure;
 
 /**
  * Application Controller
@@ -28,6 +30,10 @@ use Cake\Controller\Controller;
  */
 class AppController extends Controller
 {
+  var $DEVICE_ATTRIBUTES = array("REQUIRED" => array("ComputerName"=>"Device Name", "ComputerLocation"=>"Location", "LastUpdated"=>"Last Updated"),
+                                  "GENERAL" => array("CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID"),
+                                  "HARDWARE" => array("Manufacturer"=>"Manufacturer","Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors","DriveSpace"=>"Drive Space","ApplicationUpdates"=>"Application Updates"),
+                                  "NETWORK" => array("IPaddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACaddress"=>"MAC Address", "SupplicantUsername"=>"802.1x Supplicant Username", "SupplicantPassword"=>"802.1x Supplicant Password"));
     /**
      * Initialization hook method.
      *
@@ -49,5 +55,43 @@ class AppController extends Controller
          * see https://book.cakephp.org/4/en/controllers/components/form-protection.html
          */
         //$this->loadComponent('FormProtection');
+    }
+
+    function beforeRender(EventInterface $event){
+      parent::initialize($event);
+
+      if(!$this->viewBuilder()->hasVar('active_menu'))
+      {
+          $this->set('active_menu','');
+      }
+
+      $this->set('APP_VERSION', Configure::read('Version'));
+    }
+
+
+    protected function _check_authenticated(){
+      $session = $this->request->getSession();
+
+  		//check if we are using a login method
+  		if(!$session->check('authenticated')){
+
+  			//check if we are using a login method
+  			$loginMethod = $this->fetchTable('Setting')->find('all', ['conditions'=>['Setting.key'=>'auth_type']])->first();
+
+  			if(isset($loginMethod) && trim($loginMethod['value']) == 'none')
+  			{
+  				//we aren't authenticating, just keep moving
+  				$session->write('authenticated','true');
+          $session->write('User.username', 'admin');
+  				$session->write('User.name', 'Admin User');
+  			}
+
+  			//check, we may already be trying to go to the login page
+  			if($this->request->getParam('action') != 'login')
+  			{
+  				//we need to forward to the login page
+  				return $this->redirect("/inventory/login");
+  			}
+  		}
     }
 }
