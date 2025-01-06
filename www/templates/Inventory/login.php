@@ -10,7 +10,7 @@
           <?= $this->Form->input('username', ['id'=>'username', 'class'=>'form-control form-control-user', 'placeholder'=>'Username']) ?>
         </div>
         <div class="form-group">
-          <?= $this->Form->input('password', ['class'=>'form-control form-control-user', 'placeholder'=>'Password']) ?>
+          <?= $this->Form->password('password', ['class'=>'form-control form-control-user', 'placeholder'=>'Password']) ?>
         </div>
         <?= $this->Form->submit('Login', ['class'=>'btn btn-primary btn-user btn-block']) ?>
         <?= $this->Form->end() ?>
