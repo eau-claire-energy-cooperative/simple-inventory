@@ -22,7 +22,7 @@ class MenuHelper extends Helper
 
     if(trim($active) == '')
     {
-        $active = $this->getView()->getRequest()->getParam('controller');
+        $active = strtolower($this->getView()->getRequest()->getParam('controller'));
     }
 
     if(trim($name) == trim($active))
