@@ -11,6 +11,13 @@ class ComputerTable extends Table {
 
     $this->belongsTo('DeviceType')->setForeignKey('DeviceType');
     $this->belongsTo('Location')->setForeignKey('ComputerLocation');
+
+    $this->hasMany('Disk')->setForeignKey('comp_id')->setSort('Disk.label');
+
+    $this->belongsToMany('Application', ['joinTable'=>'application_installs',
+                                          'foreignKey'=>'comp_id',
+                                          'targetForeignKey'=>'application_id',
+                                          'sort'=>['Application.name', 'Application.version']]);
   }
 }
 ?>
