@@ -23,7 +23,7 @@
 
 <script type="text/javascript">
 function checkRunning(){
-$.getJSON('<?= $this->Url->webroot ?>ajax/checkRunning/<?= $computer['id'] ?>',function(data){
+$.getJSON('<?= $this->Url->build(['controller'=>'ajax', 'action'=>'checkRunning', $computer['id']]) ?>',function(data){
   if(data.received == data.transmitted)
   {
     $('#is_running').html('Running');
@@ -56,7 +56,7 @@ function expandTable(id){
 }
 
 function wol(mac){
-  $.ajax('<?= $this->Url->webroot ?>ajax/wol?mac=' + mac);
+  $.ajax('<?= $this->Url->build('/ajax/wol') ?>?mac=' + mac);
 }
 
 function showOriginal(id, text){
@@ -66,6 +66,7 @@ function showOriginal(id, text){
 }
 
 </script>
+
 <div class="row">
   <div class="col-xl-6 col-md-6 mb-4">
     <div class="row">
