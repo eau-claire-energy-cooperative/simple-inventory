@@ -4,11 +4,10 @@ use Cake\Event\EventInterface;
 
 class InventoryController extends AppController {
 
-  public function initialize(): void
-  {
-      parent::initialize();
+  public function initialize(): void {
+    parent::initialize();
 
-      $this->loadComponent('Ldap');
+    $this->loadComponent('Ldap');
   }
 
 	function beforeFilter(EventInterface $event){
