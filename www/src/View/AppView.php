@@ -37,6 +37,7 @@ class AppView extends View
      */
     public function initialize(): void
     {
+      $this->assign('title', $this->get('title'));
       $this->loadHelper('Menu');
     }
 }
