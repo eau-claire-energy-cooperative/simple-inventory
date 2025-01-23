@@ -11,7 +11,7 @@ class ApplicationTable extends Table {
 
     $this->hasOne('Lifecycle')->setForeignKey('application_id');
 
-    $this->belongsToMany('Computer' ['joinTable'=>'application_installs',
+    $this->belongsToMany('Computer', ['joinTable'=>'application_installs',
                                      'foreignKey'=>'application_id',
                                      'targetForeignKey'=>'comp_id']);
   }
