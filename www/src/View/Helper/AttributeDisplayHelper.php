@@ -59,11 +59,11 @@ class AttributeDisplayHelper extends Helper
   	}
   	else if($attribute == 'ComputerLocation')
   	{
-  		$result = $this->Html->link( $computer['location']['location'], array('controller'=>'search','action' => 'search', 0, $computer['ComputerLocation']));
+  		$result = $this->Html->link( $computer['location']['location'], ['controller'=>'search','action' => 'search', 0, $computer['ComputerLocation']]);
   	}
   	else if($attribute == 'CurrentUser')
   	{
-  		$result = $this->Html->link($computer['CurrentUser'],array('controller'=>'inventory','action'=>'loginHistory',$computer['id']));
+  		$result = $this->Html->link($computer['CurrentUser'], ['controller'=>'inventory','action'=>'loginHistory',$computer['id']]);
   	}
   	else if ($attribute == 'SerialNumber')
   	{
@@ -83,11 +83,11 @@ class AttributeDisplayHelper extends Helper
     }
   	else if ($attribute == 'Model')
   	{
-  		$result = $this->Html->link($computer['Model'], array('controller'=>'search','action' => 'search', 1, $computer['Model']));
+  		$result = $this->Html->link($computer['Model'], ['controller'=>'search','action' => 'search', 1, $computer['Model']]);
   	}
   	else if ($attribute == 'OS')
   	{
-  		$result = $this->Html->link( $computer['OS'], array('controller'=>'search','action' => 'search', 2, $computer['OS']));
+  		$result = $this->Html->link( $computer['OS'], ['controller'=>'search','action' => 'search', 2, $computer['OS']]);
   	}
   	else if ($attribute == 'CPU')
   	{
@@ -95,12 +95,12 @@ class AttributeDisplayHelper extends Helper
   	}
   	else if ($attribute == 'Memory')
   	{
-  		$result = $this->Html->link($computer['Memory'] . " GB", array('controller'=>'search','action' => 'search', 3, $computer['Memory']));
+  		$result = $this->Html->link($computer['Memory'] . " GB",  ['controller'=>'search','action' => 'search', 3, $computer['Memory']]);
            	$result = $result . ' (' . $this->DiskSpace->compare($computer['Memory'],$computer['MemoryFree']) . "% free)";
   	}
   	else if ($attribute == 'NumberOfMonitors')
   	{
-  		$result = $this->Html->link( $computer['NumberOfMonitors'], array('controller'=>'search','action' => 'search', 4, $computer['NumberOfMonitors']));
+  		$result = $this->Html->link( $computer['NumberOfMonitors'], ['controller'=>'search','action' => 'search', 4, $computer['NumberOfMonitors']]);
   	}
   	else if ($attribute == 'IPaddress')
   	{

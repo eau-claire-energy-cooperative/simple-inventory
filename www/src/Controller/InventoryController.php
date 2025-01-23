@@ -119,5 +119,67 @@ class InventoryController extends AppController {
     $this->request->getSession()->destroy();
     return $this->redirect('/');
   }
+
+  public function moreInfo( $id) {
+		//get the info about this computer - recurse to level 2
+    $computer = $this->fetchTable('Computer')->find('all', ['contain'=>['Application', 'DeviceType', 'Disk', 'LicenseKey', 'LicenseKey.License', 'Location'],
+                                                            'conditions'=>['Computer.id'=>$id], 'recursive'=>2])->first();
+
+    // set the page title based on the device type
+    $this->set('title', $computer['device_type']['name'] . ' Detail');
+
+    //set variables for the view
+    $this->set('computer', $computer);
+    $this->set('lifecycles', $this->fetchTable('Lifecycle')->find('list', ['keyField'=>'application_id', 'valueField'=>'id'])->toArray());
+		$this->set('services', $this->fetchTable('Service')->find('all', ['conditions' =>['comp_id' => $id],
+                                                                      'order' =>['name ASC']])->all());
+
+		//figure out what attributes to display
+    $allowedAttributes = array_merge(explode(",",$computer['device_type']['attributes']), array_keys($this->DEVICE_ATTRIBUTES['REQUIRED']));
+
+		$tables = [];
+
+    //build the tables
+		$tables['general'] = $this->_processDisplayTable(array_merge($this->DEVICE_ATTRIBUTES['REQUIRED'], $this->DEVICE_ATTRIBUTES['GENERAL']), $allowedAttributes);
+    $tables['hardware'] = $this->_processDisplayTable($this->DEVICE_ATTRIBUTES['HARDWARE'], $allowedAttributes);
+    $tables['network'] = $this->_processDisplayTable($this->DEVICE_ATTRIBUTES['NETWORK'], $allowedAttributes);
+
+
+		$this->set('validAttributes',$this->DEVICE_ATTRIBUTES['REQUIRED'] + $this->DEVICE_ATTRIBUTES['GENERAL'] + $this->DEVICE_ATTRIBUTES['HARDWARE'] + $this->DEVICE_ATTRIBUTES['NETWORK']);
+		$this->set('displayStatus', $computer['device_type']['check_running'] == 'true');
+		$this->set('tables',$tables);
+
+    // load helpers
+    $this->viewBuilder()->addHelper('AttributeDisplay');
+  }
+
+  function _processDisplayTable($validAttributes, $selectedAttributes){
+    $result = [];
+
+    $currentRow = []; //one row in a table
+    $colCount = 0; //current number of columns
+    $maxCol = 5; //maximum number of table columns
+
+    foreach(array_keys($validAttributes) as $aKey){
+      if(in_array($aKey, $selectedAttributes))
+      {
+        if($colCount >= 5){
+          $result[] = $currentRow;
+          $currentRow = [];
+          $colCount = 0;
+        }
+
+        $currentRow[] = $aKey;
+        $colCount ++;
+      }
+    }
+
+    if(count($currentRow) > 0)
+    {
+      $result[] = $currentRow;
+    }
+
+    return $result;
+	}
 }
 ?>
