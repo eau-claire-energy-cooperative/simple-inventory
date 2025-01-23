@@ -18,6 +18,9 @@ class ComputerTable extends Table {
                                           'foreignKey'=>'comp_id',
                                           'targetForeignKey'=>'application_id',
                                           'sort'=>['Application.name', 'Application.version']]);
+    $this->belongsToMany('LicenseKey', ['through'=>'ComputerLicense',
+                                        'foreignKey'=>'device_id',
+                                        'targetForeignKey'=>'license_id']);
   }
 }
 ?>
