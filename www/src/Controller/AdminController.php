@@ -26,8 +26,61 @@ class AdminController extends AppController {
     $this->set("settings", $settings);
   }
 
+  public function addLocation() {
+		$this->set('title','Add Location');
+
+    if ($this->request->is('post')) {
+        $Location = $this->fetchTable('Location');
+        $location = $Location->newEntity($this->request->getData());
+
+        if ($Location->save($location)) {
+            $this->Flash->success(sprintf('%s has been saved.', $location['location']));
+            return $this->redirect(['action' => 'location']);
+        } else {
+            $this->Flash->error(sprintf('Unable to add %s', $location['location']));
+        }
+    }
+  }
+
+  public function deleteLocation($id) {
+    $Location = $this->fetchTable('Location');
+    $location = $Location->get($id);
+
+    if ($Location->delete($location)) {
+      $this->Flash->success(sprintf("%s has been deleted", $location['location']));
+      return$this->redirect(['action' => 'location']);
+    }
+ }
+
   function downloads(){
 		$this->set('title','Downloads');
+	}
+
+  public function editLocation($id) {
+	  $this->set('title','Edit Location');
+
+    // get this location
+    $Location = $this->fetchTable('Location');
+    $location = $Location->get($id);
+
+  	if ($this->request->is('get')) {
+      $this->set('location', $location);
+ 		}
+ 		else
+ 		{
+      $Location->patchEntity($location, $this->request->getData());
+
+    	if ($Location->save($location)) {
+        $this->Flash->success(sprintf("%s has been updated", $location['location']));
+        return $this->redirect(array('action' => 'location'));
+    	}
+    	else
+    	{
+        $this->Flash->error('Unable to update your entry.');
+    	}
+
+      return $this->redirect('/admin/location');
+ 		}
 	}
 
   public function editSetting($id = null){
@@ -67,6 +120,13 @@ class AdminController extends AppController {
     $this->set('title', 'Admin');
   }
 
+  public function location() {
+ 	  $this->set('title','Locations');
+
+    $locations = $this->fetchTable('Location')->find('all', ['contain' => ['Computer'],
+                                                             'order'=> ['is_default desc, location ASC']])->all();
+    $this->set('location', $locations);  // gets all data
+  }
   public function logs()	{
 	 	$this->set('title','Logs');
     $this->viewBuilder()->addHelper('LogParser');
@@ -92,6 +152,20 @@ class AdminController extends AppController {
 		}
 
 		$this->set('settings_list', $Setting->find('all', ['order'=>['Setting.key']])->all());
+	}
+
+  public function setDefaultLocation($id){
+    $Location = $this->fetchTable('Location');
+
+		//reset all locations to false
+		$Location->updateQuery()->set(['is_default'=>'false'])->execute();
+
+    $newDefault = $Location->get($id);
+		$newDefault->is_default = "true";
+		$Location->save($newDefault);
+
+    $this->Flash->success(sprintf("%s is the default location", $newDefault['location']));
+		$this->redirect(array('action'=>'location'));
 	}
 }
 ?>
