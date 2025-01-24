@@ -5,7 +5,7 @@ use Cake\View\Helper;
 
 class AttributeDisplayHelper extends Helper
 {
-  public $helpers = ['Html', 'DiskSpace', 'Time'];
+  public $helpers = ['Html', 'DiskSpace', 'Time', 'Url'];
 
   function drawTable($tableRows, $validAttributes, $computer){
     $result =  '<div class="row">';
@@ -127,7 +127,7 @@ class AttributeDisplayHelper extends Helper
   			}
 
         if($edit){
-          $result = $result . '<a href="' . $this->Html->url('/inventory/delete_disk/' . $aDisk['id'] . '/' . $computer['id']) . '" class="ml-1 text-danger" title="Delete Disk"><i class="mdi mdi-delete icon-inline icon-sm"></i></a>';
+          $result = $result . '<a href="' . $this->Url->build('/inventory/delete_disk/' . $aDisk['id'] . '/' . $computer['id']) . '" class="ml-1 text-danger" title="Delete Disk"><i class="mdi mdi-delete icon-inline icon-sm"></i></a>';
         }
 
         $result = $result . "<br />";

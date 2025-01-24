@@ -13,6 +13,7 @@ class ComputerTable extends Table {
     $this->belongsTo('Location')->setForeignKey('ComputerLocation');
 
     $this->hasMany('Disk')->setForeignKey('comp_id')->setSort('Disk.label');
+    $this->hasMany('ComputerLogin')->setForeignKey('comp_id')->setSort('ComputerLogin.LoginDate desc');
 
     $this->belongsToMany('Application', ['joinTable'=>'application_installs',
                                           'foreignKey'=>'comp_id',

@@ -40,6 +40,61 @@ class InventoryController extends AppController {
     $this->set('columnNames', $columnNames);
   }
 
+  public function edit($id= null) {
+    $this->set('title', 'Edit Device');
+
+    $locations = $this->fetchTable('Location')->find('list', ['keyField'=>'id',
+                                                              'valueField'=>"location",
+                                                              'order'=>'Location.is_default desc, Location.Location asc'])->toArray();
+		$this->set('location', $locations);
+
+	  if ($this->request->is('get')) {
+      $computer = $this->fetchTable('Computer')->find('all', ['contain'=>['Application', 'DeviceType', 'Disk', 'LicenseKey', 'LicenseKey.License', 'Location'],
+                                                             'conditions'=>['Computer.id'=>$id]])->first();
+
+      //if device is found set page title based on device type
+      $this->set('title', 'Edit ' . $computer['device_type']['name']);
+
+      //set the attributes specific to this device type
+      $this->set('allowedAttributes', explode(',', $computer['device_type']['attributes']));
+      $this->set('generalAttributes', array_merge($this->DEVICE_ATTRIBUTES['REQUIRED'], $this->DEVICE_ATTRIBUTES['GENERAL']));
+      $this->set('hardwareAttributes', $this->DEVICE_ATTRIBUTES['HARDWARE']);
+      $this->set('networkAttributes', $this->DEVICE_ATTRIBUTES['NETWORK']);
+
+      $this->set('computer', $computer);
+
+	  }
+	  else
+	  {
+
+      $Computer = $this->fetchTable('Computer');
+      $originalData = $Computer->find('all', ['contain'=>['Application', 'DeviceType', 'Disk', 'LicenseKey', 'LicenseKey.License', 'Location'],
+                                                             'conditions'=>['Computer.id'=>$this->request->getData('id')]])->first();
+
+      //check if the current user is part of the attributes
+      if($this->request->getData('CurrentUser') != null && $this->request->getData('CurrentUser') != $originalData['CurrentUser'])
+      {
+        $ComputerLogin = $this->fetchTable('ComputerLogin');
+        $newLogin = $ComputerLogin->newEmptyEntity();
+        $newLogin->Username = $this->request->getData('CurrentUser');
+        $newLogin->comp_id = $this->request->getData('id');
+        $ComputerLogin->save($newLogin);
+      }
+
+      $Computer->patchEntity($originalData, $this->request->getData());
+      if($Computer->save($originalData))
+      {
+        $this->Flash->success('Device updated');
+      }
+      else
+      {
+        $this->Flash->error('Error updating device');
+      }
+
+	    return $this->redirect("/inventory/moreInfo/" . $this->request->getData('id'));
+	  }
+	}
+
   public function login(){
     $this->set('title', 'Login');
     $this->viewBuilder()->setLayout('login');
