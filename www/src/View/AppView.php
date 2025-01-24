@@ -38,6 +38,8 @@ class AppView extends View
     public function initialize(): void
     {
       $this->assign('title', $this->get('title'));
+      $this->loadHelper('Paginator', ['templates' => 'paginator-templates']);
       $this->loadHelper('Menu');
+      $this->loadHelper('LegacyTime');
     }
 }
