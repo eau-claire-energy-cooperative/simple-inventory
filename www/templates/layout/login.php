@@ -10,6 +10,7 @@
   <meta name="author" content="">
 
   <title><?= $this->fetch('title') ?> | Simple Inventory Manager</title>
+  <link rel="icon" type="image/x-icon" href="<?= $this->Url->build('/favicon.ico') ?>">
   <?= $this->Html->script(["jquery.min.js", "bootstrap.bundle.min.js", "jquery.easing.min.js"]) ?>
   <?= $this->Html->css(['sb-admin-2', 'materialdesignicons.min', 'icons']) ?>
 
