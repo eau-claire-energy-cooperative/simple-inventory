@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 use Cake\Event\EventInterface;
+use Cake\Routing\Router;
 
 class InventoryController extends AppController {
 
@@ -26,6 +27,45 @@ class InventoryController extends AppController {
     // find settings before rendering
     $settings = $this->fetchTable('Setting')->find('list', ['keyField'=>'key', 'valueField'=>'value'])->toArray();
     $this->set("settings", $settings);
+  }
+
+  function add(){
+    $this->set('title', 'Add a New Device');
+
+    // set drop down list items
+    $this->set('device_types', $this->fetchTable('DeviceType')->find('list', ['keyField'=>'id', 'valueField' => "name",
+                                                                             'order'=>['name'=>'asc']])->toArray());
+		$this->set('location', $this->fetchTable('Location')->find('list', ["keyField"=>'id', 'valueField' => "location",
+                                                                        'order'=>['is_default'=>'desc', 'location'=>'asc']])->toArray());
+
+    if ($this->request->is('post')) {
+      $Computer = $this->fetchTable('Computer');
+
+      $exists = $Computer->find('all', ['conditions'=>['Computer.ComputerName'=>trim($this->request->getData('ComputerName')),
+                                                       'Computer.DeviceType'=>$this->request->getData('DeviceType')]])->first();
+      //make sure this device is unique
+      if($exists == null)
+      {
+        $newDevice = $Computer->newEntity($this->request->getData());
+        $newDevice->ComputerName = trim($newDevice->ComputerName);
+
+        if($Computer->save($newDevice)) {
+        	//create log entry
+        	$this->_saveLog("Device " . $this->request->getData('ComputerName') . " added to database");
+
+          $this->Flash->success('Your Entry has been saved.');
+          return $this->redirect(['action' => 'moreInfo', $newDevice->id]);
+
+        } else {
+          $this->Flash->error('Unable to add your Entry.');
+        }
+      }
+      else {
+        // create url for duplicate 
+        $deviceUrl = Router::url(['controller'=>'inventory', 'action'=>'moreInfo', $exists['id']]);
+        $this->Flash->error(sprintf('Duplicate <a href="%s">device #%d</a> already exists', $deviceUrl, $exists['id']), ['escape'=> false]);
+      }
+    }
   }
 
   function addDisk(){
