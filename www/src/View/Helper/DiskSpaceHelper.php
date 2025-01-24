@@ -27,7 +27,7 @@ class DiskSpaceHelper extends Helper
 		}
 		else
 		{
-			$result = $kb + " KB";
+			$result = $kb . " KB";
 		}
 
 		return $result;
