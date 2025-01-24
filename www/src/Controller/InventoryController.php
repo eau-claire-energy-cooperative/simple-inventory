@@ -4,6 +4,10 @@ use Cake\Event\EventInterface;
 
 class InventoryController extends AppController {
 
+  public $paginate = [
+      'limit' => 50
+  ];
+
   public function initialize(): void {
     parent::initialize();
 
@@ -168,6 +172,20 @@ class InventoryController extends AppController {
 			}
 		}
   }
+
+  function loginHistory($id){
+		$this->set('title','User History');
+
+    $findLogins = $this->fetchTable('ComputerLogin')->find('all', ['conditions'=>['ComputerLogin.comp_id'=>$id],
+                                                     'order'=>['ComputerLogin.LoginDate'=>'desc']]);
+
+
+		$computer = $this->fetchTable('Computer')->find('all', ['conditions'=>['Computer.id'=>$id]])->first();
+
+		$this->set('id',$id);
+		$this->set('computerName',$computer['ComputerName']);
+		$this->set('history', $this->paginate($findLogins));
+	}
 
   public function logout(){
     $this->request->getSession()->destroy();
