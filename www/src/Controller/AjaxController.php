@@ -36,8 +36,7 @@ class AjaxController extends AppController {
     $this->render('json');
 	}
 
-  function wol($host, $mac)
-	{
+  function wol(){
     $this->Ping->wol($_SERVER['SERVER_ADDR'], $this->request->getQuery('mac'));
 
     $this->set('result', ['success']);
