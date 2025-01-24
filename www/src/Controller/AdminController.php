@@ -3,6 +3,9 @@ namespace App\Controller;
 use Cake\Event\EventInterface;
 
 class AdminController extends AppController {
+  public $paginate = [
+      'limit' => 50
+  ];
 
   public function initialize(): void
   {
@@ -23,8 +26,22 @@ class AdminController extends AppController {
     $this->set("settings", $settings);
   }
 
+  function downloads(){
+		$this->set('title','Downloads');
+	}
+
   function index(){
     $this->set('title', 'Admin');
   }
+
+  public function logs()	{
+	 	$this->set('title','Logs');
+    $this->viewBuilder()->addHelper('LogParser');
+
+    $logs = $this->fetchTable('Logs')->find('all', ['order'=>['Logs.id'=>'desc']]);
+	 	$this->set('logs',$this->paginate($logs));
+
+		$this->set('inventory', $this->fetchTable('Computer')->find('list', ['keyField'=>'ComputerName', 'valueField'=>'id'])->toArray());
+	}
 }
 ?>
