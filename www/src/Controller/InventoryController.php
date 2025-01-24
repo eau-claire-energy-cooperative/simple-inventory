@@ -61,7 +61,7 @@ class InventoryController extends AppController {
         }
       }
       else {
-        // create url for duplicate 
+        // create url for duplicate
         $deviceUrl = Router::url(['controller'=>'inventory', 'action'=>'moreInfo', $exists['id']]);
         $this->Flash->error(sprintf('Duplicate <a href="%s">device #%d</a> already exists', $deviceUrl, $exists['id']), ['escape'=> false]);
       }
@@ -99,6 +99,36 @@ class InventoryController extends AppController {
     $columnNames = ["CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID", "Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors", "AppUpdates"=>"Application Updates", "IPAddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACAddress"=>"MAC Address"];
     $this->set('columnNames', $columnNames);
   }
+
+  public function delete($id) {
+    $Computer = $this->fetchTable('Computer');
+
+    //get the name of the computer for logging
+    $computer = $Computer->find('all', ['contain'=>['LicenseKey', 'DeviceType'],
+                                        'conditions'=>['Computer.id'=>$id]])->first();
+
+    if($computer != null && count($computer['license_key']) == 0)
+    {
+      if ($Computer->delete($computer)) {
+
+	    	//also delete programs and services
+        $this->fetchTable('Service')->deleteQuery()->where(['comp_id'=>$id])->execute();
+        $this->fetchTable('Disk')->deleteQuery()->where(['comp_id'=>$id])->execute();
+
+	    	$message = sprintf("%s: %s has been deleted ", $computer['device_type']['name'], $computer['ComputerName']);
+
+	    	$this->_saveLog($message);
+	      $this->Flash->success($message);
+	    }
+
+      return $this->redirect(array('action' => 'computerInventory'));
+    }
+    else
+    {
+      $this->Flash->error('Device has ' . count($computer['license_key']) . ' license(s) attached to it, remove these first.');
+      return $this->redirect('/inventory/moreInfo/' . $id);
+    }
+	}
 
   function deleteDisk($disk_id, $comp_id){
 
