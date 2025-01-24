@@ -97,7 +97,6 @@ class InventoryController extends AppController {
 	  }
 	  else
 	  {
-
       $Computer = $this->fetchTable('Computer');
       $originalData = $Computer->find('all', ['contain'=>['Application', 'DeviceType', 'Disk', 'LicenseKey', 'LicenseKey.License', 'Location'],
                                                              'conditions'=>['Computer.id'=>$this->request->getData('id')]])->first();
@@ -115,6 +114,7 @@ class InventoryController extends AppController {
       $Computer->patchEntity($originalData, $this->request->getData());
       if($Computer->save($originalData))
       {
+        $this->_saveLog($originalData['ComputerName'] . ' has been updated');
         $this->Flash->success('Device updated');
       }
       else
@@ -279,6 +279,18 @@ class InventoryController extends AppController {
     }
 
     return $result;
+	}
+
+  function _saveLog($message){
+    $Log = $this->fetchTable('Logs');
+
+    $aLog = $Log->newEmptyEntity();
+    $aLog->LOGGER = 'Website';
+    $aLog->LEVEL = 'INFO';
+    $aLog->MESSAGE = $message;
+    $aLog->DATED = date("Y-m-d H:i:s",time());
+
+    $Log->save($aLog);
 	}
 }
 ?>
