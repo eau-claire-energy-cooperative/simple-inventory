@@ -28,6 +28,22 @@ class InventoryController extends AppController {
     $this->set("settings", $settings);
   }
 
+  function addDisk(){
+    $Disk = $this->fetchTable('Disk');
+    $newDisk = $Disk->newEntity($this->request->getData());
+
+    if($Disk->save($newDisk))
+    {
+      $this->Flash->success("Disk added");
+    }
+    else
+    {
+        $this->Flash->error("Error adding disk");
+    }
+
+    return $this->redirect('/inventory/moreInfo/' . $this->request->getData('comp_id'));
+  }
+
   public function computerInventory(){
     $this->set('title', 'Current Inventory');
 
@@ -42,6 +58,17 @@ class InventoryController extends AppController {
     # set the attribute names
     $columnNames = ["CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID", "Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU","Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors", "AppUpdates"=>"Application Updates", "IPAddress"=>"IP Address","IPv6address"=>"IPv6 Address","MACAddress"=>"MAC Address"];
     $this->set('columnNames', $columnNames);
+  }
+
+  function deleteDisk($disk_id, $comp_id){
+
+    //delete the disk and redirect back to computer info page
+    $Disk = $this->fetchTable('Disk');
+    $oldDisk = $Disk->get($disk_id);
+    $Disk->delete($oldDisk);
+
+    $this->Flash->success('Disk deleted');
+    return $this->redirect('/inventory/moreInfo/' . $comp_id);
   }
 
   public function edit($id= null) {

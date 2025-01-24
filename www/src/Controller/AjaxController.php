@@ -18,6 +18,10 @@ class AjaxController extends AppController {
     $this->_check_authenticated();
   }
 
+  function addDisk($comp_id){
+    $this->set('comp_id', $comp_id);
+  }
+
   function checkRunning($id){
 	  //get the IP of the device
 	  $computer = $this->fetchTable('Computer')->find('all', ['conditions'=>['Computer.id'=>$id]])->first();
