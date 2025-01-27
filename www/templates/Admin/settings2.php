@@ -2,7 +2,7 @@
 <?= $this->Html->css('jquery-confirm.min') ?>
 <?=
     //script to load the confirmation dialog
-$this->Html->scriptBlock("$(document).ready(function() {
+    $this->Html->scriptBlock("$(document).ready(function() {
       $('a.delete-setting').confirm({
         content: 'Are you sure you want to delete this setting?',
         buttons: {

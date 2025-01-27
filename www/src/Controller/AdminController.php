@@ -1,5 +1,7 @@
 <?php
 namespace App\Controller;
+
+use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 
 class AdminController extends AppController {
@@ -107,7 +109,7 @@ class AdminController extends AppController {
 			if ($Setting->save($setting)) {
         $this->Flash->success('Setting saved');
 
-        return $this->redirect(array('action' => 'settings'));
+        return $this->redirect(['action' => 'settings2']);
     	}
     	else
     	{
@@ -185,6 +187,51 @@ class AdminController extends AppController {
 
 		$this->set('inventory', $this->fetchTable('Computer')->find('list', ['keyField'=>'ComputerName', 'valueField'=>'id'])->toArray());
 	}
+
+  public function settings(){
+    $this->set('title', 'Settings');
+
+    // set some attributes
+    $this->set('homeAttributes', array_merge($this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
+    $this->set('infoAttributes', array_merge($this->DEVICE_ATTRIBUTES['REQUIRED'], $this->DEVICE_ATTRIBUTES['GENERAL'], $this->DEVICE_ATTRIBUTES['HARDWARE'], $this->DEVICE_ATTRIBUTES['NETWORK']));
+
+    // load locations
+    $locations = $this->fetchTable('Location')->find('list', ['keyField'=>"id",
+                                                            "valueField"=>"location",
+                                                            'order'=>'Location.is_default desc, Location.Location asc'])->toArray();
+    $this->set('locations', $locations);
+    $this->set('encrypted', Configure::read('Settings.encrypt'));
+
+    if($this->request->is('post'))
+		{
+			//get all the settings
+      $Setting = $this->fetchTable('Setting');
+			$db_settings = $Setting->find('all')->all();
+
+			foreach($db_settings as $aSetting){
+				$key = $aSetting['key'];
+
+				//check if we're updating
+				if($this->request->getData($key) != null)
+				{
+					$value = $this->request->getData($key);
+
+					if(is_array($this->request->getData($key)))
+					{
+						$value = implode(",", $this->request->getData($key));
+					}
+
+					$aSetting['value'] = $value;
+
+					$Setting->save($aSetting);
+				}
+			}
+
+			$this->Flash->success('Settings Saved');
+
+		}
+
+  }
 
   public function settings2($delete = null){
 		$this->set('title', 'Advanced Settings');
