@@ -116,6 +116,55 @@ class AdminController extends AppController {
 		}
 	}
 
+  public function editUser($id = null) {
+		$this->set('title','Edit User');
+    $User = $this->fetchTable('User');
+
+    if ($this->request->is('get')) {
+
+    	if($this->request->getQuery('action') != null && $this->request->getQuery('action') == 'delete'){
+
+        $user = $User->get($id);
+  			$User->delete($user);
+  			$this->Flash->success(sprintf("%s has been deleted", $user['name']));
+
+        return $this->redirect(array('action'=>'users'));
+  		}
+		  else
+		  {
+        if($id != null)
+        {
+          $this->set('user', $User->get($id));
+        }
+        else
+        {
+          $this->set('title','New User');
+          $this->set('user', $User->newEmptyEntity());
+        }
+		  }
+ 	  }
+ 		else
+ 		{
+      $user = $User->newEntity($this->request->getData());
+
+      //hash the password - if needed
+ 			if($this->request->getData('password_original') == null ||
+ 			($this->request->getData('password_original') != null && $this->request->getData('password_original') != $this->request->getData('password')))
+ 			{
+ 			  $user->password = md5($this->request->getData('password'));
+		  }
+
+      if ($User->save($user)) {
+      	$this->Flash->success(sprintf("Saved %s", $user['name']));
+      	return $this->redirect(['action' => 'users']);
+      }
+      else
+      {
+      	$this->Flash->error(sprintf('Unable to save %s', $user['name']));
+      }
+ 		}
+	}
+
   function index(){
     $this->set('title', 'Admin');
   }
@@ -166,6 +215,13 @@ class AdminController extends AppController {
 
     $this->Flash->success(sprintf("%s is the default location", $newDefault['location']));
 		$this->redirect(array('action'=>'location'));
+	}
+
+  public function users(){
+    $this->set('title','Users');
+
+		$users = $this->fetchTable('User')->find('all', ['order'=>['User.name']])->all();
+		$this->set('users',$users);
 	}
 }
 ?>
