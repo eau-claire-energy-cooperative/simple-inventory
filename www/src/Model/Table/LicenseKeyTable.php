@@ -12,7 +12,8 @@ class LicenseKeyTable extends Table {
     $this->belongsTo('License')->setForeignKey('license_id');
 
     $this->belongsToMany('Computer', ['through'=>'ComputerLicense',
-                                      'targetForeignKey'=>'license_id']);
+                                      'foreignKey'=>'license_id',
+                                      'targetForeignKey'=>'device_id']);
   }
 }
 ?>
