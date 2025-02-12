@@ -22,6 +22,22 @@ class AjaxController extends AppController {
     $this->set('comp_id', $comp_id);
   }
 
+  function assignLicenseKey($license_id, $license_key_id){
+      $this->viewBuilder()->setLayout('fancybox');
+
+      $this->set('license_id', $license_id);
+	    $this->set('license_key_id', $license_key_id);
+
+	    //get a list of all computers
+	    $allComputers = $this->fetchTable('Computer')->find('list', ['keyField'=>'id',
+                                                                   'valueField'=>'ComputerName',
+                                                                   'order'=>['Computer.ComputerName asc']])->toArray();
+	    $allComputers = [0=>'NO COMPUTER - UNASSIGNED'] + $allComputers;
+
+	    $this->set('computers', $allComputers);
+
+	}
+
   function checkRunning($id){
 	  //get the IP of the device
 	  $computer = $this->fetchTable('Computer')->find('all', ['conditions'=>['Computer.id'=>$id]])->first();
