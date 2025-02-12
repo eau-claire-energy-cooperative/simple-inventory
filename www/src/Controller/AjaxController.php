@@ -52,6 +52,12 @@ class AjaxController extends AppController {
     $this->render('json');
 	}
 
+  function newLicenseKey($license_id){
+    $this->viewBuilder()->setLayout('fancybox');
+
+    $this->set('license_id', $license_id);
+	}
+
   function wol(){
     $this->Ping->wol($_SERVER['SERVER_ADDR'], $this->request->getQuery('mac'));
 

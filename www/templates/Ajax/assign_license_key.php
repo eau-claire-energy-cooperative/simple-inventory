@@ -3,7 +3,7 @@
 <?= $this->Form->hidden('license_key_id', ['value'=>$license_key_id]); ?>
 <div class="row">
   <div class="col-sm-4">Assign License To: </div>
-  <div class="col-sm-8"><?= $this->Form->select('computer', $computers, ['label'=>false, 'empty'=>false, 'class'=>'custom-select']) ?></div>
+  <div class="col-sm-8"><?= $this->Form->select('computer', $computers, ['empty'=>false, 'class'=>'custom-select']) ?></div>
 </div>
 <div class="row mt-2">
   <div class="col-sm-4"></div>
