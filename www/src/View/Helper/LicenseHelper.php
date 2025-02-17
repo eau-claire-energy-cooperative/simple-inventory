@@ -9,7 +9,7 @@ class LicenseHelper extends Helper
 
   function hasExpiration($license){
     // return True if license has an expiration date set
-    return !empty($license['ExpirationDate']);
+    return $license['ExpirationDate'] != null && !empty($license['ExpirationDate']);
   }
 
 	function expirationCSS($expiration, $start_reminder){
@@ -37,7 +37,7 @@ class LicenseHelper extends Helper
     $next_reminder->sub(new \DateInterval('P' . $start_reminder . 'M'));
 
     // Getting the new date after substration
-    return $next_reminder->format('m/d/Y');
+    return $next_reminder->format('m/d/y');
   }
 }
 ?>

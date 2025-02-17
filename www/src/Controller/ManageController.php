@@ -43,9 +43,68 @@ class ManageController extends AppController {
 
     if ($DeviceType->delete($device)) {
       $this->Flash->success(sprintf('%s has been deleted', $device['name']));
-      return $this->redirect(['action' => 'deviceTypes']);
+    }
+    else
+    {
+      $this->Flash->error(sprintf('Error removing %s', $device['name']));
+    }
+
+    return $this->redirect(['action' => 'deviceTypes']);
+  }
+
+  public function deleteLicense($id){
+    $License = $this->fetchTable('License');
+
+    $license = $License->find('all', ['contain'=>['LicenseKey'],
+                                      'conditions'=>['License.id'=>$id]])->first();
+
+    if(count($license['license_key']) == 0)
+    {
+      if($License->delete($license))
+      {
+        $this->Flash->success(sprintf("%s Deleted", $license['LicenseName']));
+      }
+      else
+      {
+        $this->Flash->error(sprintf('Error deleting %s', $license['LicenseName']));
+      }
+
+      return $this->redirect("/manage/licenses");
+    }
+    else
+    {
+      $this->Flash->error('Cannot delete a license with active keys');
+      return $this->redirect("/manage/view_license/" . $id);
     }
   }
+
+  function deleteLicenseKey($license_id, $license_key_id){
+    $LicenseKey = $this->fetchTable('LicenseKey');
+
+    $license_key = $LicenseKey->find('all', ['contain'=>['Computer'],
+                                             'conditions'=>['LicenseKey.id'=>$license_key_id]])->first();
+
+    // cannot delete key with devices assigned
+    if(count($license_key['computer']) == 0)
+    {
+
+	    if ($LicenseKey->delete($license_key))
+      {
+	      $this->Flash->success('License Key Deleted');
+	    }
+      else
+      {
+        $this->Flash->error('Error deleting license key');
+      }
+
+    }
+    else
+    {
+      $this->Flash->error('Cannot delete key with assigned devices');
+    }
+
+    $this->redirect('/manage/view_license/' . $license_id);
+	}
 
   public function deviceTypes() {
     $this->set('title','Device Types');
@@ -59,7 +118,7 @@ class ManageController extends AppController {
 
     $DeviceType = $this->fetchTable('DeviceType');
     $device = $DeviceType->get($id);
-    
+
     if ($this->request->is('get')) {
       $this->set('device', $device);
     }
@@ -79,6 +138,111 @@ class ManageController extends AppController {
 
       return $this->redirect('/admin/deviceTypes');
     }
+  }
+
+  function licenses(){
+      $this->set('title', 'Licenses');
+      $this->set('active_menu', 'applications');
+      $this->viewBuilder()->addHelper('License');
+
+      //get a list of all licenses
+      $licenses = $this->fetchTable('License')->find('all', ['contain'=>'LicenseKey',
+                                                             'order'=>['License.LicenseName'=>'asc']])->all();
+      $this->set('licenses', $licenses);
+
+  }
+
+  function editLicense($id = null){
+    $this->set('title', 'Edit License');
+    $License = $this->fetchTable('License');
+
+    if($this->request->is('post') || $this->request->is('put'))
+    {
+      $license = $License->newEntity($this->request->getData());
+
+      // check for no expiration flag
+      if($this->request->getData("NoExpiration") == "0")
+      {
+        $license->ExpirationDate = $this->request->getData('ExpirationDate');
+      }
+      else
+      {
+        $license->ExpirationDate = null;
+      }
+
+      $License->save($license);
+      $this->Flash->success(sprintf("%s Saved %s", $license->LicenseName, $this->request->getData('ExpirationDate')));
+
+      return $this->redirect("/manage/view_license/" . $license->id);
+    }
+    else
+    {
+      $license = null;
+      if($id != null)
+      {
+        $license = $License->find('all', ['contain'=>['LicenseKey', 'LicenseKey.Computer'],
+                                          'conditions'=>['License.id' => $id],
+                                          'recursive'=>1])->first();
+      }
+      else
+      {
+        $license = $License->newEmptyEntity();
+      }
+
+      $this->set('license', $license);
+    }
+  }
+
+  function viewLicense($id){
+    $this->set('title', 'License Detail');
+    $this->set('active_menu', 'applications');
+    $this->viewBuilder()->addHelper('License');
+    $License = $this->fetchTable('License');
+
+    if($this->request->is('post')){
+      // assign a new license key
+      if($this->request->getData('license_key_id') != null)
+      {
+        //compare quantity to make sure a license is available
+        $license_key = $this->fetchTable('LicenseKey')->find('all', ['contain'=>['Computer'],
+                                                 'conditions'=>['LicenseKey.id'=>$this->request->getData('license_key_id')]])->first();
+
+        if(count($license_key['computer']) < $license_key['Quantity'])
+        {
+          $newKey = $this->fetchTable('ComputerLicense')->insertQuery()->insert(['device_id', 'license_id'])
+                                              ->values(['device_id'=>$this->request->getData('computer'), 'license_id'=>$this->request->getData('license_key_id')])
+                                              ->execute();
+
+          $this->Flash->success('License Assigned');
+        }
+        else
+        {
+          $this->Flash->error('No more keys available');
+        }
+      }
+      else
+      {
+        if($this->request->getData('Quantity') > 0)
+        {
+          $LicenseKey = $this->fetchTable('LicenseKey');
+          $newKey = $LicenseKey->newEntity($this->request->getData());
+
+          $LicenseKey->save($newKey);
+          $this->Flash->success('License Key Added');
+        }
+        else
+        {
+          $this->Flash->error('Quantity must be greater than 0');
+        }
+      }
+    }
+
+    //get the license to display
+    $license = $License->find('all', ['contain'=>['LicenseKey', 'LicenseKey.Computer'],
+                                      'conditions'=>['License.id' => $id],
+                                      'recursive'=>1])->first();
+
+    $this->set('license', $license);
   }
 
 }
