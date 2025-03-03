@@ -32,6 +32,23 @@ class SearchController extends AppController {
     $this->set("settings", $settings);
   }
 
+  function search($type, $q){
+		$this->set("title","Search Results");
+    $this->_getDisplaySettings();
+
+		//get the type
+		$type = $this->search_types[$type];
+
+    if(isset($type['active_menu']))
+    {
+      $this->set('active_menu', $type['active_menu']);
+    }
+
+		$this->set("q", $type['name']);
+		$this->set("results", $this->fetchTable('Computer')->find('all', ['contain'=>['DeviceType'],
+                                                                      'conditions'=>[$type['field'] => $q],'order'=>'Computer.ComputerName']));
+	}
+
   function searchLicense($type, $id){
 		$this->set("title","Search Results");
 
@@ -54,5 +71,18 @@ class SearchController extends AppController {
       $this->set('results', [$license_key]);
     }
 	}
+
+  function _getDisplaySettings(){
+    # get the display settings
+    $displaySetting = $this->fetchTable('Setting')->find('all', ['conditions'=>['Setting.key'=>'home_attributes']])->first();
+    $displayAttributes = explode(",", $displaySetting['value']);
+    $this->set('displayAttributes', $displayAttributes);
+
+    # set the attribute names
+    $columnNames = ["CurrentUser"=>"Current User","SerialNumber"=>"Serial Number","AssetId"=>"Asset ID", "Model"=>"Model","OS"=>"Operating System","CPU"=>"CPU",
+                    "Memory"=>"Memory","NumberOfMonitors"=>"Number of Monitors", "AppUpdates"=>"Application Updates", "IPAddress"=>"IP Address",
+                    "IPv6address"=>"IPv6 Address","MACAddress"=>"MAC Address"];
+    $this->set('columnNames', $columnNames);
+  }
 }
 ?>
