@@ -40,7 +40,7 @@
                  <?php if(isset($computer['ComputerName'])): ?>
               <tr>
                   <td data-sort="<?= $computer['device_type']['name'] ?>"><i class="mdi mdi-<?= $computer['device_type']['icon'] ?>"></i></td>
-                  <td> <?= $this->Html->link( $computer['ComputerName'] , array('controller'=>'inventory','action' => 'moreInfo', $computer['id'])); ?></td>
+                  <td> <?= $this->Html->link( $computer['ComputerName'] , ['controller'=>'inventory','action' => 'moreInfo', $computer['id']]); ?></td>
                   <td><?= $license['Keycode'] ?></td>
                   <td> <?= $locations[$computer['ComputerLocation']] ?></td>
                   <td> <?= $computer['LastUpdated']; ?></td>
