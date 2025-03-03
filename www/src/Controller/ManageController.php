@@ -193,6 +193,16 @@ class ManageController extends AppController {
     }
   }
 
+  function resetLicense($device_id, $license_key_id){
+
+    // delete the link that joins the license to the device
+    $this->fetchTable('ComputerLicense')->deleteQuery()->where(['device_id'=>$device_id, 'license_id'=>$license_key_id])->execute();
+    $this->Flash->success("Unassigned License Key");
+
+    // redirect back to the original URL
+    return $this->redirect($this->request->referer(true));
+  }
+
   function viewLicense($id){
     $this->set('title', 'License Detail');
     $this->set('active_menu', 'applications');
