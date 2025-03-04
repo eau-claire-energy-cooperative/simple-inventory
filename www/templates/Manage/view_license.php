@@ -81,7 +81,7 @@
       </div>
       <div class="card-body">
         <?php if($license['Notes'] != ''): ?>
-          <?php //echo $this->Markdown->transform($license['License']['Notes']); ?>
+          <?= $this->Markdown->transform($license['Notes']); ?>
         <?php endif; ?>
       </div>
     </div>
