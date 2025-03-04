@@ -320,6 +320,7 @@ class InventoryController extends AppController {
 
     // load helpers
     $this->viewBuilder()->addHelper('AttributeDisplay');
+    $this->viewBuilder()->addHelper('Markdown');
   }
 
   function _processDisplayTable($validAttributes, $selectedAttributes){

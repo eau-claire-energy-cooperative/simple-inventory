@@ -223,8 +223,8 @@ function showOriginal(id, text){
         <h6 class="m-0 font-weight-bold text-primary">Notes</h6>
       </div>
       <div class="card-body">
-        <?php if($computer['Computer']['notes'] != ''): ?>
-          <?= $this->Markdown->transform($computer['Computer']['notes']); ?>
+        <?php if($computer['notes'] != ''): ?>
+          <?= $this->Markdown->transform($computer['notes']); ?>
         <?php endif; ?>
       </div>
     </div>
