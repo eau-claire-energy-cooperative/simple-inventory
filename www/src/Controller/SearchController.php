@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 use Cake\Event\EventInterface;
+use \Cake\ORM\Query;
 
 class SearchController extends AppController {
   var $search_types = [["name"=>"Tag","field"=>"Computer.ComputerLocation"],
@@ -49,6 +50,20 @@ class SearchController extends AppController {
                                                                       'conditions'=>[$type['field'] => $q],'order'=>'Computer.ComputerName']));
 	}
 
+  function searchApplication($app_id){
+		$this->set("title", "Search Results");
+    $this->_getDisplaySettings();
+
+		//get all computers that match the program name
+    $application = $this->fetchTable('Application')->find('all', ['contain'=>['Computer', 'Computer.DeviceType'],
+                                                                  'conditions' => ['Application.id'=>$app_id]])->first();
+		$this->set("q", "For Application '" . $application['name'] . "'");
+
+		$this->set('results', $application['computer']);
+
+		$this->render('search');
+	}
+
   function searchLicense($type, $id){
 		$this->set("title","Search Results");
 
@@ -70,6 +85,19 @@ class SearchController extends AppController {
       $this->set("q",sprintf("Assigned Devices for Key '%s'", $license_key['Keycode']));
       $this->set('results', [$license_key]);
     }
+	}
+
+  function searchService($service){
+		$this->set("title","Search Results");
+
+		//get all computers that match the program name
+		$this->set("q","For Service '" . $service . "'");
+
+    $results = $this->fetchTable('Service')->find('all', ['contain'=>['Computer', 'Computer.DeviceType'],
+                                                          'conditions'=>['Service.name LIKE "' . $service . '%"'],
+                                                          'order'=>'Computer.ComputerName'])->all();
+
+		$this->set('results', $results);
 	}
 
   function _getDisplaySettings(){
