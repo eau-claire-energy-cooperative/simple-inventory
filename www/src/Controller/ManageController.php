@@ -253,6 +253,9 @@ class ManageController extends AppController {
                                       'recursive'=>1])->first();
 
     $this->set('license', $license);
+
+    // add helper
+    $this->viewBuilder()->addHelper('Markdown');
   }
 
 }
