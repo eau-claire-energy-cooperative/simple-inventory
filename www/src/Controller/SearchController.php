@@ -46,8 +46,11 @@ class SearchController extends AppController {
     }
 
 		$this->set("q", $type['name']);
+    $this->set("export_name", $type['name']);
 		$this->set("results", $this->fetchTable('Computer')->find('all', ['contain'=>['DeviceType'],
                                                                       'conditions'=>[$type['field'] => $q],'order'=>'Computer.ComputerName']));
+
+    $this->viewBuilder()->addHelper('DynamicTable');
 	}
 
   function searchApplication($app_id){
@@ -58,7 +61,7 @@ class SearchController extends AppController {
     $application = $this->fetchTable('Application')->find('all', ['contain'=>['Computer', 'Computer.DeviceType'],
                                                                   'conditions' => ['Application.id'=>$app_id]])->first();
 		$this->set("q", "For Application '" . $application['name'] . "'");
-
+    $this->set("export_name", $application['name']);
 		$this->set('results', $application['computer']);
 
 		$this->render('search');
@@ -74,6 +77,7 @@ class SearchController extends AppController {
 
       $this->set('license_id', $id);
 	    $this->set("q", sprintf("Assigned Keys For '%s'", $results->LicenseName));
+      $this->set("export_name", $results->LicenseName);
       $this->set('results', $results['license_key']);
     }
     else
@@ -97,6 +101,7 @@ class SearchController extends AppController {
                                                           'conditions'=>['Service.name LIKE "' . $service . '%"'],
                                                           'order'=>'Computer.ComputerName'])->all();
 
+    $this->set("export_name", $service);
 		$this->set('results', $results);
 	}
 

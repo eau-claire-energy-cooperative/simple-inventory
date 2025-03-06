@@ -2,15 +2,37 @@
 <?= $this->Html->script(["jquery.dataTables.min.js", "dataTables.bootstrap4.min.js"], ['block'=>'script']) ?>
 <?=
   $this->Html->scriptBlock("$(document).ready(function() {
-      $('#dataTable').DataTable({
+      dataTable = $('#dataTable').DataTable({
         paging: true,
         pageLength: 50,
         stateSave: true,
-        dom: '<\"top\"ifp>rt<\"bottom\"p>',
-        language: {
-          'search': 'Filter:'
+        stateDuration: 60,
+        layout: {
+          top2Start: 'info',
+          top2End: {
+            search: {}
+          },
+          topStart: null,
+          topEnd: {
+            paging: {
+              type: 'simple_numbers'
+            }
+          },
+          bottomStart: null,
+          bottomEnd: {
+            paging: {
+              type: 'simple_numbers'
+            }
           }
-        });
+        },
+        language: {
+          search: 'Filter:',
+          paginate: {
+            next: 'Next',
+            previous: 'Previous'
+          }
+        }
+      });
    });", ["block"=>true])
 ?>
 

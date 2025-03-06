@@ -2,19 +2,42 @@
 <?= $this->Html->script(["jquery.dataTables.min.js", "dataTables.bootstrap4.min.js", "csv_export.js"], ['block'=>'script']) ?>
 <?=
   $this->Html->scriptBlock("$(document).ready(function() {
-      $('#dataTable').DataTable({
+      dataTable = $('#dataTable').DataTable({
         paging: false,
-        dom: '<\"top\"ifp>rt',
-        language: {
-          'search': 'Filter:'
+        stateSave: true,
+        stateDuration: 60,
+        layout: {
+          top2Start: 'info',
+          top2End: {
+            search: {}
+          },
+          topStart: null,
+          topEnd: {
+            paging: {
+              type: 'simple_numbers'
+            }
+          },
+          bottomStart: null,
+          bottomEnd: {
+            paging: {
+              type: 'simple_numbers'
+            }
           }
-        });
+        },
+        language: {
+          search: 'Filter:',
+          paginate: {
+            next: 'Next',
+            previous: 'Previous'
+          }
+        }
+      });
    });", ["block"=>true])
 ?>
 
 <div class="mb-4" align="right">
   <a href="<?= $this->Url->build('/manage/view_license/' . $license_id) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="mdi mdi-certificate icon-sm icon-inline text-white-50"></i> License Info</a>
-  <a href=".csv" class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm"><i class="mdi mdi-download icon-sm icon-inline text-white-50"></i> Download CSV</a>
+  <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm" onClick="exportTableToCSV('dataTable', '<?= $export_name ?>_Licenses.csv')"><i class="mdi mdi-download icon-sm icon-inline text-white-50"></i> Download CSV</a>
 </div>
 
 <div class="row">
