@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## Unreleased
+
+### Idea
+
+- add validation to models
+
+### Added
+
+- exported CSV files now only show filtered search results instead of entire table
+
+### Changed
+
+- layout of Services search page matches other search pages
+- Jquery updated to 3.7.1
+- DataTables updated to 2.2.2
+- CSV exports now done in Javascript instead of PHP
+
+### Fixed
+
+- new device duplicate check now checks name and device type
+
 ## 6.0
 
 ### Added
