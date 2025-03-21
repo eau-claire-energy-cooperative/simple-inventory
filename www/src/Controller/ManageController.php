@@ -37,6 +37,20 @@ class ManageController extends AppController {
     }
   }
 
+  public function commands(){
+    $this->set('title','Scheduled Tasks');
+    $this->set('active_menu', 'schedule');
+
+    //get all of the commands that can be scheduled
+    $all_commands = $this->fetchTable('Command')->find('all', ['order'=>['Command.name']])->all();
+    $this->set('all_commands',$all_commands);
+
+    //get all of the current schedules
+    $all_schedules = $this->fetchTable('Schedule')->find('all',['contain'=>['Command'],
+                                                                'order'=>['Command.name']])->all();
+    $this->set('all_schedules',$all_schedules);
+  }
+
   public function deleteDeviceType($id) {
     $DeviceType = $this->fetchTable('DeviceType');
     $device = $DeviceType->get($id);
@@ -202,6 +216,47 @@ class ManageController extends AppController {
     // redirect back to the original URL
     return $this->redirect($this->request->referer(true));
   }
+
+  function schedule($id = NULL){
+    $Schedule = $this->fetchTable('Schedule');
+
+    if($this->request->is('post'))
+    {
+      #setup the schedule model
+      $schedule = $Schedule->newEntity($this->request->getData());
+
+      //get all of the parameters
+      $schedule_params = 'array(';
+      if($this->request->getData('parameter_list') != '')
+      {
+        $parameters = explode(',', $this->request->getData('parameter_list'));
+
+        foreach($parameters as $param){
+          $schedule_params = $schedule_params . "'" . $param . "'=>'" . $this->request->getData('param_' . $param) . "',";
+        }
+
+        $schedule_params = substr($schedule_params,0,-1);
+      }
+
+      $schedule_params = $schedule_params . ')';
+      $schedule->parameters = $schedule_params;
+      $Schedule->save($schedule);
+
+      $this->Flash->success('Schedule Created');
+    }
+    else
+    {
+      if($id != NULL)
+      {
+        $schedule = $Schedule->get($id);
+        $Schedule->delete($schedule);
+
+        $this->Flash->success('Schedule Removed');
+      }
+    }
+
+    return $this->redirect('/manage/commands');
+	}
 
   function viewLicense($id){
     $this->set('title', 'License Detail');

@@ -58,6 +58,14 @@ class AjaxController extends AppController {
     $this->set('license_id', $license_id);
 	}
 
+  function setupCommand($id){
+    $this->viewBuilder()->setLayout('fancybox');
+
+		//get the command that goes with this id
+		$command = $this->fetchTable('Command')->find('all', ['conditions'=>['Command.id'=>$id]])->first();
+		$this->set('command',$command);
+	}
+
   function wol(){
     $this->Ping->wol($_SERVER['SERVER_ADDR'], $this->request->getQuery('mac'));
 
