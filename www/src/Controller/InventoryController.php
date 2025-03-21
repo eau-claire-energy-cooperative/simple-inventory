@@ -325,6 +325,30 @@ class InventoryController extends AppController {
     $this->viewBuilder()->addHelper('Markdown');
   }
 
+  function setProfileImage(){
+    $session = $this->request->getSession();
+
+    //get the user
+    $User = $this->fetchTable('User');
+    $aUser = $User->find('all', ['conditions'=>['User.username'=>$session->read('User.username')]])->first();
+
+    if($aUser)
+    {
+
+        $aUser->gravatar = $this->request->getData('username');
+        $session->write('User.gravatar', $this->request->getData('username'));
+        $User->save($aUser);
+
+        $this->Flash->success('Profile image set');
+    }
+    else
+    {
+        $this->Flash->error('Problem setting profile image');
+    }
+
+    return $this->redirect('/');
+	}
+
   function _processDisplayTable($validAttributes, $selectedAttributes){
     $result = [];
 

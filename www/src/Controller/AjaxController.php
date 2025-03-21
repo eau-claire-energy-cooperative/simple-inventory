@@ -66,6 +66,16 @@ class AjaxController extends AppController {
 		$this->set('command',$command);
 	}
 
+  function setProfileImage(){
+    $this->viewBuilder()->setLayout('fancybox');
+
+    //get the current url
+    $session = $this->request->getSession();
+    $aUser = $this->fetchTable('User')->find('all',['conditions'=>['User.username'=>$session->read('User.username')]])->first();
+
+    $this->set('username', $aUser['gravatar']);
+	}
+
   function wol(){
     $this->Ping->wol($_SERVER['SERVER_ADDR'], $this->request->getQuery('mac'));
 
