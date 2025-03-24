@@ -29,6 +29,105 @@ class InventoryController extends AppController {
     $this->set("settings", $settings);
   }
 
+  function activeDirectorySync($action = 'find_old'){
+		$this->set('title','Active Directory Sync');
+		$this->set('active_menu', 'manage');
+
+		if($action != null)
+		{
+			$settings = $this->fetchTable('Setting')->find('list', ['keyField'=>'key', 'valueField'=>'value'])->toArray();
+
+			//set the baseDN and action
+			$this->set('baseDN', $settings['ldap_computers_basedn']);
+			$this->set('currentAction', $action);
+
+			//get the ldap computer listing
+			$this->Ldap->setup(['host'=>$settings['ldap_host'], 'port'=>$settings['ldap_port'],
+                          'baseDN'=>$settings['ldap_computers_basedn'],'user'=>$settings['ldap_user'],'password'=>$settings['ldap_password']]);
+			$ad_computers = [];
+			$ldap_response = $this->Ldap->getComputers();
+
+
+			$compare_computers = [];
+
+			foreach($ldap_response as $lr)
+			{
+				if(isset($lr['cn']))
+				{
+					$ad_computers[] = trim(strtoupper($lr['cn'][0]));
+				}
+			}
+
+			//get the computer inventory - filter out AD excluded devices
+			$database_computers = $this->fetchTable('Computer')->find('list', ['contain'=>['DeviceType'],
+                                                                          'valueField'=>'ComputerName',
+                                                                          'conditions'=>["DeviceType.exclude_ad_sync" => 'false'],
+                                                                          'recursive'=>1,
+                                                                          'order'=> ['ComputerName ASC']])->toArray();
+
+			//transform the names to uppercase
+      $inventory_computers = [];
+			foreach($database_computers as $computer)
+			{
+				$inventory_computers[] = trim(strtoupper($computer));
+			}
+
+			//find the differences between the two lists
+			$ad_diff = array_diff($ad_computers,$inventory_computers);
+			$inventory_diff = array_diff($inventory_computers,$ad_computers);
+
+			//merge the lists
+			foreach($ad_diff as $diff){
+				$compare_computers[$diff] = ['value'=>'Not in Inventory','class'=>'not_inventory'];
+			}
+
+			foreach($inventory_diff as $diff){
+				if($diff != '')
+				{
+					$compare_computers[$diff] = ['value'=>'Not in Active Directory','class'=>'not_ad'];
+				}
+			}
+
+			//sort the final array
+			ksort($compare_computers);
+
+
+			//get how many days back to go from GET params
+			$old_computers = array();
+			$days_old = 30;
+
+			if($this->request->getQuery('days_old') != null)
+			{
+			    $days_old = $this->request->getQuery('days_old');
+			}
+
+			$this->set('days_old',$days_old);
+
+			foreach($ldap_response as $lr)
+			{
+				if(isset($lr['cn']))
+				{
+					//convert the last login to unix time
+					$lastLogon = (($lr['lastlogontimestamp'][0]/10000000)-11644473600);
+
+					//if user hasn't logged on in more than x days
+					if($lastLogon < time() - (86400 * $days_old))
+					{
+						$old_computers[trim(strtoupper($lr['cn'][0]))] = ['value'=>'Last Active Directory Logon: ' . date('F d, Y',$lastLogon)];
+					}
+				}
+			}
+
+			//sort the final arrays
+			ksort($old_computers);
+
+
+			$this->set('old_computers',$old_computers);
+			$this->set('compare_computers', $compare_computers);
+		}
+
+	}
+
   function add(){
     $this->set('title', 'Add a New Device');
 
