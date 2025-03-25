@@ -11,7 +11,8 @@
         "cakephp/plugin-installer": "^1.3",
         "mobiledetect/mobiledetectlib": "^3.74",
         "geerlingguy/ping": "*",
-        "league/commonmark": "*"
+        "league/commonmark": "*",
+        "dragonmantank/cron-expression": "*"
     },
     "require-dev": {
         "cakephp/bake": "^2.8",
