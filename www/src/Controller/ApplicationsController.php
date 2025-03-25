@@ -59,12 +59,32 @@ class ApplicationsController extends AppController {
     return $this->redirect('/applications/');
   }
 
+  public function addLifecycle(){
+    $this->set('title', 'Create Software Lifecycle');
+
+    $applications = $this->fetchTable('Application')->find('list', ['keyField'=>'id', 'valueField'=>'full_name',
+                                                            'order'=>['Application.name asc', 'Application.version asc']])->toArray();
+    $this->set('applications', $applications);
+  }
+
   public function deleteOsEol($name){
     $this->fetchTable('OperatingSystem')->deleteQuery()->where(["name"=>$name])->execute();
 
     $this->Flash->success(sprintf('Deleted End of life date for %s', $name));
 
     return $this->redirect('/applications/operating_systems');
+  }
+
+  public function deleteLifecycle($id){
+    $Lifecycle = $this->fetchTable('Lifecycle');
+
+    //no reason a lifecycle can't be deleted
+    $lifecycle = $Lifecycle->get($id);
+    $Lifecycle->delete($lifecycle);
+
+    $this->Flash->success('Lifecycle deleted successfully');
+
+    $this->redirect('/applications/lifecycle');
   }
 
   public function index(){
@@ -110,6 +130,23 @@ class ApplicationsController extends AppController {
     $Lifecycle = $this->fetchTable('Lifecycle');
 
     if($this->request->is('post')){
+      $lifecycle = null;
+
+      // check if this is existing
+      if(empty($this->request->getData('id')))
+      {
+        // create new
+        $lifecycle = $Lifecycle->newEntity($this->request->getData());
+      }
+      else
+      {
+        // patch existing
+        $lifecycle = $Lifecycle->get($this->request->getData('id'));
+        $Lifecycle->patchEntity($lifecycle, $this->request->getData());
+      }
+
+      //save the lifecycle
+      $Lifecycle->save($lifecycle);
 
       $this->Flash->success("Lifecycle saved");
     }
