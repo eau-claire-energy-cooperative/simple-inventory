@@ -24,9 +24,6 @@
             }
           }
         },
-        search: {
-          search: ''
-        },
         columnDefs: [
           {'searchable': false, 'targets': [-1]}
         ],
