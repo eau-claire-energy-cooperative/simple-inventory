@@ -59,6 +59,14 @@ class ApplicationsController extends AppController {
     return $this->redirect('/applications/');
   }
 
+  public function deleteOsEol($name){
+    $this->fetchTable('OperatingSystem')->deleteQuery()->where(["name"=>$name])->execute();
+
+    $this->Flash->success(sprintf('Deleted End of life date for %s', $name));
+
+    return $this->redirect('/applications/operating_systems');
+  }
+
   public function index(){
     $this->set('title', 'Applications');
 
@@ -96,6 +104,52 @@ class ApplicationsController extends AppController {
     $this->set('applications', $applications);
   }
 
+  public function operatingSystems(){
+    $this->set('title', 'Operating Systems');
+
+    $OperatingSystem = $this->fetchTable('OperatingSystem');
+
+    if($this->request->is('post')){
+      $os = $OperatingSystem->newEntity($this->request->getData());
+
+      if($OperatingSystem->save($os))
+      {
+        $this->Flash->success(sprintf('Saved %s end of life date', $os->name));
+      }
+      else {
+        $this->Flash->error(sprintf('Error saving end of life data for %s', $os->name));
+      }
+    }
+
+    // operating systems are set values within devices
+    // not a good way to do this natively so grab them all and sort below
+    $computers = $this->fetchTable('Computer')->find('all', ['conditions'=>["Computer.OS != ''"],
+                                                             'order'=>'Computer.OS'])->all();
+
+    //get a count of the different systems
+    $systems = [];
+
+    foreach($computers as $comp){
+      if(!array_key_exists($comp['OS'], $systems))
+      {
+        //add to array with count of 1
+        $systems[$comp['OS']] = 1;
+      }
+      else
+      {
+        //increase count by one
+        $systems[$comp['OS']] = $systems[$comp['OS']] + 1;
+      }
+    }
+
+    $this->set('allOs', $systems);
+
+    //get any defined operating systems
+    $foundOs = $OperatingSystem->find('list', ['keyField'=>'name', 'valueField'=>'eol_date'])->toArray();
+    $this->set('definedOs', $foundOs);
+
+    $this->viewBuilder()->addHelper('OperatingSystem');
+  }
 
   public function unassignApplication($app_id, $comp_id){
     $connection = ConnectionManager::get('default');

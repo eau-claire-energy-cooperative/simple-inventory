@@ -66,6 +66,10 @@ class AjaxController extends AppController {
 
 	}
 
+  function assignOsEol($name){
+    $this->set('osName', $name);
+  }
+
   function checkRunning($id){
 	  //get the IP of the device
 	  $computer = $this->fetchTable('Computer')->find('all', ['conditions'=>['Computer.id'=>$id]])->first();
