@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Idea
 
 - add validation to models
+- command variables should be in JSON format
 
 ### Added
 
@@ -24,6 +25,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Fixed
 
 - new device duplicate check now checks name and device type
+
+### Removed
+
+- removed Application monitoring feature (alerting if certain app found installed). This was seldom used and didn't really have a good use case. The way software is managed in a modern environment users should not be able to install rogue software. 
 
 ## 6.0
 
