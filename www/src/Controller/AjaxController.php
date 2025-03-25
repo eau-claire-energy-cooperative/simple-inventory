@@ -108,6 +108,44 @@ class AjaxController extends AppController {
     $this->set('username', $aUser['gravatar']);
 	}
 
+  function viewLifecycle($app_id){
+    $Application = $this->fetchTable('Application');
+
+    //load this application (lifecycle will follow)
+    $application = $Application->find('all', ['contain'=>['Computer', 'Lifecycle'],
+                                              'conditions'=>['Application.id'=>$app_id]])->first();
+    $this->set('application', $application);
+
+    //get any other version of this application
+    $allVersions = $Application->find('all', ['contain'=>['Computer'],
+                                              'conditions'=>['Application.name'=>$application['name']]])->all();
+
+    // get version and total assigned info
+    $totalVersions = [];
+    $olderInstalls = 0;
+    $newerInstalls = 0;
+    foreach($allVersions as $v){
+      $totalVersions[] = $v['version'];
+
+      // if lower, count how many computers on this version
+      if(version_compare($v['version'], $application['version']) == -1)
+      {
+        $olderInstalls = $olderInstalls + count($v['computer']);
+      }
+      elseif (version_compare($v['version'], $application['version']) == 1) {
+        $newerInstalls = $newerInstalls + count($v['computer']);
+      }
+    }
+    usort($totalVersions, 'version_compare');
+    $this->set('total_versions', count($totalVersions));
+    $this->set('highest_version', end($totalVersions));
+    $this->set('older_installs', $olderInstalls);
+    $this->set('newer_installs', $newerInstalls);
+
+    $this->viewBuilder()->addHelper('Lifecycle');
+    $this->viewBuilder()->addHelper('Markdown');
+  }
+
   function wol(){
     $this->Ping->wol($_SERVER['SERVER_ADDR'], $this->request->getQuery('mac'));
 

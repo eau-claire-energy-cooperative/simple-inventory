@@ -99,9 +99,27 @@ class ApplicationsController extends AppController {
     }
 
     $applications = $Application->find('all', ['contain'=>['Computer', 'Lifecycle'],
-                                                                   'order'=>['Application.name','Application.version']]);
+                                              'order'=>['Application.name','Application.version']]);
 
     $this->set('applications', $applications);
+  }
+
+  public function lifecycle(){
+    $this->set('title', 'Application Lifecycles');
+
+    $Lifecycle = $this->fetchTable('Lifecycle');
+
+    if($this->request->is('post')){
+
+      $this->Flash->success("Lifecycle saved");
+    }
+
+    $lifecycles = $Lifecycle->find('all', ['contain'=>['Application'],
+                                           'order'=>'Application.name'])->all();
+    $this->set('lifecycles', $lifecycles);
+
+    $this->viewBuilder()->addHelper('Lifecycle');
+
   }
 
   public function operatingSystems(){
