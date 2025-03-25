@@ -22,19 +22,47 @@ class AjaxController extends AppController {
     $this->set('comp_id', $comp_id);
   }
 
+  function assignApplication($app_id){
+    $this->viewBuilder()->setLayout('fancybox');
+
+    //get the application
+    $application = $this->fetchTable('Application')->find('all', ['contain'=>['Computer'],
+                                                                  'conditions'=>['Application.id'=>$app_id]])->first();
+
+    //get a list of computers already assigned
+    $assigned = [];
+    foreach($application['computer'] as $comp){
+      $assigned[] = $comp['id'];
+    }
+
+    $this->set('application', $application);
+
+    //filter out already assigned from this list
+    $allComputers = $this->fetchTable('Computer')->find('list', ['keyField'=>'id', 'valueField'=>'ComputerName',
+                                                        'order'=>['Computer.ComputerName asc']]);
+
+    // filter out already assigned, if there are any
+    if(count($assigned) > 0)
+    {
+      $allComputers = $allComputers->where(['Computer.id NOT IN' => $assigned]);
+    }
+
+    $this->set('computers', $allComputers->toArray());
+  }
+
   function assignLicenseKey($license_id, $license_key_id){
-      $this->viewBuilder()->setLayout('fancybox');
+    $this->viewBuilder()->setLayout('fancybox');
 
-      $this->set('license_id', $license_id);
-	    $this->set('license_key_id', $license_key_id);
+    $this->set('license_id', $license_id);
+    $this->set('license_key_id', $license_key_id);
 
-	    //get a list of all computers
-	    $allComputers = $this->fetchTable('Computer')->find('list', ['keyField'=>'id',
-                                                                   'valueField'=>'ComputerName',
-                                                                   'order'=>['Computer.ComputerName asc']])->toArray();
-	    $allComputers = [0=>'NO COMPUTER - UNASSIGNED'] + $allComputers;
+    //get a list of all computers
+    $allComputers = $this->fetchTable('Computer')->find('list', ['keyField'=>'id',
+                                                                 'valueField'=>'ComputerName',
+                                                                 'order'=>['Computer.ComputerName asc']])->toArray();
+    $allComputers = [0=>'NO COMPUTER - UNASSIGNED'] + $allComputers;
 
-	    $this->set('computers', $allComputers);
+    $this->set('computers', $allComputers);
 
 	}
 

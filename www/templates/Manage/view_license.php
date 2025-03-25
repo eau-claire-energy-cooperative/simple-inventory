@@ -2,34 +2,34 @@
 <?= $this->Html->script("license-copy.js", ['block'=>'script']) ?>
 <?= $this->Html->css('jquery-confirm.min') ?>
 <?=
-    //script to load the confirmation dialog
-    $this->Html->scriptBlock("$(document).ready(function() {
-      $('a.delete-license').confirm({
-          title: 'Delete License',
-          content: 'Are you sure you want to delete this license?',
-          buttons: {
-              yes: function(){
-                  location.href = this.\$target.attr('href');
-              },
-              cancel: function(){
+  //script to load the confirmation dialog
+  $this->Html->scriptBlock("$(document).ready(function() {
+    $('a.delete-license').confirm({
+        title: 'Delete License',
+        content: 'Are you sure you want to delete this license?',
+        buttons: {
+            yes: function(){
+                location.href = this.\$target.attr('href');
+            },
+            cancel: function(){
 
-              }
-          }
-      })
+            }
+        }
+    })
 
-      $('a.delete-license-key').confirm({
-          title: 'Delete License Key',
-          content: 'Are you sure you want to delete this license key?',
-          buttons: {
-              yes: function(){
-                  location.href = this.\$target.attr('href');
-              },
-              cancel: function(){
+    $('a.delete-license-key').confirm({
+        title: 'Delete License Key',
+        content: 'Are you sure you want to delete this license key?',
+        buttons: {
+            yes: function(){
+                location.href = this.\$target.attr('href');
+            },
+            cancel: function(){
 
-              }
-          }
-      })
-     });", ["block"=>true])
+            }
+        }
+    })
+  });", ["block"=>true]);
 ?>
 
 <div class="mb-4" align="right">
