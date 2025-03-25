@@ -1,3 +1,7 @@
+<?= $this->Html->script("jquery-confirm.min.js", ['block'=>'script']) ?>
+<?= $this->Html->css('jquery-confirm.min') ?>
+<?= $this->Html->css('dataTables.bootstrap4.min', ['block'=>'css']) ?>
+<?= $this->Html->script(["jquery.dataTables.min.js", "dataTables.bootstrap4.min.js", "csv_export.js"], ['block'=>'script']) ?>
 <?=
 //script to load the confirmation dialog
   $this->Html->scriptBlock("$(document).ready(function() {
@@ -15,8 +19,7 @@
     })
 
     dataTable = $('#dataTable').DataTable({
-      paging: true,
-      pageLength: 100,
+      paging: false,
       stateSave: true,
       stateDuration: 60,
       layout: {
