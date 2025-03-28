@@ -2,6 +2,7 @@
 namespace App\Controller;
 use Cake\Event\EventInterface;
 use Cake\Datasource\ConnectionManager;
+use Cake\I18n\FrozenTime;
 
 class ApplicationsController extends AppController {
 
@@ -34,6 +35,15 @@ class ApplicationsController extends AppController {
     $this->Flash->success('Saved');
 
     return $this->redirect('/applications?q=' . $this->request->getData('application_name'));
+  }
+
+  public function checkLifecycle($id){
+    //helper function to reset the lifecycle last check date to today
+    $this->fetchTable('Lifecycle')->updateQuery()->set(['last_check'=>FrozenTime::now()])->where(['id'=>$id])->execute();
+
+    $this->Flash->success("Last check date updated");
+
+    return $this->redirect('/applications/lifecycle');
   }
 
   public function deleteApplication($app_id){
