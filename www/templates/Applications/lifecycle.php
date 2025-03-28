@@ -41,7 +41,9 @@
         }
       },
       columnDefs: [
-        {'searchable': false, 'targets': [-1]}
+        {'searchable': false, 'targets': [-1]},
+        { targets: [0,1,-1], visible: true},
+        { targets: '_all', visible: false }
       ],
       language: {
         search: 'Filter:',
@@ -55,7 +57,8 @@
 ?>
 <div class="mb-4" align="right">
   <a href="<?= $this->Url->build(['controller' => 'applications', 'action' => 'add_lifecycle']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i> Create Lifecycle</a>
-  <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm" onClick="exportTableToCSV('dataTable', 'lifecycle.csv')"><i class="mdi mdi-download icon-sm icon-inline text-white-50"></i> Download CSV</a>
+  <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm" onClick="exportDataTableToCSV(dataTable, 'lifecycle.csv')"><i class="mdi mdi-download icon-sm icon-inline text-white-50"></i> Download CSV</a>
+
 </div>
 
 <div class="card shadow mb-4">
@@ -66,6 +69,8 @@
       <thead>
         <th>Application Name</th>
         <th>Update Check Due</th>
+        <th>Last Check Date</th>
+        <th>Next Check Date</th>
         <th></th>
       </thead>
       <tbody>
@@ -81,6 +86,12 @@
             <?php else: ?>
             <p class="btn btn-sm btn-success">No</p>
             <?php endif; ?>
+          </td>
+          <td>
+            <?= $post['last_check']->i18nFormat("MM/dd/yyyy") ?>
+          </td>
+          <td>
+            <?= $this->Time->format($this->Lifecycle->getNextDate($post['last_check']->i18nFormat("yyyy-MM-dd HH:mm:ss"), $post['update_frequency']), 'M/d/Y') ?>
           </td>
           <td align="right">
             <a href="<?= $this->Url->build('/applications/check_lifecycle/' . $post['id'])?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-success" title="Update Last Check Date"><i class="mdi mdi-calendar icon-sm icon-inline text-white-50"></i></a>
