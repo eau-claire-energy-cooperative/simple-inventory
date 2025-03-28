@@ -97,6 +97,16 @@ class ApplicationsController extends AppController {
     $this->redirect('/applications/lifecycle');
   }
 
+  public function editLifecycle($id){
+    $this->set('title', 'Edit Software Lifecycle');
+
+    $applications = $this->fetchTable('Application')->find('list', ['keyField'=>'id', 'valueField'=>'full_name',
+                                                           'order'=>['Application.name asc', 'Application.version desc']]);
+    $this->set('applications', $applications);
+
+    $this->set('lifecycle', $this->fetchTable('Lifecycle')->find('all', ['conditions'=>['Lifecycle.id'=>$id]])->first());
+  }
+
   public function index(){
     $this->set('title', 'Applications');
 
