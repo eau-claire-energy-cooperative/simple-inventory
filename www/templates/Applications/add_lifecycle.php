@@ -16,7 +16,7 @@
           </div>
           <div class="row mb-2">
             <div class="col-sm-4">Last Check: </div>
-            <div class="col-sm-8"><?= $this->Form->input('last_check', ['class'=>'form-control', 'style'=>'width:20%; display:inline;', 'type'=>'datetime-local', 'dateFormat'=>'M-D-Y']); ?></div>
+            <div class="col-sm-8"><?= $this->Form->input('last_check', ['class'=>'form-control', 'style'=>'width:20%; display:inline;', 'type'=>'datetime-local', 'dateFormat'=>'M-D-Y', 'value'=>$today->i18nFormat("yyyy-MM-dd HH:mm")]); ?></div>
           </div>
           <div class="row mb-2">
             <div class="col-sm-4">Notes: </div>

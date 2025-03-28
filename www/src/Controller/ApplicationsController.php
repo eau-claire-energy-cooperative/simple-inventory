@@ -24,6 +24,15 @@ class ApplicationsController extends AppController {
     $this->set('title_for_layout', 'Add Application');
   }
 
+  public function addLifecycle(){
+    $this->set('title', 'Create Software Lifecycle');
+
+    $applications = $this->fetchTable('Application')->find('list', ['keyField'=>'id', 'valueField'=>'full_name',
+                                                            'order'=>['Application.name asc', 'Application.version asc']])->toArray();
+    $this->set('applications', $applications);
+    $this->set('today', FrozenTime::now());
+  }
+
   public function assignApplication(){
     //update the join table
     $connection = ConnectionManager::get('default');
@@ -67,14 +76,6 @@ class ApplicationsController extends AppController {
     }
 
     return $this->redirect('/applications/');
-  }
-
-  public function addLifecycle(){
-    $this->set('title', 'Create Software Lifecycle');
-
-    $applications = $this->fetchTable('Application')->find('list', ['keyField'=>'id', 'valueField'=>'full_name',
-                                                            'order'=>['Application.name asc', 'Application.version asc']])->toArray();
-    $this->set('applications', $applications);
   }
 
   public function deleteOsEol($name){
@@ -237,6 +238,37 @@ class ApplicationsController extends AppController {
     $this->Flash->success('Application removed');
 
     return $this->redirect('/inventory/moreInfo/' . $comp_id);
+  }
+
+  public function upgradeApplication(){
+    $Lifecycle = $this->fetchTable('Lifecycle');
+    $Application = $this->fetchTable('Application');
+
+    //load the lifecycle from the ID
+    $lifecycle = $Lifecycle->find('all', ['contain'=>['Application'],
+                                          'conditions'=>['Lifecycle.id'=>$this->request->getData('id')]])->first();
+    $new_version = $this->request->getData('version');
+
+    //check if we can upgrade this application
+    $app_exists = $Application->find('all', ['conditions'=>['Application.name'=>$lifecycle['application']['name'], 'Application.version'=>$new_version]]);
+    if($app_exists->count() == 0)
+    {
+      //upgrade the version number
+      $lifecycle['application']['version'] = $new_version;
+
+      $Application->save($lifecycle['application']);
+
+      //reset the lifecycle date
+      $Lifecycle->updateQuery()->set(['last_check'=>FrozenTime::now()])->where(['id'=>$lifecycle['id']])->execute();
+
+      $this->Flash->success(sprintf('%s upgraded to %s', $lifecycle['application']['name'], $new_version));
+    }
+    else
+    {
+      $this->Flash->error(sprintf("%s version %s already exists", $lifecycle['application']['name'], $new_version));
+    }
+
+    return $this->redirect('/applications/lifecycle');
   }
 }
 ?>
