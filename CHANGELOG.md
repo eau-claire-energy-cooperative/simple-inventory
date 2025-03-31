@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - CSV exports now done in Javascript instead of PHP
 - layout of Operating Systems matches License page (highlighting dates and general organization)
 - CronExpression library updated to 3.4.0. This is a [breaking change](http://ctankersley.com/2017/10/12/cron-expression-update/) to how the next dates are calculated. New lib is in line with how cron should actually function. 
+- CheckoutRequests times are now calculated based on [FrozenTime](https://book.cakephp.org/4/en/core-libraries/time.html) functions instead of based on php date() unix time comparisons. 
 
 ### Fixed
 
