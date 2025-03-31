@@ -10,6 +10,7 @@ class DeviceTypeTable extends Table {
     $this->setTable('device_types');
 
     $this->hasMany('Computer')->setForeignKey('DeviceType');
+    $this->hasMany('ComputerCheckout', ['className'=>'Computer'])->setForeignKey('DeviceType')->setConditions(['ComputerCheckout.CanCheckout'=>'true']);
   }
 }
 ?>

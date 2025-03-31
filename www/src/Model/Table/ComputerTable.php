@@ -19,6 +19,10 @@ class ComputerTable extends Table {
                                           'foreignKey'=>'comp_id',
                                           'targetForeignKey'=>'application_id',
                                           'sort'=>['Application.name', 'Application.version']]);
+    $this->belongsToMany('CheckoutRequest', ['through'=>'CheckoutReservation',
+                                        'foreignKey'=>'device_id',
+                                        'targetForeignKey'=>'request_id',
+                                        'order'=>['CheckoutRequest.check_out_date']]);
     $this->belongsToMany('LicenseKey', ['through'=>'ComputerLicense',
                                         'foreignKey'=>'device_id',
                                         'targetForeignKey'=>'license_id']);
