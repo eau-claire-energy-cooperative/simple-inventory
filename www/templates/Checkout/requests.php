@@ -167,7 +167,7 @@
               </td>
               <td><?= $post['employee_name']?></td>
               <td><?= $post['check_out_date']->i18nFormat('MM/dd/yyy') ?></td>
-              <td><?= $post['check_out_date']->i18nFormat('MM/dd/yyy') ?></td>
+              <td><?= $post['check_in_date']->i18nFormat('MM/dd/yyy') ?></td>
               <td>
                 <?php if(count($post['computer']) > 0): ?>
                   <a href="<?= $this->Url->build('/inventory/moreInfo/' . $post['computer'][0]['id'])?>">
@@ -188,7 +188,7 @@
                 <?php if(in_array($post['status'], array('new', 'approved'))): ?>
                 <a href="<?= $this->Url->build('/checkout/deny/' . $post['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-danger" title="Deny"><i class="mdi mdi-thumb-down icon-sm icon-inline text-white-50"></i></a>
                 <?php endif; ?>
-                <?php if($post['status'] == 'denied' || $this->Time->isPast($post['check_in_date'])): ?>
+                <?php if($post['status'] == 'denied' || $post['check_in_date']->isPast()): ?>
                 <a href="<?= $this->Url->build('/checkout/delete/' . $post['id']) ?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-danger delete-request" title="Delete"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i></a>
                 <?php endif; ?>
               </td>
