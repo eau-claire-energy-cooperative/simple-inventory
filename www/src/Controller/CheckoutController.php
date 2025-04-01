@@ -215,6 +215,7 @@ class CheckoutController extends AppController {
 
     if ($this->request->is('post'))
     {
+      $now = FrozenTime::now();
       $CheckoutRequest = $this->fetchTable('CheckoutRequest');
 
       //pull in requests for this device ID
@@ -225,19 +226,26 @@ class CheckoutController extends AppController {
       $request = $CheckoutRequest->find('all', ['conditions'=>['CheckoutRequest.id'=>$this->request->getData('id')]])->first();
       $request->check_in_date = new FrozenTime(sprintf('%s 00:00:00', $this->request->getData('check_in_date')));
 
-      if($this->_checkAvailable($request, $upcoming_requests['checkout_request']))
+      if($request->check_in_date->greaterThanOrEquals($now) && $request->check_in_date->greaterThanOrEquals($request->check_out_date))
       {
-        if($CheckoutRequest->save($request))
+        if($this->_checkAvailable($request, $upcoming_requests['checkout_request']))
         {
-          $this->Flash->success("Check In Date extended");
+          if($CheckoutRequest->save($request))
+          {
+            $this->Flash->success("Check In Date extended");
+          }
+          else
+          {
+            $this->Flash->error("Error extending date");
+          }
         }
-        else
-        {
-          $this->Flash->error("Error extending date");
+        else {
+          $this->Flash->error("Conflict - Check In Date cannot be extended");
         }
       }
-      else {
-        $this->Flash->error("Conflict - Check In Date cannot be extended");
+      else
+      {
+        $this->Flash->error('Check In Date cannot be in the past');
       }
     }
 
