@@ -430,6 +430,17 @@ class InventoryController extends AppController {
     $this->viewBuilder()->addHelper('Markdown');
   }
 
+  public function moreInfoDecommissioned($id) {
+	  $this->set('active_menu', 'manage');
+	 	$this->set('title','Decommissioned Device Detail');
+
+    $device = $this->fetchTable('Decommissioned')->find('all', ['contain'=>['Location'],
+                                                                'conditions'=>['Decommissioned.id'=>$id]])->first();
+    $this->set('decommissioned', $device);
+
+    $this->viewBuilder()->addHelper('Markdown');
+  }
+
   function setProfileImage(){
     $session = $this->request->getSession();
 

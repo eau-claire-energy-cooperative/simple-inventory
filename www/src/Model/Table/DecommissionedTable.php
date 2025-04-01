@@ -9,7 +9,7 @@ class DecommissionedTable extends Table {
   {
     $this->setTable('decommissioned');
 
-    $this->belongsTo('Location')->setForeignKey('ComputerLocation');
+    $this->belongsTo('Location')->setForeignKey('Location');
   }
 }
 ?>
