@@ -196,7 +196,7 @@
           </tbody>
         </table>
         <?php else: ?>
-          <p align="center">There are no checkout requests new, active, or pending at this time. </p>
+          <p align="center">There are no checkout requests active or pending at this time. </p>
         <?php endif ?>
       </div>
     </div>

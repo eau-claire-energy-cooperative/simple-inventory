@@ -65,9 +65,9 @@ class CheckoutController extends AppController {
                                                                ->values(['request_id'=>$id, 'device_id'=>$found_device])->execute();
 
         // send email to user
-        //$this->_send_email("Device Checkout Approved",
-                           //sprintf("Your equipment checkout request from %s to %s has been approved. See %s to pick up your equipment.", $checkOutDate, $checkInDate, $this->Session->read('User.name')),
-                           //$req['CheckoutRequest']['employee_email']);
+        $this->_send_email("Device Checkout Approved",
+                           sprintf("Your equipment checkout request from %s to %s has been approved. See %s to pick up your equipment.", $checkOutDate, $checkInDate, $this->request->getSession()->read('User.name')),
+                           $req['employee_email']);
 
         $this->Flash->success("Request Approved");
       }
@@ -195,9 +195,9 @@ class CheckoutController extends AppController {
       }
 
       //notify the user
-      //$this->_send_email("Device Checkout Denied",
-                         //sprintf("Your device checkout request from %s to %s has been denied. The most common reason for this is that the requested device is not available.", $checkOutDate, $checkInDate),
-                         //$req['CheckoutRequest']['employee_email']);
+      $this->_send_email("Device Checkout Denied",
+                         sprintf("Your device checkout request from %s to %s has been denied. The most common reason for this is that the requested device is not available.", $checkOutDate, $checkInDate),
+                         $req['employee_email']);
 
       $this->Flash->success("Request Denied");
     }
@@ -298,7 +298,7 @@ class CheckoutController extends AppController {
         }
 
         // email an admin
-        //$this->_send_email("Device Checkout Request", sprintf("%s has submitted an equipment checkout request. Please review the request to approve or deny.", $this->data['CheckoutRequest']['employee_name']));
+        $this->_send_email("Device Checkout Request", sprintf("%s has submitted an equipment checkout request. Please review the request to approve or deny.", $this->request->getData('employee_name')));
 
         $this->Flash->success('Request Submitted');
       }
