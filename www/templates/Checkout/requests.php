@@ -142,7 +142,6 @@
     </div>
   </div>
   <?php endif; ?>
-
   <div class="col-xl-12">
     <div class="card border-left-primary shadow mb-4">
       <div class="card-header py-3">

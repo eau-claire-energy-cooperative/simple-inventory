@@ -84,6 +84,77 @@ class CheckoutController extends AppController {
     return $this->redirect('/checkout/requests');
   }
 
+  function device($action, $request_id, $device_id){
+    $this->_check_authenticated();
+
+    $CheckoutRequest = $this->fetchTable('CheckoutRequest');
+    $request = $CheckoutRequest->find('all', ['contain'=>['Computer'],
+                                              'conditions'=>['CheckoutRequest.id'=>$request_id]])->first();
+    $device = $request['computer'][0];
+
+    //make sure request is approved and the device is not checked out
+    if($request['status'] != 'denied' && $device['CanCheckout'] == 'true')
+    {
+      if($action == 'out')
+      {
+        $settings = $this->fetchTable('Setting')->find('all', ['conditions'=>['Setting.key'=>'device_checkout_location']])->first();
+
+        if($device['IsCheckedOut'] == 'false')
+        {
+          //set the request to active
+          $request['status'] = 'active';
+          $CheckoutRequest->save($request);
+
+          // save the old device location (joinData is the reservation table)
+          $this->fetchTable('CheckoutReservation')->updateQuery()->set(['saved_device_location'=>$device['ComputerLocation']])
+                                                                 ->where(['id'=>$device['_joinData']['id']])
+                                                                 ->execute();
+
+          // update the device
+          $device['IsCheckedOut'] = 'true';
+          $device['ComputerLocation'] = $settings['value'];
+          $this->fetchTable('Computer')->save($device);
+
+          $this->Flash->success(sprintf('%s checked out', $device['ComputerName']));
+        }
+        else
+        {
+          $this->Flash->error(sprintf("%s is checked out already", $device['ComputerName']));
+        }
+
+      }
+      else
+      {
+        //make sure this is the right request and the device is checked out
+        if($request['status'] == 'active' && $device['IsCheckedOut'] == 'true')
+        {
+
+          //deactivate request
+          $request['status'] = 'approved';
+          $CheckoutRequest->save($request);
+
+          // update the device
+          $device['IsCheckedOut'] = 'false';
+          $device['ComputerLocation'] = $device['_joinData']['saved_device_location'];
+          $this->fetchTable('Computer')->save($device);
+
+          $this->Flash->success(sprintf('%s is checked in', $device['ComputerName']));
+        }
+        else
+        {
+          $this->Flash->error(sprintf("%s is not checked out", $device['ComputerName']));
+        }
+
+      }
+    }
+    else
+    {
+      $this->Flash->error(sprintf('%s is not available to check in or out', $device['ComputerName']));
+    }
+
+    return $this->redirect('/checkout/requests');
+  }
+
   function deny($id){
     $this->_check_authenticated();
 
