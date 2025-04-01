@@ -90,7 +90,7 @@ class CheckoutController extends AppController {
     $CheckoutRequest = $this->fetchTable('CheckoutRequest');
     $req = $CheckoutRequest->find('all', ['conditions'=>['CheckoutRequest.id'=>$id]])->first();
 
-    if($req['status'] == 'denied')
+    if($req['status'] == 'denied' || $req['check_in_date']->isPast())
     {
       $CheckoutRequest->delete($req);
       $this->Flash->success("Request Deleted");
