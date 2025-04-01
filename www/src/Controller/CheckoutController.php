@@ -191,6 +191,40 @@ class CheckoutController extends AppController {
     $this->viewBuilder()->setLayout('login');
   }
 
+  function extend(){
+    $this->_check_authenticated();
+
+    if ($this->request->is('post'))
+    {
+      $CheckoutRequest = $this->fetchTable('CheckoutRequest');
+
+      //pull in requests for this device ID
+      $upcoming_requests = $this->fetchTable('Computer')->find('all', ['contain'=>['CheckoutRequest'],
+                                                                       'conditions'=>['Computer.id'=>$this->request->getData('device_id')]])->first();
+
+      // get request with NEW check in date
+      $request = $CheckoutRequest->find('all', ['conditions'=>['CheckoutRequest.id'=>$this->request->getData('id')]])->first();
+      $request->check_in_date = new FrozenTime(sprintf('%s 00:00:00', $this->request->getData('check_in_date')));
+
+      if($this->_checkAvailable($request, $upcoming_requests['checkout_request']))
+      {
+        if($CheckoutRequest->save($request))
+        {
+          $this->Flash->success("Check In Date extended");
+        }
+        else
+        {
+          $this->Flash->error("Error extending date");
+        }
+      }
+      else {
+        $this->Flash->error("Conflict - Check In Date cannot be extended");
+      }
+    }
+
+    return $this->redirect('/checkout/requests');
+  }
+
   function index(){
     $this->set('title','Device Checkout Request');
 

@@ -84,6 +84,15 @@ class AjaxController extends AppController {
     $this->render('json');
 	}
 
+  function extendCheckout($id){
+    $this->viewBuilder()->setLayout('fancybox');
+
+    $req = $this->fetchTable('CheckoutRequest')->find('all', ['contain'=>['Computer'],
+                                                              'conditions'=>['CheckoutRequest.id'=>$id]])->first();
+
+    $this->set('req', $req);
+  }
+
   function newLicenseKey($license_id){
     $this->viewBuilder()->setLayout('fancybox');
 
