@@ -1,5 +1,5 @@
 <?= $this->Html->css('dataTables.bootstrap4.min', ['block'=>'css']) ?>
-<?= $this->Html->script(["jquery.dataTables.min.js", "dataTables.bootstrap4.min.js", "csv_export.js"], ['block'=>'script']) ?>
+<?= $this->Html->script(["jquery.dataTables.min.js", "dataTables.bootstrap4.min.js"], ['block'=>'script']) ?>
 <?=
   $this->Html->scriptBlock("$(document).ready(function() {
       dataTable = $('#dataTable').DataTable({
