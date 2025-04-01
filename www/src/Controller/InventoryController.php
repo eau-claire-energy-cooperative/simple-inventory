@@ -201,6 +201,12 @@ class InventoryController extends AppController {
     $this->viewBuilder()->addHelper('DynamicTable');
   }
 
+  public function decommission() {
+	  $this->set('active_menu', 'manage');
+		$this->set('title','Decommissioned Devices');
+    $this->set('decommission', $this->fetchTable('Decommissioned')->find('all', ['order'=> ['LastUpdated ASC']])->all());
+  }
+
   public function delete($id) {
     $Computer = $this->fetchTable('Computer');
 
