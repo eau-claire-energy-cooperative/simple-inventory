@@ -253,7 +253,6 @@ class InventoryController extends AppController {
 		if ($this->request->is('post') && count($errors) == 0) {
       $Decommissioned = $this->fetchTable('Decommissioned');
 
-      //TODO - make this based on device type attributes
       $decom = $Decommissioned->newEmptyEntity();
       $decom->ComputerName = $device->ComputerName;
       $decom->SerialNumber = $device->SerialNumber;
@@ -273,6 +272,7 @@ class InventoryController extends AppController {
       $decom->Recycled = $this->request->getData('Recycled');
       $decom->RedeployedAs = $this->request->getData('RedeployedAs');
       $decom->notes = $this->request->getData('notes');
+      $decom->device_attributes = $device['device_type']['attributes'];
 
       if($Decommissioned->save($decom))
       {
@@ -557,8 +557,22 @@ class InventoryController extends AppController {
 
     $device = $this->fetchTable('Decommissioned')->find('all', ['contain'=>['Location'],
                                                                 'conditions'=>['Decommissioned.id'=>$id]])->first();
+    $allowedAttributes = array_merge(explode(",", $device['device_attributes']), array_keys($this->DEVICE_ATTRIBUTES['REQUIRED']));
+
+    $tables = [];
+
+    //build the tables
+    $tables['general'] = $this->_processDisplayTable(array_merge($this->DEVICE_ATTRIBUTES['REQUIRED'], $this->DEVICE_ATTRIBUTES['GENERAL']), $allowedAttributes);
+    $tables['hardware'] = $this->_processDisplayTable($this->DEVICE_ATTRIBUTES['HARDWARE'], $allowedAttributes);
+    $tables['network'] = $this->_processDisplayTable($this->DEVICE_ATTRIBUTES['NETWORK'], $allowedAttributes);
+
+    $this->set('validAttributes',$this->DEVICE_ATTRIBUTES['REQUIRED'] + $this->DEVICE_ATTRIBUTES['GENERAL'] + $this->DEVICE_ATTRIBUTES['HARDWARE'] + $this->DEVICE_ATTRIBUTES['NETWORK']);
+    $this->set('tables',$tables);
+
     $this->set('decommissioned', $device);
 
+    // load helpers
+    $this->viewBuilder()->addHelper('AttributeDisplay');
     $this->viewBuilder()->addHelper('Markdown');
   }
 

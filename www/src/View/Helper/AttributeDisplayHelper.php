@@ -7,19 +7,26 @@ class AttributeDisplayHelper extends Helper
 {
   public $helpers = ['Html', 'DiskSpace', 'Time', 'Url'];
 
-  function drawTable($tableRows, $validAttributes, $computer){
+  function drawTable($tableRows, $validAttributes, $computer, $createLinks=true){
     $result =  '<div class="row">';
     $result = $result . '<table class="table table-striped">';
 
     foreach($tableRows as $aTable)
     {
         $result = $result . "<tr>";
+        $totalAttributes = 0;
         foreach($aTable as $attribute)
         {
+          //check that attribute exists in entity
+          if(isset($computer[$attribute]))
+          {
             $result = $result . '<th style="width: 250px;">' . $validAttributes[$attribute] . '</th>';
+            $totalAttributes ++;
+          }
         }
 
-        $tableCount = count($aTable);
+        // pad rest of table
+        $tableCount = $totalAttributes;
         while($tableCount < 5)
         {
             $result = $result . '<th style="width: 250px;"></th>';
@@ -31,10 +38,14 @@ class AttributeDisplayHelper extends Helper
 
         foreach($aTable as $attribute)
         {
-            $result = $result . '<td>' . $this->displayAttribute($attribute,$computer) . '</td>';
+          // again, make sure attribute exists in entity
+          if(isset($computer[$attribute]))
+          {
+            $result = $result . '<td>' . $this->displayAttribute($attribute,$computer,false,$createLinks) . '</td>';
+          }
         }
 
-        $tableCount = count($aTable);
+        $tableCount = $totalAttributes;
         while($tableCount < 5)
         {
             $result = $result . "<td></td>";
@@ -50,7 +61,7 @@ class AttributeDisplayHelper extends Helper
     return $result;
   }
 
-  function displayAttribute($attribute,$computer,$edit=false){
+  function displayAttribute($attribute,$computer,$edit=false,$createLinks=true){
   	$result = '';
 
   	if($attribute == 'ComputerName')
@@ -59,11 +70,25 @@ class AttributeDisplayHelper extends Helper
   	}
   	else if($attribute == 'ComputerLocation')
   	{
-  		$result = $this->Html->link( $computer['location']['location'], ['controller'=>'search','action' => 'search', 0, $computer['ComputerLocation']]);
+      if($createLinks)
+      {
+  		  $result = $this->Html->link( $computer['location']['location'], ['controller'=>'search','action' => 'search', 0, $computer['ComputerLocation']]);
+      }
+      else
+      {
+        $result = $computer['location']['location'];
+      }
   	}
   	else if($attribute == 'CurrentUser')
   	{
-  		$result = $this->Html->link($computer['CurrentUser'], ['controller'=>'inventory','action'=>'loginHistory',$computer['id']]);
+      if($createLinks)
+      {
+  		  $result = $this->Html->link($computer['CurrentUser'], ['controller'=>'inventory','action'=>'loginHistory',$computer['id']]);
+      }
+      else
+      {
+        $result = $computer['CurrentUser'];
+      }
   	}
   	else if ($attribute == 'SerialNumber')
   	{
@@ -83,11 +108,25 @@ class AttributeDisplayHelper extends Helper
     }
   	else if ($attribute == 'Model')
   	{
-  		$result = $this->Html->link($computer['Model'], ['controller'=>'search','action' => 'search', 1, $computer['Model']]);
+      if($createLinks)
+      {
+  		  $result = $this->Html->link($computer['Model'], ['controller'=>'search','action' => 'search', 1, $computer['Model']]);
+      }
+      else
+      {
+        $result = $computer['Model'];
+      }
   	}
   	else if ($attribute == 'OS')
   	{
-  		$result = $this->Html->link( $computer['OS'], ['controller'=>'search','action' => 'search', 2, $computer['OS']]);
+      if($createLinks)
+      {
+  		  $result = $this->Html->link( $computer['OS'], ['controller'=>'search','action' => 'search', 2, $computer['OS']]);
+      }
+      else
+      {
+        $result = $computer['OS'];
+      }
   	}
   	else if ($attribute == 'CPU')
   	{
@@ -95,12 +134,27 @@ class AttributeDisplayHelper extends Helper
   	}
   	else if ($attribute == 'Memory')
   	{
-  		$result = $this->Html->link($computer['Memory'] . " GB",  ['controller'=>'search','action' => 'search', 3, $computer['Memory']]);
-           	$result = $result . ' (' . $this->DiskSpace->compare($computer['Memory'],$computer['MemoryFree']) . "% free)";
+      if($createLinks)
+      {
+  		  $result = $this->Html->link($computer['Memory'] . " GB",  ['controller'=>'search','action' => 'search', 3, $computer['Memory']]);
+      }
+      else
+      {
+        $result = $computer['Memory'] . " GB";
+      }
+
+      $result = $result . ' (' . $this->DiskSpace->compare($computer['Memory'],$computer['MemoryFree']) . "% free)";
   	}
   	else if ($attribute == 'NumberOfMonitors')
   	{
-  		$result = $this->Html->link( $computer['NumberOfMonitors'], ['controller'=>'search','action' => 'search', 4, $computer['NumberOfMonitors']]);
+      if($createLinks)
+      {
+  		  $result = $this->Html->link( $computer['NumberOfMonitors'], ['controller'=>'search','action' => 'search', 4, $computer['NumberOfMonitors']]);
+      }
+      else
+      {
+        $result = $computer['NumberOfMonitors'];
+      }
   	}
   	else if ($attribute == 'IPaddress')
   	{

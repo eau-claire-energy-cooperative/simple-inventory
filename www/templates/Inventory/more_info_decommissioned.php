@@ -17,7 +17,6 @@
     });
  });", ["block"=>true])
 ?>
-
 <div class="mb-2" align="right">
   <a href="<?= $this->Url->build(['action' => 'deleteDecom', $decommissioned['id']]) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-decom"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i> Permanent Delete</a>
 </div>
@@ -88,6 +87,7 @@
   </div>
 </div>
 
+<?php if(array_key_exists('general', $tables) && count($tables['general']) > 0): ?>
 <div class="row">
   <div class="col-xl-12">
     <div class="card border-left-primary shadow mb-4">
@@ -95,29 +95,15 @@
           <h6 class="m-0 font-weight-bold text-primary">General Information</h6>
         </div>
         <div class="card-body">
-          <div class="row">
-            <table class="table table-striped">
-              <tr>
-                <th style="width: 200px;">Device Name</th>
-                <th style="width: 250px;">Location</th>
-                <th style="width: 250px;">Current User</th>
-                <th style="width: 250px;">Serial Number</th>
-                <th style="width: 250px;">Asset ID</th>
-              </tr>
-              <tr>
-                  <td><?= $decommissioned['ComputerName']?></td>
-                  <td><?= $decommissioned['location']['location']; ?></td>
-                  <td><?= $decommissioned['CurrentUser']?></td>
-                  <td><?= $decommissioned['SerialNumber']?></td>
-                  <td><?= $decommissioned['AssetId']?> </td>
-              </tr>
-            </table>
-          </div>
+          <?= $this->AttributeDisplay->drawTable($tables['general'], $validAttributes, $decommissioned, false); ?>
         </div>
       </div>
   </div>
 </div>
+<?php endif; ?>
 
+<?php if(array_key_exists('hardware', $tables) && count($tables['hardware']) > 0): ?>
+<?php $tableCount = 0; ?>
 <div class="row">
   <div class="col-xl-12">
     <div class="card border-left-warning shadow mb-4">
@@ -125,35 +111,15 @@
           <h6 class="m-0 font-weight-bold text-primary">Hardware Information</h6>
         </div>
         <div class="card-body">
-          <div class="row">
-            <table class="table table-striped">
-            <tr>
-                <th style="width: 200px;">Manufacturer</th>
-                <th style="width: 200px;">Model</th>
-                <th style="width: 250px;">Operating System</th>
-                <th style="width: 250px;">CPU</th>
-                <th style="width: 250px;">Memory</th>
-            </tr>
-            <tr>
-                <td> <?= $decommissioned['Manufacturer']; ?></td>
-                <td> <?= $decommissioned['Model']; ?></td>
-                <td><?= $decommissioned['OS']; ?></td>
-                <td><?= $decommissioned['CPU']?></td>
-                <td> <?= $decommissioned['Memory'] . " GB"; ?></td>
-            </tr>
-            <tr>
-                <th style="width: 250px;">Number of Monitors</th>
-            </tr>
-            <tr>
-              <td> <?= $decommissioned['NumberOfMonitors']; ?></td>
-            </tr>
-          </table>
-          </div>
+          <?= $this->AttributeDisplay->drawTable($tables['hardware'], $validAttributes, $decommissioned, false); ?>
         </div>
       </div>
   </div>
 </div>
+<?php endif; ?>
 
+<?php if(array_key_exists('network', $tables) && count($tables['network']) > 0): ?>
+<?php $tableCount = 0; ?>
 <div class="row">
   <div class="col-xl-12">
     <div class="card border-left-info shadow mb-4">
@@ -161,31 +127,15 @@
           <h6 class="m-0 font-weight-bold text-primary">Network Information</h6>
         </div>
         <div class="card-body">
-          <div class="row">
-            <table class="table table-striped">
-            <tr>
-                <th style="width: 200px;">IP Address</th>
-                <th style="width: 250px;">MAC Address</th>
-                <th style="width: 250px;"></th>
-                <th style="width: 250px;"></th>
-                 <th style="width: 250px;"></th>
-            </tr>
-              <tr>
-                <td><?= $decommissioned['IPaddress']?></td>
-                 <td><?= $decommissioned['MACaddress']?></td>
-                 <td></td>
-                  <td></td>
-                  <td></td>
-               </tr>
-            </table>
-          </div>
+          <?= $this->AttributeDisplay->drawTable($tables['network'], $validAttributes, $decommissioned, false); ?>
         </div>
       </div>
   </div>
 </div>
+<?php endif; ?>
 
 <div class="row">
-  <div class="col-xl-5">
+  <div class="col-xl-12">
     <div class="card border-left-dark shadow mb-4">
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Notes</h6>
