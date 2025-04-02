@@ -183,6 +183,33 @@ class InventoryController extends AppController {
     return $this->redirect('/inventory/moreInfo/' . $this->request->getData('comp_id'));
   }
 
+  public function changeDecomStatus($id, $status)
+	{
+    $Decommissioned = $this->fetchTable('Decommissioned');
+
+		$device = $Decommissioned->get($id);
+		if($status == 'hd')
+		{
+      // flip from yes to no or vice versa
+			$device->WipedHD = ($device->WipedHD == 'Yes' ? 'No' : 'Yes');
+		}
+		elseif($status == 'recycle')
+		{
+			$device->Recycled = ($device->Recycled == 'Yes' ? 'No' : 'Yes');
+		}
+
+		if($Decommissioned->save($device))
+		{
+			$this->Flash->success(sprintf('%s status updated', $device['ComputerName']));
+		}
+		else
+    {
+		  $this->Flash->error(sprintf('Error updating status for %s', $device['ComputerName']));
+		}
+
+    return $this->redirect('/inventory/decommission');
+	}
+
   public function computerInventory(){
     $this->set('title', 'Current Inventory');
 
