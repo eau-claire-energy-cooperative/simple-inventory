@@ -234,20 +234,11 @@ class InventoryController extends AppController {
     $this->set('active_menu', 'manage');
 
     $Computer = $this->fetchTable('Computer');
-		$device = $Computer->find('all', ['contain'=>['DeviceType', 'LicenseKey'],
+		$device = $Computer->find('all', ['contain'=>['CheckoutRequest', 'DeviceType', 'LicenseKey'],
                                       'conditions'=>['Computer.id'=>$id]])->first();
 
     // check for any errors that would prevent decommissioning of this device
-    $errors = [];
-    if($device['device_type']['allow_decom'] == 'false')
-    {
-      $errors[] = sprintf('Devices of type <b>%s</b> are not eligible to be decommissioned', $device['device_type']['name']);
-    }
-
-    if(count($device['license_key']) > 0)
-    {
-      $errors[] = sprintf('This device has %d license(s) attached to it. You must delete or move these licenses before decomissioning.', count($device['license_key']));
-    }
+    $errors = $this->_canDelete($device, true);
 
     // if confirmation is given make sure errors are corrected
 		if ($this->request->is('post') && count($errors) == 0) {
@@ -314,14 +305,18 @@ class InventoryController extends AppController {
     $Computer = $this->fetchTable('Computer');
 
     //get the name of the computer for logging
-    $computer = $Computer->find('all', ['contain'=>['LicenseKey', 'DeviceType'],
+    $computer = $Computer->find('all', ['contain'=>['CheckoutRequest', 'LicenseKey', 'DeviceType'],
                                         'conditions'=>['Computer.id'=>$id]])->first();
 
-    if($computer != null && count($computer['license_key']) == 0)
+    $errors = $this->_canDelete($computer, false);
+
+    if($computer != null && count($errors) == 0)
     {
       if ($Computer->delete($computer)) {
 
-	    	//also delete programs and services
+        //delete associated records
+        $db = ConnectionManager::get('default');
+        $db->delete('application_installs', ['comp_id'=>$id]);
         $this->fetchTable('Service')->deleteQuery()->where(['comp_id'=>$id])->execute();
         $this->fetchTable('Disk')->deleteQuery()->where(['comp_id'=>$id])->execute();
 
@@ -335,7 +330,11 @@ class InventoryController extends AppController {
     }
     else
     {
-      $this->Flash->error('Device has ' . count($computer['license_key']) . ' license(s) attached to it, remove these first.');
+      // display the errors
+      foreach($errors as $e)
+      {
+        $this->Flash->error($e);
+      }
       return $this->redirect('/inventory/moreInfo/' . $id);
     }
 	}
@@ -628,6 +627,28 @@ class InventoryController extends AppController {
 
     return $result;
 	}
+
+  function _canDelete($device, $decom){
+    // check for any errors that would prevent decommissioning or deleting of this device
+    $errors = [];
+    if($decom && $device['device_type']['allow_decom'] == 'false')
+    {
+      $errors[] = sprintf('Devices of type <b>%s</b> are not eligible to be decommissioned', $device['device_type']['name']);
+    }
+
+    if(count($device['checkout_request']) > 0)
+    {
+      $errors[] = sprintf("This device is part of %d active, or future, checkout request(s). You must find new compatible devices, or deny these checkout requests, before removing this device.",
+                        count($device['checkout_request']));
+    }
+
+    if(count($device['license_key']) > 0)
+    {
+      $errors[] = sprintf('This device has %d license(s) attached to it. You must delete or move these licenses before removing this device.', count($device['license_key']));
+    }
+
+    return $errors;
+  }
 
   function _saveLog($message){
     $Log = $this->fetchTable('Logs');
