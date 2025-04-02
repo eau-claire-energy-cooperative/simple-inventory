@@ -82,11 +82,12 @@ class SearchController extends AppController {
     }
     else
     {
-      $license_key = $this->fetchTable('LicenseKey')->find('all', ['contain'=>['Computer', 'Computer.DeviceType'],
+      $license_key = $this->fetchTable('LicenseKey')->find('all', ['contain'=>['Computer', 'Computer.DeviceType', 'License'],
                                                                    'conditions'=>['LicenseKey.id'=>$id]])->first();
 
       $this->set('license_id', $license_key['license_id']);
       $this->set("q",sprintf("Assigned Devices for Key '%s'", $license_key['Keycode']));
+      $this->set('export_name', $license_key['license']['LicenseName']);
       $this->set('results', [$license_key]);
     }
 	}
