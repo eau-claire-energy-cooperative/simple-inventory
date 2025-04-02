@@ -234,11 +234,23 @@ class InventoryController extends AppController {
     $this->set('active_menu', 'manage');
 
     $Computer = $this->fetchTable('Computer');
-		$device = $Computer->find('all', ['contain'=>['LicenseKey'],
-                                      'conditions'=>['id'=>$id]])->first();
+		$device = $Computer->find('all', ['contain'=>['DeviceType', 'LicenseKey'],
+                                      'conditions'=>['Computer.id'=>$id]])->first();
 
-    // if confirmation is given make sure licenses are handled
-		if ($this->request->is('post') && count($device['license_key']) == 0) {
+    // check for any errors that would prevent decommissioning of this device
+    $errors = [];
+    if($device['device_type']['allow_decom'] == 'false')
+    {
+      $errors[] = sprintf('Devices of type <b>%s</b> are not eligible to be decommissioned', $device['device_type']['name']);
+    }
+
+    if(count($device['license_key']) > 0)
+    {
+      $errors[] = sprintf('This device has %d license(s) attached to it. You must delete or move these licenses before decomissioning.', count($device['license_key']));
+    }
+
+    // if confirmation is given make sure errors are corrected
+		if ($this->request->is('post') && count($errors) == 0) {
       $Decommissioned = $this->fetchTable('Decommissioned');
 
       //TODO - make this based on device type attributes
@@ -288,12 +300,7 @@ class InventoryController extends AppController {
 
     $this->set('title', sprintf("Decommission %s", $device['ComputerName']));
 
-    if(count($device['license_key']) > 0)
-    {
-      $errors = sprintf('This computer has %d license(s) attached to it. You must delete or move these licenses before decomissioning.', count($device['license_key']));
-      $this->set('errors', $errors);
-    }
-
+    $this->set('errors', $errors);
     $this->set('device', $device);
 	}
 

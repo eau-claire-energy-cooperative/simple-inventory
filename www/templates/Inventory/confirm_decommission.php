@@ -2,7 +2,7 @@
 <div class="mb-4" align="right">
   <a href="<?= $this->Url->build('/inventory/moreInfo/' . $device['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="mdi mdi-chevron-left icon-sm icon-inline text-white-50"></i> Back </a>
 </div>
-<?php if(isset($errors)): ?>
+<?php if(count($errors) > 0): ?>
 
 <div class="row">
   <div class="col-xl-12">
@@ -11,7 +11,9 @@
           <h6 class="m-0 font-weight-bold text-primary">Warning</h6>
         </div>
         <div class="card-body">
-          <p><?= $errors ?></p>
+          <?php foreach($errors as $e): ?>
+          <p><?= $e ?></p>
+          <?php endforeach; ?>
         </div>
     </div>
   </div>
