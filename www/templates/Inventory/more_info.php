@@ -206,7 +206,7 @@ function showOriginal(id, text){
             <div id="js-copy-alert-<?= $aLicense['id'] ?>" class="text-success" style="display:none" role="alert"></div>
           </div>
           <div class="col-md-2">
-            <a href="<?= $this->Url->build('/manage/reset_license/' . $aLicense['_joinData']['id']) ?>" class="text-danger">
+            <a href="<?= $this->Url->build('/manage/reset_license/' . $computer['id'] . '/' . $aLicense['id']) ?>" class="text-danger">
               <i class="mdi mdi-delete icon-sm"></i>
             </a>
           </div>
