@@ -2,6 +2,7 @@
 namespace App\Controller;
 use Cake\Event\EventInterface;
 use Cake\Routing\Router;
+use Cake\Datasource\ConnectionManager;
 
 class InventoryController extends AppController {
 
@@ -228,6 +229,74 @@ class InventoryController extends AppController {
     $this->viewBuilder()->addHelper('DynamicTable');
   }
 
+  public function confirmDecommission($id)
+	{
+    $this->set('active_menu', 'manage');
+
+    $Computer = $this->fetchTable('Computer');
+		$device = $Computer->find('all', ['contain'=>['LicenseKey'],
+                                      'conditions'=>['id'=>$id]])->first();
+
+    // if confirmation is given make sure licenses are handled
+		if ($this->request->is('post') && count($device['license_key']) == 0) {
+      $Decommissioned = $this->fetchTable('Decommissioned');
+
+      //TODO - make this based on device type attributes
+      $decom = $Decommissioned->newEmptyEntity();
+      $decom->ComputerName = $device->ComputerName;
+      $decom->SerialNumber = $device->SerialNumber;
+      $decom->AssetId = $device->AssetId;
+      $decom->CurrentUser = $device->CurrentUser;
+      $decom->Location = $device->ComputerLocation;
+      $decom->Manufacturer = $device->Manufacturer;
+      $decom->Model = $device->Model;
+      $decom->OS = $device->OS;
+      $decom->Memory = $device->Memory;
+      $decom->CPU = $device->CPU;
+      $decom->NumberOfMonitors = $device->NumberOfMonitors;
+      $decom->IPaddress =  $device->IPaddress;
+      $decom->MACaddress =  $device->MACaddress;
+      $decom->LastUpdated =  $device->LastUpdated;
+      $decom->WipedHD = $this->request->getData('WipedHD');
+      $decom->Recycled = $this->request->getData('Recycled');
+      $decom->RedeployedAs = $this->request->getData('RedeployedAs');
+      $decom->notes = $this->request->getData('notes');
+
+      if($Decommissioned->save($decom))
+      {
+        // send an email to admins
+        $this->_send_email(sprintf("%s has been decommissioned", $device['ComputerName']),
+                           sprintf("A device has been decommissioned, the details are below. <br /><br />Device Name: %s <br />Serial Number: %s", $device['ComputerName'], $device['SerialNumber']));
+
+        // delete the device
+        $Computer->delete($device);
+
+        //delete associated records
+        $db = ConnectionManager::get('default');
+        $db->delete('application_installs', ['comp_id'=>$device['id']]);
+        $this->fetchTable('Service')->deleteQuery()->where(['comp_id'=>$device['id']])->execute();
+        $this->fetchTable('Disk')->deleteQuery()->where(['comp_id'=>$device['id']])->execute();
+
+        $this->Flash->success(sprintf("Device %s has been decommissioned", $device['ComputerName']));
+        return $this->redirect('/inventory/computerInventory');
+      }
+      else
+      {
+        $this->Flash->error(sprintf("There was an error decommissioning %s", $device['ComputerName']));
+      }
+  	}
+
+    $this->set('title', sprintf("Decommission %s", $device['ComputerName']));
+
+    if(count($device['license_key']) > 0)
+    {
+      $errors = sprintf('This computer has %d license(s) attached to it. You must delete or move these licenses before decomissioning.', count($device['license_key']));
+      $this->set('errors', $errors);
+    }
+
+    $this->set('device', $device);
+	}
+
   public function decommission() {
 	  $this->set('active_menu', 'manage');
 		$this->set('title','Decommissioned Devices');
@@ -263,6 +332,24 @@ class InventoryController extends AppController {
       return $this->redirect('/inventory/moreInfo/' . $id);
     }
 	}
+
+  public function deleteDecom($id){
+    $Decommissioned = $this->fetchTable('Decommissioned');
+    $decom = $Decommissioned->get($id);
+
+    if($Decommissioned->delete($decom))
+    {
+      $message = sprintf('%s has been permanently deleted', $decom['ComputerName']);
+      $this->_saveLog($message);
+      $this->Flash->success($message);
+    }
+    else
+    {
+      $this->Flash->error(sprintf("Failed to delete device %s", $decom['ComputerName']));
+    }
+
+    return $this->redirect('/inventory/decommission');
+  }
 
   function deleteDisk($disk_id, $comp_id){
 
