@@ -7,6 +7,10 @@
         pageLength: 50,
         stateSave: true,
         stateDuration: 60,
+        order: [
+          [4, 'desc'],
+          [0, 'desc']
+        ],
         layout: {
           top2Start: 'info',
           top2End: {
