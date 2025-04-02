@@ -19,7 +19,7 @@
 ?>
 
 <div class="mb-2" align="right">
-  <a href="<?php echo $this->Url->build(array('action' => 'deleteDecom', $decommissioned['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-decom"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i> Permanent Delete</a>
+  <a href="<?= $this->Url->build(['action' => 'deleteDecom', $decommissioned['id']]) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-decom"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i> Permanent Delete</a>
 </div>
 <div class="row">
   <div class="col-xl-3 col-md-6 mb-4">
@@ -28,7 +28,7 @@
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Wiped Hard Drive</div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $decommissioned['WipedHD']?></div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $decommissioned['WipedHD']?></div>
           </div>
           <div class="col-auto">
             <i class="mdi mdi-harddisk-remove icon-2x icon-inline text-gray-300"></i>
@@ -44,7 +44,7 @@
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Recycled</div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $decommissioned['Recycled']?></div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $decommissioned['Recycled']?></div>
           </div>
           <div class="col-auto">
             <i class="mdi mdi-recycle icon-2x icon-inline text-gray-300"></i>
@@ -61,7 +61,7 @@
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Redeployed As</div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $decommissioned['RedeployedAs'];?></div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $decommissioned['RedeployedAs'];?></div>
           </div>
           <div class="col-auto">
             <i class="mdi mdi-monitor icon-2x icon-inline text-gray-300"></i>
@@ -77,7 +77,7 @@
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Decommission Date</div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $decommissioned['LastUpdated']->format('m/d/Y') ?></div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $decommissioned['LastUpdated']->format('m/d/Y') ?></div>
           </div>
           <div class="col-auto">
             <i class="mdi mdi-calendar icon-2x icon-inline text-gray-300"></i>
@@ -105,11 +105,11 @@
                 <th style="width: 250px;">Asset ID</th>
               </tr>
               <tr>
-                  <td><?php echo $decommissioned['ComputerName']?></td>
-                  <td><?php echo $decommissioned['location']['location']; ?></td>
-                  <td><?php echo $decommissioned['CurrentUser']?></td>
-                  <td><?php echo $decommissioned['SerialNumber']?></td>
-                  <td><?php echo $decommissioned['AssetId']?> </td>
+                  <td><?= $decommissioned['ComputerName']?></td>
+                  <td><?= $decommissioned['location']['location']; ?></td>
+                  <td><?= $decommissioned['CurrentUser']?></td>
+                  <td><?= $decommissioned['SerialNumber']?></td>
+                  <td><?= $decommissioned['AssetId']?> </td>
               </tr>
             </table>
           </div>
@@ -135,17 +135,17 @@
                 <th style="width: 250px;">Memory</th>
             </tr>
             <tr>
-                <td> <?php echo $decommissioned['Manufacturer']; ?></td>
-                <td> <?php echo $decommissioned['Model']; ?></td>
-                <td><?php echo $decommissioned['OS']; ?></td>
-                <td><?php echo $decommissioned['CPU']?></td>
-                <td> <?php echo $decommissioned['Memory'] . " GB"; ?></td>
+                <td> <?= $decommissioned['Manufacturer']; ?></td>
+                <td> <?= $decommissioned['Model']; ?></td>
+                <td><?= $decommissioned['OS']; ?></td>
+                <td><?= $decommissioned['CPU']?></td>
+                <td> <?= $decommissioned['Memory'] . " GB"; ?></td>
             </tr>
             <tr>
                 <th style="width: 250px;">Number of Monitors</th>
             </tr>
             <tr>
-              <td> <?php echo $decommissioned['NumberOfMonitors']; ?></td>
+              <td> <?= $decommissioned['NumberOfMonitors']; ?></td>
             </tr>
           </table>
           </div>
@@ -171,8 +171,8 @@
                  <th style="width: 250px;"></th>
             </tr>
               <tr>
-                <td><?php echo $decommissioned['IPaddress']?></td>
-                 <td><?php echo $decommissioned['MACaddress']?></td>
+                <td><?= $decommissioned['IPaddress']?></td>
+                 <td><?= $decommissioned['MACaddress']?></td>
                  <td></td>
                   <td></td>
                   <td></td>
@@ -191,7 +191,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Notes</h6>
       </div>
       <div class="card-body">
-        <?php echo $this->Markdown->transform($decommissioned['notes']); ?>
+        <?= $this->Markdown->transform($decommissioned['notes']); ?>
       </div>
     </div>
   </div>

@@ -51,26 +51,23 @@
 
 	</thead>
 	<tbody>
-    <!-- Here is where we loop through our $posts array, printing out post info -->
-
     <?php foreach ($decommission as $post): ?>
     <tr>
-    <td> <?php echo $this->Html->link( $post['ComputerName'] , array('action' => 'moreInfoDecommissioned', $post['id'])); ?></td>
-    <td><?php echo $post['RedeployedAs']; ?></td>
-    <td><?php echo $post['WipedHD']; ?>
+    <td> <?= $this->Html->link( $post['ComputerName'] , ['action' => 'moreInfoDecommissioned', $post['id']]); ?></td>
+    <td><?= $post['RedeployedAs']; ?></td>
+    <td><?= $post['WipedHD']; ?>
      	<div style="float:right; ">
-     	    <a href="<?php echo $this->Url->build(array( 'action' => 'changeWipeStatus',$post['id'], 'Yes')) ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-1"><i class="mdi mdi-check icon-sm text-white-50"></i></a>
-          <a href="<?php echo $this->Url->build(array('action' => 'changeWipeStatus',$post['id'],'No')) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-1"><i class="mdi mdi-close icon-sm text-white-50"></i></a>
+     	    <a href="<?= $this->Url->build(['action' => 'changeWipeStatus',$post['id'], 'yes']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-1"><i class="mdi mdi-check icon-sm text-white-50"></i></a>
+          <a href="<?= $this->Url->build(['action' => 'changeWipeStatus',$post['id'], 'no']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-1"><i class="mdi mdi-close icon-sm text-white-50"></i></a>
      	</div></td>
-       <td><?php echo $post['Recycled']; ?>
+       <td><?= $post['Recycled']; ?>
        <div style="float:right; ">
-         <a href="<?php echo $this->Url->build(array( 'action' => 'changeRecycledStatus',$post['id'], 'Yes')) ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-1"><i class="mdi mdi-check icon-sm text-white-50"></i></a>
-         <a href="<?php echo $this->Url->build(array('action' => 'changeRecycledStatus',$post['id'],'No')) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-1"><i class="mdi mdi-close icon-sm text-white-50"></i></a>
+         <a href="<?= $this->Url->build(['action' => 'changeRecycledStatus',$post['id'], 'yes']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-1"><i class="mdi mdi-check icon-sm text-white-50"></i></a>
+         <a href="<?= $this->Url->build(['action' => 'changeRecycledStatus',$post['id'],'no']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-1"><i class="mdi mdi-close icon-sm text-white-50"></i></a>
      	</div>
       </td>
-      <td data-sort="<?php echo $post['LastUpdated']->format('U') ?>"><?php echo $post['LastUpdated']->format('m/d/Y')?></td>
+      <td data-sort="<?= $post['LastUpdated']->format('U') ?>"><?= $post['LastUpdated']->format('m/d/Y')?></td>
     </tr>
-         <?php endforeach; ?>
-
+    <?php endforeach; ?>
 </tbody>
 </table>
