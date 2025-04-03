@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Added
 
 - exported CSV files now only show filtered search results instead of entire table
+- some basic error checking (licenses, checkout requests) is now completed on decommissioning or deleting of devices (#22)
 
 ### Changed
 
