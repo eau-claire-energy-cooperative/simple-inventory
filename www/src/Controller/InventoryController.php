@@ -423,6 +423,80 @@ class InventoryController extends AppController {
 	  }
 	}
 
+  public function import(){
+    $this->set('title', 'Import Devices');
+
+    if($this->request->is('post'))
+    {
+      $file = $this->request->getUploadedFile('csvFile');
+
+      // make sure file is a csv
+      if(in_array($file->getClientMediaType(), ['text/plain', 'text/csv']))
+      {
+        // move the file and open
+        $targetPath = sprintf("%suploads/import_devices.csv", WWW_ROOT);
+        $file->moveTo($targetPath);
+
+        $csv = array_map('str_getcsv', file($targetPath));
+
+        //attempt to get the default location id and device types list
+  			$defaultLocation = $this->fetchTable('Location')->find('all', ['conditions'=>['Location.is_default'=>'true']])->first();
+        $deviceTypes = $this->fetchTable('DeviceType')->find('list', ['keyField'=>function($d){
+                                                                        return $d->get('slug');
+                                                                       }, 'valueField'=>"id"])->toArray();
+  			if($defaultLocation)
+  			{
+          //verify each entry's device type
+          $passedCheck = true;
+          $Computer = $this->fetchTable('Computer');
+
+          foreach($csv as $row){
+            //check if device with this name already exists
+            if($Computer->find('all', ['conditions'=>['Computer.ComputerName'=>trim($row[1])]])->count() > 0)
+            {
+              $this->Flash->error(sprintf('Cannot import devices, duplicate device name %s', $row[1]));
+              $passedCheck = false;
+            }
+            else if(!in_array(strtolower($row[0]), array_keys($deviceTypes)))
+            {
+              $this->Flash->error(sprintf('Cannot import devices, "%s" type does not exist', $row[0]));
+              $passedCheck = false;
+            }
+          }
+
+          $results = [];
+
+          //if no errors, add each to the DB
+          if($passedCheck)
+          {
+              foreach($csv as $row){
+                $newDevice = $Computer->newEmptyEntity();
+        				$newDevice->ComputerName = trim($row[1]);
+                $newDevice->DeviceType = $deviceTypes[strtolower($row[0])];
+        				$newDevice->ComputerLocation = $defaultLocation['id'];
+
+        				$Computer->save($newDevice);
+
+                array_push($results, array('id'=>$newDevice->id, 'DeviceType'=> $deviceTypes[strtolower($row[0])], 'ComputerName'=>trim($row[1])));
+              }
+
+              $this->set('results', $results);
+
+              $this->Flash->success(count($csv) . ' devices created');
+          }
+        }
+        else
+        {
+          $this->Flash->error('Cannot import devices, no default location set');
+        }
+      }
+      else
+      {
+        $this->Flash->error('The uploade file type is invalid. File must be a CSV.');
+      }
+    }
+  }
+
   public function login(){
     $this->set('title', 'Login');
     $this->viewBuilder()->setLayout('login');
