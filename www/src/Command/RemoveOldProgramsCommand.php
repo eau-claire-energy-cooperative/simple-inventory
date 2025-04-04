@@ -22,7 +22,7 @@ class RemoveOldProgramsCommand extends InventoryCommand
   	$io->out(sprintf('Found %d unique applications', $applications->count()));
 
     $total_deleted = 0;
-    foreach($applications as $app)
+    foreach($applications->all() as $app)
     {
       //delete if no devices are currently assigned and lifecycle does not exist
       if(count($app['computer']) == 0 && !isset($app['lifecycle']))

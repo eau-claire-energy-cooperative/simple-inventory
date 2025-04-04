@@ -58,7 +58,7 @@ class ScheduleCommand extends InventoryCommand
             //$this->PurgeDecom->execute($schedule_params);
             break;
           case 9:
-            //$this->PurgeLogs->execute($schedule_params);
+            $this->executeCommand(PurgeLogsCommand::class, $options);
             break;
           case 10:
             //$this->CheckLifecycles->execute($schedule_params);
