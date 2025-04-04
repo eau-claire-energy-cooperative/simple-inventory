@@ -18,6 +18,7 @@ namespace App;
 
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
+use Cake\Console\CommandCollection;
 use Cake\Datasource\FactoryLocator;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
@@ -27,6 +28,9 @@ use Cake\Http\MiddlewareQueue;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+
+// list valid commands
+use App\Command\AuthenticationResetCommand;
 
 /**
  * Application setup class.
@@ -64,6 +68,14 @@ class Application extends BaseApplication
         }
 
         // Load more plugins here
+    }
+
+    public function console(CommandCollection $commands): CommandCollection
+    {
+        // Add commands we want
+        $commands->add('authentication_reset', AuthenticationResetCommand::class);
+
+        return $commands;
     }
 
     /**
@@ -124,9 +136,9 @@ class Application extends BaseApplication
      */
     protected function bootstrapCli(): void
     {
-        $this->addOptionalPlugin('Bake');
-
-        $this->addPlugin('Migrations');
+        // commented these out for production
+        //$this->addOptionalPlugin('Bake');
+        //$this->addPlugin('Migrations');
 
         // Load more plugins here
     }
