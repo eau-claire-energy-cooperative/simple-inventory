@@ -52,7 +52,7 @@ class ScheduleCommand extends InventoryCommand
 						//$this->DiskSpace->execute($schedule_params);
 						break;
 					case 7:
-					  //$this->RemoveOldPrograms->execute($schedule_params);
+					  $this->executeCommand(RemoveOldProgramsCommand::class, $options);
             break;
           case 8:
             //$this->PurgeDecom->execute($schedule_params);
