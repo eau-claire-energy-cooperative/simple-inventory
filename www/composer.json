@@ -12,7 +12,8 @@
         "mobiledetect/mobiledetectlib": "^3.74",
         "geerlingguy/ping": "*",
         "league/commonmark": "*",
-        "dragonmantank/cron-expression": "*"
+        "dragonmantank/cron-expression": "*",
+        "phpmailer/phpmailer": "^6.9.2"
     },
     "require-dev": {
         "cakephp/bake": "^2.8",
