@@ -3,6 +3,8 @@ namespace App\Controller;
 
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
+use Cake\Filesystem\Folder;
+use Cake\Filesystem\File;
 
 class AdminController extends AppController {
   public $paginate = [
@@ -42,6 +44,21 @@ class AdminController extends AppController {
             $this->Flash->error(sprintf('Unable to add %s', $location['location']));
         }
     }
+  }
+
+  public function deleteDriver(){
+    $file = new File(sprintf('%sdrivers/%s', WWW_ROOT, $this->request->getQuery('file')));
+
+    // attempt to delete the file
+    if($file->delete())
+    {
+      $this->Flash->success(sprintf("%s deleted", $file->name));
+    }
+    else
+    {
+      $this->Flash->error(sprintf("There was a problem deleting %s", $file->name));
+    }
+    return $this->redirect("/admin/manage_drivers");
   }
 
   public function deleteLocation($id) {
@@ -187,6 +204,13 @@ class AdminController extends AppController {
 
 		$this->set('inventory', $this->fetchTable('Computer')->find('list', ['keyField'=>'ComputerName', 'valueField'=>'id'])->toArray());
 	}
+
+  public function manageDrivers(){
+    $this->set('title', 'Manage Drivers');
+
+    $drivers = new Folder(sprintf("%sdrivers", WWW_ROOT));
+    $this->set('drivers', $drivers->find(".*\.zip"));
+  }
 
   public function settings(){
     $this->set('title', 'Settings');

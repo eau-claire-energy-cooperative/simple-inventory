@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - exported CSV files now only show filtered search results instead of entire table
 - some basic error checking (licenses, checkout requests) is now completed on decommissioning or deleting of devices (#22)
+- viewer to see driver files in the /drivers/ directory and delete them
 
 ### Changed
 
@@ -27,6 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - CheckoutRequests times are now calculated based on [FrozenTime](https://book.cakephp.org/4/en/core-libraries/time.html) functions instead of based on php date() unix time comparisons. 
 - Checkout requests can now be deleted if the check in time has past without denying them first (#30)
 - Decommissioned devices now save the display attributes of the parent device type. Only valid attributes are shown on the Decommissioned pages now. 
+- Driver upload information now references Powershell commands instead of old Double Drivers tools. This is outdated and no longer necessary. 
 
 ### Fixed
 
