@@ -50,7 +50,7 @@ abstract class InventoryCommand extends Command
 
   		foreach($users as $aUser){
   			//log email
-  			$this->dblog("Sending email to " . $aUser['User']['email']);
+  			$this->dblog("Sending email to " . $aUser['email']);
 
   			$email->AddAddress($aUser['email']);
   		}
