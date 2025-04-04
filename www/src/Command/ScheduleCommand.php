@@ -55,7 +55,7 @@ class ScheduleCommand extends InventoryCommand
 					  $this->executeCommand(RemoveOldProgramsCommand::class, $options);
             break;
           case 8:
-            //$this->PurgeDecom->execute($schedule_params);
+            $this->executeCommand(PurgeDecomCommand::class, $options);
             break;
           case 9:
             $this->executeCommand(PurgeLogsCommand::class, $options);
