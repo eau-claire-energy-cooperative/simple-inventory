@@ -46,7 +46,7 @@ class ScheduleCommand extends InventoryCommand
             $this->executeCommand(WakeComputerCommand::class, $options);
 						break;
 					case 4:
-						//$this->SendEmails->execute($schedule_params);
+						$this->executeCommand(SendEmailCommand::class, $options);
 						break;
 					case 5:
 						//$this->DiskSpace->execute($schedule_params);
