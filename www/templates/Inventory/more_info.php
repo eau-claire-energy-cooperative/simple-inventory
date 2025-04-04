@@ -133,8 +133,8 @@ function showOriginal(id, text){
         <?php endif; ?>
       <?php endif; ?>
     <?php endif ?>
-    <?php if(file_exists(WWW_ROOT . '/drivers/' . str_replace(' ','_',$computer['Model']) . '.zip')): ?>
-      <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?= $this->Url->build("/drivers/" . str_replace(' ','_',$computer['Model']) . ".zip") ?>" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm mr-2"><i class="mdi mdi-download icon-sm text-white-50"></i> Download Drivers</a>
+    <?php if(file_exists(sprintf('%sdrivers/%s', WWW_ROOT, $computer['driver_filename']))): ?>
+      <a href="<?= $this->Url->build(sprintf("/drivers/%s", $computer['driver_filename'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm mr-2"><i class="mdi mdi-download icon-sm text-white-50"></i> Download Drivers</a>
     <?php else: ?>
       <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?= $this->Url->build('/ajax/uploadDrivers/' . $computer['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm mr-2 popup fancybox.ajax"><i class="mdi mdi-upload icon-sm text-white-50"></i> Upload Drivers</a>
     <?php endif; ?>

@@ -368,6 +368,29 @@ class InventoryController extends AppController {
     return $this->redirect('/inventory/moreInfo/' . $comp_id);
   }
 
+  function doDriversUpload(){
+    // load the device
+    $device = $this->fetchTable('Computer')->find('all', ['conditions'=>['Computer.id'=>$this->request->getData('id')]])->first();
+
+    $file = $this->request->getUploadedFile('local_file');
+
+    // make sure file is a zip file
+    if(in_array($file->getClientMediaType(), ['application/x-zip', 'application/x-zip-compressed']))
+    {
+      // move the file
+      $targetPath = sprintf("%sdrivers/%s", WWW_ROOT, $device['driver_filename']);
+      $file->moveTo($targetPath);
+
+      $this->Flash->success(sprintf('Driver File <i>%s</i> Uploaded', $device['driver_filename']), ['escape'=>false]);
+    }
+    else
+    {
+      $this->Flash->error("Driver file must be a zip file" . $file->getClientMediaType());
+    }
+
+    return $this->redirect('/inventory/more_info/' . $device['id']);
+  }
+
   public function edit($id= null) {
     $this->set('title', 'Edit Device');
 

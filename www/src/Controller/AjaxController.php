@@ -155,6 +155,13 @@ class AjaxController extends AppController {
     $this->viewBuilder()->addHelper('Markdown');
   }
 
+  function uploadDrivers($id){
+	  $this->viewBuilder()->setLayout('fancybox');
+		$computer = $this->fetchTable('Computer')->find('all', ['conditions'=>['Computer.id'=>$id]])->first();
+
+		$this->set('computer',$computer);
+	}
+
   function wol(){
     $this->Ping->wol($_SERVER['SERVER_ADDR'], $this->request->getQuery('mac'));
 
