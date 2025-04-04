@@ -31,6 +31,7 @@ use Cake\Routing\Middleware\RoutingMiddleware;
 
 // list valid commands
 use App\Command\AuthenticationResetCommand;
+use App\Command\EmailTestCommand;
 
 /**
  * Application setup class.
@@ -74,6 +75,7 @@ class Application extends BaseApplication
     {
         // Add commands we want
         $commands->add('authentication_reset', AuthenticationResetCommand::class);
+        $commands->add('email_test', EmailTestCommand::class);
 
         return $commands;
     }
