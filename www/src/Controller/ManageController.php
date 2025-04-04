@@ -232,7 +232,7 @@ class ManageController extends AppController {
         $parameters = explode(',', $this->request->getData('parameter_list'));
 
         foreach($parameters as $param){
-          $schedule_params = $schedule_params . "'" . $param . "'=>'" . $this->request->getData('param_' . $param) . "',";
+          $schedule_params = $schedule_params . "'" . $param . "'=>'" . $this->request->getData('param_' . strtolower(str_replace(' ', '_',$param))) . "',";
         }
 
         $schedule_params = substr($schedule_params,0,-1);

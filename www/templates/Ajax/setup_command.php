@@ -19,7 +19,7 @@
   <?php foreach($parameters as $param): ?>
 <div class="row">
   <div class="col-sm-4"><?= $param ?>:</div>
-  <div class="col-sm-8"><?= $this->Form->input('param_' . $param, ['class'=>'form-control']) ?></div>
+  <div class="col-sm-8"><?= $this->Form->input('param_' . strtolower(str_replace(' ', '_',$param)), ['class'=>'form-control']) ?></div>
 </div>
   <?php endforeach; ?>
 <?php endif; ?>
