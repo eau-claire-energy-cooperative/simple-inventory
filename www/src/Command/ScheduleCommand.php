@@ -64,7 +64,7 @@ class ScheduleCommand extends InventoryCommand
             //$this->CheckLifecycles->execute($schedule_params);
             break;
           case 11:
-            //$this->ExpireCheckout->execute($schedule_params);
+              $this->executeCommand(ExpireCheckoutCommand::class, $options);
             break;
           case 12:
             //$this->LicenseExpirationReminder->execute($schedule_params);
