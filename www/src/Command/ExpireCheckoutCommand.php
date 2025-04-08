@@ -21,7 +21,7 @@ class ExpireCheckoutCommand extends InventoryCommand
     $io->out(sprintf('Found %d checkout requests', $requests->count()));
 
     //figure out if any are expired
-    $today =FrozenTime::now();
+    $today = FrozenTime::now();
     $count = 0;
     foreach($requests->all() as $r)
     {
