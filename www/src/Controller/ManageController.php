@@ -185,7 +185,7 @@ class ManageController extends AppController {
       }
 
       $License->save($license);
-      $this->Flash->success(sprintf("%s Saved %s", $license->LicenseName, $this->request->getData('ExpirationDate')));
+      $this->Flash->success(sprintf("%s Saved", $license->LicenseName));
 
       return $this->redirect("/manage/view_license/" . $license->id);
     }
