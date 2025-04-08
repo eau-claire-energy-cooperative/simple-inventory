@@ -39,7 +39,6 @@ class CheckDiskSpaceCommand extends InventoryCommand
         $message = sprintf('Disk Space Warning on %s (less than %d%%)', $aDisk['computer']['ComputerName'], $args->getOption('minimum_space_threshold'));
         $io->out($message);
 				$this->dblog($message);
-				//$this->Alarm->triggerAlarm($computer['Computer']['id'],'disk_space', $params['Minimum Space Threshold'] . "," . $aDisk['label']);
 			}
 
 		}
