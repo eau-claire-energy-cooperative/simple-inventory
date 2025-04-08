@@ -18,7 +18,7 @@ class AttributeDisplayHelper extends Helper
         foreach($aTable as $attribute)
         {
           //check that attribute exists in entity
-          if(isset($computer[$attribute]))
+          if(isset($computer[$attribute]) || ($attribute == 'DriveSpace' && isset($computer['disk'])))
           {
             $result = $result . '<th style="width: 250px;">' . $validAttributes[$attribute] . '</th>';
             $totalAttributes ++;
@@ -39,7 +39,7 @@ class AttributeDisplayHelper extends Helper
         foreach($aTable as $attribute)
         {
           // again, make sure attribute exists in entity
-          if(isset($computer[$attribute]))
+          if(isset($computer[$attribute])  || ($attribute == 'DriveSpace' && isset($computer['disk'])))
           {
             $result = $result . '<td>' . $this->displayAttribute($attribute,$computer,false,$createLinks) . '</td>';
           }
