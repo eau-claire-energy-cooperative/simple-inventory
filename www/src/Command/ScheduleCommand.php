@@ -49,7 +49,7 @@ class ScheduleCommand extends InventoryCommand
 						$this->executeCommand(SendEmailCommand::class, $options);
 						break;
 					case 5:
-						//$this->DiskSpace->execute($schedule_params);
+						$this->executeCommand(CheckDiskSpaceCommand::class, $options);
 						break;
 					case 7:
 					  $this->executeCommand(RemoveOldProgramsCommand::class, $options);
