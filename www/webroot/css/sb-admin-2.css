@@ -10998,3 +10998,7 @@ footer.sticky-footer .copyright {
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;
 }
+
+a.link-variant:hover{
+  text-decoration: none
+}

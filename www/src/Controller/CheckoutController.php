@@ -81,7 +81,8 @@ class CheckoutController extends AppController {
       $this->Flash->error("Request Is Already Approved");
     }
 
-    return $this->redirect('/checkout/requests');
+    // redirect back to referrer
+    return $this->redirect($this->request->referer(true));
   }
 
   function delete($id){
@@ -171,7 +172,7 @@ class CheckoutController extends AppController {
       $this->Flash->error(sprintf('%s is not available to check in or out', $device['ComputerName']));
     }
 
-    return $this->redirect('/checkout/requests');
+    return $this->redirect($this->request->referer(true));
   }
 
   function deny($id){
@@ -202,7 +203,7 @@ class CheckoutController extends AppController {
       $this->Flash->success("Request Denied");
     }
 
-    return $this->redirect('/checkout/requests');
+    return $this->redirect($this->request->referer(true));
   }
 
   function disabled(){
@@ -249,7 +250,7 @@ class CheckoutController extends AppController {
       }
     }
 
-    return $this->redirect('/checkout/requests');
+    return $this->redirect($this->request->referer(true));
   }
 
   function index(){

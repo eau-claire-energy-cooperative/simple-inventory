@@ -42,8 +42,8 @@
       <!-- Nav Item - Current Inventory -->
       <li class="nav-item <?= $this->Menu->getActiveMenu('inventory', $active_menu) ?>">
         <a class="nav-link" href="<?= $this->Url->build('/') ?>">
-          <i class="mdi mdi-table"></i>
-          <span>Current Inventory</span></a>
+          <i class="mdi mdi-view-dashboard"></i>
+          <span>Dashboard</span></a>
       </li>
 
       <!-- Divider -->
@@ -61,6 +61,7 @@
             <?php if(isset($settings) && $settings['ldap_computers_basedn'] != ''): ?>
             <a class="collapse-item" href="<?= $this->Url->build('/inventory/active_directory_sync') ?>">Active Directory Sync</a>
             <?php endif; ?>
+            <a class="collapse-item" href="<?= $this->Url->build('/inventory/computer_inventory') ?>">Current Inventory</a>
             <a class="collapse-item" href="<?= $this->Url->build('/inventory/decommission') ?>">Decommissioned</a>
             <a class="collapse-item" href="<?= $this->Url->build('/manage/deviceTypes') ?>">Device Types</a>
           </div>

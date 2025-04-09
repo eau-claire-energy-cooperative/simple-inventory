@@ -295,6 +295,40 @@ class InventoryController extends AppController {
     $this->set('device', $device);
 	}
 
+  public function dashboard(){
+    $this->set('title', 'Dashboard');
+
+    // set some totals
+    $this->set('total_devices', $this->fetchTable('Computer')->find('all')->count());
+    $this->set('total_types', $this->fetchTable('DeviceType')->find('all')->count());
+    $this->set('total_applications', $this->fetchTable('Application')->find('all')->count());
+
+    // determine if there are any checkout requests
+    $new = $this->fetchTable('CheckoutRequest')->find('all', ['contain'=>['DeviceType'],
+                                                      'conditions'=>['CheckoutRequest.status'=>'new'],
+                                                      'order'=>['CheckoutRequest.check_out_date']])->all();
+
+    $this->set('new_checkout', $new);
+
+    // determine if there are any expired checkout requests
+    $expired = $this->fetchTable('CheckoutRequest')->find('all',  ['contain'=>['DeviceType', 'Computer'],
+                                              'conditions'=>['CheckoutRequest.status'=>'active', 'CheckoutRequest.check_in_date < now()'],
+                                              'order'=>['CheckoutRequest.check_out_date']])->all();
+
+    $this->set('expired_checkout', $expired);
+
+    // pull in lifecycle list
+    $lifecycles = $this->fetchTable('Lifecycle')->find('all')->all();
+    $this->set('lifecycles', $lifecycles);
+
+    // pull in a list of recently updated devices
+    $logs = $this->fetchTable('Logs')->find('all', ['conditions'=>['Logs.LOGGER'=>'Website'],
+                                                    'order'=>['Logs.id'=>'desc']])->limit(100)->all();
+	 	$this->set('logs', $logs);
+
+    $this->viewBuilder()->addHelper('Lifecycle');
+  }
+
   public function decommission() {
 	  $this->set('active_menu', 'manage');
 		$this->set('title','Decommissioned Devices');

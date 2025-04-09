@@ -55,7 +55,7 @@ return function (RouteBuilder $routes): void {
          * its action called 'display', and we pass a param to select the view file
          * to use (in this case, templates/Pages/home.php)...
          */
-        $builder->connect('/', ['controller' => 'inventory', 'action' => 'computerInventory']);
+        $builder->connect('/', ['controller' => 'inventory', 'action' => 'dashboard']);
 
         /*
          * Connect catchall routes for all controllers.
