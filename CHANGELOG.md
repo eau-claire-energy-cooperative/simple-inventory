@@ -6,16 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased
 
-### Idea
-
-- add validation to models
-- command variables should be in JSON format
-
 ### Added
 
 - exported CSV files now only show filtered search results instead of entire table
 - some basic error checking (licenses, checkout requests) is now completed on decommissioning or deleting of devices (#22)
 - viewer to see driver files in the /drivers/ directory and delete them
+- new Dashboard page - shows default metrics such as total devices, total applications, checkout requests, and recent activity
 
 ### Changed
 
@@ -29,6 +25,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - Checkout requests can now be deleted if the check in time has past without denying them first (#30)
 - Decommissioned devices now save the display attributes of the parent device type. Only valid attributes are shown on the Decommissioned pages now. 
 - Driver upload information now references Powershell commands instead of old Double Drivers tools. This is outdated and no longer necessary. 
+- Dashboard page replaces full inventory as default landing page. Full inventory is now a link in the Devices menu 
+- root `/` now redirects to Dashboard. 
 
 ### Fixed
 
