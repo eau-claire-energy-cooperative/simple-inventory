@@ -105,4 +105,16 @@ class AppController extends Controller
 
     $EmailMessage->save($m);
   }
+
+  protected function _saveLog($message){
+    $Log = $this->fetchTable('Logs');
+
+    $aLog = $Log->newEmptyEntity();
+    $aLog->LOGGER = 'Website';
+    $aLog->LEVEL = 'INFO';
+    $aLog->MESSAGE = $message;
+    $aLog->DATED = date("Y-m-d H:i:s",time());
+
+    $Log->save($aLog);
+	}
 }
