@@ -12,6 +12,7 @@
         <td> <?=  $this->Time->nice( $post['DATED']) ; ?></td>
         <td> <?=  $post['LOGGER']; ?></td>
         <td> <?=  $post['LEVEL']; ?></td>
+        <td> <?= $post['USER'] ?></td>
         <td> <?=  $this->LogParser->parseMessage($inventory,$post['MESSAGE']); ?></td>
     </tr>
 

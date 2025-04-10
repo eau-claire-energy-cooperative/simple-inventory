@@ -221,7 +221,7 @@ var dataTable = null;
     	<thead>
         <tr>
             <th>Message</th>
-            <th>Level</th>
+            <th>User</th>
             <th>Date</th>
         </tr>
     	</thead>
@@ -229,7 +229,7 @@ var dataTable = null;
         <?php foreach ($logs as $aLog): ?>
         <tr>
             <td><?= $aLog['MESSAGE'] ?></td>
-            <td><?= $aLog['LEVEL'] ?></td>
+            <td><?= $aLog['USER'] ?></td>
             <td data-sort="<?= $aLog['DATED']->format('U') ?>"><?= $aLog['DATED']->format('m/d/Y H:i') ?></td>
         </tr>
         <?php endforeach; ?>

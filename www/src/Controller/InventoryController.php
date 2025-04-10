@@ -151,7 +151,8 @@ class InventoryController extends AppController {
 
         if($Computer->save($newDevice)) {
         	//create log entry
-        	$this->_saveLog("Device " . $this->request->getData('ComputerName') . " added to database");
+        	$this->_saveLog($this->request->getSession()->read('User.username'),
+                          sprintf("Device %s added to database", $this->request->getData('ComputerName')));
 
           $this->Flash->success('Your Entry has been saved.');
           return $this->redirect(['action' => 'moreInfo', $newDevice->id]);
@@ -356,7 +357,8 @@ class InventoryController extends AppController {
 
 	    	$message = sprintf("%s: %s has been deleted ", $computer['device_type']['name'], $computer['ComputerName']);
 
-	    	$this->_saveLog($message);
+	    	$this->_saveLog($this->request->getSession()->read('User.username'),
+                        $message);
 	      $this->Flash->success($message);
 	    }
 
@@ -380,7 +382,7 @@ class InventoryController extends AppController {
     if($Decommissioned->delete($decom))
     {
       $message = sprintf('%s has been permanently deleted', $decom['ComputerName']);
-      $this->_saveLog($message);
+      $this->_saveLog($this->request->getSession()->read('User.username'), $message);
       $this->Flash->success($message);
     }
     else
@@ -468,7 +470,7 @@ class InventoryController extends AppController {
       $Computer->patchEntity($originalData, $this->request->getData());
       if($Computer->save($originalData))
       {
-        $this->_saveLog($originalData['ComputerName'] . ' has been updated');
+        $this->_saveLog($this->request->getSession()->read('User.username'), $originalData['ComputerName'] . ' has been updated');
         $this->Flash->success('Device updated');
       }
       else
