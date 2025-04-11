@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - some basic error checking (licenses, checkout requests) is now completed on decommissioning or deleting of devices (#22)
 - viewer to see driver files in the /drivers/ directory and delete them
 - new Dashboard page - shows default metrics such as total devices, total applications, checkout requests, and recent activity
+- Additional logging for various website operations, including the user that completed the action. Actions impacted are: Devices added/removed/changed, lifecycles added/removed/changed, checkouts approved/denied/extended/check-in/check-out, devices types added/removed, schedules created/removed, locations added/removed/changed, decomissioned devices hard drive or recycle status. 
 
 ### Changed
 
@@ -27,6 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - Driver upload information now references Powershell commands instead of old Double Drivers tools. This is outdated and no longer necessary. 
 - Dashboard page replaces full inventory as default landing page. Full inventory is now a link in the Devices menu 
 - root `/` now redirects to Dashboard. 
+- Logs table now includes a `USER` column. Populated for website log messages to capture the user that performed the action.
 
 ### Fixed
 
