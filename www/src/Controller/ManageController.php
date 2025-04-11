@@ -29,8 +29,10 @@ class ManageController extends AppController {
       $newDevice->attributes = implode(",", $this->request->getData('attributes'));
 
       if ($DeviceType->save($newDevice)) {
-          $this->Flash->success(sprintf('%s has been saved', $newDevice['name']));
-          return $this->redirect(array('action' => 'deviceTypes'));
+        $this->_saveLog($this->request->getSession()->read('User.username'),
+                        sprintf('Created device type %s', $newDevice['name']));
+        $this->Flash->success(sprintf('%s has been saved', $newDevice['name']));
+        return $this->redirect(array('action' => 'deviceTypes'));
       } else {
           $this->Flash->error('Unable to add your entry');
       }
@@ -56,6 +58,8 @@ class ManageController extends AppController {
     $device = $DeviceType->get($id);
 
     if ($DeviceType->delete($device)) {
+      $this->_saveLog($this->request->getSession()->read('User.username'),
+                      sprintf('Deleted device type %s', $device['name']));
       $this->Flash->success(sprintf('%s has been deleted', $device['name']));
     }
     else
@@ -76,6 +80,8 @@ class ManageController extends AppController {
     {
       if($License->delete($license))
       {
+        $this->_saveLog($this->request->getSession()->read('User.username'),
+                        sprintf('Deleted license %s', $license['LicenseName']));
         $this->Flash->success(sprintf("%s Deleted", $license['LicenseName']));
       }
       else
@@ -95,7 +101,7 @@ class ManageController extends AppController {
   function deleteLicenseKey($license_id, $license_key_id){
     $LicenseKey = $this->fetchTable('LicenseKey');
 
-    $license_key = $LicenseKey->find('all', ['contain'=>['Computer'],
+    $license_key = $LicenseKey->find('all', ['contain'=>['Computer', 'License'],
                                              'conditions'=>['LicenseKey.id'=>$license_key_id]])->first();
 
     // cannot delete key with devices assigned
@@ -104,6 +110,8 @@ class ManageController extends AppController {
 
 	    if ($LicenseKey->delete($license_key))
       {
+        $this->_saveLog($this->request->getSession()->read('User.username'),
+                        sprintf('Deleted license key assigned to %s', $license_key['license']['LicenseName']));
 	      $this->Flash->success('License Key Deleted');
 	    }
       else
@@ -142,6 +150,8 @@ class ManageController extends AppController {
       $device->attributes = implode(",", $this->request->getData('attributes'));
 
       if ($DeviceType->save($device)) {
+        $this->_saveLog($this->request->getSession()->read('User.username'),
+                        sprintf('Updated device type %s', $device['name']));
         $this->Flash->success(sprintf('%s has been updated', $device['name']));
         $this->redirect(array('action' => 'deviceTypes'));
       }
@@ -185,6 +195,8 @@ class ManageController extends AppController {
       }
 
       $License->save($license);
+      $this->_saveLog($this->request->getSession()->read('User.username'),
+                      sprintf('License %s saved', $license->LicenseName));
       $this->Flash->success(sprintf("%s Saved", $license->LicenseName));
 
       return $this->redirect("/manage/view_license/" . $license->id);
@@ -241,16 +253,22 @@ class ManageController extends AppController {
       $schedule_params = $schedule_params . ')';
       $schedule->parameters = $schedule_params;
       $Schedule->save($schedule);
+      $schedule = $Schedule->loadInto($schedule, ['Command']);
 
+      $this->_saveLog($this->request->getSession()->read('User.username'),
+                      sprintf('Created schedule %s for %s', $schedule['command']['name'], $schedule['schedule']));
       $this->Flash->success('Schedule Created');
     }
     else
     {
       if($id != NULL)
       {
-        $schedule = $Schedule->get($id);
+        $schedule = $Schedule->find('all', ['contain'=>['Command'],
+                                            'conditions'=>['Schedule.id'=>$id]])->first();
         $Schedule->delete($schedule);
 
+        $this->_saveLog($this->request->getSession()->read('User.username'),
+                        sprintf('Deleted schedule %s for %s', $schedule['command']['name'], $schedule['schedule']));
         $this->Flash->success('Schedule Removed');
       }
     }

@@ -38,7 +38,7 @@ class CheckoutController extends AppController {
     if($req['status'] != 'approved')
     {
       //find an available device
-      $found_device = -1;
+      $found_device = null;
       $devices = $this->fetchTable('DeviceType')->find('all', ['contain'=>['ComputerCheckout', 'ComputerCheckout.CheckoutRequest'],
                                                                'conditions'=>['DeviceType.id'=>$req['device_type']]])->first();
 
@@ -47,12 +47,12 @@ class CheckoutController extends AppController {
         //check if this device will be available
         if($this->_checkAvailable($req, $d['checkout_request']))
         {
-          $found_device = $d['id'];
+          $found_device = $d;
           break;
         }
       }
 
-      if($found_device > 0)
+      if(isset($found_device))
       {
         $checkOutDate = $req['check_out_date']->i18nFormat('MM/dd/yyy');
         $checkInDate = $req['check_in_date']->i18nFormat('MM/dd/yyy');
@@ -62,8 +62,10 @@ class CheckoutController extends AppController {
         $CheckoutRequest->save($req);
 
         $this->fetchTable('CheckoutReservation')->insertQuery()->insert(['request_id', 'device_id'])
-                                                               ->values(['request_id'=>$id, 'device_id'=>$found_device])->execute();
+                                                               ->values(['request_id'=>$id, 'device_id'=>$found_device['id']])->execute();
 
+        $this->_saveLog($this->request->getSession()->read('User.username'),
+                        sprintf('Checkout request approved for %s from %s to %s', $found_device['ComputerName'], $checkOutDate, $checkInDate));
         // send email to user
         $this->_send_email("Device Checkout Approved",
                            sprintf("Your equipment checkout request from %s to %s has been approved. See %s to pick up your equipment.", $checkOutDate, $checkInDate, $this->request->getSession()->read('User.name')),
@@ -135,6 +137,8 @@ class CheckoutController extends AppController {
           $device['ComputerLocation'] = $settings['value'];
           $this->fetchTable('Computer')->save($device);
 
+          $this->_saveLog($this->request->getSession()->read('User.username'),
+                          sprintf('Device %s checked out', $device['ComputerName']));
           $this->Flash->success(sprintf('%s checked out', $device['ComputerName']));
         }
         else
@@ -158,6 +162,8 @@ class CheckoutController extends AppController {
           $device['ComputerLocation'] = $device['_joinData']['saved_device_location'];
           $this->fetchTable('Computer')->save($device);
 
+          $this->_saveLog($this->request->getSession()->read('User.username'),
+                          sprintf('Checked in %s', $device['ComputerName']));
           $this->Flash->success(sprintf('%s is checked in', $device['ComputerName']));
         }
         else
@@ -196,6 +202,8 @@ class CheckoutController extends AppController {
       }
 
       //notify the user
+      $this->_saveLog($this->request->getSession()->read('User.username'),
+                      sprintf('Denied checkout request for %s from %s to %s', $req['employee_name'], $checkOutDate, $checkInDate));
       $this->_send_email("Device Checkout Denied",
                          sprintf("Your device checkout request from %s to %s has been denied. The most common reason for this is that the requested device is not available.", $checkOutDate, $checkInDate),
                          $req['employee_email']);
@@ -224,15 +232,20 @@ class CheckoutController extends AppController {
                                                                        'conditions'=>['Computer.id'=>$this->request->getData('device_id')]])->first();
 
       // get request with NEW check in date
-      $request = $CheckoutRequest->find('all', ['conditions'=>['CheckoutRequest.id'=>$this->request->getData('id')]])->first();
+      $request = $CheckoutRequest->find('all', ['contain'=>['Computer'],
+                                                'conditions'=>['CheckoutRequest.id'=>$this->request->getData('id')]])->first();
       $request->check_in_date = new FrozenTime(sprintf('%s 00:00:00', $this->request->getData('check_in_date')));
 
+      // error check the new date
       if($request->check_in_date->greaterThanOrEquals($now) && $request->check_in_date->greaterThanOrEquals($request->check_out_date))
       {
+        // see if this conflicts with any other requests
         if($this->_checkAvailable($request, $upcoming_requests['checkout_request']))
         {
           if($CheckoutRequest->save($request))
           {
+            $this->_saveLog($this->request->getSession()->read('User.username'),
+                            sprintf('Check in extended for %s until %s', $request['computer'][0]['ComputerName'], $request->check_in_date->i18nFormat('MM/dd/yyy')));
             $this->Flash->success("Check In Date extended");
           }
           else

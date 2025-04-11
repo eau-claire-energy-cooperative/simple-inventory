@@ -38,10 +38,12 @@ class AdminController extends AppController {
         $location = $Location->newEntity($this->request->getData());
 
         if ($Location->save($location)) {
-            $this->Flash->success(sprintf('%s has been saved.', $location['location']));
-            return $this->redirect(['action' => 'location']);
+          $this->_saveLog($this->request->getSession()->read('User.username'),
+                          sprintf('Location %s has been added', $location['location']));
+          $this->Flash->success(sprintf('%s has been saved.', $location['location']));
+          return $this->redirect(['action' => 'location']);
         } else {
-            $this->Flash->error(sprintf('Unable to add %s', $location['location']));
+          $this->Flash->error(sprintf('Unable to add %s', $location['location']));
         }
     }
   }
@@ -66,6 +68,8 @@ class AdminController extends AppController {
     $location = $Location->get($id);
 
     if ($Location->delete($location)) {
+      $this->_saveLog($this->request->getSession()->read('User.username'),
+                      sprintf("Location %s has been deleted", $location['location']));
       $this->Flash->success(sprintf("%s has been deleted", $location['location']));
       return$this->redirect(['action' => 'location']);
     }
@@ -90,6 +94,8 @@ class AdminController extends AppController {
       $Location->patchEntity($location, $this->request->getData());
 
     	if ($Location->save($location)) {
+        $this->_saveLog($this->request->getSession()->read('User.username'),
+                        sprintf("Location %s has been updated", $location['location']));
         $this->Flash->success(sprintf("%s has been updated", $location['location']));
         return $this->redirect(array('action' => 'location'));
     	}
@@ -145,6 +151,9 @@ class AdminController extends AppController {
 
         $user = $User->get($id);
   			$User->delete($user);
+
+        $this->_saveLog($this->request->getSession()->read('User.username'),
+                        sprintf("%s has been deleted", $user['name']));
   			$this->Flash->success(sprintf("%s has been deleted", $user['name']));
 
         return $this->redirect(array('action'=>'users'));
@@ -174,6 +183,9 @@ class AdminController extends AppController {
 		  }
 
       if ($User->save($user)) {
+
+        $this->_saveLog($this->request->getSession()->read('User.username'),
+                        sprintf("User %s has been saved", $user['name']));
       	$this->Flash->success(sprintf("Saved %s", $user['name']));
       	return $this->redirect(['action' => 'users']);
       }
@@ -284,6 +296,8 @@ class AdminController extends AppController {
 		$newDefault->is_default = "true";
 		$Location->save($newDefault);
 
+    $this->_saveLog($this->request->getSession()->read('User.username'),
+                    sprintf("%s is now the default location", $newDefault['location']));
     $this->Flash->success(sprintf("%s is the default location", $newDefault['location']));
 		$this->redirect(array('action'=>'location'));
 	}

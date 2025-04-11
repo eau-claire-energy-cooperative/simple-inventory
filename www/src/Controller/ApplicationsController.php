@@ -47,9 +47,16 @@ class ApplicationsController extends AppController {
   }
 
   public function checkLifecycle($id){
-    //helper function to reset the lifecycle last check date to today
-    $this->fetchTable('Lifecycle')->updateQuery()->set(['last_check'=>FrozenTime::now()])->where(['id'=>$id])->execute();
 
+    $Lifecycle = $this->fetchTable('Lifecycle');
+    $lifecycle = $Lifecycle->find('all', ['contain'=>['Application'],
+                                          'conditions'=>['Lifecycle.id'=>$id]])->first();
+
+    //helper function to reset the lifecycle last check date to today
+    $Lifecycle->updateQuery()->set(['last_check'=>FrozenTime::now()])->where(['id'=>$id])->execute();
+
+    $this->_saveLog($this->request->getSession()->read('User.username'),
+                    sprintf("Lifecycle check updated for %s", $lifecycle['application']['full_name']));
     $this->Flash->success("Last check date updated");
 
     return $this->redirect('/applications/lifecycle');
@@ -90,9 +97,12 @@ class ApplicationsController extends AppController {
     $Lifecycle = $this->fetchTable('Lifecycle');
 
     //no reason a lifecycle can't be deleted
-    $lifecycle = $Lifecycle->get($id);
+    $lifecycle = $Lifecycle->find('all', ['contain'=>['Application'],
+                                          'conditions'=>['Lifecycle.id'=>$id]])->first();
     $Lifecycle->delete($lifecycle);
 
+    $this->_saveLog($this->request->getSession()->read('User.username'),
+                    sprintf('Lifecycle deleted for application %s', $lifecycle['application']['full_name']));
     $this->Flash->success('Lifecycle deleted successfully');
 
     $this->redirect('/applications/lifecycle');
@@ -166,9 +176,12 @@ class ApplicationsController extends AppController {
         $Lifecycle->patchEntity($lifecycle, $this->request->getData());
       }
 
-      //save the lifecycle
+      //save the lifecycle - reload associations
       $Lifecycle->save($lifecycle);
+      $lifecycle = $Lifecycle->loadInto($lifecycle, ['Application']);
 
+      $this->_saveLog($this->request->getSession()->read('User.username'),
+                      sprintf('Lifecycle created for %s', $lifecycle['application']['full_name']));
       $this->Flash->success("Lifecycle saved");
     }
 
@@ -261,6 +274,8 @@ class ApplicationsController extends AppController {
       //reset the lifecycle date
       $Lifecycle->updateQuery()->set(['last_check'=>FrozenTime::now()])->where(['id'=>$lifecycle['id']])->execute();
 
+      $this->_saveLog($this->request->getSession()->read('User.username'),
+                      sprintf('%s lifecycle upgraded to %s', $lifecycle['application']['name'], $new_version));
       $this->Flash->success(sprintf('%s upgraded to %s', $lifecycle['application']['name'], $new_version));
     }
     else

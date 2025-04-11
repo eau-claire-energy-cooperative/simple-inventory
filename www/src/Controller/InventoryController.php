@@ -202,6 +202,8 @@ class InventoryController extends AppController {
 
 		if($Decommissioned->save($device))
 		{
+      $this->_saveLog($this->request->getSession()->read('User.username'),
+                      sprintf("%s status updated on %s", ucfirst($status), $device['ComputerName']));
 			$this->Flash->success(sprintf('%s status updated', $device['ComputerName']));
 		}
 		else
@@ -269,6 +271,8 @@ class InventoryController extends AppController {
       if($Decommissioned->save($decom))
       {
         // send an email to admins
+        $this->_saveLog($this->request->getSession()->read('User.username'),
+                        sprintf("%s has been decommissioned", $device['ComputerName']));
         $this->_send_email(sprintf("%s has been decommissioned", $device['ComputerName']),
                            sprintf("A device has been decommissioned, the details are below. <br /><br />Device Name: %s <br />Serial Number: %s", $device['ComputerName'], $device['SerialNumber']));
 
@@ -327,7 +331,11 @@ class InventoryController extends AppController {
                                                     'order'=>['Logs.id'=>'desc']])->limit(100)->all();
 	 	$this->set('logs', $logs);
 
+    // to highlight devices for log parsing
+    $this->set('inventory', $this->fetchTable('Computer')->find('list', ['keyField'=>'ComputerName', 'valueField'=>'id'])->toArray());
+
     $this->viewBuilder()->addHelper('Lifecycle');
+    $this->viewBuilder()->addHelper('LogParser');
   }
 
   public function decommission() {
@@ -535,6 +543,9 @@ class InventoryController extends AppController {
         				$newDevice->ComputerLocation = $defaultLocation['id'];
 
         				$Computer->save($newDevice);
+                $this->_saveLog($this->request->getSession()->read('User.username'),
+                                sprintf("Device %s added to database", $newDevice['ComputerName']));
+
 
                 array_push($results, array('id'=>$newDevice->id, 'DeviceType'=> $deviceTypes[strtolower($row[0])], 'ComputerName'=>trim($row[1])));
               }

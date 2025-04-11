@@ -7,7 +7,7 @@ var dataTable = null;
   $this->Html->scriptBlock("$(document).ready(function() {
       dataTable = $('#dataTable').DataTable({
         paging: true,
-        pageLength: 10,
+        pageLength: 20,
         stateSave: true,
         stateDuration: 60,
         order: [
@@ -228,7 +228,7 @@ var dataTable = null;
     	<tbody>
         <?php foreach ($logs as $aLog): ?>
         <tr>
-            <td><?= $aLog['MESSAGE'] ?></td>
+            <td><?= $this->LogParser->parseMessage($inventory, $aLog['MESSAGE']) ?></td>
             <td><?= $aLog['USER'] ?></td>
             <td data-sort="<?= $aLog['DATED']->format('U') ?>"><?= $aLog['DATED']->format('m/d/Y H:i') ?></td>
         </tr>
