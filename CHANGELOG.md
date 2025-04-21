@@ -29,6 +29,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - Dashboard page replaces full inventory as default landing page. Full inventory is now a link in the Devices menu 
 - root `/` now redirects to Dashboard. 
 - Logs table now includes a `USER` column. Populated for website log messages to capture the user that performed the action.
+- REST API now utilizes HTTP Methods instead of url actions. This is inline with how REST APIs are typically used. Examples: instead of `/api/inventory/exists` you call `/api/inventory` using a the HTTP GET method. The same endpoint `/api/inventory/` using POST would add a new device. 
+- Updater Powershell script updated to utilize GET, POST, PUT, or DELETE method calls as appropriate with the REST API. 
 
 ### Fixed
 
