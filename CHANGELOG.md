@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - some basic error checking (licenses, checkout requests) is now completed on decommissioning or deleting of devices (#22)
 - viewer to see driver files in the /drivers/ directory and delete them
 - new Dashboard page - shows default metrics such as total devices, total applications, checkout requests, and recent activity
-- Additional logging for various website operations, including the user that completed the action. Actions impacted are: Devices added/removed/changed, lifecycles added/removed/changed, checkouts approved/denied/extended/check-in/check-out, devices types added/removed, schedules created/removed, locations added/removed/changed, decomissioned devices hard drive or recycle status. 
+- Additional logging for various website operations, including the user that completed the action. Actions impacted are: Logins, Devices added/removed/changed, lifecycles added/removed/changed, checkouts approved/denied/extended/check-in/check-out, devices types added/removed, schedules created/removed, locations added/removed/changed, decomissioned devices hard drive or recycle status. 
 
 ### Changed
 

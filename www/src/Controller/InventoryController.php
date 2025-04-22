@@ -592,6 +592,9 @@ class InventoryController extends AppController {
 						$session->write('User.username', $aUser['username']);
 						$session->write('User.name', $aUser['name']);
 						$session->write('User.gravatar', $aUser['gravatar']);
+
+            $this->_saveLog($this->request->getSession()->read('User.username'),
+                            "User logged in");
 						return $this->redirect('/');
 					}
 					else
@@ -622,6 +625,9 @@ class InventoryController extends AppController {
 						$session->write('User.username', $aUser['username']);
 						$session->write('User.name', $aUser['name']);
 						$session->write('User.gravatar', $aUser['gravatar']);
+
+            $this->_saveLog($this->request->getSession()->read('User.username'),
+                            "User logged in");
 						return $this->redirect('/');
 					}
 					else
