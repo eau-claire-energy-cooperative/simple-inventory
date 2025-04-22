@@ -96,38 +96,43 @@ class ApiController extends AppController {
     }
     else if($this->request->is('post'))
     {
+      $result['type'] = 'success';
+      $result['result'] = [];
+
+      // go through an array of applications and attempt to add each one
       $Application = $this->fetchTable('Application');
-      //lookup this application
-      $application = $Application->find('all', ['conditions'=>['Application.name'=>$this->request->getData('application'),
-                                                               'Application.version'=>$this->request->getData('version')]])->first();
+      foreach($this->request->getData('applications') as $newApp){
+        //lookup this application
+        $application = $Application->find('all', ['conditions'=>['Application.name'=>$newApp['application'],
+                                                                 'Application.version'=>$newApp['version']]])->first();
 
-      if($application == null)
-      {
-        //add this application to the database
-        $application = $Application->newEmptyEntity();
-        $application->name = $this->request->getData('application');
-        $application->version = $this->request->getData('version');
-        $Application->save($application);
+        if($application == null)
+        {
+          //add this application to the database
+          $application = $Application->newEmptyEntity();
+          $application->name = $newApp['application'];
+          $application->version = $newApp['version'];
+          $Application->save($application);
 
-      }
+        }
 
-      $computerId = $this->request->getData("id");
-      $compCheck = $this->fetchTable('Computer')->find('all', ['contain'=>['Application'=> function(Query $q) use ($application){
-                                                            return $q->where(['Application.id'=>$application['id']]);
-                                                          }],
-                                              'conditions'=>['Computer.id'=>$computerId]])->first();
+        $compCheck = $this->fetchTable('Computer')->find('all', ['contain'=>['Application'=> function(Query $q) use ($application){
+                                                              return $q->where(['Application.id'=>$application['id']]);
+                                                            }],
+                                                'conditions'=>['Computer.id'=>$this->request->getData("id")]])->first();
 
 
-      if(count($compCheck['application']) == 0)
-      {
-        $Application->Computer->link($application, [$compCheck]);
-			  $result['type'] = 'success';
-        $result['result'] = sprintf('Application %s added for computer id %d', $application['name'], $computerId);
-      }
-      else
-      {
-        $result['type'] = 'error';
-        $result['result'] = sprintf('Application %s already assigned to computer id %d', $application['name'], $computerId);
+        if(count($compCheck['application']) == 0)
+        {
+          $Application->Computer->link($application, [$compCheck]);
+  			  $result['result'][] = ['type'=>'success',
+                                 'message'=>sprintf('Application %s added for computer id %d', $application['name'], $this->request->getData("id"))];
+        }
+        else
+        {
+          $result['result'][] = ['type'=>'error',
+                                 'message'=>sprintf('Application %s already assigned to computer id %d', $application['name'], $this->request->getData("id"))];
+        }
       }
     }
 

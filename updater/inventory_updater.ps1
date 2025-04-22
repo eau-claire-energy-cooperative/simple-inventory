@@ -76,11 +76,12 @@ function web-call{
 	{
 		#convert to json string
 		$jsonData = $data | ConvertTo-Json -Compress
-		
+		Write-Host $jsonData
 		try{
 			$output = Invoke-WebRequest -Method $method -Uri ($apiUrl + $endpoint) -Body $jsonData -ContentType "application/json" -Headers @{"x-auth-key"="$ApiAuthKey"} -UseBasicParsing | ConvertFrom-Json
 		}
 		catch{
+			Write-Host $($_.Exception.Message)
 			Continue
 		}
 	}
@@ -336,7 +337,7 @@ if($ComputerId -eq $null)
 $disks = @($(Get-WmiObject -Class Win32_LogicalDisk -Filter "DriveType=3" | Select DeviceId, FreeSpace, Size))
 
 foreach ($disk in $disks.GetEnumerator()){
-	$diskOutput = web-call -Endpoint "/disk" -Data @{comp_id = $ComputerId; type = "Local"; label=$disk.DeviceId; total_space = $disk.Size/1025; space_free = $disk.FreeSpace/1024} -Method = 'post'
+	$diskOutput = web-call -Endpoint "/disk" -Data @{comp_id = $ComputerId; type = "Local"; label=$disk.DeviceId; total_space = $disk.Size/1025; space_free = $disk.FreeSpace/1024} -Method 'post'
 }
 
 #APPLICATIONS
@@ -352,14 +353,21 @@ if(evalBool($CheckApplications))
 	#clear out the current programs list
 	$clearOutput = web-call -Endpoint "/applications" -Data @{id = $ComputerId} -Method 'delete'
 
+    $appData = [System.Collections.ArrayList]@()
 	foreach ($program in $allPrograms.GetEnumerator()){
 		if($program.DisplayVersion -eq $null -Or $program.DisplayVersion -eq "")
 		{
 			$program.DisplayVersion = "?"
 		}
 		
-		$programOutput = web-call -Endpoint "/applications" -Data @{id = $ComputerId; application = $program.DisplayName; version = $program.DisplayVersion} -Method 'post'
+		if($program.DisplayName -ne $null)
+		{
+			# add to the array, trim out any non-ascii characters
+			$index = $appData.Add(@{application = ($program.DisplayName -replace '[^\u0000-\u007F]', ''); version = $program.DisplayVersion})
+		}
 	}
+
+	$programOutput = web-call -Endpoint "/applications" -Data @{id = $ComputerId; applications = $appData} -Method 'post'
 }
 
 #SERVICES
