@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - Logs table now includes a `USER` column. Populated for website log messages to capture the user that performed the action.
 - REST API now utilizes HTTP Methods instead of url actions. This is inline with how REST APIs are typically used. Examples: instead of `/api/inventory/exists` you call `/api/inventory` using a the HTTP GET method. The same endpoint `/api/inventory/` using POST would add a new device. 
 - Updater Powershell script updated to utilize GET, POST, PUT, or DELETE method calls as appropriate with the REST API. 
+- REST API endpoints for `/applications` and `/services` now take a list of each to update instead of a single entry. This greatly speeds up bulk additions to the database. The updater script is also updated to reflect this change. 
 
 ### Fixed
 

@@ -454,18 +454,25 @@ class ApiController extends AppController {
 		}
     else if($this->request->is('post'))
     {
+      $result['type'] = 'success';
+      $result['result'] = [];
+
+      //go through an array of services and attempt to add each one
       $Service = $this->fetchTable('Service');
-      $service = $Service->newEmptyEntity();
 
-      $service->name = $this->request->getData('name');
-      $service->startmode = $this->request->getData('mode');
-      $service->status = $this->request->getData('status');
-      $service->comp_id = $this->request->getData('id');
+      foreach($this->request->getData('services') as $newService)
+      {
+        $service = $Service->newEmptyEntity();
 
-			$Service->save($service);
+        $service->name = $newService['name'];
+        $service->startmode = $newService['mode'];
+        $service->status = $newService['status'];
+        $service->comp_id = $this->request->getData('id');
 
-			$result['type'] = 'success';
-			$result['result'] = sprintf("Service %s added for computer id %d", $service['name'], $service['comp_id']);
+			  $Service->save($service);
+
+			  $result['result'][] = ['type'=>'success','result'=>sprintf("Service %s added for computer id %d", $service['name'], $service['comp_id'])];
+      }
     }
     else if($this->request->is('put'))
     {

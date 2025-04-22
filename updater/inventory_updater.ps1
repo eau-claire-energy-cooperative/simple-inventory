@@ -76,12 +76,11 @@ function web-call{
 	{
 		#convert to json string
 		$jsonData = $data | ConvertTo-Json -Compress
-		Write-Host $jsonData
+
 		try{
 			$output = Invoke-WebRequest -Method $method -Uri ($apiUrl + $endpoint) -Body $jsonData -ContentType "application/json" -Headers @{"x-auth-key"="$ApiAuthKey"} -UseBasicParsing | ConvertFrom-Json
 		}
 		catch{
-			Write-Host $($_.Exception.Message)
 			Continue
 		}
 	}
@@ -380,7 +379,10 @@ if(evalBool($CheckServices))
 	#clear out the current services list
 	$clearOutput = web-call -Endpoint "/services" -Data @{id = $ComputerId} -Method 'delete'
 	
+	$serviceData = [System.Collections.ArrayList]@()
 	foreach ($service in $allServices.GetEnumerator()){
-		$serviceOutput = web-call -Endpoint "/services" -Data @{id = $ComputerId; name = $service.DisplayName; mode = $service.StartMode; status = $service.State} -Method 'post'
+		$index = $serviceData.Add(@{name = $service.DisplayName; mode = $service.StartMode; status = $service.State})
 	}
+	
+	$serviceOutput = web-call -Endpoint "/services" -Data @{id = $ComputerId; services = $serviceData} -Method 'post'
 }
