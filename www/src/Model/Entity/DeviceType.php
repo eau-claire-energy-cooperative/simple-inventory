@@ -5,7 +5,8 @@ use Cake\Core\Configure;
 use Cake\ORM\Entity;
 
 class DeviceType extends Entity{
-
+  protected $_virtual = ['slug'];
+  
   // virtual field "slug"
   protected function _getSlug(){
 
