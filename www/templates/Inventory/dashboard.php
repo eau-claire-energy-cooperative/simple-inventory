@@ -118,6 +118,33 @@ var dataTable = null;
   </div>
 </div>
 
+<!-- expiring licenses -->
+<?php $expiringLicense = [] ?>
+<?php foreach($licenses as $aLicense): ?>
+  <?php if($this->License->isExpiring($aLicense['ExpirationDate'], $aLicense['StartReminder'])): ?>
+    <?php $expiringLicense[] = $aLicense; ?>
+  <?php endif ?>
+<?php endforeach ?>
+<?php if(count($expiringLicense) > 0): ?>
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card border-left-warning shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">License Warnings</h6>
+      </div>
+      <div class="card-body">
+        The following licenses are either getting close to expiration, or have already expired. <br /><br />
+        <ul>
+        <?php foreach($expiringLicense as $aLicense): ?>
+          <li><?= $this->Html->link($aLicense['LicenseName'], '/manage/view_license/' . $aLicense['id']) ?> - <?= $aLicense->ExpirationDate->i18nFormat('MM/dd/YY') ?></li>
+        <?php endforeach ?>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<?php endif; ?>
+
 <!-- checkout requests -->
 <div class="row">
   <?php if(count($new_checkout) > 0): ?>

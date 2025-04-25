@@ -12,6 +12,20 @@ class LicenseHelper extends Helper
     return $license['ExpirationDate'] != null && !empty($license['ExpirationDate']);
   }
 
+  function isExpiring($expiration, $start_reminder){
+    $result = false;
+
+    if(!empty($expiration))
+    {
+      if($this->Time->isPast($this->calcReminder($expiration, $start_reminder))){
+        // return true if past the start reminder time
+        $result = true;
+      }
+    }
+
+    return $result;
+  }
+
 	function expirationCSS($expiration, $start_reminder){
     $result = ""; // no text change by default
 

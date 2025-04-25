@@ -326,7 +326,12 @@ class InventoryController extends AppController {
     $lifecycles = $this->fetchTable('Lifecycle')->find('all')->all();
     $this->set('lifecycles', $lifecycles);
 
-    // pull in a list of recently updated devices
+    # list all licenses
+    $licenses = $this->fetchTable('License')->find('all', ['contain'=>'LicenseKey',
+                                                           'order'=>['License.LicenseName'=>'asc']])->all();
+    $this->set('licenses', $licenses);
+
+    // pull in a list of recent activity
     $logs = $this->fetchTable('Logs')->find('all', ['conditions'=>['Logs.LOGGER'=>'Website'],
                                                     'order'=>['Logs.id'=>'desc']])->limit(100)->all();
 	 	$this->set('logs', $logs);
@@ -334,6 +339,7 @@ class InventoryController extends AppController {
     // to highlight devices for log parsing
     $this->set('inventory', $this->fetchTable('Computer')->find('list', ['keyField'=>'ComputerName', 'valueField'=>'id'])->toArray());
 
+    $this->viewBuilder()->addHelper('License');
     $this->viewBuilder()->addHelper('Lifecycle');
     $this->viewBuilder()->addHelper('LogParser');
   }
