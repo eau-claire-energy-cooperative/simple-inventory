@@ -4,6 +4,45 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## 7.0
+
+### Added
+
+- exported CSV files now only show filtered search results instead of entire table
+- some basic error checking (licenses, checkout requests) is now completed on decommissioning or deleting of devices (#22)
+- viewer to see driver files in the /drivers/ directory and delete them
+- new Dashboard page - shows default metrics such as total devices, total applications, checkout requests, and recent activity
+- Additional logging for various website operations, including the user that completed the action. Actions impacted are: Logins, Devices added/removed/changed, lifecycles added/removed/changed, checkouts approved/denied/extended/check-in/check-out, devices types added/removed, schedules created/removed, locations added/removed/changed, decomissioned devices hard drive or recycle status. 
+
+### Changed
+
+- Updated to CakePHP 4 framework from CakePHP 2
+- layout of Services search page matches other search pages
+- Jquery updated to 3.7.1
+- DataTables updated to 2.2.2
+- CSV exports now done in Javascript instead of PHP
+- layout of Operating Systems matches License page (highlighting dates and general organization)
+- CronExpression library updated to 3.4.0. This is a [breaking change](http://ctankersley.com/2017/10/12/cron-expression-update/) to how the next dates are calculated. New lib is in line with how cron should actually function. 
+- CheckoutRequests times are now calculated based on [FrozenTime](https://book.cakephp.org/4/en/core-libraries/time.html) functions instead of based on php date() unix time comparisons. 
+- Checkout requests can now be deleted if the check in time has past without denying them first (#30)
+- Decommissioned devices now save the display attributes of the parent device type. Only valid attributes are shown on the Decommissioned pages now. 
+- Driver upload information now references Powershell commands instead of old Double Drivers tools. This is outdated and no longer necessary. 
+- Dashboard page replaces full inventory as default landing page. Full inventory is now a link in the Devices menu 
+- root `/` now redirects to Dashboard. 
+- Logs table now includes a `USER` column. Populated for website log messages to capture the user that performed the action.
+- REST API now utilizes HTTP Methods instead of url actions. This is inline with how REST APIs are typically used. Examples: instead of `/api/inventory/exists` you call `/api/inventory` using a the HTTP GET method. The same endpoint `/api/inventory/` using POST would add a new device. 
+- Updater Powershell script updated to utilize GET, POST, PUT, or DELETE method calls as appropriate with the REST API. 
+- REST API endpoints for `/applications` and `/services` now take a list of each to update instead of a single entry. This greatly speeds up bulk additions to the database. The updater script is also updated to reflect this change. 
+
+### Fixed
+
+- new device duplicate check now checks name and device type
+- extending checkout times now fails if the check in date is in the past or is set prior to the check out date (#29)
+
+### Removed
+
+- removed Application monitoring feature (alerting if certain app found installed). This was seldom used and didn't really have a good use case. The way software is managed in a modern environment users should not be able to install rogue software. 
+
 ## 6.0
 
 ### Added

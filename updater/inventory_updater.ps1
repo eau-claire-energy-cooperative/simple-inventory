@@ -55,19 +55,36 @@ function evalBool(){
 
 #call the web api with the following json data
 function web-call{
-	param([string]$endpoint, [hashtable] $data)
-	
-	#convert to json string
-	$jsonData = $data | ConvertTo-Json -Compress
+	param([string]$endpoint, [hashtable] $data, [string] $method = 'post')
 	$output = @{}
-	try{
-		$output = Invoke-WebRequest -Method 'Post' -Uri ($apiUrl + $endpoint) -Body $jsonData -ContentType "application/json" -Headers @{"x-auth-key"="$ApiAuthKey"} -UseBasicParsing | ConvertFrom-Json
-	}
-	catch{
-		Continue
-	}
 	
-	#Write-Host $output
+	if($method -eq "get")
+	{
+		$endpoint += "?"
+		foreach ($item in $data.GetEnumerator()) {
+			$endpoint += "$($item.key)=$($item.value)&" 
+		}
+
+		try{
+		$output = Invoke-WebRequest -Method $method -Uri ($apiUrl + $endpoint) -ContentType "application/json" -Headers @{"x-auth-key"="$ApiAuthKey"} -UseBasicParsing | ConvertFrom-Json
+		}
+		catch{
+			Continue
+		}
+	}
+	else
+	{
+		#convert to json string
+		$jsonData = $data | ConvertTo-Json -Compress
+
+		try{
+			$output = Invoke-WebRequest -Method $method -Uri ($apiUrl + $endpoint) -Body $jsonData -ContentType "application/json" -Headers @{"x-auth-key"="$ApiAuthKey"} -UseBasicParsing | ConvertFrom-Json
+		}
+		catch{
+			Continue
+		}
+	}
+
 	return $output 
 }
 
@@ -98,7 +115,7 @@ if($logSuccess.type -eq 'error'){
 }
 
 #get the settings
-$settingsObj = web-call -Endpoint "/settings" -Data @{}
+$settingsObj = web-call -Endpoint "/settings" -Data @{} -Method 'get'
 $settings = $settingsObj."result"
 
 ###PART 1 - collect PC info
@@ -215,7 +232,7 @@ if($DebugLog){
 
 #SEND RESULTS
 $ComputerId = $null
-$output = web-call -Endpoint "/inventory/exists" -Data @{computer = "$ComputerName"} 
+$output = web-call -Endpoint "/inventory" -Data @{computer = "$ComputerName"} -Method 'get'
 
 if($output."type" -eq "success")
 {
@@ -224,7 +241,7 @@ if($output."type" -eq "success")
 	$ComputerId = $output."result".id
 	$computerInfo.id = $output."result".id
 	
-	$updateOutput = web-call -Endpoint "/inventory/update" -Data $computerInfo
+	$updateOutput = web-call -Endpoint "/inventory" -Data $computerInfo -Method 'put'
 	
 	if($updateOutput."type" -eq "success")
 	{
@@ -253,16 +270,16 @@ else
 	if($settings.computer_auto_add.ToLower() -eq "true")
 	{
 		#make sure there is a default location
-		$defaultObj = web-call -Endpoint "/location/default" -Data @{}
+		$defaultObj = web-call -Endpoint "/location" -Data @{default="true"} -Method 'get'
 		
 		if($defaultObj."type" -ne "success")
 		{
 			web-log -Message "Need default location to auto-add" -level "ERROR" | out-null
 			exit 0
 		}
-		
+
 		#add the computer
-		$addOutput = web-call -Endpoint "/inventory/add" -Data @{ComputerName = "$ComputerName"; DeviceType = $DeviceType}
+		$addOutput = web-call -Endpoint "/inventory" -Data @{ComputerName = "$ComputerName"; DeviceType = $DeviceType} -Method 'post'
 	
 		if($addOutput."type" -eq "success")
 		{
@@ -273,7 +290,7 @@ else
 			web-log -Message "Added $Computername with id: $ComputerId" | out-null
 			
 			#try and send the computer info again
-			$updateOutput = web-call -Endpoint "/inventory/update" -Data $computerInfo
+			$updateOutput = web-call -Endpoint "/inventory" -Data $computerInfo -Method 'put'
 			
 			#notify admin via email
 			$compUrl = $Url + "/inventory/moreInfo/$ComputerId"
@@ -315,12 +332,11 @@ if($ComputerId -eq $null)
 }
 
 #DISKS
-
 #only get local drives
 $disks = @($(Get-WmiObject -Class Win32_LogicalDisk -Filter "DriveType=3" | Select DeviceId, FreeSpace, Size))
 
 foreach ($disk in $disks.GetEnumerator()){
-	$diskOutput = web-call -Endpoint "/disk/update" -Data @{comp_id = $ComputerId; type = "Local"; label=$disk.DeviceId; total_space = $disk.Size/1025; space_free = $disk.FreeSpace/1024}
+	$diskOutput = web-call -Endpoint "/disk" -Data @{comp_id = $ComputerId; type = "Local"; label=$disk.DeviceId; total_space = $disk.Size/1025; space_free = $disk.FreeSpace/1024} -Method 'post'
 }
 
 #APPLICATIONS
@@ -334,16 +350,23 @@ if(evalBool($CheckApplications))
 	web-log -Message "Found $($allPrograms.count) applications on $ComputerName" | out-null
 	
 	#clear out the current programs list
-	$clearOutput = web-call -Endpoint "/applications/clear" -Data @{id = $ComputerId}
+	$clearOutput = web-call -Endpoint "/applications" -Data @{id = $ComputerId} -Method 'delete'
 
+    $appData = [System.Collections.ArrayList]@()
 	foreach ($program in $allPrograms.GetEnumerator()){
 		if($program.DisplayVersion -eq $null -Or $program.DisplayVersion -eq "")
 		{
 			$program.DisplayVersion = "?"
 		}
 		
-		$programOutput = web-call -Endpoint "/applications/add" -Data @{id = $ComputerId; application = $program.DisplayName; version = $program.DisplayVersion}
+		if($program.DisplayName -ne $null)
+		{
+			# add to the array, trim out any non-ascii characters
+			$index = $appData.Add(@{application = ($program.DisplayName -replace '[^\u0000-\u007F]', ''); version = $program.DisplayVersion})
+		}
 	}
+
+	$programOutput = web-call -Endpoint "/applications" -Data @{id = $ComputerId; applications = $appData} -Method 'post'
 }
 
 #SERVICES
@@ -354,9 +377,12 @@ if(evalBool($CheckServices))
 	web-log -Message "Found $($allServices.count) services on $ComputerName" | out-null
 	
 	#clear out the current services list
-	$clearOutput = web-call -Endpoint "/services/clear" -Data @{id = $ComputerId}
+	$clearOutput = web-call -Endpoint "/services" -Data @{id = $ComputerId} -Method 'delete'
 	
+	$serviceData = [System.Collections.ArrayList]@()
 	foreach ($service in $allServices.GetEnumerator()){
-		$serviceOutput = web-call -Endpoint "/services/add" -Data @{id = $ComputerId; name = $service.DisplayName; mode = $service.StartMode; status = $service.State}
+		$index = $serviceData.Add(@{name = $service.DisplayName; mode = $service.StartMode; status = $service.State})
 	}
+	
+	$serviceOutput = web-call -Endpoint "/services" -Data @{id = $ComputerId; services = $serviceData} -Method 'post'
 }
