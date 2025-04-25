@@ -468,8 +468,17 @@ class InventoryController extends AppController {
 	  else
 	  {
       $Computer = $this->fetchTable('Computer');
-      $originalData = $Computer->find('all', ['contain'=>['Application', 'DeviceType', 'Disk', 'LicenseKey', 'LicenseKey.License', 'Location'],
+      $originalData = $Computer->find('all', ['contain'=>['Application', 'CheckoutRequest', 'DeviceType', 'Disk', 'LicenseKey', 'LicenseKey.License', 'Location'],
                                                              'conditions'=>['Computer.id'=>$this->request->getData('id')]])->first();
+
+      // check if the checkout request attribute is being changed
+      if($originalData['CanCheckout'] == 'true' && $this->request->getData('CanCheckout') == 'false' && count($originalData['checkout_request']) > 0)
+      {
+        // going from true to false check if there are any checkout requests
+        $this->Flash->error(sprintf('Update Failed - this device is part of <a href="%s">one or more checkout requests</a>, please correct this before changing the Available For Checkout attribute',
+                                    \Cake\Routing\Router::url('/checkout/requests')), ['escape'=>false]);
+        return $this->redirect("/inventory/moreInfo/" . $this->request->getData('id'));
+      }
 
       //check if the current user is part of the attributes
       if($this->request->getData('CurrentUser') != null && $this->request->getData('CurrentUser') != $originalData['CurrentUser'])
@@ -484,7 +493,7 @@ class InventoryController extends AppController {
       $Computer->patchEntity($originalData, $this->request->getData());
       if($Computer->save($originalData))
       {
-        $this->_saveLog($this->request->getSession()->read('User.username'), $originalData['ComputerName'] . ' has been updated');
+        //$this->_saveLog($this->request->getSession()->read('User.username'), $originalData['ComputerName'] . ' has been updated');
         $this->Flash->success('Device updated');
       }
       else

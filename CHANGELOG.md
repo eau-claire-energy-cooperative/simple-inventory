@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - added upcoming license expirations to the dashboard
 
+## Fixed
+
+- fixed changing device checkout status when a request is already assigned (#34)
+
 ## 7.0
 
 ### Added
