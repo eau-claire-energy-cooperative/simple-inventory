@@ -425,5 +425,5 @@ return [
     'Session' => [
         'defaults' => 'php',
     ],
-    'Version' => "7.0b1",
+    'Version' => "7.0",
 ];
