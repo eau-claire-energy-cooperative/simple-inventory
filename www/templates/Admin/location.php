@@ -34,9 +34,9 @@
           <td><?= count($post['computer']) ?></td>
             <td align="right">
            	<?php if($post['is_default'] == 'false'): ?>
-           	    <a href="<?= $this->Url->build(['action'=>'setDefaultLocation',$post['id']]) ?>" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm mr-2 p-2">Set Default</a>
+           	    <a href="<?= $this->Url->build(['action'=>'setDefaultLocation',$post['id']]) ?>" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm mr-2 p-2"><i class="mdi mdi-star-outline icon-sm icon-inline text-white-50"></i></a>
            	<?php else: ?>
-  					   <span class="btn btn-success btn-sm shadow-sm p-2">Default</span>
+  					   <button class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2"><i class="mdi mdi-star icon-sm icon-inline text-white-50"></i> Default</button>
   				  <?php endif; ?>
   				    <a href="<?= $this->Url->build(['action' => 'editLocation', $post['id']]) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-square-edit-outline icon-sm icon-inline text-white-50"></i> Edit</a>
   				    <a data-title="Delete Location" href="<?= $this->Url->build(['action' => 'deleteLocation', $post['id']]) ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-location"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i> Delete</a>
