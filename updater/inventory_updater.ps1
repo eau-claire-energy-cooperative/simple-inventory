@@ -283,10 +283,12 @@ else
 	
 		if($addOutput."type" -eq "success")
 		{
+			Write-Host $addOutput
 			#save the id for later
 			$ComputerId = $addOutput."result".id
 			$computerInfo.id = $ComputerId
-			
+			$computerInfo.Location = $addOutput."result".location
+
 			web-log -Message "Added $Computername with id: $ComputerId" | out-null
 			
 			#try and send the computer info again
@@ -295,6 +297,7 @@ else
 			#notify admin via email
 			$compUrl = $Url + "/inventory/moreInfo/$ComputerId"
 			$message = "Computer <b>$ComputerName</b> has been added to the inventory. Details are below: <br><br>" + 
+			"Location: $($computerInfo.Location) <br>" + 
 			"Model: $($computerInfo.Model)<br>" + 
 			"Serial Number: $($computerInfo.SerialNumber)<br>" + 
 			"Current User: $($computerInfo.CurrentUser)<br>" + 
