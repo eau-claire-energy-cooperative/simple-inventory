@@ -37,7 +37,7 @@ class AdminController extends AppController {
         $Location = $this->fetchTable('Location');
         $location = $Location->newEntity($this->request->getData());
 
-        if(preg_match(sprintf('/%s/', $location['auto_regex']), '') === false)
+        if(@preg_match(sprintf('/%s/', $location['auto_regex']), '') === false)
         {
           $this->Flash->error('Regular Expression syntax is invalid');
           return $this->render();
