@@ -11,7 +11,7 @@ class Setting extends Entity{
     parent::__construct($properties, $options);
 
     // decrypt the value, if encrypted
-    if(Configure::read('Settings.encrypt'))
+    if(Configure::read('Settings.encrypt') && !empty($this->_fields['value']))
     {
       $this->_fields['value'] = Security::decrypt($this->_fields['value'], Configure::read('Settings.encrypt_key'));
     }
