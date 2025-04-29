@@ -4,7 +4,7 @@ use Cake\Event\EventInterface;
 use \Cake\ORM\Query;
 
 class SearchController extends AppController {
-  var $search_types = [["name"=>"Tag","field"=>"Computer.ComputerLocation"],
+  var $search_types = [["name"=>"Location","field"=>"Computer.ComputerLocation"],
   						         ['name'=>'Model','field'=>'Computer.Model'],
   						         ['name'=>'OS','field'=>'Computer.OS'],
   						         ['name'=>'Memory','field'=>'Computer.Memory'],

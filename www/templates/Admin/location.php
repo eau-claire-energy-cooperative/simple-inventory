@@ -31,7 +31,7 @@
       <?php foreach ($location as $post): ?>
       <tr>
           <td><?=  $post['location']; ?></td>
-          <td><?= count($post['computer']) ?></td>
+          <td><?= $this->Html->link(count($post['computer']), ['controller'=>'search','action' => 'search', 0, $post['id']]); ?></td>
             <td align="right">
            	<?php if($post['is_default'] == 'false'): ?>
            	    <a href="<?= $this->Url->build(['action'=>'setDefaultLocation',$post['id']]) ?>" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm mr-2 p-2"><i class="mdi mdi-star-outline icon-sm icon-inline text-white-50"></i></a>
