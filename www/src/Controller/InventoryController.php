@@ -493,7 +493,7 @@ class InventoryController extends AppController {
       $Computer->patchEntity($originalData, $this->request->getData());
       if($Computer->save($originalData))
       {
-        //$this->_saveLog($this->request->getSession()->read('User.username'), $originalData['ComputerName'] . ' has been updated');
+        $this->_saveLog($this->request->getSession()->read('User.username'), $originalData['ComputerName'] . ' has been updated');
         $this->Flash->success('Device updated');
       }
       else
