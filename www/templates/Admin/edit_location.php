@@ -14,10 +14,10 @@
             <div class="col-md-8"><?= $this->Form->input('location', ['class'=>'form-control']);?></div>
           </div>
           <div class="row mb-1">
-            <div class="col-md-4">Auto Grouping Regex: </div>
+            <div class="col-md-4">Auto Location Regex: </div>
             <div class="col-md-8">
               <?= $this->Form->input('auto_regex',['class'=>'form-control']); ?>
-              <a href="https://en.wikipedia.org/wiki/Regular_expression">Regular expression</a> that will put devices in this group automatically upon creation via the API based on the device name.
+              <a href="https://en.wikipedia.org/wiki/Regular_expression">Regular expression</a> that will put devices in this location automatically upon creation via the API based on the device name.
             </div>
           </div>
           <div class="row mt-2">
