@@ -9,10 +9,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Added
 
 - added upcoming license expirations to the dashboard
+- locations screen hyperlinks the device count to view assigned devices
+
+## Changed
+
+- minor cosemetic items
 
 ## Fixed
 
 - fixed changing device checkout status when a request is already assigned (#34)
+- fixed settings encryption, missed this during initial framework update
 
 ## 7.0
 

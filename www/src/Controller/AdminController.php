@@ -37,6 +37,12 @@ class AdminController extends AppController {
         $Location = $this->fetchTable('Location');
         $location = $Location->newEntity($this->request->getData());
 
+        if(preg_match(sprintf('/%s/', $location['auto_regex']), '') === false)
+        {
+          $this->Flash->error('Regular Expression syntax is invalid');
+          return $this->render();
+        }
+
         if ($Location->save($location)) {
           $this->_saveLog($this->request->getSession()->read('User.username'),
                           sprintf('Location %s has been added', $location['location']));
@@ -92,6 +98,12 @@ class AdminController extends AppController {
  		else
  		{
       $Location->patchEntity($location, $this->request->getData());
+
+      if(@preg_match(sprintf('/%s/', $location['auto_regex']), '') === false)
+      {
+        $this->Flash->error('Regular Expression syntax is invalid');
+        return $this->render();
+      }
 
     	if ($Location->save($location)) {
         $this->_saveLog($this->request->getSession()->read('User.username'),
