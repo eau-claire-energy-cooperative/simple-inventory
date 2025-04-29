@@ -314,12 +314,20 @@ class ApiController extends AppController {
 
       if($aComputer == null)
       {
-  			//attempt to get the default location id and device types list
-  			$locations = $this->fetchTable('Location')->find('all', ['conditions'=>['Location.is_default'=>'true']])->first();
+        // attempt to auto find the location based on location grouping
+        $location = $this->fetchTable('Location')->find('all')->where(sprintf("'%s' REGEXP auto_regex", $this->request->getData('ComputerName')))->first();
+
+        if($location == null)
+        {
+          //attempt to get the default location id
+          $location = $this->fetchTable('Location')->find('all', ['conditions'=>['Location.is_default'=>'true']])->first();
+        }
+
+  			// load the device list device types list
         $deviceTypes = $this->fetchTable('DeviceType')->find('list', ['keyField'=>function($d){
                                                                         return $d->get('slug');
                                                                        }, 'valueField'=>"id"])->toArray();
-  			if($locations != null)
+  			if($location != null)
   			{
           //check that device type exists
           if(array_key_exists(strtolower($this->request->getData('DeviceType')), $deviceTypes))
@@ -327,13 +335,14 @@ class ApiController extends AppController {
     				$aComputer = $Computer->newEmptyEntity();
     				$aComputer->ComputerName = trim($this->request->getData('ComputerName'));
             $aComputer->DeviceType = $deviceTypes[strtolower($this->request->getData('DeviceType'))];  // convert slug to id
-    				$aComputer->ComputerLocation = $locations['id'];
+    				$aComputer->ComputerLocation = $location['id'];
 
+            // save
     				$Computer->save($aComputer);
 
     				$result['type'] = 'success';
     				$result['message'] = sprintf('computer %s added to database', $aComputer['ComputerName']);
-    				$result['result'] = array('id'=>$aComputer->id);
+    				$result['result'] = ['id'=>$aComputer->id, 'location'=>$location['location']];
           }
           else
           {
