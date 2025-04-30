@@ -113,6 +113,7 @@ function showOriginal(id, text){
       </button>
       <div class="dropdown-menu">
         <a href="<?= $this->Url->build(array('action' => 'edit', $computer['id'])) ?>" class="dropdown-item"><i class="mdi mdi-square-edit-outline icon-sm icon-inline"></i> Edit</a>
+        <a href="<?= $this->Url->build('/manage/available_licenses/' . $computer['id']) ?>" class="dropdown-item"><i class="mdi mdi-license icon-sm icon-inline"></i> Add License</a>
         <div class="dropdown-divider"></div>
         <?php if($computer['device_type']['allow_decom'] == 'true'): ?>
         <a href="<?= $this->Url->build(array('action' => 'confirmDecommission', $computer['id'])) ?>" class="dropdown-item"><i class="mdi mdi-cancel icon-sm icon-inline"></i> Decommission</a>

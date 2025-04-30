@@ -39,6 +39,51 @@ class ManageController extends AppController {
     }
   }
 
+  function assignLicenseKey($license_key_id, $device_id){
+
+    //compare quantity to make sure a license is available
+    $license_key = $this->fetchTable('LicenseKey')->find('all', ['contain'=>['Computer'],
+                                             'conditions'=>['LicenseKey.id'=>$license_key_id]])->first();
+
+    if(count($license_key['computer']) < $license_key['Quantity'])
+    {
+      $newKey = $this->fetchTable('ComputerLicense')->insertQuery()->insert(['device_id', 'license_id'])
+                                          ->values(['device_id'=>$device_id, 'license_id'=>$license_key_id])
+                                          ->execute();
+
+      $this->Flash->success('License Assigned');
+    }
+    else
+    {
+      $this->Flash->error('No more keys available');
+    }
+
+    return $this->redirect(sprintf('/inventory/more_info/%d', $device_id));
+  }
+
+  public function availableLicenses($id){
+    $this->set('title','Available Licenses');
+    $this->set('active_menu', 'applications');
+
+    $device = $this->fetchTable('Computer')->get($id);
+
+    // get all the license keys
+    $license_keys = $this->fetchTable('LicenseKey')->find('all', ['contain'=>['Computer', 'License'],
+                                                                  'order'=>['License.LicenseName'=>'asc']])->all();
+    $available_keys = [];
+
+    foreach($license_keys as $key){
+      // check if a key is available
+      if(count($key['computer']) < $key['Quantity'])
+      {
+        $available_keys[] = $key;
+      }
+    }
+
+    $this->set('computer', $device);
+    $this->set('available_keys', $available_keys);
+  }
+
   public function commands(){
     $this->set('title','Scheduled Tasks');
     $this->set('active_menu', 'schedule');
