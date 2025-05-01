@@ -1,5 +1,11 @@
-<?= $this->Form->create(null, ['url'=>'/applications/lifecycle']);?>
+<?= $this->Html->script(["bootstrap-autocomplete.min.js"], ['block'=>'script']) ?>
+<?=
+  $this->Html->scriptBlock("$(document).ready(function() {
+    $('.auto-select').autoComplete({preventEnter: true});
+   });", ["block"=>true])
+?>
 
+<?= $this->Form->create(null, ['url'=>'/applications/lifecycle']);?>
 <div class="row">
   <div class="col-xl-12">
     <div class="card shadow mb-4">
@@ -7,7 +13,9 @@
           <p>Define a lifecycle to be added to the system. Once assigned the application assigned to this lifecycle cannot be deleted.</p>
           <div class="row mb-2">
             <div class="col-md-4">Application: </div>
-            <div class="col-md-8"><?= $this->Form->select('application_id',$applications, ['class'=>'custom-select','empty'=>false]) ?></div>
+            <div class="col-md-8"><?= $this->Form->select('application_id', [], ['class'=>'custom-select auto-select','empty'=>false,'autocomplete'=>'off',
+                                                                                           'placeholder'=>'Start typing to search',
+                                                                                           'data-url'=>$this->Url->build('/ajax/search_application_list')]) ?></div>
           </div>
           <div class="row mb-2">
             <div class="col-md-4">Update Frequency: </div>

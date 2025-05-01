@@ -1,3 +1,10 @@
+<?= $this->Html->script(["bootstrap-autocomplete.min.js"], ['block'=>'script']) ?>
+<?=
+  $this->Html->scriptBlock("$(document).ready(function() {
+    $('.auto-select').autoComplete({preventEnter: true});
+   });", ["block"=>true])
+?>
+
 <script>
 function load_today(){
   today = new Date();
@@ -12,6 +19,7 @@ function load_today(){
   $('#last_check_date').val(today.getFullYear() + "-" + month + "-" + today.getDate() + " " + today.getHours() + ":" + today.getMinutes());
 
 }
+
 </script>
 
 <div class="mb-4" align="right">
@@ -25,8 +33,11 @@ function load_today(){
         <div class="card-body">
           <p>Define a lifecycle to be added to the system. Once assigned the application assigned to this lifecycle cannot be deleted. If changing the application keep in mind that individual devices will still point to the original application version.</p>
           <div class="row mb-2">
-            <div class="col-md-4">Application: </div>
-            <div class="col-md-8"><?= $this->Form->select('application_id',$applications, ['class'=>'custom-select','empty'=>false, 'value'=>$lifecycle['application_id']]) ?></div>
+            <div class="col-md-4">Application:</div>
+            <div class="col-md-8"><?= $this->Form->select('application_id', [], ['class'=>'custom-select auto-select','empty'=>false, 'autocomplete'=>'off',
+                                                                                           'data-default-value'=>$lifecycle['application_id'],
+                                                                                           'data-default-text'=>$lifecycle['application']['full_name'],
+                                                                                           'data-url'=>$this->Url->build('/ajax/search_application_list')]) ?></div>
           </div>
           <div class="row mb-2">
             <div class="col-md-4">Update Frequency: </div>

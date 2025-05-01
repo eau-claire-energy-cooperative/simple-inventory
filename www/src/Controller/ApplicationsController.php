@@ -27,9 +27,6 @@ class ApplicationsController extends AppController {
   public function addLifecycle(){
     $this->set('title', 'Create Software Lifecycle');
 
-    $applications = $this->fetchTable('Application')->find('list', ['keyField'=>'id', 'valueField'=>'full_name',
-                                                            'order'=>['Application.name asc', 'Application.version asc']])->toArray();
-    $this->set('applications', $applications);
     $this->set('today', FrozenTime::now());
   }
 
@@ -111,11 +108,8 @@ class ApplicationsController extends AppController {
   public function editLifecycle($id){
     $this->set('title', 'Edit Software Lifecycle');
 
-    $applications = $this->fetchTable('Application')->find('list', ['keyField'=>'id', 'valueField'=>'full_name',
-                                                           'order'=>['Application.name asc', 'Application.version desc']]);
-    $this->set('applications', $applications);
-
-    $this->set('lifecycle', $this->fetchTable('Lifecycle')->find('all', ['conditions'=>['Lifecycle.id'=>$id]])->first());
+    $this->set('lifecycle', $this->fetchTable('Lifecycle')->find('all', ['contain'=>['Application'],
+                                                                         'conditions'=>['Lifecycle.id'=>$id]])->first());
   }
 
   public function index(){
