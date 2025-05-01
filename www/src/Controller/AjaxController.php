@@ -29,25 +29,7 @@ class AjaxController extends AppController {
     $application = $this->fetchTable('Application')->find('all', ['contain'=>['Computer'],
                                                                   'conditions'=>['Application.id'=>$app_id]])->first();
 
-    //get a list of computers already assigned
-    $assigned = [];
-    foreach($application['computer'] as $comp){
-      $assigned[] = $comp['id'];
-    }
-
     $this->set('application', $application);
-
-    //filter out already assigned from this list
-    $allComputers = $this->fetchTable('Computer')->find('list', ['keyField'=>'id', 'valueField'=>'ComputerName',
-                                                        'order'=>['Computer.ComputerName asc']]);
-
-    // filter out already assigned, if there are any
-    if(count($assigned) > 0)
-    {
-      $allComputers = $allComputers->where(['Computer.id NOT IN' => $assigned]);
-    }
-
-    $this->set('computers', $allComputers->toArray());
   }
 
   function assignLicenseKey($license_id, $license_key_id){
@@ -55,14 +37,6 @@ class AjaxController extends AppController {
 
     $this->set('license_id', $license_id);
     $this->set('license_key_id', $license_key_id);
-
-    //get a list of all computers
-    $allComputers = $this->fetchTable('Computer')->find('list', ['keyField'=>'id',
-                                                                 'valueField'=>'ComputerName',
-                                                                 'order'=>['Computer.ComputerName asc']])->toArray();
-    $allComputers = [0=>'NO COMPUTER - UNASSIGNED'] + $allComputers;
-
-    $this->set('computers', $allComputers);
 
 	}
 
@@ -91,6 +65,22 @@ class AjaxController extends AppController {
                                                               'conditions'=>['CheckoutRequest.id'=>$id]])->first();
 
     $this->set('req', $req);
+  }
+
+  function searchDeviceList(){
+    $this->viewBuilder()->setClassName("Json");
+    // escape character for sprintf is %
+    $devices = $this->fetchTable('Computer')->find('all', ['conditions'=>[sprintf("Computer.ComputerName LIKE '%%%s%%'", $this->request->getQuery('q'))],
+                                                           'order'=>['Computer.ComputerName asc']])->all();
+
+    // put in the format value=id, text=name
+    $result = [];
+    foreach($devices as $aDevice){
+      $result[] = ['value'=>$aDevice['id'], 'text'=>$aDevice['ComputerName']];
+    }
+
+    $this->set('result', $result);
+    $this->viewBuilder()->setOption('serialize', 'result');
   }
 
   function newLicenseKey($license_id){
