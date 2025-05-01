@@ -45,6 +45,7 @@ class AjaxController extends AppController {
   }
 
   function checkRunning($id){
+    $this->viewBuilder()->setClassName("Json");
 	  //get the IP of the device
 	  $computer = $this->fetchTable('Computer')->find('all', ['conditions'=>['Computer.id'=>$id]])->first();
 
@@ -55,7 +56,7 @@ class AjaxController extends AppController {
     }
 
     $this->set('result', $isRunning);
-    $this->render('json');
+    $this->viewBuilder()->setOption('serialize', 'result');
 	}
 
   function extendCheckout($id){
@@ -65,6 +66,22 @@ class AjaxController extends AppController {
                                                               'conditions'=>['CheckoutRequest.id'=>$id]])->first();
 
     $this->set('req', $req);
+  }
+
+  function searchApplicationList(){
+    $this->viewBuilder()->setClassName("Json");
+    // escape character for sprintf is %
+    $applications = $this->fetchTable('Application')->find('all', ['conditions'=>[sprintf("Application.name LIKE '%%%s%%'", $this->request->getQuery('q'))],
+                                                           'order'=>['Application.name asc']])->all();
+
+    // put in the format value=id, text=name
+    $result = [];
+    foreach($applications  as $app){
+      $result[] = ['value'=>$app['id'], 'text'=>$app['full_name']];
+    }
+
+    $this->set('result', $result);
+    $this->viewBuilder()->setOption('serialize', 'result');
   }
 
   function searchDeviceList(){
@@ -153,10 +170,12 @@ class AjaxController extends AppController {
 	}
 
   function wol(){
+    $this->viewBuilder()->setClassName("Json");
     $this->Ping->wol($_SERVER['SERVER_ADDR'], $this->request->getQuery('mac'));
 
     $this->set('result', ['success']);
-    $this->render('json');
+
+    $this->viewBuilder()->setOption('serialize', 'result');
 	}
 }
 ?>
