@@ -10,7 +10,7 @@
     <div id="content-wrapper">
 
         <!-- Begin Page Content -->
-        <div style="max-width:600px;">
+        <div style="min-width:600px;min-height:300px;">
 
           <!-- Main Content -->
           <?= $this->Flash->render(); ?>
