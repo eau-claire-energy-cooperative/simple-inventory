@@ -29,6 +29,9 @@
           { targets: [". $this->DynamicTable->listVisibleColumns(array_keys($columnNames), $displayAttributes, [0,1,-1,-2], 2) . "], visible: true},
           { targets: '_all', visible: false }
         ],
+        order: [
+          [1, 'asc']
+        ],
         language: {
           search: 'Filter:',
           paginate: {

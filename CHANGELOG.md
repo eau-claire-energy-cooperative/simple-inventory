@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - added upcoming license expirations to the dashboard
 - locations screen hyperlinks the device count to view assigned devices
+- can add license keys to a device directly from the device info page
 
 ## Changed
 
@@ -19,6 +20,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - fixed changing device checkout status when a request is already assigned (#34)
 - fixed settings encryption, missed this during initial framework update
+- minor PHP 8 issues
+- sorting on search pages
 
 ## 7.0
 
