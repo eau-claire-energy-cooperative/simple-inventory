@@ -1,7 +1,7 @@
 <?= $this->Html->script(["bootstrap-autocomplete.min.js"], ['block'=>'script']) ?>
 <?=
   $this->Html->scriptBlock("$(document).ready(function() {
-    $('.auto-select').autoComplete();
+    $('.auto-select').autoComplete({preventEnter: true});
    });", ["block"=>true])
 ?>
 <h1 class="h3 mb-2 text-gray-800">Assign Application - <?= $application['name'] ?></h1>

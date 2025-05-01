@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## Changed
 
 - minor cosemetic items
+- utilize dynamic autocomplete when searching for device or application names instead of giant drop down list
+- utilize CakePHP json output instead of special json render file
 
 ## Fixed
 
