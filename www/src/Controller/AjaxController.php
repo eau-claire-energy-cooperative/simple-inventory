@@ -84,12 +84,21 @@ class AjaxController extends AppController {
     $this->viewBuilder()->setOption('serialize', 'result');
   }
 
-  function searchDeviceList(){
+  function searchDeviceList($app_filter=null){
     $this->viewBuilder()->setClassName("Json");
     // escape character for sprintf is %
-    $devices = $this->fetchTable('Computer')->find('all', ['conditions'=>[sprintf("Computer.ComputerName LIKE '%%%s%%'", $this->request->getQuery('q'))],
-                                                           'order'=>['Computer.ComputerName asc']])->all();
+    $deviceQ = $this->fetchTable('Computer')->find('all', ['conditions'=>[sprintf("Computer.ComputerName LIKE '%%%s%%'", $this->request->getQuery('q'))],
+                                                           'order'=>['Computer.ComputerName asc']]);
 
+    // if app filter given, filter out devices assigned to this app
+    if(isset($app_filter))
+    {
+      $deviceQ->notMatching('Application', function($q) use ($app_filter){
+        return $q->where(['Application.id'=>intval($app_filter)]);
+      });
+    }
+
+    $devices = $deviceQ->all();
     // put in the format value=id, text=name
     $result = [];
     foreach($devices as $aDevice){
