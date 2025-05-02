@@ -4,13 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
-## Unreleased
+## 7.1
 
 ### Added
 
 - added upcoming license expirations to the dashboard
 - locations screen hyperlinks the device count to view assigned devices
 - can add license keys to a device directly from the device info page
+- default schema file for new installs
 
 ## Changed
 
@@ -24,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - fixed settings encryption, missed this during initial framework update
 - minor PHP 8 issues
 - sorting on search pages
+- Install instructions now updated for CakePHP 4 framework
 
 ## 7.0
 
