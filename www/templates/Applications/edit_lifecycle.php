@@ -2,6 +2,14 @@
 <?=
   $this->Html->scriptBlock("$(document).ready(function() {
     $('.auto-select').autoComplete({preventEnter: true});
+
+    $('.auto-select').on('autocomplete.select', function (evt, item) {
+        // if value is blank put the original back
+        if(item == null)
+        {
+					reset_lifecycle();
+        }
+		});
    });", ["block"=>true])
 ?>
 
@@ -20,6 +28,9 @@ function load_today(){
 
 }
 
+function reset_lifecycle(){
+  $('.auto-select').autoComplete('set', {value: <?= $lifecycle['application_id'] ?>, text: '<?= $lifecycle['application']['full_name'] ?>'});
+}
 </script>
 
 <div class="mb-4" align="right">
@@ -33,7 +44,7 @@ function load_today(){
         <div class="card-body">
           <p>Define a lifecycle to be added to the system. Once assigned the application assigned to this lifecycle cannot be deleted. If changing the application keep in mind that individual devices will still point to the original application version.</p>
           <div class="row mb-2">
-            <div class="col-md-4">Application:</div>
+            <div class="col-md-4">Application: </div>
             <div class="col-md-8"><?= $this->Form->select('application_id', [], ['class'=>'custom-select auto-select','empty'=>false, 'autocomplete'=>'off',
                                                                                            'data-default-value'=>$lifecycle['application_id'],
                                                                                            'data-default-text'=>$lifecycle['application']['full_name'],
