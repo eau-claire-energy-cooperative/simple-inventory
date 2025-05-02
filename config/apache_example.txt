@@ -1,0 +1,20 @@
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html
+
+        # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+        # error, crit, alert, emerg.
+        # It is also possible to configure the loglevel for particular
+        # modules, e.g.
+        #LogLevel info ssl:warn
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        Alias /inventory /path/to/simple-inventory/www
+        <Directory /path/to/simple-inventory/www>
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride all
+                Require all granted
+        </Directory>
+</VirtualHost>
