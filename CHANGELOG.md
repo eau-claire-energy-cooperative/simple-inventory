@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - minor PHP 8 issues
 - sorting on search pages
 - Install instructions now updated for CakePHP 4 framework
+- REGEX issue if Location didn't have auto location string
 
 ## 7.0
 

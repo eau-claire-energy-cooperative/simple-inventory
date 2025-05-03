@@ -315,7 +315,7 @@ class ApiController extends AppController {
       if($aComputer == null)
       {
         // attempt to auto find the location based on location grouping
-        $location = $this->fetchTable('Location')->find('all')->where(sprintf("'%s' REGEXP auto_regex", $this->request->getData('ComputerName')))->first();
+        $location = $this->fetchTable('Location')->find('all')->where(["auto_regex != ''", sprintf("'%s' REGEXP auto_regex", $this->request->getData('ComputerName'))])->first();
 
         if($location == null)
         {
