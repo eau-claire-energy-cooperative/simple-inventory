@@ -1,3 +1,4 @@
-/www/app/Config/custom.ini
-/www/app/webroot/drivers/double_drivers.zip
-/www/.remote-sync.json
+www/webroot/files/inventory_updater.ps1
+www/webroot/drivers/*
+www/composer.phar
+www/.remote-sync.json
