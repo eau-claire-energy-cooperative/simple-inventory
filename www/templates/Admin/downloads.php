@@ -35,7 +35,7 @@ Remove-Item -Path "$driverPath" -Recurse -Force`;
           <div class="row">
             <div class="col-md-12">
             	<p>The update_inventory.ps1 script can pull the information from a Windows computer and send it to the inventory site via a REST API. The updater should run at login for each computer. This can be most easily accomplished via a <a href="https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki/Updater-Script-via-Group-Policy">Group Policy login script</a> or just adding a call to the existing login script for users. The updater script needs to be somewhere on your network it can be called by all computers.</p>
-				      <p>At minimum the script takes 2 parameters; the URL of the inventory site and the API authentication key. The authentication key is set on the <?= $this->Html->link('settings page','/admin/settings') ?> and is "pass" by default (please change it!). There are other parameters to turn off various functions if you don't need them. An example of how to run it is below, see the script itself for more details.</p>
+				      <p>At minimum the script takes 2 parameters; the URL of the inventory site and the API authentication key. The authentication key is set on the <?= $this->Html->link('settings page','/admin/settings') ?> and is "change_me" by default (please change it!). There are other parameters to turn off various functions if you don't need them. An example of how to run it is below, see the script itself for more details.</p>
 
       				<code>
       					inventory_updater.ps1 -Url http://localhost/inventory -ApiAuthKey <?= $settings['api_auth_key'] ?>

@@ -50,6 +50,10 @@ Two files are needed to setup the configuration and database information.
 cd www/
 cp config/.env.example config/.env
 cp config/app_local.example.php config/app_local.php
+
+# copy the powershell script
+cp ../updater/inventory_updater.ps1 webroot/files/
+
 ```
 
 Edit the `.env` file. Set the security salt and timezone information. Timezone codes can be found on the PHP site: https://www.php.net/manual/en/timezones.php

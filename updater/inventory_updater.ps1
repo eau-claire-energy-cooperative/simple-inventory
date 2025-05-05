@@ -18,7 +18,8 @@
 .EXAMPLE
     C:\PS>inventory_updater.ps1 -Url http://localhost/inventory -ApiAuthKey key -CheckApplications False
 .NOTES
-    Author: Rob Weber   
+    Author: Rob Weber
+    Version: 2.0
 #>
 param(
 [Parameter(Mandatory=$true,Position=0)][ValidateNotNullOrEmpty()][string]$Url, 
