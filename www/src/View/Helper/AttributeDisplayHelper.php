@@ -191,6 +191,10 @@ class AttributeDisplayHelper extends Helper
   	{
   		$result = $this->Time->nice($computer['LastUpdated']);
   	}
+    else if($attribute == 'LastBooted')
+    {
+      $result = $this->Time->nice($computer['LastBooted']);
+    }
     else if($attribute == 'SupplicantUsername'){
       $result = $computer['SupplicantUsername'];
     }

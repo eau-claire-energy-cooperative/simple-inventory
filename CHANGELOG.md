@@ -12,12 +12,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - locations screen hyperlinks the device count to view assigned devices
 - can add license keys to a device directly from the device info page
 - default schema file for new installs
+- Added the attribute Last Boot as a device type option. Powershell script will collect this automatically. #35
 
 ## Changed
 
 - minor cosemetic items
 - utilize dynamic autocomplete when searching for device or application names instead of giant drop down list
 - utilize CakePHP json output instead of special json render file
+- switch to `FormHelper->control()` from `FormHelper->input()` to auto detect field data type
 
 ## Fixed
 
