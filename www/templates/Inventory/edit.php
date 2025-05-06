@@ -28,7 +28,7 @@
           <?php if(in_array($a, $allowedAttributes)): ?>
           <div class="row mb-1">
             <div class="col-md-4"><?= $generalAttributes[$a] ?></div>
-            <div class="col-md-8"><?= $this->Form->input($a,  ['class'=>'form-control']);?></div>
+            <div class="col-md-8"><?= $this->Form->control($a,  ['class'=>'form-control', 'label'=>false]); ?></div>
           </div>
           <?php endif ?>
           <?php endforeach; ?>
@@ -55,7 +55,7 @@
           <?php if(in_array($a, $allowedAttributes) && $a != 'DriveSpace'): ?>
           <div class="row mb-1">
             <div class="col-md-4"><?= $hardwareAttributes[$a] ?></div>
-            <div class="col-md-8"><?= $this->Form->input($a,  ['class'=>'form-control']);?></div>
+            <div class="col-md-8"><?= $this->Form->control($a,  ['class'=>'form-control', 'label'=>false]); ?></div>
           </div>
           <?php endif ?>
           <?php endforeach; ?>
@@ -90,7 +90,7 @@
           <?php if(in_array($a, $allowedAttributes)): ?>
           <div class="row mb-1">
             <div class="col-md-4"><?= $networkAttributes[$a] ?></div>
-            <div class="col-md-8"><?= $this->Form->input($a, ['class'=>'form-control']);?></div>
+            <div class="col-md-8"><?= $this->Form->control($a,  ['class'=>'form-control', 'label'=>false]); ?></div>
           </div>
           <?php endif ?>
           <?php endforeach; ?>
