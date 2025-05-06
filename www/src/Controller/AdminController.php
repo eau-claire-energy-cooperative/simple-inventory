@@ -311,8 +311,21 @@ class AdminController extends AppController {
     $this->_saveLog($this->request->getSession()->read('User.username'),
                     sprintf("%s is now the default location", $newDefault['location']));
     $this->Flash->success(sprintf("%s is the default location", $newDefault['location']));
-		$this->redirect(array('action'=>'location'));
+		return $this->redirect(array('action'=>'location'));
 	}
+
+  public function testEmail($id){
+
+    // get this user
+    $aUser = $this->fetchTable('User')->get($id);
+
+    // send a test email to this user
+    $this->_send_email("Inventory Test Email", "This is a test email from the inventory system to make sure outgoing mail settings are correct.", $aUser['email']);
+
+    $this->Flash->success(sprintf('Sending an email to %s', $aUser['email']));
+
+    return $this->redirect('/admin/users');
+  }
 
   public function users(){
     $this->set('title','Users');

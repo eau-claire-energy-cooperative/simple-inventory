@@ -48,6 +48,9 @@
                 <div class="col-md-12">
                   <a href="<?= $this->Url->build(array('action' => 'editUser', $aUser['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-square-edit-outline icon-sm icon-inline text-white-50"></i> Edit</a>
                   <a data-title="Delete User" href="<?= $this->Url->build("/admin/editUser/". $aUser['id'] ."?action=delete") ?>" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm mr-2 delete-user"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i> Delete</a>
+                  <?php if(!empty($aUser['email'])): ?>
+                  <a href="<?= $this->Url->build(sprintf('/admin/test_email/%d', $aUser['id'])) ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2"><i class="mdi mdi-email-fast-outline icon-sm icon-inline text-white-50"></i> Test Email</a>
+                  <?php endif ?>
                 </div>
               </div>
             </div>

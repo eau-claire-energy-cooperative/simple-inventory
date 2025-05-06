@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - utilize dynamic autocomplete when searching for device or application names instead of giant drop down list
 - utilize CakePHP json output instead of special json render file
 - switch to `FormHelper->control()` from `FormHelper->input()` to auto detect field data type
+- renamed "Send Emails" to "Receive Emails" in user area - this makes more sense for what this setting does
 
 ## Fixed
 
