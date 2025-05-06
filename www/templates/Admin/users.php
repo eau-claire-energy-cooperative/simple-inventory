@@ -39,7 +39,7 @@
                 <div class="col-sm-8"><?= $aUser['email'] ?></div>
               </div>
               <div class="row mt-2">
-                <div class="col-sm-4">Send Emails: </div>
+                <div class="col-sm-4">Receive Emails: </div>
                 <div class="col-sm-8"><?= strtolower($aUser['send_email']) == 'true' ? 'Yes' : 'No'; ?></div>
               </div>
             </div>

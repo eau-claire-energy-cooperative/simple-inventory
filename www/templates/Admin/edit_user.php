@@ -29,7 +29,7 @@
             <div class="col-md-8"><?= $this->Form->input('email', ['class'=>'form-control']);?></div>
           </div>
           <div class="row mb-1">
-            <div class="col-md-4">Send Emails: </div>
+            <div class="col-md-4">Receive Emails: </div>
             <div class="col-md-8"><?= $this->Form->input('send_email', ['type' => 'select','options' => ['true'=>'Yes','false'=>'No'],'class'=>'custom-select']); ?></div>
           </div>
           <div class="row mt-2">
