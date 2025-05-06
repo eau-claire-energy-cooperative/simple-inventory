@@ -19,7 +19,7 @@
     C:\PS>inventory_updater.ps1 -Url http://localhost/inventory -ApiAuthKey key -CheckApplications False
 .NOTES
     Author: Rob Weber
-    Version: 2.0
+    Version: 2.1
 #>
 param(
 [Parameter(Mandatory=$true,Position=0)][ValidateNotNullOrEmpty()][string]$Url, 
@@ -208,7 +208,7 @@ else{
 }
 
 #LAST BOOT TIME
-$computerInfo.LastBootTime = $win32Output.LastBootUpTime | Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+$computerInfo.LastBooted = $win32Output.LastBootUpTime | Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 
 #CHOCO - not everyone will want this
 if(evalBool $CheckChoco -And (Get-Command "choco" -errorAction SilentlyContinue)){
