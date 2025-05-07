@@ -80,4 +80,23 @@ Log in to the site by going to the URL created (http://localhost/inventory if on
 
 Check the [Getting Started](https://github.com/eau-claire-energy-cooperative/simple-inventory/wiki/Getting-Started) page on the wiki for more information on how to start recording your assets and customizing the setup.
 
+## Updating
 
+Updating the web interface is fairly easy once it's up and running. Components should be updated in the following order: 
+
+```
+# update the source code
+git pull
+
+# rebuild composer
+php composer.phar update
+
+# copy the powershell script - in case this was updated
+cp ../updater/inventory_updater.ps1 webroot/files/
+
+# update the database schema
+mysql -u inventory_user -p inventory < config/inventory_schema_update_VERSION.sql
+
+```
+
+For the schema updates keep in mind you may have multiple update files to go from whatever version you were on to the latest version. 
