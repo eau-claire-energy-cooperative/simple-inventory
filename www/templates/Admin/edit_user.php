@@ -8,27 +8,27 @@
           <h6 class="m-0 font-weight-bold text-primary"></h6>
         </div>
         <div class="card-body">
-          <div class="row mb-1">
+          <div class="row mb-2">
             <div class="col-md-4">Name: </div>
             <div class="col-md-8"><?= $this->Form->input('name', ['class'=>'form-control']);?></div>
           </div>
-          <div class="row mb-1">
+          <div class="row mb-2">
             <div class="col-md-4">Username: </div>
             <div class="col-md-8"><?= $this->Form->input('username', ['class'=>'form-control']);?></div>
           </div>
           <?php if($settings['auth_type'] == 'local'): ?>
-          <div class="row mb-1">
+          <div class="row mb-2">
             <div class="col-md-4">Password: </div>
             <div class="col-md-8"><?= $this->Form->password('password', ['class'=>'form-control']) ?></div>
           </div>
           <?php else: ?>
            <?= $this->Form->input('password',array('type'=>'hidden')); ?>
           <?php endif; ?>
-          <div class="row mb-1">
+          <div class="row mb-2">
             <div class="col-md-4">Email: </div>
             <div class="col-md-8"><?= $this->Form->input('email', ['class'=>'form-control']);?></div>
           </div>
-          <div class="row mb-1">
+          <div class="row mb-2">
             <div class="col-md-4">Receive Emails: </div>
             <div class="col-md-8"><?= $this->Form->input('send_email', ['type' => 'select','options' => ['true'=>'Yes','false'=>'No'],'class'=>'custom-select']); ?></div>
           </div>
