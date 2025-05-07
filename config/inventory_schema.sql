@@ -637,7 +637,7 @@ CREATE TABLE `settings` (
 
 LOCK TABLES `settings` WRITE;
 /*!40000 ALTER TABLE `settings` DISABLE KEYS */;
-INSERT INTO `settings` VALUES (1,'smtp_server','yourmailhost.com'),(2,'smtp_user',''),(3,'smtp_pass',''),(4,'smtp_auth','false'),(5,'outgoing_email','inventory@example.com'),(10,'computer_ignore_list',''),(13,'ldap_host',''),(14,'ldap_port','389'),(15,'ldap_basedn',''),(16,'ldap_user',''),(17,'ldap_password',''),(18,'show_computer_commands','true'),(19,'domain_username',''),(20,'domain_password',''),(21,'shutdown_message',''),(23,'computer_auto_add','true'),(24,'api_auth_key','change_me'),(25,'ldap_computers_basedn',''),(30,'display_attributes',''),(31,'search_domain',''),(99,'auth_type','local'),(101,'home_attributes','CurrentUser,SerialNumber,Model,OS'),(102,'enable_device_checkout','false'),(103,'device_checkout_location','9');
+INSERT INTO `settings` VALUES (1,'smtp_server','yourmailhost.com'),(2,'smtp_user',''),(3,'smtp_pass',''),(4,'smtp_auth','false'),(5,'outgoing_email','inventory@example.com'),(10,'computer_ignore_list',''),(13,'ldap_host',''),(14,'ldap_port','389'),(15,'ldap_basedn',''),(16,'ldap_user',''),(17,'ldap_password',''),(18,'show_computer_commands','true'),(19,'domain_username',''),(20,'domain_password',''),(21,'shutdown_message',''),(23,'computer_auto_add','true'),(24,'api_auth_key','change_me'),(25,'ldap_computers_basedn',''),(30,'display_attributes',''),(31,'search_domain',''),(99,'auth_type','local'),(101,'home_attributes','CurrentUser,SerialNumber,Model,OS'),(102,'enable_device_checkout','false'),(103,'device_checkout_location','9'), (104, 'ldap_auto_location', 'false');
 /*!40000 ALTER TABLE `settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
