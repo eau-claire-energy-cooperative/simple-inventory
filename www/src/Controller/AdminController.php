@@ -255,18 +255,19 @@ class AdminController extends AppController {
 			//get all the settings
       $Setting = $this->fetchTable('Setting');
 			$db_settings = $Setting->find('all')->all();
+      $request_data = $this->request->getParsedBody();
 
 			foreach($db_settings as $aSetting){
 				$key = $aSetting['key'];
 
 				//check if we're updating
-				if($this->request->getData($key) != null)
+				if(isset($request_data[$key]))
 				{
-					$value = $this->request->getData($key);
+					$value = $request_data[$key];
 
-					if(is_array($this->request->getData($key)))
+					if(is_array($request_data[$key]))
 					{
-						$value = implode(",", $this->request->getData($key));
+						$value = implode(",", $request_data[$key]);
 					}
 
 					$aSetting['value'] = $value;
