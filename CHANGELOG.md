@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - test LDAP connection on save
 - can utilize LDAP as part of Auto Location if the LDAP location field is set
 
+## Changed
+
+- changed the default user icon to a Material Design Icon - "account"
+
 ## Fixed
 
 - ensure local user password field is masked
