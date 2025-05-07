@@ -118,20 +118,33 @@
                 <div class="col-sm-6"><?php echo $this->Form->input('ldap_port',array('class'=>'form-control','label'=>false,'value'=>$settings['ldap_port'])) ?></div>
               </div>
               <div class="row mt-2">
-                <div class="col-sm-6">LDAP Authentication Search Base</div>
-                <div class="col-sm-6"><?php echo $this->Form->input('ldap_basedn',array('class'=>'form-control','label'=>false,'value'=>$settings['ldap_basedn'])) ?></div>
-              </div>
-              <div class="row mt-2">
-                <div class="col-sm-6">LDAP Computers Search Base</div>
-                <div class="col-sm-6"><?php echo $this->Form->input('ldap_computers_basedn',array('class'=>'form-control','label'=>false,'value'=>$settings['ldap_computers_basedn'])) ?></div>
-              </div>
-              <div class="row mt-2">
                 <div class="col-sm-6">LDAP Username</div>
                 <div class="col-sm-6"><?php echo $this->Form->input('ldap_user',array('class'=>'form-control','label'=>false,'value'=>$settings['ldap_user'])) ?></div>
               </div>
               <div class="row mt-2">
                 <div class="col-sm-6">LDAP Password</div>
                 <div class="col-sm-6"><?php echo $this->Form->password('ldap_password',array('class'=>'form-control','label'=>false,'value'=>$settings['ldap_password'])) ?></div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-sm-6">LDAP Authentication Search Base</div>
+                <div class="col-sm-6">
+                  <?php echo $this->Form->input('ldap_basedn',array('class'=>'form-control','label'=>false,'value'=>$settings['ldap_basedn'])) ?>
+                  Set to use LDAP for user authentication - must use full <a href="https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ldap/distinguished-names">distinguished name</a>.
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-sm-6">LDAP Computers Search Base</div>
+                <div class="col-sm-6">
+                  <?php echo $this->Form->input('ldap_computers_basedn',array('class'=>'form-control','label'=>false,'value'=>$settings['ldap_computers_basedn'])) ?>
+                  Set to use LDAP to search device OU - must use full <a href="https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ldap/distinguished-names">distinguished name</a>.
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-sm-6">Use LDAP For Auto Location</div>
+                <div class="col-sm-6">
+                  <?php echo $this->Form->select('ldap_auto_location',array('true'=>'Yes','false'=>'No'),array('class'=>'custom-select','value'=>$settings['ldap_auto_location'],'empty'=>false)) ?>
+                  In conjuction with Device Auto Add this will use the LDAP Computer Search Base to set the device location based on the Location LDAP field value.
+                </div>
               </div>
             </div>
           </div>

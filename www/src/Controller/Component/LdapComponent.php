@@ -68,43 +68,66 @@ class LdapComponent extends Component {
 		return $result;
 	}
 
-    private function getUser($user){
+  public function getComputerLocation($name){
+    $result = null;
 
-    	if(isset($this->dsPointer))
-    	{
-    		$attributes = array('dn','givenName','sn','mail','samaccountname','memberof');
-    		$query = ldap_search($this->dsPointer,$this->baseDN,"(samaccountname=" . $user . ")",$attributes);
+    $this->connect();
 
-    		if($query)
-    		{
-    			//ldap_sort($this->dsPointer,$query,'sn');
+    $query = ldap_search($this->dsPointer, $this->baseDN, sprintf("(&(objectClass=Computer)(cn=%s))", $name));
 
-    			$result =  ldap_get_entries($this->dsPointer, $query);
+    if($query)
+    {
+      $device = ldap_get_entries($this->dsPointer, $query);
 
-    			return $result;
-    		}
-    		else
-    		{
-    			return null;
-    		}
-    	}
-    	else
-    	{
-    		return null;
-    	}
+      // check the count and if a location exists
+      if($device != null && $device['count'] > 0 && isset($device[0]['location']))
+      {
+        $result = $device[0]['location'][0];
+      }
     }
 
-    public function connect(){
-    	$this->dsPointer = ldap_connect($this->host,$this->port);
-    	ldap_set_option($this->dsPointer,LDAP_OPT_PROTOCOL_VERSION,3);
-    	return ldap_bind($this->dsPointer,$this->user,$this->password);
-    }
+    $this->disconnect();
 
-    public function disconnect(){
-    	if(isset($this->dsPointer))
-    	{
-    		ldap_close($this->dsPointer);
-    	}
+    return $result;
+  }
+
+  public function connect(){
+    $this->dsPointer = ldap_connect($this->host,$this->port);
+    ldap_set_option($this->dsPointer,LDAP_OPT_PROTOCOL_VERSION,3);
+    return ldap_bind($this->dsPointer,$this->user,$this->password);
+  }
+
+  public function disconnect(){
+    if(isset($this->dsPointer))
+    {
+      ldap_close($this->dsPointer);
     }
+  }
+
+  private function getUser($user){
+
+  	if(isset($this->dsPointer))
+  	{
+  		$attributes = array('dn','givenName','sn','mail','samaccountname','memberof');
+  		$query = ldap_search($this->dsPointer,$this->baseDN,"(samaccountname=" . $user . ")",$attributes);
+
+  		if($query)
+  		{
+  			//ldap_sort($this->dsPointer,$query,'sn');
+
+  			$result =  ldap_get_entries($this->dsPointer, $query);
+
+  			return $result;
+  		}
+  		else
+  		{
+  			return null;
+  		}
+  	}
+  	else
+  	{
+  		return null;
+  	}
+  }
 }
 ?>

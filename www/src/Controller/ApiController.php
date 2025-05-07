@@ -21,6 +21,8 @@ class ApiController extends AppController {
 
     //$this->viewBuilder()->setLayout('ajax');
     $this->viewBuilder()->setClassName("Json");
+
+    $this->loadComponent('Ldap');
   }
 
   function beforeFilter(EventInterface $event){
@@ -311,11 +313,34 @@ class ApiController extends AppController {
     {
       $Computer = $this->fetchTable('Computer');
       $aComputer = $Computer->find('all', ['conditions'=>['ComputerName'=>$this->request->getData('ComputerName')]])->first();
+      $settings = $this->fetchTable('Setting')->find('list', ['keyField'=>'key', 'valueField'=>'value'])->toArray();
 
       if($aComputer == null)
       {
-        // attempt to auto find the location based on location grouping
-        $location = $this->fetchTable('Location')->find('all')->where(["auto_regex != ''", sprintf("'%s' REGEXP auto_regex", $this->request->getData('ComputerName'))])->first();
+        // try 3 ways to set location, LDAP, REGEX, or use the default
+        $location = null;
+        if($settings['ldap_auto_location'] == 'true')
+        {
+          $this->Ldap->setup(['host'=>$settings['ldap_host'], 'port'=>$settings['ldap_port'],
+                              'baseDN'=>$settings['ldap_computers_basedn'],'user'=>$settings['ldap_user'],'password'=>$settings['ldap_password']]);
+
+          // see if we can find this computer and get the location
+          $location_name = $this->Ldap->getComputerLocation(trim($this->request->getData('ComputerName')));
+
+          if($location_name != null)
+          {
+            // check if this location matches one in the database
+            $location = $this->fetchTable('Location')->find('all', ['conditions'=>['Location.location'=>$location_name]])->first();
+            $this->_log(date("Y-m-d H:i:s",time()), "Updater", "INFO", sprintf("%s location found via LDAP", $this->request->getData('ComputerName')));
+          }
+        }
+
+        if($location == null)
+        {
+          // attempt to auto find the location based on location grouping
+          $location = $this->fetchTable('Location')->find('all')->where(["auto_regex != ''", sprintf("'%s' REGEXP auto_regex", $this->request->getData('ComputerName'))])->first();
+          $this->_log(date("Y-m-d H:i:s",time()), "Updater", "INFO", sprintf("%s location found via REGEX", $this->request->getData('ComputerName')));
+        }
 
         if($location == null)
         {
@@ -336,6 +361,7 @@ class ApiController extends AppController {
     				$aComputer->ComputerName = trim($this->request->getData('ComputerName'));
             $aComputer->DeviceType = $deviceTypes[strtolower($this->request->getData('DeviceType'))];  // convert slug to id
     				$aComputer->ComputerLocation = $location['id'];
+            $aComputer->notes = '';
 
             // save
     				$Computer->save($aComputer);
