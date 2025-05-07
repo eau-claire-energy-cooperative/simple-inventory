@@ -94,13 +94,13 @@ class LdapComponent extends Component {
     	}
     }
 
-    private function connect(){
+    public function connect(){
     	$this->dsPointer = ldap_connect($this->host,$this->port);
     	ldap_set_option($this->dsPointer,LDAP_OPT_PROTOCOL_VERSION,3);
-    	ldap_bind($this->dsPointer,$this->user,$this->password);
+    	return ldap_bind($this->dsPointer,$this->user,$this->password);
     }
 
-    private function disconnect(){
+    public function disconnect(){
     	if(isset($this->dsPointer))
     	{
     		ldap_close($this->dsPointer);

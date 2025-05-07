@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased
 
+## Added
+
+- test LDAP connection on save
+
 ## Fixed
 
 - ensure local user password field is masked

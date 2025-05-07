@@ -275,6 +275,28 @@ class AdminController extends AppController {
 				}
 			}
 
+      // check if there is an ldap connection set
+      if(!empty($this->request->getData('ldap_host')) && !empty($this->request->getData('ldap_user')) && !empty($this->request->getData('ldap_password')))
+      {
+        $this->loadComponent('Ldap');
+
+        $this->Ldap->setup(['host'=>$this->request->getData('ldap_host'),'port'=>$this->request->getData('ldap_port'),
+                            'baseDN'=>$this->request->getData('ldap_basedn'),'user'=>$this->request->getData('ldap_user'),
+                            'password'=>$this->request->getData('ldap_password')]);
+
+        if($this->Ldap->connect())
+        {
+          // close out
+          $this->Ldap->disconnect();
+          $this->Flash->success("LDAP Connection Successful");
+        }
+        else
+        {
+          $this->Flash->error("LDAP Connection Failed");
+        }
+
+      }
+
 			$this->Flash->success('Settings Saved');
 
 		}
