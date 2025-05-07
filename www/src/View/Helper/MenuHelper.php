@@ -7,7 +7,7 @@ class MenuHelper extends Helper
 {
   function getProfileImage($gravatar_address){
 
-    $result = '/img/profile/user-profile-smile.svg';
+    $result = '/img/profile/user-profile-default.svg';
 
     if($gravatar_address != null && trim($gravatar_address) != "")
     {
