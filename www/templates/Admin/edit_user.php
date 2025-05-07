@@ -19,7 +19,7 @@
           <?php if($settings['auth_type'] == 'local'): ?>
           <div class="row mb-1">
             <div class="col-md-4">Password: </div>
-            <div class="col-md-8"><?= $this->Form->input('password', ['class'=>'form-control']) ?></div>
+            <div class="col-md-8"><?= $this->Form->password('password', ['class'=>'form-control']) ?></div>
           </div>
           <?php else: ?>
            <?= $this->Form->input('password',array('type'=>'hidden')); ?>
