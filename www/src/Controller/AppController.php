@@ -89,6 +89,9 @@ class AppController extends Controller
 			//check, we may already be trying to go to the login page
 			if($this->request->getParam('action') != 'login')
 			{
+        // save the url target
+        $session->write('redirect_url', $this->request->getRequestTarget());
+
 				//we need to forward to the login page
 				return $this->redirect("/inventory/login");
 			}

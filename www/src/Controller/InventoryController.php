@@ -586,6 +586,7 @@ class InventoryController extends AppController {
     $this->set('title', 'Login');
     $this->viewBuilder()->setLayout('login');
 
+    $successfulLogin = False;
     if($this->request->is('post'))
 		{
 			//check the type of login method
@@ -608,9 +609,10 @@ class InventoryController extends AppController {
 						$session->write('User.name', $aUser['name']);
 						$session->write('User.gravatar', $aUser['gravatar']);
 
-            $this->_saveLog($this->request->getSession()->read('User.username'),
+            $this->_saveLog($session->read('User.username'),
                             "User logged in");
-						return $this->redirect('/');
+
+						$successfulLogin = True;
 					}
 					else
 					{
@@ -641,9 +643,10 @@ class InventoryController extends AppController {
 						$session->write('User.name', $aUser['name']);
 						$session->write('User.gravatar', $aUser['gravatar']);
 
-            $this->_saveLog($this->request->getSession()->read('User.username'),
+            $this->_saveLog($session->read('User.username'),
                             "User logged in");
-						return $this->redirect('/');
+
+            $successfulLogin = True;
 					}
 					else
 					{
@@ -660,6 +663,19 @@ class InventoryController extends AppController {
 			    $this->Flash->error('Login Failed. An incorrect authentication type is set in the settings. ');
 			}
 		}
+
+    // redirect if login was successful
+    if($successfulLogin)
+    {
+      $redirect_location = '/';
+      if($session->check('redirect_url'))
+      {
+        // get redirect from session, if exists
+        $redirect_location = $session->consume('redirect_url');
+      }
+
+      return $this->redirect($redirect_location);
+    }
   }
 
   function loginHistory($id){
