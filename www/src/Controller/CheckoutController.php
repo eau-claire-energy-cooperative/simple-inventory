@@ -2,6 +2,7 @@
 namespace App\Controller;
 use Cake\Event\EventInterface;
 use Cake\I18n\FrozenTime;
+use Cake\Routing\Router;
 
 class CheckoutController extends AppController {
 
@@ -312,7 +313,8 @@ class CheckoutController extends AppController {
         }
 
         // email an admin
-        $this->_send_email("Device Checkout Request", sprintf("%s has submitted an equipment checkout request. Please review the request to approve or deny.", $this->request->getData('employee_name')));
+        $this->_send_email("Device Checkout Request", sprintf("%s has submitted an equipment checkout request. Please <a href=\"%s\">review the request</a> to approve or deny.",
+                                                              $this->request->getData('employee_name'), Router::url('/', true)));
 
         $this->Flash->success('Request Submitted');
       }
