@@ -22,7 +22,7 @@
 </div>
 <div class="card shadow mb-4">
   <div class="card-body">
-    <p>Device Types are used to assign attributes to specific types of device classes. Examples may be computers, phones, or printers. The icon class is the CSS class as indicated by the open source <a href="https://materialdesignicons.com/">Material Design Icons</a> library.
+    <p>Device Types are used to assign attributes to specific types of device classes. Examples may be computers, phones, or printers. The icon class is the CSS class as indicated by the open source <a href="https://materialdesignicons.com/" target="_blank">Material Design Icons</a> library.
     If you can't find an icon you like consider using the basic <i>desktop_windows</i> icon.</p>
 
     <table class="table table-striped">

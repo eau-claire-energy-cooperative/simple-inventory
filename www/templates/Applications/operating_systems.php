@@ -40,7 +40,7 @@
 
 <div class="card shadow mb-4">
   <div class="card-body">
-    <p>Operating systems currently assigned to devices are listed here. You can assign an End of Life date to any individual operating system to keep track of when support for this OS will be ending. As the end date approaches an alert will be displayed and if the end date has past it will be flagged as well. </p>
+    <p>Operating systems currently assigned to devices are listed here. You can assign an <a href="https://endoflife.date/" target="_blank">End of Life date</a> to any individual operating system to keep track of when support for this OS will be ending. As the end date approaches an alert will be displayed and if the end date has past it will be flagged as well. </p>
     <table id="dataTable" class="table table-striped">
       <thead>
         <th>Operating System</th>

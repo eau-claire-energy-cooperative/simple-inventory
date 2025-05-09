@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - test LDAP connection on save
 - can utilize LDAP as part of Auto Location if the LDAP location field is set
 - include link within Checkout Request notification email
+- link to [https://endoflife.date](https://endoflife.date) on OS page to help find EOL for operating systems
 
 ## Changed
 
