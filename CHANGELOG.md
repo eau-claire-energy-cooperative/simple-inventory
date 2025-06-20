@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - ensure local user password field is masked
 - redirect to initial URL after login (long time bug)
+- blank notes field failing out new devices additions
 
 ## 7.1
 

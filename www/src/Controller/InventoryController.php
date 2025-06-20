@@ -148,6 +148,7 @@ class InventoryController extends AppController {
       {
         $newDevice = $Computer->newEntity($this->request->getData());
         $newDevice->ComputerName = trim($newDevice->ComputerName);
+        $newDevice->notes = '';  // should set default value in DB
 
         if($Computer->save($newDevice)) {
         	//create log entry
