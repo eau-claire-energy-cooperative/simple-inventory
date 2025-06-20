@@ -185,7 +185,7 @@ $computerInfo.CurrentUser = $win32_user
 
 #OPERATING SYSTEM 
 $displayVersion = $((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion").DisplayVersion)
-$computerInfo.OS = $win32Output.Caption + " " + $win32Output.OSArchitecture
+$computerInfo.OS = $win32Output.Caption + " " + $displayVersion
 
 #MODEL INFORMATION
 $win32_bios = $(Get-WMIObject -class Win32_BIOS | select SerialNumber, Manufacturer)

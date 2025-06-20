@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## Changed
 
 - changed the default user icon to a Material Design Icon - "account"
+- inventory_updater.ps1 script now uses Windows version name instead of architecture in OS name - __major change__
 
 ## Fixed
 
