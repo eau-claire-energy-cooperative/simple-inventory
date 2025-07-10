@@ -4,21 +4,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## Unreleased
+
+### Fixed
+
+- fixed issue where authentiction expiration redirects not always executing as expected. See [Issue #36](https://github.com/eau-claire-energy-cooperative/simple-inventory/issues/36) for more information. 
+
 ## 7.2
 
-## Added
+### Added
 
 - test LDAP connection on save
 - can utilize LDAP as part of Auto Location if the LDAP location field is set
 - include link within Checkout Request notification email
 - link to [https://endoflife.date](https://endoflife.date) on OS page to help find EOL for operating systems
 
-## Changed
+### Changed
 
 - changed the default user icon to a Material Design Icon - "account"
 - inventory_updater.ps1 script now uses Windows version name instead of architecture in OS name - __major change__
 
-## Fixed
+### Fixed
 
 - ensure local user password field is masked
 - redirect to initial URL after login (long time bug)
@@ -34,7 +40,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - default schema file for new installs
 - Added the attribute Last Boot as a device type option. Powershell script will collect this automatically. #35
 
-## Changed
+### Changed
 
 - minor cosemetic items
 - utilize dynamic autocomplete when searching for device or application names instead of giant drop down list
@@ -42,7 +48,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - switch to `FormHelper->control()` from `FormHelper->input()` to auto detect field data type
 - renamed "Send Emails" to "Receive Emails" in user area - this makes more sense for what this setting does
 
-## Fixed
+### Fixed
 
 - fixed changing device checkout status when a request is already assigned (#34)
 - fixed settings encryption, missed this during initial framework update
