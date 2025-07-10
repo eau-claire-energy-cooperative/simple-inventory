@@ -19,6 +19,8 @@ namespace App\Controller;
 use Cake\Event\EventInterface;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
+use Cake\Http\Exception\RedirectException;
+use Cake\Routing\Router;
 
 /**
  * Application Controller
@@ -93,7 +95,7 @@ class AppController extends Controller
         $session->write('redirect_url', $this->request->getRequestTarget());
 
 				//we need to forward to the login page
-				return $this->redirect("/inventory/login");
+        throw new RedirectException(Router::url('/inventory/login'));
 			}
 		}
   }
