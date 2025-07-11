@@ -6,12 +6,25 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\I18n\FrozenTime;
 use Cron\CronExpression;
+use Cake\Console\ConsoleOptionParser;
 
 class CheckLifecyclesCommand extends InventoryCommand
 {
   public static function getDescription(): string
   {
       return 'Check to see which software lifecycles currently need to be reviewed.';
+  }
+
+  protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+  {
+    // define named options required for this task
+    $parser
+      ->addOption('email_address', [
+          'required'=>false,
+          'help' => 'email address to send report to, if set'
+      ]);
+
+    return $parser;
   }
 
   public function execute(Arguments $args, ConsoleIo $io): int
@@ -40,7 +53,16 @@ class CheckLifecyclesCommand extends InventoryCommand
         $message = sprintf('%s %s <br />', $message, $cycle['application']['full_name']);
       }
 
-      $this->sendMail("Software Lifecycle Check", $message);
+      if(!empty($args->getOption('email_address')))
+      {
+        // send to given email
+        $this->sendMail("Software Lifecycle Check", $message, $args->getOption('email_address'));
+      }
+      else
+      {
+        // send to all admins
+        $this->sendMail("Software Lifecycle Check", $message);
+      }
     }
 
   	$io->out('Complete');

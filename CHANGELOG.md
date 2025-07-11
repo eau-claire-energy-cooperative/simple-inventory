@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased
 
+### Changed
+
+- Lifecycle Update report has an optional email parameter. If set the report goes to that email, if not set users get the email (default behavior)
+
 ### Fixed
 
 - fixed issue where authentiction expiration redirects not always executing as expected. See [Issue #36](https://github.com/eau-claire-energy-cooperative/simple-inventory/issues/36) for more information. 
