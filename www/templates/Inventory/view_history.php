@@ -84,7 +84,7 @@
         <?php foreach($computer['computer_history'] as $item): ?>
         <tr>
           <td data-sort="<?= $item['updated_timestamp']->format('U') ?>"><?= $item['updated_timestamp']->format('m/d/Y H:ia') ?></td>
-          <td><?= count($item['orig_json']) ?></td>
+          <td><?= count($item['orig_as_json']) ?></td>
           <td><?= $item['user'] ?></td>
           <td align="right">
   				  <a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-eye-outline icon-sm icon-inline text-white-50"></i> Details</a>
