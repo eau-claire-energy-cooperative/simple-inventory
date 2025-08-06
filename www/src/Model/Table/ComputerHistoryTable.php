@@ -9,7 +9,7 @@ class ComputerHistoryTable extends Table {
   {
     $this->setTable('computer_history');
 
-    //$this->belongsTo('Computer')->setForeignKey('comp_id');
+    $this->belongsTo('Computer')->setForeignKey('device_id');
   }
 }
 ?>
