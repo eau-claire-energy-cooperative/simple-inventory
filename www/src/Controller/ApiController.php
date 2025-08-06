@@ -283,7 +283,7 @@ class ApiController extends AppController {
       $allowedAttributes = explode(",", $aComputer['device_type']['attributes']);
 
       $Computer->patchEntity($aComputer, $this->request->getData());
-
+      $this->_saveDeviceHistory($aComputer, 'Updater');
       //this could fail validation
 			if($Computer->save($aComputer))
       {
