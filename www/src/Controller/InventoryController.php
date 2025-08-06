@@ -493,11 +493,11 @@ class InventoryController extends AppController {
 
       // patch the original
       $Computer->patchEntity($originalData, $this->request->getData());
-      $this->_saveDirty($originalData);
+      $this->_saveDeviceHistory($originalData, $this->request->getSession()->read('User.username'));
 
       if($Computer->save($originalData))
       {
-        //$this->_saveLog($this->request->getSession()->read('User.username'), $originalData['ComputerName'] . ' has been updated');
+        $this->_saveLog($this->request->getSession()->read('User.username'), $originalData['ComputerName'] . ' has been updated');
 
         $this->Flash->success('Device updated');
       }
@@ -842,26 +842,6 @@ class InventoryController extends AppController {
     }
 
     return $errors;
-  }
-
-  function _saveDirty($device){
-    // only save if fields have changed
-    if($device->isDirty())
-    {
-      $dirty = array_combine($device->getDirty(), $device->extract($device->getDirty()));
-      $original = $device->extractOriginal($device->getDirty());
-
-      // save the history entry
-      $ComputerHistory = $this->fetchTable('ComputerHistory');
-      $hist = $ComputerHistory->newEmptyEntity();
-
-      $hist->device_id = $device->id;
-      $hist->user = $this->request->getSession()->read('User.username');
-      $hist->orig_json = json_encode($original);
-      $hist->updated_json = json_encode($dirty);
-
-      $ComputerHistory->save($hist);
-    }
   }
 }
 ?>
