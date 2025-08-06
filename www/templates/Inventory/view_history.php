@@ -8,6 +8,9 @@
       pageLength: 50,
       stateSave: false,
       stateDuration: 60,
+      order: [
+        [0, 'desc']
+      ],
       layout: {
         top2Start: 'info',
         top2End: {
@@ -83,7 +86,7 @@
       <tbody>
         <?php foreach($computer['computer_history'] as $item): ?>
         <tr>
-          <td data-sort="<?= $item['updated_timestamp']->format('U') ?>"><?= $item['updated_timestamp']->format('m/d/Y H:ia') ?></td>
+          <td data-sort="<?= $item['updated_timestamp']->format('U') ?>"><?= $item['updated_timestamp']->format('m/d/Y h:ia') ?></td>
           <td><?= count($item['orig_as_json']) ?></td>
           <td><?= $item['user'] ?></td>
           <td align="right">
