@@ -7,11 +7,17 @@ class ComputerHistory extends Entity{
 
   // virtual fields
   protected function _getOrigAsJson(){
-    return json_decode($this->orig_json, true);
+    $result = json_decode($this->orig_json, true);
+    ksort($result);
+
+    return $result;
   }
 
   protected function _getUpdatedAsJson(){
-    return json_decode($this->updated_json, true);
+    $result = json_decode($this->updated_json, true);
+    ksort($result);
+
+    return $result;
   }
 }
 ?>
