@@ -11,7 +11,7 @@ class ComputerHistory extends Entity{
   }
 
   protected function _getUpdatedAsJson(){
-  }
     return json_decode($this->updated_json, true);
+  }
 }
 ?>
