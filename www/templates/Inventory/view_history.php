@@ -90,7 +90,7 @@
           <td><?= count($item['orig_as_json']) ?></td>
           <td><?= $item['user'] ?></td>
           <td align="right">
-  				  <a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-eye-outline icon-sm icon-inline text-white-50"></i> Details</a>
+  				  <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?= $this->Url->build('/ajax/view_history/' . $item['id']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-eye-outline icon-sm icon-inline text-white-50"></i> Details</a>
           </td>
         </tr>
         <?php endforeach; ?>
