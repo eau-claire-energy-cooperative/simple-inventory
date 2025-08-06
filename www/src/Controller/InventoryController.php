@@ -786,7 +786,7 @@ class InventoryController extends AppController {
   function viewHistory($id){
     $this->set('title', 'View History');
 
-    $computer = $this->fetchTable('Computer')->find('all', ['contain'=>['DeviceType'],
+    $computer = $this->fetchTable('Computer')->find('all', ['contain'=>['ComputerHistory', 'DeviceType'],
                                                            'conditions'=>['Computer.id'=>$id]])->first();
     $this->set('computer', $computer);
   }

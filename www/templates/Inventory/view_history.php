@@ -27,7 +27,9 @@
         }
       },
       columnDefs: [
-        {'searchable': false, 'targets': [-1]}
+        {'searchable': false, 'targets': [-1]},
+        {'className': 'dt-left', 'targets': '_all'},
+        {'className': 'dt-right', 'targets': [-1]}
       ],
       language: {
         search: 'Filter:',
@@ -79,14 +81,16 @@
         <th></th>
       </thead>
       <tbody>
+        <?php foreach($computer['computer_history'] as $item): ?>
         <tr>
-          <td data-sort="1">8/6/2025 8:45am</td>
-          <td>5</td>
-          <td>rweber</td>
+          <td data-sort="<?= $item['updated_timestamp']->format('U') ?>"><?= $item['updated_timestamp']->format('m/d/Y H:ia') ?></td>
+          <td><?= count($item['orig_json']) ?></td>
+          <td><?= $item['user'] ?></td>
           <td align="right">
   				  <a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="mdi mdi-eye-outline icon-sm icon-inline text-white-50"></i> Details</a>
           </td>
         </tr>
+        <?php endforeach; ?>
       </tbody>
     </table>
   </div>
