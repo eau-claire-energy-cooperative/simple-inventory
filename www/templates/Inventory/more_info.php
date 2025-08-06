@@ -119,6 +119,7 @@ function showOriginal(id, text){
         <a href="<?= $this->Url->build(array('action' => 'confirmDecommission', $computer['id'])) ?>" class="dropdown-item"><i class="mdi mdi-cancel icon-sm icon-inline"></i> Decommission</a>
         <?php endif; ?>
         <a href="<?= $this->Url->build(array('action' => 'delete', $computer['id'])) ?>" class="dropdown-item delete-computer"><i class="mdi mdi-delete icon-sm icon-inline"></i> Delete</a>
+        <a href="<?= $this->Url->build(array('action' => 'viewHistory', $computer['id'])) ?>" class="dropdown-item"><i class="mdi mdi-history icon-sm icon-inline"></i> View History</a>
       </div>
     </div>
     <?php if($settings['enable_device_checkout'] == 'true'): ?>

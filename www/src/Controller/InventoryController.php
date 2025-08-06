@@ -492,6 +492,8 @@ class InventoryController extends AppController {
       }
 
       $Computer->patchEntity($originalData, $this->request->getData());
+      //$dirty = array_combine($originalData->getDirty(), $originalData->extract($originalData->getDirty()));
+      //$this->Flash->success(json_encode($dirty));
       if($Computer->save($originalData))
       {
         $this->_saveLog($this->request->getSession()->read('User.username'), $originalData['ComputerName'] . ' has been updated');
@@ -780,6 +782,14 @@ class InventoryController extends AppController {
 
     return $this->redirect('/');
 	}
+
+  function viewHistory($id){
+    $this->set('title', 'View History');
+
+    $computer = $this->fetchTable('Computer')->find('all', ['contain'=>['DeviceType'],
+                                                           'conditions'=>['Computer.id'=>$id]])->first();
+    $this->set('computer', $computer);
+  }
 
   function _processDisplayTable($validAttributes, $selectedAttributes){
     $result = [];
