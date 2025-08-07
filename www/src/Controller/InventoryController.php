@@ -153,7 +153,7 @@ class InventoryController extends AppController {
         if($Computer->save($newDevice)) {
         	//create log entry
         	$this->_saveLog($this->request->getSession()->read('User.username'),
-                          sprintf("Device %s added to database", $this->request->getData('ComputerName')));
+                          sprintf("Device [%s](device:%d) added to database", $this->request->getData('ComputerName'), $newDevice->id));
 
           $this->Flash->success('Your Entry has been saved.');
           return $this->redirect(['action' => 'moreInfo', $newDevice->id]);
@@ -204,7 +204,7 @@ class InventoryController extends AppController {
 		if($Decommissioned->save($device))
 		{
       $this->_saveLog($this->request->getSession()->read('User.username'),
-                      sprintf("%s status updated on %s", ucfirst($status), $device['ComputerName']));
+                      sprintf("%s status updated on [%s](decom:%d)", ucfirst($status), $device['ComputerName'], $id));
 			$this->Flash->success(sprintf('%s status updated', $device['ComputerName']));
 		}
 		else
@@ -273,7 +273,7 @@ class InventoryController extends AppController {
       {
         // send an email to admins
         $this->_saveLog($this->request->getSession()->read('User.username'),
-                        sprintf("%s has been decommissioned", $device['ComputerName']));
+                        sprintf("[%s](decom:%d) has been decommissioned", $device['ComputerName'], $decom->id));
         $this->_send_email(sprintf("%s has been decommissioned", $device['ComputerName']),
                            sprintf("A device has been decommissioned, the details are below. <br /><br />Device Name: %s <br />Serial Number: %s", $device['ComputerName'], $device['SerialNumber']));
 
@@ -497,7 +497,8 @@ class InventoryController extends AppController {
 
       if($Computer->save($originalData))
       {
-        $this->_saveLog($this->request->getSession()->read('User.username'), $originalData['ComputerName'] . ' has been updated');
+        $this->_saveLog($this->request->getSession()->read('User.username'),
+                        sprintf('[%s](history:%d) has been updated', $originalData['ComputerName'], $originalData['id']));
 
         $this->Flash->success('Device updated');
       }
@@ -564,7 +565,7 @@ class InventoryController extends AppController {
 
         				$Computer->save($newDevice);
                 $this->_saveLog($this->request->getSession()->read('User.username'),
-                                sprintf("Device %s added to database", $newDevice['ComputerName']));
+                                sprintf("Device [%s](device:%d) added to database", $newDevice['ComputerName'], $newDevice->id));
 
 
                 array_push($results, array('id'=>$newDevice->id, 'DeviceType'=> $deviceTypes[strtolower($row[0])], 'ComputerName'=>trim($row[1])));
