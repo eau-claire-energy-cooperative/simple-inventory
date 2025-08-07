@@ -29,7 +29,7 @@ class PurgeLogsCommand extends InventoryCommand
   {
     $io->out(sprintf("Attempting to find logs older than %d years", $args->getOption('years')));
 
-    //find devices older than x years from today
+    // find logs older than x years from today
     $Logs = $this->fetchTable('Logs');
     $oldLogs = $Logs->find('all', ['conditions'=>['DATED <=' => date('Y-m-d', strtotime('-' . $args->getOption('years') . ' years'))],
                                    'order'=>['DATED asc']]);
@@ -39,7 +39,7 @@ class PurgeLogsCommand extends InventoryCommand
       $Logs->delete($aLog);
     }
 
-    //delete computer login logs as well
+    // delete computer login logs
     $ComputerLogin = $this->fetchTable('ComputerLogin');
     $oldLogins = $ComputerLogin->find('all', ['conditions'=>['ComputerLogin.LoginDate <=' => date('Y-m-d', strtotime('-' . $args->getOption('years') . ' years'))],
                                               'order'=>['ComputerLogin.LoginDate']]);
@@ -49,7 +49,17 @@ class PurgeLogsCommand extends InventoryCommand
       $ComputerLogin->delete($aLog);
     }
 
-    //send an email with the details
+    // delete computer update history
+    $ComputerHistory = $this->fetchTable('ComputerHistory');
+    $oldHistory = $ComputerHistory->find('all', ['conditions'=>['ComputerHistory.updated_timestamp <=' => date('Y-m-d', strtotime('-' . $args->getOption('years') . ' years'))],
+                                                 'order'=>['ComputerHistory.updated_timestamp']]);
+
+    $io->out(sprintf('Found %d device update records that need to be deleted', $oldHistory->count()));
+    foreach($oldHistory->all() as $aLog){
+      $ComputerHistory->delete($aLog);
+    }
+
+    //create a log entry with the details
     $this->dblog(sprintf('Logs purged older than %d years', $args->getOption("years")));
 
     return static::CODE_SUCCESS;
