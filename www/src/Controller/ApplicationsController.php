@@ -179,6 +179,16 @@ class ApplicationsController extends AppController {
       $this->Flash->success("Lifecycle saved");
     }
 
+    // set URL query - if it exists
+    if($this->request->getQuery('q') != null)
+    {
+      $this->set('q', $this->request->getQuery('q'));
+    }
+    else
+    {
+      $this->set('q', '');
+    }
+
     $lifecycles = $Lifecycle->find('all', ['contain'=>['Application'],
                                            'order'=>'Application.name'])->all();
     $this->set('lifecycles', $lifecycles);

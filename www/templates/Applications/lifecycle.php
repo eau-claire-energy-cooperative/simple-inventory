@@ -20,7 +20,7 @@
 
     dataTable = $('#dataTable').DataTable({
       paging: false,
-      stateSave: true,
+      stateSave: false,
       stateDuration: 60,
       layout: {
         top2Start: 'info',
@@ -39,6 +39,9 @@
             type: 'simple_numbers'
           }
         }
+      },
+      search: {
+        search: '" . $q . "'
       },
       columnDefs: [
         {'searchable': false, 'targets': [-1]},
