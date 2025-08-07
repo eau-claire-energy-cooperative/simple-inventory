@@ -19,7 +19,7 @@
     C:\PS>inventory_updater.ps1 -Url http://localhost/inventory -ApiAuthKey key -CheckApplications False
 .NOTES
     Author: Rob Weber
-    Version: 2.1
+    Version: 2.2
 #>
 param(
 [Parameter(Mandatory=$true,Position=0)][ValidateNotNullOrEmpty()][string]$Url, 
@@ -246,7 +246,7 @@ if($output."type" -eq "success")
 	
 	if($updateOutput."type" -eq "success")
 	{
-		web-log -Message "$ComputerName has been updated" | out-null
+		web-log -Message "[$ComputerName](history:$ComputerId) has been updated" | out-null
 	}
 	else
 	{
@@ -290,7 +290,7 @@ else
 			$computerInfo.id = $ComputerId
 			$computerInfo.Location = $addOutput."result".location
 
-			web-log -Message "Added $Computername with id: $ComputerId" | out-null
+			web-log -Message "Added [$ComputerName](device:$ComputerId) with id: $ComputerId" | out-null
 			
 			#try and send the computer info again
 			$updateOutput = web-call -Endpoint "/inventory" -Data $computerInfo -Method 'put'
@@ -351,7 +351,7 @@ if(evalBool($CheckApplications))
 	$allPrograms += $(Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion)
 	$allPrograms += $(Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion)
 	
-	web-log -Message "Found $($allPrograms.count) applications on $ComputerName" | out-null
+	web-log -Message "Found $($allPrograms.count) applications on [$ComputerName](device:$ComputerId)" | out-null
 	
 	#clear out the current programs list
 	$clearOutput = web-call -Endpoint "/applications" -Data @{id = $ComputerId} -Method 'delete'
@@ -378,7 +378,7 @@ if(evalBool($CheckServices))
 {
 	$allServices = $(Get-WmiObject -Class Win32_Service | Select DisplayName, StartMode, State)
 	
-	web-log -Message "Found $($allServices.count) services on $ComputerName" | out-null
+	web-log -Message "Found $($allServices.count) services on [$ComputerName](device:$ComputerId)" | out-null
 	
 	#clear out the current services list
 	$clearOutput = web-call -Endpoint "/services" -Data @{id = $ComputerId} -Method 'delete'

@@ -10,6 +10,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - Updates to device now record a before/after changelog (as JSON) that can be viewed within the device info page. 
 
+### Changed
+
+- Logs can embed links that are created a runtime in the web interface. This greatly simplifies log parsing on page load and makes it possible to link to different places within the interface easily
+
+### Fixed
+
+- Lifecycle page wasn't setting "q" query string parameter properly
+
 ## 7.3
 
 ### Changed
