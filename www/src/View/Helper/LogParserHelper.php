@@ -10,7 +10,8 @@ class LogParserHelper extends Helper
                          "history"=> "/inventory/view-history/%d",
                          "application"=> "/search/searchApplication/%d",
                          "decom"=> "/inventory/more-info-decommissioned/%d",
-                         "device_type"=> "/search/search/5/%s"];
+                         "device_type"=> "/search/search/5/%s",
+                         "lifecycle"=>"/applications/lifecycle?q=%s"];
 
   function parseMessage($inventory, $message){
 
