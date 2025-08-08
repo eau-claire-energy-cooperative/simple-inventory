@@ -19,7 +19,7 @@
     C:\PS>inventory_updater.ps1 -Url http://localhost/inventory -ApiAuthKey key -CheckApplications False
 .NOTES
     Author: Rob Weber
-    Version: 2.2
+    Version: 2.3
 #>
 param(
 [Parameter(Mandatory=$true,Position=0)][ValidateNotNullOrEmpty()][string]$Url, 
@@ -30,6 +30,9 @@ param(
 [Parameter(Mandatory=$false,Position=5)][string]$DeviceType = "computer",
 [Parameter(Mandatory=$false,Position=6)][boolean]$DebugLog = $False
 )
+
+# current script version
+$scriptVersion = [version]"2.3"
 
 #lowest powershell version this script will support
 $minPowerShellVersion = 5
@@ -135,6 +138,10 @@ if($PSVersionTable.PSVersion.major -lt $minPowerShellVersion){
 }
 
 web-log -Message "Gathering PC Information" | out-null
+
+if($settings.POWERSHELL_SCRIPT_VERSION -ne $scriptVersion){
+	web-log -Message "$ComputerName is running PS Updater version $scriptVersion, which is outdated" -Level "WARNING" | out-null
+}
 
 #MEMORY
 $computerInfo.Memory = [math]::round($win32Output.totalvisiblememorysize / 1024/1024, 3)
