@@ -5,17 +5,28 @@
           <h6 class="m-0 font-weight-bold text-primary">Device: <?= $this->Html->link($computerName, ['controller'=>'inventory','action'=>'moreInfo',$id ]) ?></h6>
         </div>
         <div class="card-body">
+          <div class="row">
+            <div class="col-md-6"><?= $this->Paginator->counter('Displaying page {{page}} of {{pages}}') ?></div>
+            <div class="col-md-6">
+              <div style="float:right">
+                <ul class="pagination">
+                  <?= $this->Paginator->prev("Previous"); ?>
+                  <?= $this->Paginator->numbers(['before'=>'', 'modulus'=>2]) ?>
+                  <?= $this->Paginator->next("Next") ?>
+                </ul>
+              </div>
+            </div>
+          </div>
           <table class="table table-striped">
           	<thead>
-          		<th width="33%"><p align="left"><?= $this->Paginator->prev("<< Newer "); ?></p></th>
-          		<th width="33%"><p align="center"><?= $this->Paginator->counter('Displaying page {{page}} of {{pages}}') ?></p></th>
-          		<th align="right"><p align="right"><?= $this->Paginator->next("Older >> ") ?></p></th>
+          		<th><p>User</p></th>
+          		<th><p>Login Timestamp</p></th>
           	</thead>
           	<tbody>
           	<?php foreach($history as $aLogin): ?>
           	<tr>
           		<td><?= $aLogin['Username'] ?></td>
-          		<td colspan="2"><?= $this->LegacyTime->niceShort($aLogin['LoginDate']) ?></td>
+          		<td><?= $this->LegacyTime->niceShort($aLogin['LoginDate']) ?></td>
           	</tr>
           	<?php endforeach ?>
           	</tbody>
