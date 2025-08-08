@@ -83,6 +83,9 @@ class AdminController extends AppController {
 
   function downloads(){
 		$this->set('title','Downloads');
+
+    // set updater script version
+    $this->set('POWERSHELL_SCRIPT_VERSION', Configure::read('PS_Version'));
 	}
 
   public function editLocation($id) {
