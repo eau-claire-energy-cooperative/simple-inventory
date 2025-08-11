@@ -53,7 +53,7 @@ class ApplicationsController extends AppController {
     $Lifecycle->updateQuery()->set(['last_check'=>FrozenTime::now()])->where(['id'=>$id])->execute();
 
     $this->_saveLog($this->request->getSession()->read('User.username'),
-                    sprintf("Lifecycle check updated for %s", $lifecycle['application']['full_name']));
+                    sprintf("Lifecycle check updated for [%s](lifecycle:%s)", $lifecycle['application']['full_name'], $lifecycle['application']['name']));
     $this->Flash->success("Last check date updated");
 
     return $this->redirect('/applications/lifecycle');
@@ -175,8 +175,18 @@ class ApplicationsController extends AppController {
       $lifecycle = $Lifecycle->loadInto($lifecycle, ['Application']);
 
       $this->_saveLog($this->request->getSession()->read('User.username'),
-                      sprintf('Lifecycle created for %s', $lifecycle['application']['full_name']));
+                      sprintf('Lifecycle created for [%s](lifecycle:%s)', $lifecycle['application']['full_name'], $lifecycle['application']['name']));
       $this->Flash->success("Lifecycle saved");
+    }
+
+    // set URL query - if it exists
+    if($this->request->getQuery('q') != null)
+    {
+      $this->set('q', $this->request->getQuery('q'));
+    }
+    else
+    {
+      $this->set('q', '');
     }
 
     $lifecycles = $Lifecycle->find('all', ['contain'=>['Application'],
@@ -269,7 +279,7 @@ class ApplicationsController extends AppController {
       $Lifecycle->updateQuery()->set(['last_check'=>FrozenTime::now()])->where(['id'=>$lifecycle['id']])->execute();
 
       $this->_saveLog($this->request->getSession()->read('User.username'),
-                      sprintf('%s lifecycle upgraded to %s', $lifecycle['application']['name'], $new_version));
+                      sprintf('[%s](lifecycle:%s) lifecycle upgraded to %s', $lifecycle['application']['name'], $lifecycle['application']['name'], $new_version));
       $this->Flash->success(sprintf('%s upgraded to %s', $lifecycle['application']['name'], $new_version));
     }
     else

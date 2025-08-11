@@ -133,6 +133,14 @@ class AjaxController extends AppController {
     $this->set('username', $aUser['gravatar']);
 	}
 
+  function viewHistory($hist_id){
+    $this->viewBuilder()->setLayout('fancybox');
+
+    $entry = $this->fetchTable('ComputerHistory')->find('all', ['contain'=>['Computer'],
+                                                                'conditions'=>['ComputerHistory.id'=>$hist_id]])->first();
+    $this->set('entry', $entry);
+  }
+
   function viewLifecycle($app_id){
     $Application = $this->fetchTable('Application');
 

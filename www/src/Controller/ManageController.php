@@ -30,7 +30,7 @@ class ManageController extends AppController {
 
       if ($DeviceType->save($newDevice)) {
         $this->_saveLog($this->request->getSession()->read('User.username'),
-                        sprintf('Created device type %s', $newDevice['name']));
+                        sprintf('Created device type [%s](device_type:%s)', $newDevice['name'], $newDevice['name']));
         $this->Flash->success(sprintf('%s has been saved', $newDevice['name']));
         return $this->redirect(array('action' => 'deviceTypes'));
       } else {
@@ -196,7 +196,7 @@ class ManageController extends AppController {
 
       if ($DeviceType->save($device)) {
         $this->_saveLog($this->request->getSession()->read('User.username'),
-                        sprintf('Updated device type %s', $device['name']));
+                        sprintf('Updated device type [%s](device_type:%s)', $device['name'], $device['name']));
         $this->Flash->success(sprintf('%s has been updated', $device['name']));
         $this->redirect(array('action' => 'deviceTypes'));
       }

@@ -41,7 +41,7 @@ Remove-Item -Path "$driverPath" -Recurse -Force`;
       					inventory_updater.ps1 -Url http://localhost/inventory -ApiAuthKey <?= $settings['api_auth_key'] ?>
       				</code>
 
-       			  <p class="mt-3"><?= $this->Html->link('Download Inventory Updater', '/files/inventory_updater.ps1',  ['class'=>'btn btn-primary','target'=>'_blank']); ?></p>
+       			  <p class="mt-3"><?= $this->Html->link(sprintf('Download Inventory Updater v%s', $POWERSHELL_SCRIPT_VERSION), '/files/inventory_updater.ps1',  ['class'=>'btn btn-primary','target'=>'_blank']); ?></p>
 
            	</div>
           </div>

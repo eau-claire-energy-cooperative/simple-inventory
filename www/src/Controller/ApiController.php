@@ -1,5 +1,6 @@
 <?php
 namespace App\Controller;
+use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\View\JsonView;
 use Cake\Datasource\ConnectionManager;
@@ -283,7 +284,7 @@ class ApiController extends AppController {
       $allowedAttributes = explode(",", $aComputer['device_type']['attributes']);
 
       $Computer->patchEntity($aComputer, $this->request->getData());
-
+      $this->_saveDeviceHistory($aComputer, 'Updater');
       //this could fail validation
 			if($Computer->save($aComputer))
       {
@@ -537,6 +538,10 @@ class ApiController extends AppController {
 
     $settings = $this->fetchTable('Setting')->find('list', ['keyField'=>'key', 'valueField'=>'value',
                                                             'order'=>['Setting.key']])->toArray();
+
+    // inject latest updater script version and web version into settings
+    $settings['POWERSHELL_SCRIPT_VERSION'] = Configure::read('PS_Version');
+    $settings['APP_VERSION'] = Configure::read('Version');
 
 		if($settings)
 		{

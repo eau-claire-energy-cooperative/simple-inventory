@@ -5,6 +5,8 @@ use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
+use Cake\ORM\Query;
+use Cake\Database\Expression\QueryExpression;
 
 class AdminController extends AppController {
   public $paginate = [
@@ -83,6 +85,9 @@ class AdminController extends AppController {
 
   function downloads(){
 		$this->set('title','Downloads');
+
+    // set updater script version
+    $this->set('POWERSHELL_SCRIPT_VERSION', Configure::read('PS_Version'));
 	}
 
   public function editLocation($id) {
@@ -219,11 +224,25 @@ class AdminController extends AppController {
                                                              'order'=> ['is_default desc, location ASC']])->all();
     $this->set('location', $locations);  // gets all data
   }
+
   public function logs()	{
 	 	$this->set('title','Logs');
     $this->viewBuilder()->addHelper('LogParser');
 
     $logs = $this->fetchTable('Logs')->find('all', ['order'=>['Logs.id'=>'desc']]);
+
+    //if filter exists, apply it
+    if($this->request->getData('q') != null)
+    {
+      $logs->where(function(QueryExpression $exp, Query $query) {
+        // search level, user and message field with OR statment
+        $level = $query->newExpr()->like('Logs.LEVEL', '%' . $this->request->getData('q') . '%');
+        $message = $query->newExpr()->like('Logs.USER', '%' . $this->request->getData('q') . '%');
+        $user = $query->newExpr()->like('Logs.MESSAGE', '%' . $this->request->getData('q') . '%');
+        return $exp->or([$level, $message, $user]);
+      });
+    }
+
 	 	$this->set('logs',$this->paginate($logs));
 
 		$this->set('inventory', $this->fetchTable('Computer')->find('list', ['keyField'=>'ComputerName', 'valueField'=>'id'])->toArray());

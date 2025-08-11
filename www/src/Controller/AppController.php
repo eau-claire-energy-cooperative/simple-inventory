@@ -123,4 +123,24 @@ class AppController extends Controller
 
     $Log->save($aLog);
 	}
+
+  function _saveDeviceHistory($device, $user){
+    // only save if fields have changed - check for > 1 since LastUpdated always changes
+    if(count($device->getDirty()) > 1)
+    {
+      $dirty = array_combine($device->getDirty(), $device->extract($device->getDirty()));
+      $original = $device->extractOriginal($device->getDirty());
+
+      // save the history entry
+      $ComputerHistory = $this->fetchTable('ComputerHistory');
+      $hist = $ComputerHistory->newEmptyEntity();
+
+      $hist->device_id = $device->id;
+      $hist->user = $user;
+      $hist->orig_json = json_encode($original);
+      $hist->updated_json = json_encode($dirty);
+
+      $ComputerHistory->save($hist);
+    }
+  }
 }

@@ -66,7 +66,7 @@ class CheckoutController extends AppController {
                                                                ->values(['request_id'=>$id, 'device_id'=>$found_device['id']])->execute();
 
         $this->_saveLog($this->request->getSession()->read('User.username'),
-                        sprintf('Checkout request approved for %s from %s to %s', $found_device['ComputerName'], $checkOutDate, $checkInDate));
+                        sprintf('Checkout request approved for [%s](device:%d) from %s to %s', $found_device['ComputerName'], $found_device['id'], $checkOutDate, $checkInDate));
         // send email to user
         $this->_send_email("Device Checkout Approved",
                            sprintf("Your equipment checkout request from %s to %s has been approved. See %s to pick up your equipment.", $checkOutDate, $checkInDate, $this->request->getSession()->read('User.name')),
@@ -139,7 +139,7 @@ class CheckoutController extends AppController {
           $this->fetchTable('Computer')->save($device);
 
           $this->_saveLog($this->request->getSession()->read('User.username'),
-                          sprintf('Device %s checked out', $device['ComputerName']));
+                          sprintf('Device [%s](device:%d) checked out', $device['ComputerName'], $device['id']));
           $this->Flash->success(sprintf('%s checked out', $device['ComputerName']));
         }
         else
@@ -164,7 +164,7 @@ class CheckoutController extends AppController {
           $this->fetchTable('Computer')->save($device);
 
           $this->_saveLog($this->request->getSession()->read('User.username'),
-                          sprintf('Checked in %s', $device['ComputerName']));
+                          sprintf('Checked in [%s](device:%d)', $device['ComputerName'], $device['id']));
           $this->Flash->success(sprintf('%s is checked in', $device['ComputerName']));
         }
         else
@@ -246,7 +246,7 @@ class CheckoutController extends AppController {
           if($CheckoutRequest->save($request))
           {
             $this->_saveLog($this->request->getSession()->read('User.username'),
-                            sprintf('Check in extended for %s until %s', $request['computer'][0]['ComputerName'], $request->check_in_date->i18nFormat('MM/dd/yyy')));
+                            sprintf('Check in extended for [%s](device:%d) until %s', $request['computer'][0]['ComputerName'], $request['computer'][0]['id'], $request->check_in_date->i18nFormat('MM/dd/yyy')));
             $this->Flash->success("Check In Date extended");
           }
           else

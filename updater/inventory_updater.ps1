@@ -19,7 +19,7 @@
     C:\PS>inventory_updater.ps1 -Url http://localhost/inventory -ApiAuthKey key -CheckApplications False
 .NOTES
     Author: Rob Weber
-    Version: 2.1
+    Version: 2.3
 #>
 param(
 [Parameter(Mandatory=$true,Position=0)][ValidateNotNullOrEmpty()][string]$Url, 
@@ -30,6 +30,9 @@ param(
 [Parameter(Mandatory=$false,Position=5)][string]$DeviceType = "computer",
 [Parameter(Mandatory=$false,Position=6)][boolean]$DebugLog = $False
 )
+
+# current script version
+$scriptVersion = [version]"2.3"
 
 #lowest powershell version this script will support
 $minPowerShellVersion = 5
@@ -135,6 +138,10 @@ if($PSVersionTable.PSVersion.major -lt $minPowerShellVersion){
 }
 
 web-log -Message "Gathering PC Information" | out-null
+
+if($settings.POWERSHELL_SCRIPT_VERSION -ne $scriptVersion){
+	web-log -Message "$ComputerName is running PS Updater version $scriptVersion, which is outdated" -Level "WARNING" | out-null
+}
 
 #MEMORY
 $computerInfo.Memory = [math]::round($win32Output.totalvisiblememorysize / 1024/1024, 3)
@@ -246,7 +253,7 @@ if($output."type" -eq "success")
 	
 	if($updateOutput."type" -eq "success")
 	{
-		web-log -Message "$ComputerName has been updated" | out-null
+		web-log -Message "[$ComputerName](history:$ComputerId) has been updated" | out-null
 	}
 	else
 	{
@@ -290,7 +297,7 @@ else
 			$computerInfo.id = $ComputerId
 			$computerInfo.Location = $addOutput."result".location
 
-			web-log -Message "Added $Computername with id: $ComputerId" | out-null
+			web-log -Message "Added [$ComputerName](device:$ComputerId) with id: $ComputerId" | out-null
 			
 			#try and send the computer info again
 			$updateOutput = web-call -Endpoint "/inventory" -Data $computerInfo -Method 'put'
@@ -351,7 +358,7 @@ if(evalBool($CheckApplications))
 	$allPrograms += $(Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion)
 	$allPrograms += $(Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion)
 	
-	web-log -Message "Found $($allPrograms.count) applications on $ComputerName" | out-null
+	web-log -Message "Found $($allPrograms.count) applications on [$ComputerName](device:$ComputerId)" | out-null
 	
 	#clear out the current programs list
 	$clearOutput = web-call -Endpoint "/applications" -Data @{id = $ComputerId} -Method 'delete'
@@ -378,7 +385,7 @@ if(evalBool($CheckServices))
 {
 	$allServices = $(Get-WmiObject -Class Win32_Service | Select DisplayName, StartMode, State)
 	
-	web-log -Message "Found $($allServices.count) services on $ComputerName" | out-null
+	web-log -Message "Found $($allServices.count) services on [$ComputerName](device:$ComputerId)" | out-null
 	
 	#clear out the current services list
 	$clearOutput = web-call -Endpoint "/services" -Data @{id = $ComputerId} -Method 'delete'

@@ -426,4 +426,5 @@ return [
         'defaults' => 'php',
     ],
     'Version' => "7.3",
+    'PS_Version' => "2.3",
 ];
