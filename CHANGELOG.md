@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - Lifecycle page wasn't setting "q" query string parameter properly
 - Login history and Logs page layout now looks consistant with rest of tables
+- update [league/commonmark](https://github.com/thephpleague/commonmark) library to 2.7.0 or greater as part of security fix
 
 ## 7.3
 
