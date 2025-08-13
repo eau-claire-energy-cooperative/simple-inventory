@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
-## 7.4
+## 7.5
 
 ### Added
 
@@ -14,12 +14,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Changed
 
 - Logs can embed links that are created a runtime in the web interface. This greatly simplifies log parsing on page load and makes it possible to link to different places within the interface easily
+- Commands use a built in identifier for scheduled execution instead of random database ID
 
 ### Fixed
 
 - Lifecycle page wasn't setting "q" query string parameter properly
 - Login history and Logs page layout now looks consistant with rest of tables
 - update [league/commonmark](https://github.com/thephpleague/commonmark) library to 2.7.0 or greater as part of security fix
+- Parameters for scheduled tasks store as JSON arrays and not PHP style arrays. Remove use of `eval()` function. 
 
 ## 7.3
 
