@@ -125,8 +125,15 @@ class AppController extends Controller
 	}
 
   function _saveDeviceHistory($device, $user){
-    // only save if fields have changed - check for > 1 since LastUpdated always changes
-    if(count($device->getDirty()) > 1)
+    // only save if fields have changed, don't include LastUpdated
+    $changed_fields = count($device->getDirty());
+    if(in_array('LastUpdated', $device->getDirty()))
+    {
+      // take out one to account for LastUpdated
+      $changed_fields --;
+    }
+
+    if($changed_fields > 0)
     {
       $dirty = array_combine($device->getDirty(), $device->extract($device->getDirty()));
       $original = $device->extractOriginal($device->getDirty());
