@@ -223,15 +223,15 @@ class ApplicationsController extends AppController {
     $systems = [];
 
     foreach($computers as $comp){
-      if(!array_key_exists($comp['OS'], $systems))
+      if(!array_key_exists(trim($comp['OS']), $systems))
       {
         //add to array with count of 1
-        $systems[$comp['OS']] = 1;
+        $systems[trim($comp['OS'])] = 1;
       }
       else
       {
         //increase count by one
-        $systems[$comp['OS']] = $systems[$comp['OS']] + 1;
+        $systems[trim($comp['OS'])] = $systems[trim($comp['OS'])] + 1;
       }
     }
 
