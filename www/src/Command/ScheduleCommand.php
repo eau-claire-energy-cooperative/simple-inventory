@@ -41,32 +41,32 @@ class ScheduleCommand extends InventoryCommand
         }
 
         // run the correct command
-        switch($schedule['command_id']){
-					case 2:
+        switch($schedule['command']['slug']){
+					case "wake_computer":
             $this->executeCommand(WakeComputerCommand::class, $options);
 						break;
-					case 4:
+					case "send_emails":
 						$this->executeCommand(SendEmailCommand::class, $options);
 						break;
-					case 5:
+					case "check_disk_space":
 						$this->executeCommand(CheckDiskSpaceCommand::class, $options);
 						break;
-					case 7:
+					case "remove_old_applications":
 					  $this->executeCommand(RemoveOldProgramsCommand::class, $options);
             break;
-          case 8:
+          case "purge_decommissioned_devices":
             $this->executeCommand(PurgeDecomCommand::class, $options);
             break;
-          case 9:
+          case "purge_logs":
             $this->executeCommand(PurgeLogsCommand::class, $options);
             break;
-          case 10:
+          case "lifecycle_update_check":
             $this->executeCommand(CheckLifecyclesCommand::class, $options);
             break;
-          case 11:
+          case "purge_checkout_requests":
             $this->executeCommand(ExpireCheckoutCommand::class, $options);
             break;
-          case 12:
+          case "license_renewal_reminders":
             $this->executeCommand(LicenseExpirationReminderCommand::class, $options);
             break;
 				}

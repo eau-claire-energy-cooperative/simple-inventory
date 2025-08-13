@@ -8,3 +8,8 @@ CREATE TABLE `computer_history` (
   `updated_json` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci
+
+ALTER TABLE commands 
+ADD COLUMN slug VARCHAR(45) AFTER id;
+
+UPDATE commands SET slug = LOWER(REPLACE(name,' ','_'));

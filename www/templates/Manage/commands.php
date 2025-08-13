@@ -26,7 +26,7 @@
       </div>
       <div class="card-body">
         <?php foreach($all_schedules as $schedule): ?>
-          <div class="mb-4">
+          <div class="p-3 mb-2 bg-light">
           <div class="row">
             <div class="col-md-8">
               <h1 class="h4 mb-1 text-gray-800"><?= $schedule['command']['name']; ?></h1>
