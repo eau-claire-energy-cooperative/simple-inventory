@@ -19,7 +19,7 @@ class WakeComputerCommand extends InventoryCommand
   {
     // define named options required for this task
     $parser
-      ->addOption('computer_name', [
+      ->addArgument('computer_name', [
           'required'=>true,
           'help' => 'Computer to wake up'
       ]);
@@ -33,7 +33,7 @@ class WakeComputerCommand extends InventoryCommand
 
     $pingComp = new PingComponent(new ComponentRegistry());
 
-    $computer = $this->fetchTable('Computer')->find('all', ['conditions'=>['Computer.ComputerName'=>$args->getOption('computer_name')]])->first();
+    $computer = $this->fetchTable('Computer')->find('all', ['conditions'=>['Computer.ComputerName'=>$args->getArgument('computer_name')]])->first();
 
     if($computer != null)
     {

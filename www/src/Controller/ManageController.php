@@ -283,20 +283,18 @@ class ManageController extends AppController {
       $schedule = $Schedule->newEntity($this->request->getData());
 
       //get all of the parameters
-      $schedule_params = 'array(';
+      $schedule_params = [];
       if($this->request->getData('parameter_list') != '')
       {
         $parameters = explode(',', $this->request->getData('parameter_list'));
 
+        // for each parameter save value to array
         foreach($parameters as $param){
-          $schedule_params = $schedule_params . "'" . $param . "'=>'" . $this->request->getData('param_' . strtolower(str_replace(' ', '_',$param))) . "',";
+          $schedule_params[$param] = $this->request->getData('param_' . strtolower(str_replace(' ', '_',$param)));
         }
-
-        $schedule_params = substr($schedule_params,0,-1);
       }
 
-      $schedule_params = $schedule_params . ')';
-      $schedule->parameters = $schedule_params;
+      $schedule->parameters = json_encode($schedule_params);
       $Schedule->save($schedule);
       $schedule = $Schedule->loadInto($schedule, ['Command']);
 

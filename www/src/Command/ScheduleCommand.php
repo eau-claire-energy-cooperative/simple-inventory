@@ -30,14 +30,13 @@ class ScheduleCommand extends InventoryCommand
 				$io->out(sprintf("Running %s", $schedule['command']['name']));
 
 				//create the parameter array for this task
-				eval("\$schedule_params = " . $schedule['parameters'] . ";");
+				$schedule_params = json_decode($schedule['parameters'], true);
 
-        // convert parameters into Command Options syntax (flat array)
+        // convert parameters into Command Arguments
         $options = [];
         foreach(array_keys($schedule_params) as $o)
         {
-          $options[] = sprintf('--%s', strtolower(str_replace(' ', '_', $o)));
-          $options[] = $schedule_params[$o];
+          $options[strtolower(str_replace(' ', '_', $o))] = $schedule_params[$o];
         }
 
         // run the correct command

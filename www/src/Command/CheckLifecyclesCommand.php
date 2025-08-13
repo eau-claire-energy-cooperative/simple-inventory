@@ -19,7 +19,7 @@ class CheckLifecyclesCommand extends InventoryCommand
   {
     // define named options required for this task
     $parser
-      ->addOption('email_address', [
+      ->addArgument('email_address', [
           'required'=>false,
           'help' => 'email address to send report to, if set'
       ]);
@@ -53,10 +53,10 @@ class CheckLifecyclesCommand extends InventoryCommand
         $message = sprintf('%s %s <br />', $message, $cycle['application']['full_name']);
       }
 
-      if(!empty($args->getOption('email_address')))
+      if(!empty($args->getArgument('email_address')))
       {
         // send to given email
-        $this->sendMail("Software Lifecycle Check", $message, $args->getOption('email_address'));
+        $this->sendMail("Software Lifecycle Check", $message, $args->getArgument('email_address'));
       }
       else
       {

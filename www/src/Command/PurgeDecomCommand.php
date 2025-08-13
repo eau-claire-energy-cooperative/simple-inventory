@@ -17,7 +17,7 @@ class PurgeDecomCommand extends InventoryCommand
   {
     // define named options required for this task
     $parser
-      ->addOption('years', [
+      ->addArgument('years', [
           'required'=>true,
           'help' => 'How many years to keep'
       ]);
@@ -27,14 +27,14 @@ class PurgeDecomCommand extends InventoryCommand
 
   public function execute(Arguments $args, ConsoleIo $io): int
   {
-    $io->out(sprintf("Attempting to find devices older than %d years", $args->getOption('years')));
+    $io->out(sprintf("Attempting to find devices older than %d years", $args->getArgument('years')));
 
     //find devices older than x years from today
     $Decommissioned = $this->fetchTable('Decommissioned');
-    $outdated = $Decommissioned->find('all', ['conditions'=>['LastUpdated <=' => date('Y-m-d', strtotime('-' . $args->getOption('years'). ' years'))],
+    $outdated = $Decommissioned->find('all', ['conditions'=>['LastUpdated <=' => date('Y-m-d', strtotime('-' . $args->getArgument('years'). ' years'))],
                                               'order'=>['LastUpdated asc']]);
 
-    $message = sprintf("The following computers are older than %d years and have been purged:<br /><br />",  $args->getOption('years'));
+    $message = sprintf("The following computers are older than %d years and have been purged:<br /><br />",  $args->getArgument('years'));
 
     $io->out(sprintf('Found %d devices', $outdated->count()));
     foreach($outdated->all() as $computer){

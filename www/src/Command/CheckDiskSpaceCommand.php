@@ -17,7 +17,7 @@ class CheckDiskSpaceCommand extends InventoryCommand
   {
     // define named options required for this task
     $parser
-      ->addOption('minimum_space_threshold', [
+      ->addArgument('minimum_space_threshold', [
           'required'=>true,
           'help' => 'minimum disk space threshold, as a percent'
       ]);
@@ -34,9 +34,9 @@ class CheckDiskSpaceCommand extends InventoryCommand
 
 		foreach($disks->all() as $aDisk){
 
-			if(($aDisk['space_free']/$aDisk['total_space']) * 100 <= $args->getOption('minimum_space_threshold'))
+			if(($aDisk['space_free']/$aDisk['total_space']) * 100 <= $args->getArgument('minimum_space_threshold'))
 			{
-        $message = sprintf('Disk Space Warning on %s (less than %d%%)', $aDisk['computer']['ComputerName'], $args->getOption('minimum_space_threshold'));
+        $message = sprintf('Disk Space Warning on %s (less than %d%%)', $aDisk['computer']['ComputerName'], $args->getArgument('minimum_space_threshold'));
         $io->out($message);
 				$this->dblog($message);
 			}

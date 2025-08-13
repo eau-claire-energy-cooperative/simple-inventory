@@ -39,7 +39,7 @@
           </div>
           <div class="row">
             <div class="col-md-12">
-              <?php eval("\$schedule_params = " . $schedule['parameters'] . ";"); ?>
+              <?php $schedule_params = json_decode($schedule['parameters'], true); ?>
               <ul>
                 <li>Schedule: <?= $schedule['schedule'] ?></li>
                 <?php foreach(array_keys($schedule_params) as $aKey): ?>
