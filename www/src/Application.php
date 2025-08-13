@@ -33,6 +33,7 @@ use Cake\Routing\Middleware\RoutingMiddleware;
 use App\Command\AuthenticationResetCommand;
 use App\Command\EmailTestCommand;
 use App\Command\ScheduleCommand;
+use App\Command\UpdateOsInfoCommand;
 
 /**
  * Application setup class.
@@ -78,6 +79,7 @@ class Application extends BaseApplication
         $commands->add('authentication_reset', AuthenticationResetCommand::class);
         $commands->add('email_test', EmailTestCommand::class);
         $commands->add('scheduler', ScheduleCommand::class);
+        $commands->add('update_os', UpdateOsInfoCommand::class);
 
         return $commands;
     }

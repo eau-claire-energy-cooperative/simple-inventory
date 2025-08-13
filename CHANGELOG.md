@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - Login history and Logs page layout now looks consistant with rest of tables
 - update [league/commonmark](https://github.com/thephpleague/commonmark) library to 2.7.0 or greater as part of security fix
 - Parameters for scheduled tasks store as JSON arrays and not PHP style arrays. Remove use of `eval()` function. 
+- check for whitespace when matching OS names for the Operating System page
 
 ## 7.3
 
