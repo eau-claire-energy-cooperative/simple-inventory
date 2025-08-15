@@ -91,8 +91,16 @@ class AppController extends Controller
 			//check, we may already be trying to go to the login page
 			if($this->request->getParam('action') != 'login')
 			{
-        // save the url target
-        $session->write('redirect_url', $this->request->getRequestTarget());
+        if($this->request->is('get'))
+        {
+          // save the url target if GET request
+          $session->write('redirect_url', $this->request->getRequestTarget());
+        }
+        else
+        {
+          // save the original URL if POST or PUT (form data is lost)
+          $session->write('redirect_url', $this->request->referer());
+        }
 
 				//we need to forward to the login page
         throw new RedirectException(Router::url('/inventory/login'));
