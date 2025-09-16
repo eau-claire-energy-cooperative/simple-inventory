@@ -11,7 +11,8 @@ class LogParserHelper extends Helper
                          "application"=> "/search/searchApplication/%d",
                          "decom"=> "/inventory/more-info-decommissioned/%d",
                          "device_type"=> "/search/search/5/%s",
-                         "lifecycle"=>"/applications/lifecycle?q=%s"];
+                         "lifecycle"=>"/applications/lifecycle?q=%s",
+                         "license"=>"/manage/view_license/%d"];
 
   function parseMessage($inventory, $message){
 
