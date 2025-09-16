@@ -156,7 +156,8 @@ class ManageController extends AppController {
 	    if ($LicenseKey->delete($license_key))
       {
         $this->_saveLog($this->request->getSession()->read('User.username'),
-                        sprintf('Deleted license key assigned to %s', $license_key['license']['LicenseName']));
+                        sprintf('Deleted license key assigned to [%s](license:%d)', $license_key['license']['LicenseName'],
+                                                                                    $license_key['license']['id']));
 	      $this->Flash->success('License Key Deleted');
 	    }
       else
@@ -241,7 +242,7 @@ class ManageController extends AppController {
 
       $License->save($license);
       $this->_saveLog($this->request->getSession()->read('User.username'),
-                      sprintf('License %s saved', $license->LicenseName));
+                      sprintf('License [%s](license:%d) saved', $license->LicenseName, $license->id));
       $this->Flash->success(sprintf("%s Saved", $license->LicenseName));
 
       return $this->redirect("/manage/view_license/" . $license->id);
