@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - Updates to device now record a before/after changelog (as JSON) that can be viewed within the device info page. 
 - Display warning in logs if Powershell Updater version does not match most current available version
+- License Key quantities can now be edited, changes to the quantity are logged per user for tracking #40
 
 ### Changed
 
