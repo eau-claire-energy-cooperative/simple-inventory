@@ -118,8 +118,9 @@
             <td><?= $key['Quantity'] ?></td>
             <td align="right">
               <?php if (count($key['computer']) < $key['Quantity']): ?>
-              <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?= $this->Url->build('/ajax/assign_license_key/' . $license['id'] . '/' . $key['id']) ?>" title="Assign License Key" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-primary"><i class="mdi mdi-plus icon-sm icon-inline text-white-50"></i></a>
+              <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?= $this->Url->build('/ajax/assign_license_key/' . $license['id'] . '/' . $key['id']) ?>" title="Assign License Key" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-primary"><i class="mdi mdi-link-variant-plus icon-sm icon-inline text-white-50"></i></a>
               <?php endif ?>
+              <a data-fancybox data-type="ajax" href="javascript:;" data-src="<?= $this->Url->build('/ajax/edit_license_key/' . $license['id'] . '/' . $key['id']) ?>" title="Edit Quantity" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-secondary"><i class="mdi mdi-arrow-up-down icon-sm icon-inline text-white-50"></i></a>
               <?php if (count($key['computer']) == 0): ?>
               <a href="<?= $this->Url->build('/manage/delete_license_key/' . $license['id'] . '/' . $key['id']) ?>" title="Delete License" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2 btn-danger delete-license-key"><i class="mdi mdi-delete icon-sm icon-inline text-white-50"></i></a>
               <?php endif; ?>

@@ -7,6 +7,7 @@
 <h1 class="h3 mb-2 text-gray-800">Assign License</h1>
 <?= $this->Form->create(null, ['url'=>'/manage/view_license/' . $license_id]) ?>
 <?= $this->Form->hidden('license_key_id', ['value'=>$license_key_id]); ?>
+<?= $this->Form->hidden('license_action', ['value'=>'assign']); ?>
 <div class="row">
   <div class="col-sm-4">Assign License To: </div>
   <div class="col-sm-8"><?= $this->Form->select('computer', [], ['empty'=>false, 'class'=>'custom-select auto-select', 'autocomplete'=>'off',

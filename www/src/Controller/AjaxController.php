@@ -59,6 +59,18 @@ class AjaxController extends AppController {
     $this->viewBuilder()->setOption('serialize', 'result');
 	}
 
+  function editLicenseKey($license_id, $license_key_id){
+    $this->viewBuilder()->setLayout('fancybox');
+
+    $license_key = $this->fetchTable('LicenseKey')->find('all', ['contain'=>['License'],
+                                                                 'conditions'=>['LicenseKey.id'=>$license_key_id]])->first();
+
+    $this->set('license_id', $license_id);
+    $this->set('license_key_id', $license_key_id);
+    $this->set('license_key', $license_key);
+
+	}
+
   function extendCheckout($id){
     $this->viewBuilder()->setLayout('fancybox');
 

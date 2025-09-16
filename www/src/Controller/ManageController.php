@@ -329,21 +329,48 @@ class ManageController extends AppController {
       // assign a new license key
       if($this->request->getData('license_key_id') != null)
       {
-        //compare quantity to make sure a license is available
-        $license_key = $this->fetchTable('LicenseKey')->find('all', ['contain'=>['Computer'],
+        // get the license key
+        $license_key = $this->fetchTable('LicenseKey')->find('all', ['contain'=>['Computer', 'License'],
                                                  'conditions'=>['LicenseKey.id'=>$this->request->getData('license_key_id')]])->first();
 
-        if(count($license_key['computer']) < $license_key['Quantity'])
+        if($this->request->getData('license_action') == 'assign')
         {
-          $newKey = $this->fetchTable('ComputerLicense')->insertQuery()->insert(['device_id', 'license_id'])
-                                              ->values(['device_id'=>$this->request->getData('computer'), 'license_id'=>$this->request->getData('license_key_id')])
-                                              ->execute();
+          //compare quantity to make sure a license is available
+          if(count($license_key['computer']) < $license_key['Quantity'])
+          {
+            $newKey = $this->fetchTable('ComputerLicense')->insertQuery()->insert(['device_id', 'license_id'])
+                                                ->values(['device_id'=>$this->request->getData('computer'), 'license_id'=>$this->request->getData('license_key_id')])
+                                                ->execute();
 
-          $this->Flash->success('License Assigned');
+            $this->Flash->success('License Assigned');
+          }
+          else
+          {
+            $this->Flash->error('No more keys available');
+          }
         }
-        else
+        elseif($this->request->getData('license_action') == 'edit')
         {
-          $this->Flash->error('No more keys available');
+          // quantity cannot be less than currently assigned
+          if($this->request->getData('Quantity') >= count($license_key['computer']))
+          {
+
+            $this->_saveLog($this->request->getSession()->read('User.username'),
+                            sprintf("[%s](license:%d) quantity changed from %d to %d", $license_key['license']['LicenseName'],
+                                                                                       $id,
+                                                                                       $license_key['Quantity'],
+                                                                                       $this->request->getData('Quantity')));
+
+            // save the new quantity
+            $license_key->Quantity = $this->request->getData('Quantity');
+            $this->fetchTable('LicenseKey')->save($license_key);
+            $this->Flash->success('Quantity Updated');
+          }
+          else
+          {
+            $this->Flash->error(sprintf('New quantity %d cannot be less than assigned quantity of %d', $this->request->getData('Quantity'), count($license_key['computer'])));
+          }
+
         }
       }
       else
