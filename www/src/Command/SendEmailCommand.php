@@ -15,7 +15,11 @@ class SendEmailCommand extends InventoryCommand
   public function execute(Arguments $args, ConsoleIo $io): int
   {
 
+    // check if emails should be silenced
+    $silenceEmail = $this->fetchTable('Setting')->find('all', ['conditions'=>['Setting.key'=>'smtp_silence_mail_send']])->first();
+
     $EmailMessage = $this->fetchTable('EmailMessage');
+
     //get any email messages that need to be sent
 		$messages = $EmailMessage->find('all');
 
@@ -25,7 +29,10 @@ class SendEmailCommand extends InventoryCommand
 
 			foreach($messages->all() as $aMessage)
 			{
-				$this->sendMail($aMessage['subject'],$aMessage['message'],$aMessage['recipient']);
+        if($silenceEmail['value'] != 'true')
+        {
+				  $this->sendMail($aMessage['subject'],$aMessage['message'],$aMessage['recipient']);
+        }
 
 				//delete this message
 				$EmailMessage->delete($aMessage);

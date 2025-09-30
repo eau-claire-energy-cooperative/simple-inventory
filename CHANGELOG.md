@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - Updates to device now record a before/after changelog (as JSON) that can be viewed within the device info page. 
 - Display warning in logs if Powershell Updater version does not match most current available version
 - License Key quantities can now be edited, changes to the quantity are logged per user for tracking #40
+- added additional setting to silence email notifications, this will clear the email queue without sending messages. Useful for completely turning off notifications globally without having to mess with the email queue scheduled task. 
 
 ### Changed
 
