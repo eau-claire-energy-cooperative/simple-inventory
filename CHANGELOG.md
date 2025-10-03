@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - Parameters for scheduled tasks store as JSON arrays and not PHP style arrays. Remove use of `eval()` function. 
 - check for whitespace when matching OS names for the Operating System page
 - When sessions expire a GET request saves the target URL for redirect after login. POST and PUT requests save the referring URL for redirect. This avoids errors with trying to submit forms as POST data is lost during login process after session expiration. 
+- AD sync select updates properly after refresh
 
 ## 7.3
 

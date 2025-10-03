@@ -41,7 +41,7 @@
         	<div class="row">
           		<div class="col-md-10"></div>
           		<div class="col-md-2"><?= $this->Form->input('days_old', ['id'=>'days_old', 'type' => 'select','onchange'=>'updateDays()',
-                                                                        'options' => ['30'=>'30 Days','60'=>'60 days','90'=>'90 days','120'=>'120 days'],'selected'=>$days_old,'label'=>false,'style'=>'float:right', 'class'=>'custom-select custom-select-md mb-2']); ?></div>
+                                                                        'options' => ['30'=>'30 Days','60'=>'60 days','90'=>'90 days','120'=>'120 days'],'val'=>$days_old,'label'=>false,'style'=>'float:right', 'class'=>'custom-select custom-select-md mb-2']); ?></div>
             </div>
         <?php endif; ?>
         <table class="table table-striped">
