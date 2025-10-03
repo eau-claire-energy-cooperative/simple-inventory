@@ -183,12 +183,6 @@
                 <div class="col-sm-6">SMTP Password</div>
                 <div class="col-sm-6"><?php echo $this->Form->password('smtp_pass',array('class'=>'form-control','label'=>false,'value'=>$settings['smtp_pass'])) ?></div>
               </div>
-              <div class="row mt-2">
-                <div class="col-md-6">Silence Notifications</div>
-                <div class="col-md-6"><?php echo $this->Form->select('smtp_silence_mail_send',array('true'=>'Yes','false'=>'No'),array('class'=>'custom-select','value'=>$settings['smtp_silence_mail_send'],'empty'=>false)) ?>
-                  Enabling this setting will clear the email queue without sending messages, useful for temporarily halting messages without turning off the scheduled task.
-                </div>
-              </div>
             </div>
           </div>
       </div>
