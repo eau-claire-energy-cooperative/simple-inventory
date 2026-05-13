@@ -213,6 +213,23 @@ class AdminController extends AppController {
  		}
 	}
 
+  function emailQueue($id = NULL){
+    $this->set('title', 'Email Queue');
+
+    $EmailMessage = $this->fetchTable('EmailMessage');
+
+    if($id != NULL){
+      $deleteMessage = $EmailMessage->get($id);
+      $EmailMessage->delete($deleteMessage);
+
+      $this->Flash->success("Message deleted");
+    }
+
+    $emails = $EmailMessage->find('all', ['order'=>['EmailMessage.id']])->all();
+
+    $this->set('email_queue', $emails);
+  }
+
   function index(){
     $this->set('title', 'Admin');
   }
