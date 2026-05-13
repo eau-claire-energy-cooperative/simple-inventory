@@ -43,28 +43,34 @@ abstract class InventoryCommand extends Command
 		$email->Subject = $subject;
 		$email->Body = $message;
 
-    if(empty($recipient))
-    {
-  		//send to admin users
-  		$users = $this->fetchTable('User')->find('all', ['conditions'=>['User.send_email'=>'true']])->all();
+    try{
+      if(empty($recipient))
+      {
+    		//send to admin users
+    		$users = $this->fetchTable('User')->find('all', ['conditions'=>['User.send_email'=>'true']])->all();
 
-  		foreach($users as $aUser){
-  			//log email
-  			$this->dblog("Sending email to " . $aUser['email']);
+    		foreach($users as $aUser){
+    			//log email
+    			$this->dblog("Sending email to " . $aUser['email']);
 
-  			$email->AddAddress($aUser['email']);
-  		}
+    			$email->AddAddress($aUser['email']);
+    		}
+      }
+      else
+      {
+        //recipient is already set
+        $email->AddAddress($recipient);
+        $this->dblog("Sending email to " . $recipient);
+      }
+
+  		//send the message
+  		$email->Send();
     }
-    else
+    catch (Exception $e)
     {
-      //recipient is already set
-      $email->AddAddress($recipient);
-      $this->dblog("Sending email to " . $recipient);
+      // PHP Mailer threw an exception, this message will be logged but the email will fail
+      $this->dblog($e->getMessage(), "Scheduler", "ERROR");
     }
-
-		//send the message
-		$email->Send();
-
 	}
 }
 ?>

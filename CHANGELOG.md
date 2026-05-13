@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## Unreleased 
+
+### Added
+
+- added page `/admin/email_queue` to quickly see the contents of the email queue
+
+### Fixed
+
+- issue where invalid email addresses can kill scheduler tasks by halting further executions (#42)
+
 ## 7.5
 
 ### Added
