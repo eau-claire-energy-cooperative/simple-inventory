@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Fixed
 
 - issue where invalid email addresses can kill scheduler tasks by halting further executions (#42)
+- validation checking now done on cron syntax before saving schedules (#41)
 
 ## 7.5
 

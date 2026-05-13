@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 use Cake\Event\EventInterface;
+use Cron\CronExpression;
 
 class ManageController extends AppController {
 
@@ -283,25 +284,35 @@ class ManageController extends AppController {
       #setup the schedule model
       $schedule = $Schedule->newEntity($this->request->getData());
 
-      //get all of the parameters
-      $schedule_params = [];
-      if($this->request->getData('parameter_list') != '')
+      # check if cron syntax is valid
+      if(CronExpression::isValidExpression($schedule->schedule))
       {
-        $parameters = explode(',', $this->request->getData('parameter_list'));
+        //get all of the parameters
+        $schedule_params = [];
+        if($this->request->getData('parameter_list') != '')
+        {
+          $parameters = explode(',', $this->request->getData('parameter_list'));
 
-        // for each parameter save value to array
-        foreach($parameters as $param){
-          $schedule_params[$param] = $this->request->getData('param_' . strtolower(str_replace(' ', '_',$param)));
+          // for each parameter save value to array
+          foreach($parameters as $param){
+            $schedule_params[$param] = $this->request->getData('param_' . strtolower(str_replace(' ', '_',$param)));
+          }
         }
+
+        $schedule->parameters = json_encode($schedule_params);
+        $Schedule->save($schedule);
+
+        // lazy load command information into the entity
+        $schedule = $Schedule->loadInto($schedule, ['Command']);
+
+        $this->_saveLog($this->request->getSession()->read('User.username'),
+                        sprintf('Created schedule %s for %s', $schedule['command']['name'], $schedule['schedule']));
+        $this->Flash->success('Schedule Created');
       }
-
-      $schedule->parameters = json_encode($schedule_params);
-      $Schedule->save($schedule);
-      $schedule = $Schedule->loadInto($schedule, ['Command']);
-
-      $this->_saveLog($this->request->getSession()->read('User.username'),
-                      sprintf('Created schedule %s for %s', $schedule['command']['name'], $schedule['schedule']));
-      $this->Flash->success('Schedule Created');
+      else
+      {
+        $this->Flash->error(sprintf("Cron schedule %s is invalid", $schedule->schedule));
+      }
     }
     else
     {
